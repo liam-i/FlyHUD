@@ -1,7 +1,11 @@
-*.xcuserstate
-project.xcworkspace
+# Mac OS X
+.DS_Store
+
+## Various settings
 xcuserdata
-UserInterfaceState.xcuserstate
-project.xcworkspace/
-xcuserdata/
-UserInterface.xcuserstate
+
+
+## Other
+*.xccheckout
+*.xcuserstate
+*.xcscmblueprint
