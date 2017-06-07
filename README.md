@@ -1,6 +1,6 @@
 # LPProgressHUD
 
-LPProgressHUD is an imitation [MBProgressHUD](https://github.com/jdg/MBProgressHUD) written out of the Swift version of the HUD.
+LPProgressHUD is a Swift version of the HUD that mimics [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
 
 
 ![](ScreenShots/ScreenShot1.png)
