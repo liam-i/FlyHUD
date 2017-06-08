@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LPProgressHUD"
-  s.version      = "1.0.0"
+  s.version      = "1.0.1"
   s.summary      = "LPProgressHUD is a Swift version of the HUD that mimics MBProgressHUD."
   s.homepage     = "https://github.com/leo-lp/LPProgressHUD"
   s.license      = "MIT"

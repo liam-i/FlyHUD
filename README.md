@@ -23,7 +23,12 @@ LPProgressHUD is a Swift version of the HUD that mimics [MBProgressHUD](https://
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
 
-To integrate LPProgressHUD into your Xcode project using CocoaPods, specify it in your Podfile:
+```
+$ gem install cocoapods
+```
+
+
+To integrate LPProgressHUD into your Xcode project using CocoaPods, specify it in your `Podfile `:
 
 ```
 source 'https://github.com/CocoaPods/Specs.git'
@@ -31,7 +36,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target '<Your Target Name>'  do
-    pod 'LPProgressHUD', '~> 1.0.0’
+    pod 'LPProgressHUD', '~> 1.0.1’
 end
 ```
 
@@ -40,6 +45,31 @@ Then, run the following command:
 ```
 $ pod install
 ```
+
+### Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+$ brew update
+$ brew install carthage
+```
+
+To integrate LPProgressHUD into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "LPProgressHUD/LPProgressHUD"
+```
+
+Run `carthage update` to build the framework and drag the built `LPProgressHUD.framework` into your Xcode project.
+
+### Manually
+
+If you prefer not to use either of the aforementioned dependency managers, you can integrate LPProgressHUD into your project manually.
+
+---
 
 ## Usage
 Use MBProgressHUD to set up on the main thread and then switch the task to be performed to the new thread.
