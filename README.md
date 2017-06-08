@@ -1,6 +1,6 @@
 # LPProgressHUD
 
-LPProgressHUD is an imitation [MBProgressHUD](https://github.com/jdg/MBProgressHUD) written out of the Swift version of the HUD.
+LPProgressHUD is a Swift version of the HUD that mimics [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
 
 
 ![](ScreenShots/ScreenShot1.png)
@@ -24,10 +24,10 @@ Use MBProgressHUD to set up on the main thread and then switch the task to be pe
 ````
 let hud = LPProgressHUD.show(to: view, animated: true)
 DispatchQueue.global().async {
-	// Do something...
-	DispatchQueue.main.sync {
-		hud.hide(animated: true)
-	}
+    // Do something...
+    DispatchQueue.main.sync {
+        hud.hide(animated: true)
+    }
 }
 ````
 
