@@ -9,3 +9,9 @@ xcuserdata
 *.xccheckout
 *.xcuserstate
 *.xcscmblueprint
+
+# Carthage
+Carthage/Build
+
+#CocoaPods
+Pods
