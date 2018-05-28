@@ -50,7 +50,7 @@ class LPHUDViewController: UITableViewController {
 
 extension LPHUDViewController {
     
-    func indeterminateExample() {
+    @objc func indeterminateExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         // 模仿一个异步任务
         DispatchQueue.global().async {
@@ -62,7 +62,7 @@ extension LPHUDViewController {
         }
     }
     
-    func labelExample() {
+    @objc func labelExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.label.text = "加载中..."
         DispatchQueue.global().async {
@@ -73,7 +73,7 @@ extension LPHUDViewController {
         }
     }
     
-    func detailsLabelExample() {
+    @objc func detailsLabelExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.label.text = "加载中..."
         hud.detailsLabel.text = "正在进行网络请求\n(1/1)"
@@ -85,7 +85,7 @@ extension LPHUDViewController {
         }
     }
     
-    func determinateExample() {
+    @objc func determinateExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .determinate
         hud.detailsLabel.text = "加载中..."
@@ -97,7 +97,7 @@ extension LPHUDViewController {
         }
     }
     
-    func annularDeterminateExample() {
+    @objc func annularDeterminateExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .annularDeterminate
         hud.label.text = "加载中..."
@@ -109,7 +109,7 @@ extension LPHUDViewController {
         }
     }
     
-    func barDeterminateExample() {
+    @objc func barDeterminateExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .determinateHorizontalBar
         hud.label.text = "加载中..."
@@ -121,7 +121,7 @@ extension LPHUDViewController {
         }
     }
     
-    func textExample() {
+    @objc func textExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .text
         hud.label.text = "密码错误"
@@ -129,7 +129,7 @@ extension LPHUDViewController {
         hud.hide(animated: true, afterDelay: 3.0)
     }
     
-    func customViewExample() {
+    @objc func customViewExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .customView
         hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
@@ -138,7 +138,7 @@ extension LPHUDViewController {
         hud.hide(animated: true, afterDelay: 3.0)
     }
     
-    func cancelationExample() {
+    @objc func cancelationExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .determinate
         hud.label.text = "加载中..."
@@ -153,7 +153,7 @@ extension LPHUDViewController {
         }
     }
     
-    func modeSwitchingExample() {
+    @objc func modeSwitchingExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.label.text = "准备中..."
         hud.minSize = CGSize(width: 150.0, height: 100.0)
@@ -165,7 +165,7 @@ extension LPHUDViewController {
         }
     }
     
-    func windowExample() {
+    @objc func windowExample() {
         let hud = LPProgressHUD.show(to: view.window!, animated: true)
         DispatchQueue.global().async {
             self.doSomeWork()
@@ -175,14 +175,14 @@ extension LPHUDViewController {
         }
     }
     
-    func networkingExample() {
+    @objc func networkingExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.label.text = "准备中..."
         hud.minSize = CGSize(width: 150.0, height: 100.0)
         doSomeNetworkWorkWithProgress()
     }
     
-    func determinateProgressExample() {
+    @objc func determinateProgressExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.mode = .determinate
         hud.label.text = "加载中..."
@@ -198,7 +198,7 @@ extension LPHUDViewController {
         }
     }
     
-    func dimBackgroundExample() {
+    @objc func dimBackgroundExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.backgroundView.style = .solidColor
         hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
@@ -210,7 +210,7 @@ extension LPHUDViewController {
         }
     }
     
-    func colorExample() {
+    @objc func colorExample() {
         let hud = LPProgressHUD.show(to: navigationController!.view, animated: true)
         hud.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
         hud.label.text = "加载中..."
@@ -308,7 +308,7 @@ extension LPHUDViewController {
         }
     }
     
-    func cancelWork(_ sender: UIButton) {
+    @objc func cancelWork(_ sender: UIButton) {
         canceled = true
     }
 }
