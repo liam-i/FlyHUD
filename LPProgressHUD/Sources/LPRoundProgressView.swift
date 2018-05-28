@@ -1,9 +1,12 @@
 //
 //  LPRoundProgressView.swift
-//  LPProgressHUD
+//  LPProgressHUD <https://github.com/leo-lp/LPProgressHUD>
 //
 //  Created by 李鹏 on 2017/6/1.
 //  Copyright © 2017年 Zhejiang lp Technology Co., Ltd. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit

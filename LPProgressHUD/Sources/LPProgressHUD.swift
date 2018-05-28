@@ -1,9 +1,12 @@
 //
 //  LPProgressHUD.swift
-//  LPProgressHUD
+//  LPProgressHUD <https://github.com/leo-lp/LPProgressHUD>
 //
 //  Created by 李鹏 on 2017/6/1.
 //  Copyright © 2017年 Zhejiang lp Technology Co., Ltd. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit
@@ -32,7 +35,7 @@ public class LPProgressHUD: UIView {
     public weak var delegate: LPProgressHUDDelegate? = nil
     
     /// Called after the HUD is hiden.
-    public var completionBlock: ((Void) -> Void)?
+    public var completionBlock: (() -> Void)?
     
     /// The minimum time (in seconds) that the HUD is shown.
     /// This avoids the problem of the HUD being shown and than instantly hidden.
@@ -60,7 +63,7 @@ public class LPProgressHUD: UIView {
     
     /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views.
     /// Defaults to semi-translucent black.
-    public dynamic var contentColor: UIColor = UIColor(white: 0.0, alpha: 0.7) {
+    @objc public dynamic var contentColor: UIColor = UIColor(white: 0.0, alpha: 0.7) {
         didSet {
             if contentColor != oldValue, !contentColor.isEqual(oldValue) { updateViews(for: contentColor) }
         }
@@ -72,7 +75,7 @@ public class LPProgressHUD: UIView {
     /// The bezel offset relative to the center of the view. You can use LPProgressMaxOffset
     /// and -LPProgressMaxOffset to move the HUD all the way to the screen edge in each direction.
     /// E.g., CGPoint(x: 0.0, y: LPProgressMaxOffset) would position the HUD centered on the bottom edge.
-    public dynamic var offset: CGPoint = .zero {
+    @objc public dynamic var offset: CGPoint = .zero {
         didSet {
             if !offset.equalTo(oldValue) { setNeedsUpdateConstraints() }
         }
@@ -81,7 +84,7 @@ public class LPProgressHUD: UIView {
     /// The amount of space between the HUD edge and the HUD elements (labels, indicators or custom views).
     /// This also represents the minimum bezel distance to the edge of the HUD view.
     /// Defaults to 20.0
-    public dynamic var margin: CGFloat = 20.0 {
+    @objc public dynamic var margin: CGFloat = 20.0 {
         didSet {
             if margin != oldValue { setNeedsUpdateConstraints() }
         }
@@ -95,14 +98,14 @@ public class LPProgressHUD: UIView {
     }
     
     /// Force the HUD dimensions to be equal if possible.
-    public dynamic var isSquare: Bool = false {
+    @objc public dynamic var isSquare: Bool = false {
         didSet {
             if isSquare != oldValue { setNeedsUpdateConstraints() }
         }
     }
  
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to true.
-    public dynamic var isMotionEffectsEnabled: Bool = true {
+    @objc public dynamic var isMotionEffectsEnabled: Bool = true {
         didSet {
             if isMotionEffectsEnabled != oldValue { updateBezelMotionEffects() }
         }
@@ -112,7 +115,7 @@ public class LPProgressHUD: UIView {
     // MARK: - Progress
     
     /// The progress of the progress indicator, from 0.0 to 1.0. Defaults to 0.0.
-    public var progress: CGFloat = 0.0 {
+    @objc public var progress: CGFloat = 0.0 {
         didSet {
             if progress != oldValue, let indicator = indicator, indicator.responds(to: #selector(setter: progress)) {
                 indicator.setValue(progress, forKey: "progress")
@@ -370,19 +373,19 @@ extension LPProgressHUD {
 
 extension LPProgressHUD {
     
-    func handleHideTimer(_ timer: Timer) {
+    @objc func handleHideTimer(_ timer: Timer) {
         let animated = timer.userInfo as? Bool ?? true
         hide(animated: animated)
     }
     
-    func handleGraceTimer(_ timer: Timer) {
+    @objc func handleGraceTimer(_ timer: Timer) {
         // Show the HUD only if the task is still running
         if !isFinished {
             show(usingAnimation: useAnimation)
         }
     }
     
-    func handleMinShowTimer(_ timer: Timer) {
+    @objc func handleMinShowTimer(_ timer: Timer) {
         hide(usingAnimation: useAnimation)
     }
 }
@@ -453,8 +456,8 @@ extension LPProgressHUD {
         
         for view in [label, detailsLabel, button] as [UIView] {
             view.translatesAutoresizingMaskIntoConstraints = false
-            view.setContentCompressionResistancePriority(998.0, for: .horizontal)
-            view.setContentCompressionResistancePriority(998.0, for: .vertical)
+            view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
+            view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
             bezelView.addSubview(view)
         }
         
@@ -523,8 +526,8 @@ extension LPProgressHUD {
                 indicator.setValue(progress, forKey: "progress")
             }
             
-            indicator.setContentCompressionResistancePriority(998.0, for: .horizontal)
-            indicator.setContentCompressionResistancePriority(998.0, for: .vertical)
+            indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
+            indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
         }
         
         updateViews(for: contentColor)
@@ -607,14 +610,14 @@ extension LPProgressHUD {
         var centeringConstraints: [NSLayoutConstraint] = []
         centeringConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: offset.x))
         centeringConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1.0, constant: offset.y))
-        apply(priority: 998.0, to: centeringConstraints)
+        apply(priority: UILayoutPriority(rawValue: 998.0), to: centeringConstraints)
         addConstraints(centeringConstraints)
         
         // Ensure minimum side margin is kept
         var sideConstraints: [NSLayoutConstraint] = []
         sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
         sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
-        apply(priority: 999.0, to: sideConstraints)
+        apply(priority: UILayoutPriority(rawValue: 999.0), to: sideConstraints)
         addConstraints(sideConstraints)
         
         // Minimum bezel size, if set
@@ -622,14 +625,14 @@ extension LPProgressHUD {
             var minSizeConstraints: [NSLayoutConstraint] = []
             minSizeConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: minSize.width))
             minSizeConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: minSize.height))
-            apply(priority: 997.0, to: minSizeConstraints)
+            apply(priority: UILayoutPriority(rawValue: 997.0), to: minSizeConstraints)
             bezelConstraints.append(contentsOf: minSizeConstraints)
         }
         
         // Square aspect ratio, if set
         if isSquare {
             let square = NSLayoutConstraint(item: bezelView, attribute: .height, relatedBy: .equal, toItem: bezelView, attribute: .width, multiplier: 1.0, constant: 0.0)
-            square.priority = 997.0
+            square.priority = UILayoutPriority(rawValue: 997.0)
             bezelConstraints.append(square)
         }
         
@@ -732,7 +735,7 @@ extension LPProgressHUD {
         }
     }
     
-    func updateProgressFromProgressObject() {
+    @objc func updateProgressFromProgressObject() {
         if let progressObject = progressObject {
             progress = CGFloat(progressObject.fractionCompleted)
         }
@@ -755,7 +758,7 @@ extension LPProgressHUD {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func statusBarOrientationDidChange(_ notification: Notification) {
+    @objc func statusBarOrientationDidChange(_ notification: Notification) {
         if let _ = superview {
             updateForCurrentOrientation(animated: true)
         }
