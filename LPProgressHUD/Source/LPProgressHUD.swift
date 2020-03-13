@@ -27,7 +27,6 @@ public protocol LPProgressHUDDelegate: NSObjectProtocol {
 /// NOTE: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// ATTENTION: MBProgressHUD is a UI class and should therefore only be accessed on the main thread.
 public class LPProgressHUD: UIView {
-    
     // MARK: - Properties
     
     /// The HUD delegate object. Receives HUD state notifications.
