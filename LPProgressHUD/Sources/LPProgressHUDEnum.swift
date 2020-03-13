@@ -11,43 +11,35 @@
 
 import Foundation
 
-/// mode
-///
-/// - indeterminate: UIActivityIndicatorView.
-/// - determinate: A round, pie-chart like, progress view.
-/// - determinateHorizontalBar: Horizontal progress bar.
-/// - annularDeterminate: Ring-shaped progress view.
-/// - customView: Shows a custom view.
-/// - text: Shows only labels.
 public enum LPProgressHUDMode {
+    /// UIActivityIndicatorView.
     case indeterminate
+    /// A round, pie-chart like, progress view.
     case determinate
+    /// Horizontal progress bar.
     case determinateHorizontalBar
+    /// Ring-shaped progress view.
     case annularDeterminate
+    /// Shows a custom view.
     case customView
+    /// Shows only labels.
     case text
 }
 
-
-/// animation
-///
-/// - fade: Opacity animation
-/// - zoom: Opacity + scale animation (zoom in when appearing zoom out when disappearing)
-/// - zoomOut: Opacity + scale animation (zoom out style)
-/// - zoomIn: Opacity + scale animation (zoom in style)
 public enum LPProgressHUDAnimation {
+    /// Opacity animation
     case fade
+    /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
     case zoom
+    /// Opacity + scale animation (zoom out style)
     case zoomOut
+    /// Opacity + scale animation (zoom in style)
     case zoomIn
 }
 
-
-/// background style
-///
-/// - solidColor: Solid color background
-/// - blur: UIVisualEffectView background view
 public enum LPProgressHUDBackgroundStyle {
+    /// Solid color background
     case solidColor
+    /// UIVisualEffectView or UIToolbar.layer background view
     case blur
 }

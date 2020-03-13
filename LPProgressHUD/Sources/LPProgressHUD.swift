@@ -19,9 +19,8 @@ private let LPDefaultDetailsLabelFontSize: CGFloat = 12.0
 
 public protocol LPProgressHUDDelegate: NSObjectProtocol {
     /// Called after the HUD was fully hidden from the screen.
-    func hudWasHidden(_ hud: LPProgressHUD) -> Void
+    func hudWasHidden(_ hud: LPProgressHUD)
 }
-
 
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 ///
@@ -34,12 +33,13 @@ public class LPProgressHUD: UIView {
     /// The HUD delegate object. Receives HUD state notifications.
     public weak var delegate: LPProgressHUDDelegate? = nil
     
-    /// Called after the HUD is hiden.
+    /// Called after the HUD is hidden.
     public var completionBlock: (() -> Void)?
     
-    /// The minimum time (in seconds) that the HUD is shown.
-    /// This avoids the problem of the HUD being shown and than instantly hidden.
+    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
     /// Defaults to 0 (no minimum show time).
+    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
+    ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
     
     /// The minimum time (in seconds) that the HUD is shown.
@@ -69,8 +69,20 @@ public class LPProgressHUD: UIView {
         }
     }
     
+    @objc public dynamic var contentColor2: UIColor = {
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            return UIColor.label.withAlphaComponent(0.7)
+        } else {
+            return UIColor(white: 0.0, alpha: 0.7)
+        }
+        }() {
+        didSet {
+            if contentColor != oldValue, !contentColor.isEqual(oldValue) { updateViews(for: contentColor) }
+        }
+    }
+    
     /// The animation type that should be used when the HUD is shown and hidden.
-    public /*dynamic*/ var animationType: LPProgressHUDAnimation = .fade
+    public dynamic var animationType: LPProgressHUDAnimation = .fade
     
     /// The bezel offset relative to the center of the view. You can use LPProgressMaxOffset
     /// and -LPProgressMaxOffset to move the HUD all the way to the screen edge in each direction.
@@ -104,8 +116,8 @@ public class LPProgressHUD: UIView {
         }
     }
  
-    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to true.
-    @objc public dynamic var isMotionEffectsEnabled: Bool = true {
+    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to false.
+    @objc public dynamic var isMotionEffectsEnabled: Bool = false {
         didSet {
             if isMotionEffectsEnabled != oldValue { updateBezelMotionEffects() }
         }
@@ -117,9 +129,9 @@ public class LPProgressHUD: UIView {
     /// The progress of the progress indicator, from 0.0 to 1.0. Defaults to 0.0.
     @objc public var progress: CGFloat = 0.0 {
         didSet {
-            if progress != oldValue, let indicator = indicator, indicator.responds(to: #selector(setter: progress)) {
-                indicator.setValue(progress, forKey: "progress")
-            }
+            guard let indicator = indicator, progress != oldValue
+                , indicator.responds(to: #selector(setter: progress)) else { return }
+            indicator.setValue(progress, forKey: "progress")
         }
     }
     
@@ -153,9 +165,8 @@ public class LPProgressHUD: UIView {
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
     public lazy var detailsLabel: UILabel = UILabel(frame: .zero)
     
-    /// A button that is placed below the labels. Visible only if a target / action is added.
+    /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public lazy var button: UIButton = LPRoundedButton(frame: .zero)
-    
     
     fileprivate var useAnimation: Bool = false
     fileprivate var isFinished: Bool = false
@@ -168,6 +179,7 @@ public class LPProgressHUD: UIView {
     fileprivate var graceTimer: Timer?
     fileprivate var minShowTimer: Timer?
     fileprivate var hideDelayTimer: Timer?
+    private var bezelMotionEffects: UIMotionEffectGroup?
     fileprivate var progressObjectDisplayLink: CADisplayLink? {
         didSet {
             if progressObjectDisplayLink != oldValue {
@@ -222,12 +234,9 @@ extension LPProgressHUD {
     }
     
     public class func hud(for view: UIView) -> LPProgressHUD? {
-        let subviewsCollection = view.subviews.reversed()
-        for subView in subviewsCollection {
-            if subView is LPProgressHUD, let hud = subView as? LPProgressHUD {
-                if hud.isFinished == false {
-                    return hud
-                }
+        for subView in view.subviews.reversed() where subView is LPProgressHUD {
+            if let hud = subView as? LPProgressHUD, !hud.isFinished {
+                return hud
             }
         }
         return nil
@@ -277,6 +286,9 @@ extension LPProgressHUD {
     }
     
     public func hide(animated: Bool, afterDelay delay: TimeInterval) {
+        // Cancel any scheduled hideAnimated:afterDelay: calls
+        hideDelayTimer?.invalidate()
+        
         let timer = Timer(timeInterval: delay, target: self, selector: #selector(handleHideTimer), userInfo: animated, repeats: false)
         RunLoop.current.add(timer, forMode: .common)
         hideDelayTimer = timer
@@ -289,7 +301,7 @@ extension LPProgressHUD {
         bezelView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
         
-        // Cancel any scheduled hideDelayed: calls
+        // Cancel any scheduled hide(animated:afterDelay:) calls
         hideDelayTimer?.invalidate()
         
         showStarted = Date()
@@ -297,6 +309,9 @@ extension LPProgressHUD {
         
         // Needed in case we hide and re-show with the same NSProgress object attached.
         setNSProgressDisplayLink(enabled: true)
+        
+        // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
+        updateBezelMotionEffects()
         
         if animated {
             animate(in: true, type: animationType, completion: nil)
@@ -307,6 +322,11 @@ extension LPProgressHUD {
     }
     
     func hide(usingAnimation animated: Bool) {
+        // Cancel any scheduled hide(animated:afterDelay:) calls.
+        // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
+        // call comes in while the HUD is animating out.
+        hideDelayTimer?.invalidate()
+        
         if animated && showStarted != nil {
             showStarted = nil
             animate(in: false, type: animationType, completion: { (finished) in
@@ -346,8 +366,9 @@ extension LPProgressHUD {
                 self.bezelView.transform = small
             }
             
-            self.bezelView.alpha = animating ? 1.0 : 0.0 // self.opacity
-            self.backgroundView.alpha = animating ? 1.0 : 0.0
+            let alpha: CGFloat = animating ? 1.0 : 0.0
+            self.bezelView.alpha = alpha
+            self.backgroundView.alpha = alpha
         }, completion: completion)
     }
     
@@ -432,9 +453,7 @@ extension LPProgressHUD {
         bezelView.layer.cornerRadius = 5.0
         bezelView.alpha = 0.0
         addSubview(bezelView)
-        
-        updateBezelMotionEffects()
-        
+                
         label.adjustsFontSizeToFitWidth = false
         label.textAlignment = .center
         label.textColor = defaultColor
@@ -471,30 +490,29 @@ extension LPProgressHUD {
     }
     
     func updateIndicators() {
-        let isActivityIndicator = indicator is UIActivityIndicatorView
-        let isRoundIndicator = indicator is LPRoundProgressView
-        
         switch mode {
         case .indeterminate:
-            
-            if !isActivityIndicator {
-                // Update to indeterminate indicator
+            if !(indicator is UIActivityIndicatorView) {
                 indicator?.removeFromSuperview()
-                let indicatorView = UIActivityIndicatorView(style: .whiteLarge)
+                let indicatorView: UIActivityIndicatorView // Update to indeterminate indicator
+                if #available(iOS 13.0, tvOS 13.0, *) {
+                    indicatorView = UIActivityIndicatorView(style: .large)
+                    indicatorView.color = UIColor.white
+                } else {
+                    indicatorView = UIActivityIndicatorView(style: .whiteLarge)
+                }
                 indicatorView.startAnimating()
                 bezelView.addSubview(indicatorView)
                 indicator = indicatorView
             }
         case .determinateHorizontalBar:
-            
             // Update to bar determinate indicator
             indicator?.removeFromSuperview()
             let bar = LPBarProgressView()
             bezelView.addSubview(bar)
             indicator = bar
         case .determinate, .annularDeterminate:
-            
-            if !isRoundIndicator {
+            if !(indicator is LPRoundProgressView) {
                 // Update to determinante indicator
                 indicator?.removeFromSuperview()
                 let roundView = LPRoundProgressView()
@@ -506,7 +524,6 @@ extension LPProgressHUD {
                 (indicator as? LPRoundProgressView)?.isAnnular = true
             }
         case .customView:
-            
             if let customView = customView, customView != indicator {
                 // Update custom view indicator
                 indicator?.removeFromSuperview()
@@ -514,7 +531,6 @@ extension LPProgressHUD {
                 indicator = customView
             }
         case .text:
-            
             indicator?.removeFromSuperview()
             indicator = nil
         }
@@ -539,30 +555,23 @@ extension LPProgressHUD {
         detailsLabel.textColor = color
         button.setTitleColor(color, for: .normal)
         
-        if indicator is UIActivityIndicatorView {
-            
-            (indicator as? UIActivityIndicatorView)?.color = color
-        } else if indicator is LPRoundProgressView {
-            
-            (indicator as? LPRoundProgressView)?.progressTintColor = color
-            (indicator as? LPRoundProgressView)?.backgroundTintColor = color.withAlphaComponent(0.1)
-        } else if indicator is LPBarProgressView {
-            
-            (indicator as? LPBarProgressView)?.progressColor = color
-            (indicator as? LPBarProgressView)?.lineColor = color
+        // UIAppearance settings are prioritized. If they are preset the set color is ignored.
+        guard let indicator = indicator else { return }
+        if let indicator = indicator as? UIActivityIndicatorView {
+            indicator.color = color
+        } else if let indicator = indicator as? LPRoundProgressView {
+            indicator.progressTintColor = color
+            indicator.backgroundTintColor = color.withAlphaComponent(0.1)
+        } else if let indicator = indicator as? LPBarProgressView {
+            indicator.progressColor = color
+            indicator.lineColor = color
         } else {
-            if let indicator = indicator, indicator.responds(to: #selector(setter: tintColor)) {
-                indicator.tintColor = color
-            }
+            indicator.tintColor = color
         }
     }
     
     func updateBezelMotionEffects() {
-        if !bezelView.responds(to: #selector(addMotionEffect)) {
-            return
-        }
-        
-        if isMotionEffectsEnabled {
+        if isMotionEffectsEnabled && bezelMotionEffects == nil {
             let effectOffset = 10.0
             let effectX = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
             effectX.maximumRelativeValue = effectOffset
@@ -575,10 +584,11 @@ extension LPProgressHUD {
             let group = UIMotionEffectGroup()
             group.motionEffects = [effectX, effectY]
             bezelView.addMotionEffect(group)
-        } else {
-            for effect in bezelView.motionEffects {
-                bezelView.removeMotionEffect(effect)
-            }
+            
+            bezelMotionEffects = group
+        } else if let motionEffects = bezelMotionEffects {
+            bezelMotionEffects = nil
+            bezelView.removeMotionEffect(motionEffects)
         }
     }
 }
@@ -759,15 +769,13 @@ extension LPProgressHUD {
     }
     
     @objc func statusBarOrientationDidChange(_ notification: Notification) {
-        if let _ = superview {
-            updateForCurrentOrientation(animated: true)
-        }
+        guard superview != nil else { return }
+        updateForCurrentOrientation(animated: true)
     }
     
     func updateForCurrentOrientation(animated: Bool) {
-        // Stay in sync with the superview in any case
         if let superview = superview {
-            frame = superview.bounds
+            frame = superview.bounds // Stay in sync with the superview in any case
         }
     }
 }
