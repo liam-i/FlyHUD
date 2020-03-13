@@ -14,8 +14,8 @@ LPProgressHUD is a Swift version of the HUD that mimics [MBProgressHUD](https://
 ## Requirements
 
 * iOS 9.0+ 
-* Xcode 8.1+
-* Swift 3.0+
+* Xcode 11.3.1+
+* Swift 5.0+
 
 ## Installation
 
