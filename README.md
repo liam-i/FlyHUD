@@ -36,7 +36,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>'  do
-    pod 'LPProgressHUD', '~> 1.0.1’
+    pod 'LPProgressHUD', '~> 1.1.1’
 end
 ```
 
