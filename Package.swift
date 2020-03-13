@@ -12,9 +12,7 @@ let package = Package(
         .library(name: "LPProgressHUD", targets: ["LPProgressHUD"]),
     ],
     targets: [
-        .target(
-            name: "LPProgressHUD",
-            dependencies: []),
+        .target(name: "LPProgressHUD", path: "Source"),
     ],
     swiftLanguageVersions: [.v5]
 )
