@@ -15,17 +15,37 @@ public class LPBackgroundView: UIView {
     
     // MARK: - Properties
     
-    /// The background style. Defaults to LPProgressHUDBackgroundStyle.blur
+    /// The background style. Defaults to .blur
     public var style: LPProgressHUDBackgroundStyle = .blur {
         didSet {
             if style != oldValue { updateForBackgroundStyle() }
         }
     }
     
-    /// The background color or the blur tint color.
-    public var color: UIColor = UIColor(white: 0.8, alpha: 0.6) {
+    /// The blur effect style, when using .blur. Defaults to .light.
+    public var blurEffectStyle: UIBlurEffect.Style = {
+        if #available(iOS 13.0, *) {
+            return .systemThickMaterial
+        } else {
+            return .light
+        }
+        }() {
         didSet {
-            if color != oldValue, !color.isEqual(oldValue) { backgroundColor = color }
+            if blurEffectStyle != oldValue { updateForBackgroundStyle() }
+        }
+    }
+    
+    /// The background color or the blur tint color.
+    ///  - Note: Defaults to nil on iOS 13 and later and. UIColor(white: 0.8, alpha: 0.6) on older systems.
+    public var color: UIColor? = {
+        if #available(iOS 13.0, *) {
+            return nil
+        } else {
+            return UIColor(white: 0.8, alpha: 0.6)
+        }
+        }() {
+        didSet {
+            if color != oldValue { backgroundColor = color }
         }
     }
     
@@ -53,29 +73,24 @@ public class LPBackgroundView: UIView {
         // Smallest size possible. Content pushes against this.
         return .zero
     }
-}
-
-extension LPBackgroundView {
     
     // MARK: - Views
     
-    fileprivate func updateForBackgroundStyle() {
+    private func updateForBackgroundStyle() {
+        effectView?.removeFromSuperview()
+        effectView = nil
+        
         if style == .blur {
-            
-            let effect = UIBlurEffect(style: .light)
+            let effect = UIBlurEffect(style: blurEffectStyle)
             let effectview = UIVisualEffectView(effect: effect)
-            addSubview(effectview)
+            insertSubview(effectview, at: 0)
             effectview.frame = bounds
             effectview.autoresizingMask = [.flexibleHeight, .flexibleWidth]
             backgroundColor = color
             layer.allowsGroupOpacity = false
             effectView = effectview
         } else {
-            
-            effectView?.removeFromSuperview()
-            effectView = nil
             backgroundColor = color
         }
     }
-    
 }

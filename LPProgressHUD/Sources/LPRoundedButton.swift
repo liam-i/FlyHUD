@@ -29,23 +29,18 @@ class LPRoundedButton: UIButton {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         // Fully rounded corners
         layer.cornerRadius = ceil(bounds.height / 2.0)
     }
     
     override var intrinsicContentSize: CGSize {
-        
-        // Only show if we have associated control events
-        if allControlEvents == UIControl.Event(rawValue: 0) {
+        // Only show if we have associated control events and a title
+        if allControlEvents.rawValue == 0 || title(for: .normal)?.count == 0 {
             return .zero
         }
         
         var size = super.intrinsicContentSize
-        
-        // Add some side padding
-        size.width += 20.0
-        
+        size.width += 20.0 // Add some side padding
         return size
     }
     
@@ -53,7 +48,6 @@ class LPRoundedButton: UIButton {
     
     override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
         super.setTitleColor(color, for: state)
-        
         // Update related colors
         let highlighted = isHighlighted
         isHighlighted = highlighted

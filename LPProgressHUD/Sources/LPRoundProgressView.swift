@@ -20,7 +20,7 @@ public class LPRoundProgressView: UIView {
     public var isAnnular: Bool = false
     
     /// Progress (0.0 to 1.0)
-    public var progress: CGFloat = 0.0 {
+    @objc public var progress: CGFloat = 0.0 {
         didSet {
             if progress != oldValue { setNeedsDisplay() }
         }
@@ -29,14 +29,14 @@ public class LPRoundProgressView: UIView {
     /// Indicator progress color. Defaults to white UIColor.white.
     public var progressTintColor: UIColor = UIColor(white: 1.0, alpha: 1.0) {
         didSet {
-            if progressTintColor != oldValue, !progressTintColor.isEqual(oldValue) { setNeedsDisplay() }
+            if progressTintColor != oldValue && !progressTintColor.isEqual(oldValue) { setNeedsDisplay() }
         }
     }
     
     /// Indicator background (non-progress) color. Defaults to translucent white (alpha 0.1).
     public var backgroundTintColor: UIColor = UIColor(white: 1.0, alpha: 0.1) {
         didSet {
-            if backgroundTintColor != oldValue, !backgroundTintColor.isEqual(oldValue) { setNeedsDisplay() }
+            if backgroundTintColor != oldValue && !backgroundTintColor.isEqual(oldValue) { setNeedsDisplay() }
         }
     }
     
@@ -48,14 +48,12 @@ public class LPRoundProgressView: UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
         backgroundColor = UIColor.clear
         isOpaque = false
     }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
         backgroundColor = UIColor.clear
         isOpaque = false
     }
@@ -69,8 +67,7 @@ public class LPRoundProgressView: UIView {
     // MARK: - Drawing
     
     public override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        
+        guard let context = UIGraphicsGetCurrentContext() else { return assert(false) }
         if isAnnular {
             // Draw background
             let lineWidth: CGFloat = 2.0
@@ -105,9 +102,7 @@ public class LPRoundProgressView: UIView {
                                clockwise: true)
             progressTintColor.set()
             processPath.stroke()
-            
         } else {
-            
             // Draw background
             let lineWidth: CGFloat = 2.0
             let allRect = bounds
@@ -142,5 +137,4 @@ public class LPRoundProgressView: UIView {
             processPath.stroke()
         }
     }
-    
 }

@@ -257,13 +257,12 @@ extension LPHUDViewController {
     }
     
     func doSomeWorkWithMixedProgress() {
-        guard let hud = LPProgressHUD.hud(for: navigationController!.view) else { return }
-        
         // Indeterminate mode
         sleep(2)
         
         // Switch to determinate mode
         DispatchQueue.main.async {
+            guard let hud = LPProgressHUD.hud(for: self.navigationController!.view) else { return assert(false) }
             hud.mode = .determinate
             hud.label.text = "加载中..."
         }
@@ -272,6 +271,7 @@ extension LPHUDViewController {
         while progress < 1.0 {
             progress += 0.01
             DispatchQueue.main.async {
+                guard let hud = LPProgressHUD.hud(for: self.navigationController!.view) else { return assert(false) }
                 hud.progress = progress
             }
             usleep(50000)
@@ -279,6 +279,7 @@ extension LPHUDViewController {
         
         // Back to indeterminate mode
         DispatchQueue.main.async {
+            guard let hud = LPProgressHUD.hud(for: self.navigationController!.view) else { return assert(false) }
             hud.mode = .indeterminate
             hud.label.text = "清理中..."
         }
@@ -286,6 +287,7 @@ extension LPHUDViewController {
         sleep(2)
         
         DispatchQueue.main.async {
+            guard let hud = LPProgressHUD.hud(for: self.navigationController!.view) else { return assert(false) }
             hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
             hud.mode = .customView
             hud.label.text = "已完成"
@@ -350,25 +352,21 @@ extension LPHUDViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LPHUDExampleCell", for: indexPath)
         cell.textLabel?.text = examples[indexPath.section][indexPath.row].title
-        
         cell.selectedBackgroundView = UIView()
         cell.selectedBackgroundView?.backgroundColor = cell.textLabel?.textColor.withAlphaComponent(0.1)
-        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 10.0
+        return 15.0
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
+        return 0.1
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
         perform(examples[indexPath.section][indexPath.row].selector)
     }
-    
 }
