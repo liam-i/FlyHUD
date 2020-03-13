@@ -12,6 +12,7 @@
 import UIKit
 
 public let LPProgressMaxOffset: CGFloat = 1000000.0
+
 private let LPDefaultPadding: CGFloat = 4.0
 private let LPDefaultLabelFontSize: CGFloat = 16.0
 private let LPDefaultDetailsLabelFontSize: CGFloat = 12.0
