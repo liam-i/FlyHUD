@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Example
 //
-//  Created by 李鹏 on 2017/6/1.
+//  Created by lipeng on 2017/6/1.
 //  Copyright © 2017年 Zhejiang lp Technology Co., Ltd. All rights reserved.
 //
 

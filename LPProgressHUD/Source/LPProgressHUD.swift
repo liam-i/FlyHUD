@@ -2,7 +2,7 @@
 //  LPProgressHUD.swift
 //  LPProgressHUD <https://github.com/leo-lp/LPProgressHUD>
 //
-//  Created by 李鹏 on 2017/6/1.
+//  Created by lipeng on 2017/6/1.
 //  Copyright © 2017年 Zhejiang lp Technology Co., Ltd. All rights reserved.
 //
 //  This source code is licensed under the MIT-style license found in the
@@ -12,7 +12,6 @@
 import UIKit
 
 public let LPProgressMaxOffset: CGFloat = 1000000.0
-
 private let LPDefaultPadding: CGFloat = 4.0
 private let LPDefaultLabelFontSize: CGFloat = 16.0
 private let LPDefaultDetailsLabelFontSize: CGFloat = 12.0
@@ -31,7 +30,7 @@ public class LPProgressHUD: UIView {
     // MARK: - Properties
     
     /// The HUD delegate object. Receives HUD state notifications.
-    public weak var delegate: LPProgressHUDDelegate? = nil
+    public weak var delegate: LPProgressHUDDelegate?
     
     /// Called after the HUD is hidden.
     public var completionBlock: (() -> Void)?
@@ -50,7 +49,6 @@ public class LPProgressHUD: UIView {
     /// Removes the HUD from its parent view when hidden. Defaults to false.
     public var removeFromSuperViewOnHide: Bool = false
     
-    
     // MARK: -
     // MARK: - Appearance
     
@@ -63,13 +61,7 @@ public class LPProgressHUD: UIView {
     
     /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views.
     /// Defaults to semi-translucent black.
-    @objc public dynamic var contentColor: UIColor = UIColor(white: 0.0, alpha: 0.7) {
-        didSet {
-            if contentColor != oldValue, !contentColor.isEqual(oldValue) { updateViews(for: contentColor) }
-        }
-    }
-    
-    @objc public dynamic var contentColor2: UIColor = {
+    public var contentColor: UIColor = {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return UIColor.label.withAlphaComponent(0.7)
         } else {
@@ -82,12 +74,12 @@ public class LPProgressHUD: UIView {
     }
     
     /// The animation type that should be used when the HUD is shown and hidden.
-    public dynamic var animationType: LPProgressHUDAnimation = .fade
+    public var animationType: LPProgressHUDAnimation = .fade
     
     /// The bezel offset relative to the center of the view. You can use LPProgressMaxOffset
     /// and -LPProgressMaxOffset to move the HUD all the way to the screen edge in each direction.
     /// E.g., CGPoint(x: 0.0, y: LPProgressMaxOffset) would position the HUD centered on the bottom edge.
-    @objc public dynamic var offset: CGPoint = .zero {
+    public var offset: CGPoint = .zero {
         didSet {
             if !offset.equalTo(oldValue) { setNeedsUpdateConstraints() }
         }
@@ -96,7 +88,7 @@ public class LPProgressHUD: UIView {
     /// The amount of space between the HUD edge and the HUD elements (labels, indicators or custom views).
     /// This also represents the minimum bezel distance to the edge of the HUD view.
     /// Defaults to 20.0
-    @objc public dynamic var margin: CGFloat = 20.0 {
+    public var margin: CGFloat = 20.0 {
         didSet {
             if margin != oldValue { setNeedsUpdateConstraints() }
         }
@@ -110,14 +102,14 @@ public class LPProgressHUD: UIView {
     }
     
     /// Force the HUD dimensions to be equal if possible.
-    @objc public dynamic var isSquare: Bool = false {
+    public var isSquare: Bool = false {
         didSet {
             if isSquare != oldValue { setNeedsUpdateConstraints() }
         }
     }
  
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to false.
-    @objc public dynamic var isMotionEffectsEnabled: Bool = false {
+    public var isMotionEffectsEnabled: Bool = false {
         didSet {
             if isMotionEffectsEnabled != oldValue { updateBezelMotionEffects() }
         }
@@ -146,10 +138,10 @@ public class LPProgressHUD: UIView {
     // MARK: - Views
     
     /// The view containing the labels and indicator (or customView).
-    public lazy var bezelView: LPBackgroundView = LPBackgroundView(frame: .zero)
+    public lazy var bezelView = LPBackgroundView(frame: .zero)
     
     /// View covering the entire HUD area, placed behind bezelView.
-    public lazy var backgroundView: LPBackgroundView = LPBackgroundView(frame: self.bounds)
+    public lazy var backgroundView = LPBackgroundView(frame: bounds)
     
     /// The UIView (e.g., a UIImageView) to be shown when the HUD is in LPProgressHUDModeCustomView.
     /// The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
@@ -160,32 +152,31 @@ public class LPProgressHUD: UIView {
     }
     
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    public lazy var label: UILabel = UILabel(frame: .zero)
+    public lazy var label = UILabel(frame: .zero)
     
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
-    public lazy var detailsLabel: UILabel = UILabel(frame: .zero)
+    public lazy var detailsLabel = UILabel(frame: .zero)
     
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public lazy var button: UIButton = LPRoundedButton(frame: .zero)
     
-    fileprivate var useAnimation: Bool = false
-    fileprivate var isFinished: Bool = false
-    fileprivate var indicator: UIView?
-    fileprivate var showStarted: Date?
-    fileprivate var paddingConstraints: [NSLayoutConstraint]?
-    fileprivate var bezelConstraints: [NSLayoutConstraint]?
-    fileprivate lazy var topSpacer: UIView = UIView(frame: .zero)
-    fileprivate lazy var bottomSpacer: UIView = UIView(frame: .zero)
-    fileprivate var graceTimer: Timer?
-    fileprivate var minShowTimer: Timer?
-    fileprivate var hideDelayTimer: Timer?
+    private var useAnimation: Bool = false
+    private var isFinished: Bool = false
+    private var indicator: UIView?
+    private var showStarted: Date?
+    private var paddingConstraints: [NSLayoutConstraint]?
+    private var bezelConstraints: [NSLayoutConstraint]?
+    private lazy var topSpacer = UIView(frame: .zero)
+    private lazy var bottomSpacer = UIView(frame: .zero)
+    private var graceTimer: Timer?
+    private var minShowTimer: Timer?
+    private var hideDelayTimer: Timer?
     private var bezelMotionEffects: UIMotionEffectGroup?
-    fileprivate var progressObjectDisplayLink: CADisplayLink? {
+    private var progressObjectDisplayLink: CADisplayLink? {
         didSet {
-            if progressObjectDisplayLink != oldValue {
-                oldValue?.invalidate()
-                progressObjectDisplayLink?.add(to: .main, forMode: .default)
-            }
+            guard progressObjectDisplayLink != oldValue else { return }
+            oldValue?.invalidate()
+            progressObjectDisplayLink?.add(to: .main, forMode: .default)
         }
     }
     
@@ -227,7 +218,6 @@ extension LPProgressHUD {
     
     public class func hide(for view: UIView, animated: Bool) -> Bool {
         guard let hud = hud(for: view) else { return false }
-        
         hud.removeFromSuperViewOnHide = true
         hud.hide(animated: animated)
         return true
@@ -541,7 +531,6 @@ extension LPProgressHUD {
             if indicator.responds(to: #selector(setter: progress)) {
                 indicator.setValue(progress, forKey: "progress")
             }
-            
             indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
             indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
         }
@@ -665,11 +654,9 @@ extension LPProgressHUD {
             
             // Element spacing
             if idx == 0 {
-                
                 // First, ensure spacing to bezel edge
                 bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: bezelView, attribute: .top, multiplier: 1.0, constant: 0.0))
             } else if idx == subviews.count - 1 {
-                
                 // Last, ensure spacing to bezel edge
                 bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: bezelView, attribute: .bottom, multiplier: 1.0, constant: 0.0))
             }
@@ -706,24 +693,20 @@ extension LPProgressHUD {
         
         var hasVisibleAncestors = false
         for padding in paddingConstraints {
-            guard let firstView = padding.firstItem as? UIView else { return }
-            guard let secondView = padding.secondItem as? UIView else { return }
-            
+            guard let firstView = padding.firstItem as? UIView
+                , let secondView = padding.secondItem as? UIView else { return }
+           
             let firstVisible = !firstView.isHidden && !firstView.intrinsicContentSize.equalTo(.zero)
             let secondVisible = !secondView.isHidden && !secondView.intrinsicContentSize.equalTo(.zero)
             
-            // Set if both views are visible or if there's a visible view on top that doesn't have padding
-            // added relative to the current view yet
+            // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
             padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? LPDefaultPadding : 0.0
-            
             hasVisibleAncestors = hasVisibleAncestors || secondVisible
         }
     }
     
     func apply(priority: UILayoutPriority, to constraints: [NSLayoutConstraint]) {
-        for constraint in constraints {
-            constraint.priority = priority
-        }
+        constraints.forEach { $0.priority = priority }
     }
 }
 
@@ -746,9 +729,8 @@ extension LPProgressHUD {
     }
     
     @objc func updateProgressFromProgressObject() {
-        if let progressObject = progressObject {
-            progress = CGFloat(progressObject.fractionCompleted)
-        }
+        guard let progressObject = progressObject else { return }
+        progress = CGFloat(progressObject.fractionCompleted)
     }
 }
 
@@ -774,8 +756,7 @@ extension LPProgressHUD {
     }
     
     func updateForCurrentOrientation(animated: Bool) {
-        if let superview = superview {
-            frame = superview.bounds // Stay in sync with the superview in any case
-        }
+        guard let superview = superview else { return }
+        frame = superview.bounds // Stay in sync with the superview in any case
     }
 }
