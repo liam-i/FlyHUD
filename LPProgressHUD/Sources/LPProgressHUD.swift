@@ -172,7 +172,7 @@ public class LPProgressHUD: UIView {
         didSet {
             if progressObjectDisplayLink != oldValue {
                 oldValue?.invalidate()
-                progressObjectDisplayLink?.add(to: RunLoop.main, forMode: .defaultRunLoopMode)
+                progressObjectDisplayLink?.add(to: .main, forMode: .default)
             }
         }
     }
@@ -245,7 +245,7 @@ extension LPProgressHUD {
         // If the grace time is set, postpone the HUD display
         if graceTime > 0.0 {
             let timer = Timer(timeInterval: graceTime, target: self, selector: #selector(handleGraceTimer), userInfo: nil, repeats: false)
-            RunLoop.current.add(timer, forMode: .commonModes)
+            RunLoop.current.add(timer, forMode: .common)
             graceTimer = timer
             return
         }
@@ -266,7 +266,7 @@ extension LPProgressHUD {
             let interv = Date().timeIntervalSince(showStarted)
             if interv < minShowTime {
                 let timer = Timer(timeInterval: minShowTime - interv, target: self, selector: #selector(handleMinShowTimer), userInfo: nil, repeats: false)
-                RunLoop.current.add(timer, forMode: .commonModes)
+                RunLoop.current.add(timer, forMode: .common)
                 minShowTimer = timer
                 return
             }
@@ -278,7 +278,7 @@ extension LPProgressHUD {
     
     public func hide(animated: Bool, afterDelay delay: TimeInterval) {
         let timer = Timer(timeInterval: delay, target: self, selector: #selector(handleHideTimer), userInfo: animated, repeats: false)
-        RunLoop.current.add(timer, forMode: .commonModes)
+        RunLoop.current.add(timer, forMode: .common)
         hideDelayTimer = timer
     }
     
@@ -480,7 +480,7 @@ extension LPProgressHUD {
             if !isActivityIndicator {
                 // Update to indeterminate indicator
                 indicator?.removeFromSuperview()
-                let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                let indicatorView = UIActivityIndicatorView(style: .whiteLarge)
                 indicatorView.startAnimating()
                 bezelView.addSubview(indicatorView)
                 indicator = indicatorView
@@ -615,8 +615,8 @@ extension LPProgressHUD {
         
         // Ensure minimum side margin is kept
         var sideConstraints: [NSLayoutConstraint] = []
-        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
-        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
+        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
+        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=margin)-[bezelView]-(>=margin)-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: metrics, views: ["bezelView": bezelView]))
         apply(priority: UILayoutPriority(rawValue: 999.0), to: sideConstraints)
         addConstraints(sideConstraints)
         
@@ -651,7 +651,7 @@ extension LPProgressHUD {
             bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem: bezelView, attribute: .centerX, multiplier: 1.0, constant: 0.0))
             
             // Ensure the minimum edge margin is kept
-            bezelConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[view]-(>=margin)-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: metrics, views: ["view": view]))
+            bezelConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[view]-(>=margin)-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: metrics, views: ["view": view]))
             
             // Element spacing
             if idx == 0 {
@@ -750,7 +750,7 @@ extension LPProgressHUD {
     func registerForNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(statusBarOrientationDidChange),
-                                               name: Notification.Name.UIApplicationDidChangeStatusBarOrientation,
+                                               name: UIApplication.didChangeStatusBarOrientationNotification,
                                                object: nil)
     }
     
