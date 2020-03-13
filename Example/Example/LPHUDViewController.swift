@@ -38,12 +38,6 @@ class LPHUDViewController: UITableViewController {
         ]
     ]
     lazy var canceled: Bool = false
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.backgroundView = UIImageView(image: UIImage(named: "bg.jpg"))
-                
-    }
 }
 
 // MARK: - Examples
@@ -303,8 +297,7 @@ extension LPHUDViewController {
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config, delegate: self, delegateQueue: nil)
         if let url = URL(string: "https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/HT1425/sample_iPod.m4v.zip") {
-            let task = session.downloadTask(with: url)
-            task.resume()
+            session.downloadTask(with: url).resume()
         }
     }
     
@@ -332,6 +325,7 @@ extension LPHUDViewController: URLSessionDelegate, URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         let progress = CGFloat(totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
+        print("download progress: \(progress)")
         
         // 回到主线程更新UI
         DispatchQueue.main.async {

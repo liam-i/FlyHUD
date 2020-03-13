@@ -37,7 +37,7 @@ class LPRoundedButton: UIButton {
     override var intrinsicContentSize: CGSize {
         
         // Only show if we have associated control events
-        if allControlEvents == UIControlEvents(rawValue: 0) {
+        if allControlEvents == UIControl.Event(rawValue: 0) {
             return .zero
         }
         
@@ -51,7 +51,7 @@ class LPRoundedButton: UIButton {
     
     // MARK: - Color
     
-    override func setTitleColor(_ color: UIColor?, for state: UIControlState) {
+    override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
         super.setTitleColor(color, for: state)
         
         // Update related colors
