@@ -9,10 +9,10 @@ let package = Package(
         .iOS(.v9),
     ],
     products: [
-        .library(name: "LPProgressHUD", targets: ["LPProgressHUD"]),
+        .library(name: "HUD", targets: ["HUD"]),
     ],
     targets: [
-        .target(name: "LPProgressHUD", path: "LPProgressHUD/Source"),
+        .target(name: "HUD", path: "HUD/Sources"),
     ],
     swiftLanguageVersions: [.v5]
 )

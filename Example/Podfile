@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'HUD_Example' do
+  pod 'HUD', :path => '../'
+
+  target 'HUD_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
