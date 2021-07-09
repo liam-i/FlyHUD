@@ -1,5 +1,5 @@
 PODS:
-  - HUD (0.2.0)
+  - HUD (1.2.0)
 
 DEPENDENCIES:
   - HUD (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  HUD: 755c4ef23a4dbe625d35b1fdd0e88677aecab358
+  HUD: bc5e1275d59676ed941eeb1258b381fbcab4f65c
 
 PODFILE CHECKSUM: f76817e793b5d21f21a85a24e24ea58280b74e13
 
