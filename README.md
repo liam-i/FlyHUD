@@ -32,7 +32,7 @@ HUD is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'HUD'
+pod 'HUD', :git => 'git@github.com:leo-lp/HUD.git', :tag => '1.2.0'
 ```
 
 ## Author
