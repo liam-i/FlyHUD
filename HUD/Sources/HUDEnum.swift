@@ -1,5 +1,5 @@
 //
-//  LPProgressHUDEnum.swift
+//  HUDEnum.swift
 //  HUD <https://github.com/leo-lp/HUD>
 //
 //  Created by Yao wang on 2017/6/1.

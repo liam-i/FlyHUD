@@ -129,7 +129,7 @@ public class HUD: UIView {
     /// View covering the entire HUD area, placed behind bezelView.
     public lazy var backgroundView = BackgroundView(frame: bounds)
 
-    /// The UIView (e.g., a UIImageView) to be shown when the HUD is in LPProgressHUDModeCustomView.
+    /// The UIView (e.g., a UIImageView) to be shown when the HUD is in HUDModeCustomView.
     /// The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
     public var customView: UIView? {
         didSet {
