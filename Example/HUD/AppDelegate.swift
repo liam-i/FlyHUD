@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  HUD
 //
-//  Created by Yao wang on 07/09/2021.
-//  Copyright (c) 2021 Yao wang. All rights reserved.
+//  Created by Liam on 07/09/2021.
+//  Copyright (c) 2021 Liam. All rights reserved.
 //
 
 import UIKit

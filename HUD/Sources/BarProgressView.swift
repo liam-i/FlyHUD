@@ -1,9 +1,9 @@
 //
 //  BarProgressView.swift
-//  HUD <https://github.com/leo-lp/HUD>
+//  HUD <https://github.com/liam-i/HUD>
 //
-//  Created by Yao wang on 2017/6/1.
-//  Copyright (c) 2021 Yao wang. All rights reserved.
+//  Created by Liam on 2017/6/1.
+//  Copyright (c) 2021 Liam. All rights reserved.
 //
 //  This source code is licensed under the MIT-style license found in the
 //  LICENSE file in the root directory of this source tree.
