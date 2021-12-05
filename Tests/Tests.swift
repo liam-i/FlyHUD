@@ -1,5 +1,5 @@
 import XCTest
-import HUD
+import LPHUD
 
 class Tests: XCTestCase {
     override func setUpWithError() throws {

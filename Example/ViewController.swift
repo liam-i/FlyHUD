@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import HUD
+import LPHUD
 
 class ViewController: UITableViewController {
     // MARK: Getters and Setters
