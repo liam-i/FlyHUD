@@ -5,11 +5,26 @@
 [![License](https://img.shields.io/cocoapods/l/HUD.svg?style=flat)](https://cocoapods.org/pods/HUD)
 [![Platform](https://img.shields.io/cocoapods/p/HUD.svg?style=flat)](https://cocoapods.org/pods/HUD)
 
+The Swift version of [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
+
+## ScreenShots
+
+![](ScreenShots/ScreenShot1.png)
+![](ScreenShots/ScreenShot2.png)
+![](ScreenShots/ScreenShot3.png)
+![](ScreenShots/ScreenShot4.png)
+![](ScreenShots/ScreenShot5.png)
+![](ScreenShots/ScreenShot6.png)
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+* iOS 10.0+ 
+* Xcode 12.0+
+* Swift 5.0+
 
 ## Installation
 
