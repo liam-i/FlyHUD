@@ -14,7 +14,7 @@ use_frameworks! :linkage => :static
 #workspace 'HUD.xcworkspace'
 
 target 'HUD_Example' do
-  pod 'HUD', :path => './'
+  pod 'LPHUD', :path => './'
 
   target 'HUD_Tests' do
     inherit! :search_paths
