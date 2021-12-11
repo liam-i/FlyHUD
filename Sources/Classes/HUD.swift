@@ -20,7 +20,7 @@ public protocol HUDDelegate: AnyObject {
 ///
 /// - NOTE: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - ATTENTION: HUD is a UI class and should therefore only be accessed on the main thread.
-public class HUD: UIView {
+open class HUD: UIView {
     // MARK: - Properties
 
     /// The HUD delegate object. Receives HUD state notifications.
@@ -80,6 +80,13 @@ public class HUD: UIView {
     public var margin: CGFloat = 20.0 {
         didSet {
             if margin != oldValue { setNeedsUpdateConstraints() }
+        }
+    }
+
+    /// Top and bottom spacing. Defaults to 20.0
+    public var topBottomMargin: CGFloat = 20.0 {
+        didSet {
+            if topBottomMargin != oldValue { setNeedsUpdateConstraints() }
         }
     }
 
@@ -144,7 +151,7 @@ public class HUD: UIView {
     public lazy var detailsLabel = UILabel(frame: .zero)
 
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
-    public lazy var button: UIButton = RoundedButton(frame: .zero)
+    public lazy var button = RoundedButton(frame: .zero)
 
     private var useAnimation: Bool = false
     private var isFinished: Bool = false
@@ -194,7 +201,6 @@ public class HUD: UIView {
 }
 
 extension HUD {
-
     // MARK: - Class methods, Show & hide
 
     public class func show(to view: UIView, animated: Bool) -> HUD {
@@ -371,7 +377,6 @@ extension HUD {
 // MARK: - Timer callbacks
 
 extension HUD {
-
     @objc private func handleHideTimer(_ timer: Timer) {
         let animated = timer.userInfo as? Bool ?? true
         hide(animated: animated)
@@ -400,7 +405,6 @@ extension HUD {
 // MARK: - UI
 
 extension HUD {
-
     private func commonInit() {
         // Transparent background
         isOpaque = false
@@ -425,7 +429,6 @@ extension HUD {
         addSubview(backgroundView)
 
         bezelView.translatesAutoresizingMaskIntoConstraints = false
-        bezelView.layer.cornerRadius = 5.0
         bezelView.alpha = 0.0
         addSubview(bezelView)
 
@@ -570,7 +573,6 @@ extension HUD {
 // MARK: - Layout
 
 extension HUD {
-
     public override func updateConstraints() {
         var bezelConstraints: [NSLayoutConstraint] = []
         let metrics = ["margin": margin]
@@ -620,8 +622,8 @@ extension HUD {
         }
 
         // Top and bottom spacing
-        topSpacer.addConstraint(NSLayoutConstraint(item: topSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: margin))
-        bottomSpacer.addConstraint(NSLayoutConstraint(item: bottomSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: margin))
+        topSpacer.addConstraint(NSLayoutConstraint(item: topSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: topBottomMargin))
+        bottomSpacer.addConstraint(NSLayoutConstraint(item: bottomSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: topBottomMargin))
 
         // Top and bottom spaces should be equal
         bezelConstraints.append(NSLayoutConstraint(item: topSpacer, attribute: .height, relatedBy: .equal, toItem: bottomSpacer, attribute: .height, multiplier: 1.0, constant: 0.0))
@@ -701,7 +703,6 @@ extension HUD {
 // MARK: - NSProgress
 
 extension HUD {
-
     private func setNSProgressDisplayLink(enabled: Bool) {
         // We're using CADisplayLink, because NSProgress can change very quickly and observing it may starve the main thread,
         // so we're refreshing the progress only every frame draw
@@ -724,7 +725,6 @@ extension HUD {
 // MARK: - Notifications
 
 extension HUD {
-
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationDidChange),
                                                name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)

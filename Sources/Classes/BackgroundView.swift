@@ -12,6 +12,7 @@
 import UIKit
 
 public class BackgroundView: UIView {
+    public var roundedCorners: RoundedCorners = .radius(5.0)
 
     // MARK: - Properties
 
@@ -68,6 +69,16 @@ public class BackgroundView: UIView {
     }
 
     // MARK: - Layout
+
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        switch roundedCorners {
+        case .radius(let value):
+            layer.cornerRadius = ceil(value)
+        case .fully:
+            layer.cornerRadius = ceil(bounds.height / 2.0) // Fully rounded corners
+        }
+    }
 
     public override var intrinsicContentSize: CGSize {
         // Smallest size possible. Content pushes against this.
