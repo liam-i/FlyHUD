@@ -43,3 +43,10 @@ public enum HUDBackgroundStyle {
     /// UIVisualEffectView or UIToolbar.layer background view
     case blur
 }
+
+public enum RoundedCorners {
+    /// corner Radius
+    case radius(CGFloat)
+    /// Fully rounded corners
+    case fully
+}

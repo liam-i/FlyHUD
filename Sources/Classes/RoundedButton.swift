@@ -11,29 +11,34 @@
 
 import UIKit
 
-class RoundedButton: UIButton {
+public class RoundedButton: UIButton {
+    public var roundedCorners: RoundedCorners = .fully
 
     // MARK: - Lifecycle
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         layer.borderWidth = 1.0
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         layer.borderWidth = 1.0
     }
 
     // MARK: - Layout
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
-        // Fully rounded corners
-        layer.cornerRadius = ceil(bounds.height / 2.0)
+        switch roundedCorners {
+        case .radius(let value):
+            layer.cornerRadius = ceil(value)
+        case .fully:
+            layer.cornerRadius = ceil(bounds.height / 2.0) // Fully rounded corners
+        }
     }
 
-    override var intrinsicContentSize: CGSize {
+    public override var intrinsicContentSize: CGSize {
         // Only show if we have associated control events and a title
         if let title = title(for: .normal), !title.isEmpty, allControlEvents.rawValue > 0 {
             var size = super.intrinsicContentSize
@@ -45,7 +50,7 @@ class RoundedButton: UIButton {
 
     // MARK: - Color
 
-    override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
+    public override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
         super.setTitleColor(color, for: state)
         // Update related colors
         let highlighted = isHighlighted
@@ -53,7 +58,7 @@ class RoundedButton: UIButton {
         layer.borderColor = color?.cgColor
     }
 
-    override var isHighlighted: Bool {
+    public override var isHighlighted: Bool {
         didSet {
             let baseColor = titleColor(for: .selected)
             backgroundColor = isHighlighted ? baseColor?.withAlphaComponent(0.1) : UIColor.clear

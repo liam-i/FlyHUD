@@ -13,7 +13,6 @@ import UIKit
 
 /// A progress view for showing definite progress by filling up a circle (pie chart).
 public class RoundProgressView: UIView, Progressive {
-
     // MARK: - Properties
 
     /// Display mode - false = round or true = annular. Defaults to round.

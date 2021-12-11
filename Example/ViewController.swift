@@ -17,7 +17,6 @@ class ViewController: UITableViewController {
 // MARK: Examples
 
 extension ViewController {
-
     @objc func indeterminateExample() {
         let hud = HUD.show(to: navigationController!.view, animated: true)
         Network.request {
