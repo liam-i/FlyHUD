@@ -397,7 +397,7 @@ extension HUD {
 // MARK: - View Hierarchy
 
 extension HUD {
-    public override func didMoveToSuperview() {
+    open override func didMoveToSuperview() {
         updateForCurrentOrientation(animated: false)
     }
 }
@@ -405,7 +405,7 @@ extension HUD {
 // MARK: - UI
 
 extension HUD {
-    private func commonInit() {
+    open func commonInit() {
         // Transparent background
         isOpaque = false
         backgroundColor = UIColor.clear
@@ -573,7 +573,7 @@ extension HUD {
 // MARK: - Layout
 
 extension HUD {
-    public override func updateConstraints() {
+    open override func updateConstraints() {
         var bezelConstraints: [NSLayoutConstraint] = []
         let metrics = ["margin": margin]
         var subviews = [topSpacer, label, detailsLabel, button, bottomSpacer]
@@ -663,7 +663,7 @@ extension HUD {
         super.updateConstraints()
     }
 
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         // There is no need to update constraints if they are going to
         // be recreated in [super layoutSubviews] due to needsUpdateConstraints being set.
         // This also avoids an issue on iOS 8, where updatePaddingConstraints
