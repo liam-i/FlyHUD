@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LPHUD'
-  s.version          = '1.2.4'
+  s.version          = '1.2.5'
   s.summary          = 'An iOS activity indicator view.'
   s.description      = <<-DESC
                     LPHUD is an iOS drop-in class that displays a translucent HUD
