@@ -202,7 +202,7 @@ open class HUD: UIView {
 
 extension HUD {
     // MARK: - Class methods, Show & hide
-
+    @discardableResult
     public class func show(to view: UIView, animated: Bool) -> HUD {
         let hud = HUD(with: view)
         hud.removeFromSuperViewOnHide = true
@@ -211,6 +211,7 @@ extension HUD {
         return hud
     }
 
+    @discardableResult
     public class func hide(for view: UIView, animated: Bool) -> Bool {
         guard let hud = hud(for: view) else { return false }
         hud.removeFromSuperViewOnHide = true
