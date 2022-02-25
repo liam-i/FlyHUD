@@ -31,7 +31,6 @@
 /* Begin PBXFileReference section */
 		1828E0952643B700004E75A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		24BF3D8C3FC71E5A901F1909 /* push-git.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = "push-git.sh"; path = "./push-git.sh"; sourceTree = "<group>"; };
-		3E67BA80ACCB282C1E5E44B3 /* build.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; name = build.sh; path = ./build.sh; sourceTree = "<group>"; };
 		49272EEED1155CB868DD89DB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ./LICENSE; sourceTree = "<group>"; };
 		560C516F554DA412B5D00A24 /* LPHUD.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LPHUD.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		607FACD01AFB9204008FA782 /* HUD_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUD_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +134,6 @@
 				560C516F554DA412B5D00A24 /* LPHUD.podspec */,
 				9E0324869DDCF5B38A611744 /* README.md */,
 				49272EEED1155CB868DD89DB /* LICENSE */,
-				3E67BA80ACCB282C1E5E44B3 /* build.sh */,
 				24BF3D8C3FC71E5A901F1909 /* push-git.sh */,
 				8AD07109811498BE84F94001 /* install-pods.sh */,
 				F46AAFD39E145EDFB4E2E898 /* update-pods.sh */,
