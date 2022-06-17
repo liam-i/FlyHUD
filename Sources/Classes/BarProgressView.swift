@@ -13,7 +13,6 @@ import UIKit
 
 /// A flat bar progress view.
 public class BarProgressView: UIView, Progressive {
-
     // MARK: - Properties
 
     /// Progress (0.0 to 1.0)
@@ -66,6 +65,7 @@ public class BarProgressView: UIView, Progressive {
 
     // MARK: - Drawing
 
+    // swiftlint:disable function_body_length
     public override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.setLineWidth(2.0)
@@ -96,7 +96,6 @@ public class BarProgressView: UIView, Progressive {
 
         // Progress in the middle area
         if amount >= radius + 4 && amount <= (rect.size.width - radius - 4) {
-
             context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
             context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
                            tangent2End: CGPoint(x: radius + 4, y: 4.0),
@@ -116,7 +115,6 @@ public class BarProgressView: UIView, Progressive {
 
         // Progress in the right arc
         else if amount > radius + 4 {
-
             let x = amount - (rect.width - radius - 4.0)
             context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
             context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
@@ -157,7 +155,6 @@ public class BarProgressView: UIView, Progressive {
 
         // Progress is in the left arc
         else if amount < radius + 4 && amount > 0 {
-
             context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
             context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
                            tangent2End: CGPoint(x: radius + 4, y: 4.0),
@@ -173,4 +170,5 @@ public class BarProgressView: UIView, Progressive {
             context.fillPath()
         }
     }
+    // swiftlint:enable function_body_length
 }
