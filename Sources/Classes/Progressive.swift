@@ -1,6 +1,6 @@
 //
 //  Progressive.swift
-//  HUD
+//  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by Liam on 2021/7/9.
 //  Copyright (c) 2021 Liam. All rights reserved.
