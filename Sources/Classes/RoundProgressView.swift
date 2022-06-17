@@ -65,6 +65,7 @@ public class RoundProgressView: UIView, Progressive {
 
     // MARK: - Drawing
 
+    // swiftlint:disable function_body_length
     public override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return assert(false) }
         if isAnnular {
@@ -137,4 +138,5 @@ public class RoundProgressView: UIView, Progressive {
             processPath.stroke()
         }
     }
+    // swiftlint:enable function_body_length
 }

@@ -8,6 +8,9 @@
 //  This source code is licensed under the MIT-style license found in the
 //  LICENSE file in the root directory of this source tree.
 //
+//  Forked from https://github.com/liam-i/HUD
+//  Version 1.2.5
+//
 
 import UIKit
 
