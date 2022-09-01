@@ -35,6 +35,10 @@ it, simply add the following line to your Podfile:
 pod 'LPHUD'
 ```
 
+## ## Documentation
+
+[Complete API Documentation](https://liam-i.github.io/HUD/documentation/lphud)
+
 ## Author
 
 Liam, liam_i@163.com
