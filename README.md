@@ -1,11 +1,11 @@
 # HUD
 
-[![CI Status](https://img.shields.io/travis/Liam/HUD.svg?style=flat)](https://travis-ci.org/Liam/HUD)
-[![Version](https://img.shields.io/cocoapods/v/HUD.svg?style=flat)](https://cocoapods.org/pods/HUD)
-[![License](https://img.shields.io/cocoapods/l/HUD.svg?style=flat)](https://cocoapods.org/pods/HUD)
-[![Platform](https://img.shields.io/cocoapods/p/HUD.svg?style=flat)](https://cocoapods.org/pods/HUD)
+<!-- [![CI Status](https://img.shields.io/travis/Liam/HUD.svg?style=flat)](https://travis-ci.org/Liam/HUD) -->
+[![Version](https://img.shields.io/cocoapods/v/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
+[![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
+[![Platform](https://img.shields.io/cocoapods/p/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
 
-The Swift version of [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
+A Swift version of [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
 
 ## ScreenShots
 
