@@ -2,7 +2,7 @@
 //  Model.swift
 //  HUD_Example
 //
-//  Created by yalla012 on 2021/7/9.
+//  Created by liam on 2021/7/9.
 //  Copyright © 2021 CocoaPods. All rights reserved.
 //
 
