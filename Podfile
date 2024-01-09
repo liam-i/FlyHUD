@@ -5,7 +5,8 @@ install! 'cocoapods',
   :generate_multiple_pod_projects => true
 
 platform :ios, '11.0'
-use_frameworks!
+#use_frameworks!
+use_frameworks! :linkage => :static
 
 target 'HUD_Example' do
   pod 'LPHUD', :path => './'
