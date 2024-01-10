@@ -17,15 +17,19 @@ class ViewController: UITableViewController {
 // MARK: Examples
 
 extension ViewController {
+    private var container: UIView {
+        navigationController!.view
+    }
+
     @objc func indeterminateExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         Network.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Loading..."
 
         Network.request {
@@ -34,7 +38,7 @@ extension ViewController {
     }
 
     @objc func detailsLabelExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Loading..."
         hud.detailsLabel.text = "Parsing data\n(1/1)"
 
@@ -44,43 +48,43 @@ extension ViewController {
     }
 
     @objc func determinateExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinate
         hud.detailsLabel.text = "Loading..."
 
         Network.request {
-            HUD.hud(for: self.navigationController!.view)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
     }
 
     @objc func annularDeterminateExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .annularDeterminate
         hud.label.text = "Loading..."
 
         Network.request {
-            HUD.hud(for: self.navigationController!.view)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
     }
 
     @objc func barDeterminateExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinateHorizontalBar
         hud.label.text = "Loading..."
 
         Network.request {
-            HUD.hud(for: self.navigationController!.view)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
     }
 
     @objc func textExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .text
         hud.label.text = "Wrong password"
         hud.offset = CGPoint(x: 0.0, y: HUD.maxOffset) // 移动到底部居中
@@ -88,7 +92,7 @@ extension ViewController {
     }
 
     @objc func customViewExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .customView
         hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
         hud.isSquare = true
@@ -97,38 +101,38 @@ extension ViewController {
     }
 
     @objc func cancelationExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinate
         hud.label.text = "Loading..."
         hud.button.setTitle("Cancel", for: .normal)
         hud.button.addTarget(self, action: #selector(cancelWork), for: .touchUpInside)
 
         Network.request {
-            HUD.hud(for: self.navigationController!.view)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
     }
 
     @objc func modeSwitchingExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Preparing..."
         hud.minSize = CGSize(width: 150.0, height: 100.0)
 
         Network.requestMultiTask {
-            HUD.hud(for: self.navigationController!.view)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0
         } completion: {
             switch $0 {
             case 3:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
+                guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.mode = .determinate
                 hud.label.text = "Loading..."
             case 2:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
+                guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.mode = .indeterminate
                 hud.label.text = "Cleaning up..."
             case 1:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
+                guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
                 hud.mode = .customView
                 hud.label.text = "Completed"
@@ -148,16 +152,16 @@ extension ViewController {
     }
 
     @objc func networkingExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Preparing..."
         hud.minSize = CGSize(width: 150.0, height: 100.0)
 
         Network.download {
-            guard let hud = HUD.hud(for: self.navigationController!.view) else { return }
+            guard let hud = HUD.hud(for: self.container) else { return }
             hud.mode = .determinate
             hud.progress = $0
         } completion: {
-            guard let hud = HUD.hud(for: self.navigationController!.view) else { return }
+            guard let hud = HUD.hud(for: self.container) else { return }
             hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
             hud.mode = .customView
             hud.label.text = "Completed"
@@ -166,7 +170,7 @@ extension ViewController {
     }
 
     @objc func determinateProgressExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinate
         hud.label.text = "Loading..."
         let progress = Progress(totalUnitCount: 100)
@@ -180,7 +184,7 @@ extension ViewController {
     }
 
     @objc func dimBackgroundExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.backgroundView.style = .solidColor
         hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
         Network.request {
@@ -189,7 +193,7 @@ extension ViewController {
     }
 
     @objc func colorExample() {
-        let hud = HUD.show(to: navigationController!.view, animated: true)
+        let hud = HUD.show(to: container, animated: true)
         hud.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
         hud.label.text = "Loading..."
         Network.request {
@@ -199,6 +203,41 @@ extension ViewController {
 
     @objc func cancelWork(_ sender: UIButton) {
         Network.cancelTask()
+    }
+
+    @objc func multipleHUDExample() {
+        /// Handle show `HUD` multiple times in the same `View`.
+
+        HUD.isCountEnabled = true
+
+        func request1() {
+            let hud = HUD.show(to: container, animated: true)
+            Network.request {
+                hud.hide(animated: true)
+            }
+        }
+        func request2() {
+            let hud = HUD.show(to: container, animated: true)
+            Network.request {
+                hud.hide(animated: true)
+            }
+        }
+        func request3() {
+            let hud = HUD.show(to: container, animated: true)
+            Network.request {
+                hud.hide(animated: true)
+            }
+        }
+
+        request1()
+        request2()
+        request3()
+
+        let hud = HUD.hud(for: container)
+        print("开始：\(String(describing: hud?.count))")
+        hud?.completionBlock = { hud in
+            print("结束：\(hud.count)")
+        }
     }
 }
 

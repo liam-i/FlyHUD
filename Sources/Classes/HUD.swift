@@ -27,7 +27,7 @@ open class HUD: UIView {
     public weak var delegate: HUDDelegate?
 
     /// Called after the HUD is hidden.
-    public var completionBlock: (() -> Void)?
+    public var completionBlock: ((_ hud: HUD) -> Void)?
 
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
     /// Defaults to 0 (no minimum show time).
@@ -41,6 +41,11 @@ open class HUD: UIView {
 
     /// Removes the HUD from its parent view when hidden. Defaults to true.
     public var removeFromSuperViewOnHide: Bool = true
+
+    /// Handle show `HUD` multiple times in the same `View`.
+    public private(set) var count: Int = 0
+    /// Enable `count`. Defaults to false.
+    public static var isCountEnabled: Bool = false
 
     // MARK: - Appearance
 
@@ -218,12 +223,16 @@ open class HUD: UIView {
         print("👍👍👍 HUD is released.")
         #endif
     }
-}
 
-extension HUD {
     // MARK: - Class methods, Show & hide
+
     @discardableResult
     public class func show(to view: UIView, animated: Bool) -> HUD {
+        if HUD.isCountEnabled, let hud = hud(for: view) {
+            hud.count += 1
+            return hud
+        }
+
         let hud = HUD(with: view)
         hud.removeFromSuperViewOnHide = true
         view.addSubview(hud)
@@ -239,8 +248,11 @@ extension HUD {
         return true
     }
 
+    /// Finds the top-most HUD subview that hasn't finished and returns it.
+    /// - Parameter view: The view that is going to be searched.
+    /// - Returns: A reference to the last HUD subview discovered.
     public class func hud(for view: UIView) -> HUD? {
-        for case let hud as HUD in view.subviews.reversed() where !hud.isFinished {
+        for case let hud as HUD in view.subviews.reversed() where hud.isFinished == false {
             return hud
         }
         return nil
@@ -250,6 +262,10 @@ extension HUD {
 
     public func show(animated: Bool) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
+
+        if HUD.isCountEnabled {
+            count += 1
+        }
 
         minShowTimer?.invalidate()
         useAnimation = animated
@@ -269,6 +285,13 @@ extension HUD {
 
     public func hide(animated: Bool) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
+
+        if HUD.isCountEnabled {
+            count -= 1
+            if count > 0 {
+                return
+            }
+        }
 
         graceTimer?.invalidate()
         useAnimation = animated
@@ -390,14 +413,12 @@ extension HUD {
             }
         }
 
-        completionBlock?()
+        completionBlock?(self)
         delegate?.hudWasHidden(self)
     }
-}
 
-// MARK: - Timer callbacks
+    // MARK: - Timer callbacks
 
-extension HUD {
     @objc
     private func handleHideTimer(_ timer: Timer) {
         let animated = timer.userInfo as? Bool ?? true
@@ -416,19 +437,15 @@ extension HUD {
     private func handleMinShowTimer(_ timer: Timer) {
         hide(usingAnimation: useAnimation)
     }
-}
 
-// MARK: - View Hierarchy
+    // MARK: - View Hierarchy
 
-extension HUD {
     open override func didMoveToSuperview() {
         updateForCurrentOrientation(animated: false)
     }
-}
 
-// MARK: - UI
+    // MARK: - UI
 
-extension HUD {
     private func setupViews() {
         let defaultColor = contentColor
 
@@ -580,11 +597,9 @@ extension HUD {
             bezelView.removeMotionEffect(motionEffects)
         }
     }
-}
 
-// MARK: - Layout
+    // MARK: - Layout
 
-extension HUD {
     // swiftlint:disable function_body_length
     open override func updateConstraints() {
         var bezelConstraints: [NSLayoutConstraint] = []
@@ -729,11 +744,9 @@ extension HUD {
     private func apply(priority: UILayoutPriority, to constraints: [NSLayoutConstraint]) {
         constraints.forEach { $0.priority = priority }
     }
-}
 
-// MARK: - NSProgress
+    // MARK: - NSProgress
 
-extension HUD {
     private func setNSProgressDisplayLink(enabled: Bool) {
         // We're using CADisplayLink, because NSProgress can change very quickly and observing it may starve the main thread,
         // so we're refreshing the progress only every frame draw
@@ -752,11 +765,9 @@ extension HUD {
         guard let progressObject = progressObject else { return }
         progress = CGFloat(progressObject.fractionCompleted)
     }
-}
 
-// MARK: - Notifications
+    // MARK: - Notifications
 
-extension HUD {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationDidChange),
                                                name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)

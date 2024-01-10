@@ -14,10 +14,10 @@ struct Model {
 }
 
 extension Model {
-    static var examples: [[Model]] {
-        [[Model(title: "Indeterminate mode", selector: #selector(ViewController.indeterminateExample)),
-          Model(title: "With label", selector: #selector(ViewController.labelExample)),
-          Model(title: "With details label", selector: #selector(ViewController.detailsLabelExample))
+    static var examples: [[Model]] {[
+        [Model(title: "Indeterminate mode", selector: #selector(ViewController.indeterminateExample)),
+         Model(title: "With label", selector: #selector(ViewController.labelExample)),
+         Model(title: "With details label", selector: #selector(ViewController.detailsLabelExample))
         ],
         [Model(title: "Determinate mode", selector: #selector(ViewController.determinateExample)),
          Model(title: "Annular determinate mode", selector: #selector(ViewController.annularDeterminateExample)),
@@ -33,8 +33,9 @@ extension Model {
          Model(title: "Determinate with Progress", selector: #selector(ViewController.determinateProgressExample)),
          Model(title: "Dim background", selector: #selector(ViewController.dimBackgroundExample)),
          Model(title: "Colored", selector: #selector(ViewController.colorExample))
-        ]]
-    }
+        ],
+        [Model(title: "Multiple HUD", selector: #selector(ViewController.multipleHUDExample))]
+    ]}
 }
 
 // MARK: Tasks
