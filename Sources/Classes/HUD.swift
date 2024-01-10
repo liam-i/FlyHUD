@@ -224,10 +224,17 @@ open class HUD: UIView {
         #endif
     }
 
-    // MARK: - Class methods, Show & hide
+    // MARK: - Show & hide
 
+    /// Creates a new HUD, adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true.`
+    /// - Returns: A reference to the created HUD.
+    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
+    /// - SeeAlso: animationType.
     @discardableResult
-    public class func show(to view: UIView, animated: Bool) -> HUD {
+    public class func show(to view: UIView, animated: Bool = true) -> HUD {
         if HUD.isCountEnabled, let hud = hud(for: view) {
             hud.count += 1
             return hud
@@ -240,8 +247,15 @@ open class HUD: UIView {
         return hud
     }
 
+    /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:animated:)`.
+    /// - Parameters:
+    ///   - view: The view that is going to be searched for a HUD subview.
+    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true.`
+    /// - Returns: true if a HUD was found and removed, false otherwise.
+    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
+    /// - SeeAlso: animationType.
     @discardableResult
-    public class func hide(for view: UIView, animated: Bool) -> Bool {
+    public class func hide(for view: UIView, animated: Bool = true) -> Bool {
         guard let hud = hud(for: view) else { return false }
         hud.removeFromSuperViewOnHide = true
         hud.hide(animated: animated)
@@ -258,9 +272,11 @@ open class HUD: UIView {
         return nil
     }
 
-    // MARK: - Show & hide
-
-    public func show(animated: Bool) {
+    /// Displays the HUD.
+    /// - Parameter animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true.`
+    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like NSOperation or making an asynchronous call like NSURLRequest).
+    /// - SeeAlso: animationType.
+    public func show(animated: Bool = true) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if HUD.isCountEnabled {
@@ -283,7 +299,10 @@ open class HUD: UIView {
         show(usingAnimation: useAnimation)
     }
 
-    public func hide(animated: Bool) {
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    /// - Parameter animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true.`
+    /// - SeeAlso: animationType.
+    public func hide(animated: Bool = true) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if HUD.isCountEnabled {
@@ -313,7 +332,12 @@ open class HUD: UIView {
         hide(usingAnimation: useAnimation)
     }
 
-    public func hide(animated: Bool, afterDelay delay: TimeInterval) {
+    /// Hides the HUD after a delay. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    /// - Parameters:
+    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true.`
+    ///   - delay: Delay in seconds until the HUD is hidden.
+    /// - SeeAlso: animationType.
+    public func hide(animated: Bool = true, afterDelay delay: TimeInterval) {
         // Cancel any scheduled hideAnimated:afterDelay: calls
         hideDelayTimer?.invalidate()
 
