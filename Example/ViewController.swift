@@ -120,15 +120,15 @@ extension ViewController {
         } completion: {
             switch $0 {
             case 3:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assert(false) }
+                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
                 hud.mode = .determinate
                 hud.label.text = "Loading..."
             case 2:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assert(false) }
+                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
                 hud.mode = .indeterminate
                 hud.label.text = "Cleaning up..."
             case 1:
-                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assert(false) }
+                guard let hud = HUD.hud(for: self.navigationController!.view) else { return assertionFailure() }
                 hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
                 hud.mode = .customView
                 hud.label.text = "Completed"

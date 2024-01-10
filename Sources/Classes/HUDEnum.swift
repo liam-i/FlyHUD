@@ -16,10 +16,10 @@ public enum HUDMode {
     case indeterminate
     /// A round, pie-chart like, progress view.
     case determinate
-    /// Horizontal progress bar.
-    case determinateHorizontalBar
     /// Ring-shaped progress view.
     case annularDeterminate
+    /// Horizontal progress bar.
+    case determinateHorizontalBar
     /// Shows a custom view.
     case customView
     /// Shows only labels.
