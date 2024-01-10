@@ -197,6 +197,21 @@ open class HUD: UIView {
         commonInit()
     }
 
+    /// Common initialization method, allowing overriding
+    open func commonInit() {
+        // Transparent background
+        isOpaque = false
+        backgroundColor = UIColor.clear
+        // Make it invisible for now
+        alpha = 0.0
+        autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        layer.allowsGroupOpacity = false
+
+        setupViews()
+        updateIndicators()
+        registerForNotifications()
+    }
+
     deinit {
         unregisterFromNotifications()
         #if DEBUG
@@ -225,10 +240,8 @@ extension HUD {
     }
 
     public class func hud(for view: UIView) -> HUD? {
-        for subView in view.subviews.reversed() where subView is HUD {
-            if let hud = subView as? HUD, !hud.isFinished {
-                return hud
-            }
+        for case let hud as HUD in view.subviews.reversed() where !hud.isFinished {
+            return hud
         }
         return nil
     }
@@ -416,20 +429,6 @@ extension HUD {
 // MARK: - UI
 
 extension HUD {
-    open func commonInit() {
-        // Transparent background
-        isOpaque = false
-        backgroundColor = UIColor.clear
-        // Make it invisible for now
-        alpha = 0.0
-        autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        layer.allowsGroupOpacity = false
-
-        setupViews()
-        updateIndicators()
-        registerForNotifications()
-    }
-
     private func setupViews() {
         let defaultColor = contentColor
 
@@ -551,9 +550,9 @@ extension HUD {
             indicator.color = color
         } else if let indicator = indicator as? RoundProgressView {
             indicator.progressTintColor = color
-            indicator.backgroundTintColor = color.withAlphaComponent(0.1)
+            indicator.trackTintColor = color.withAlphaComponent(0.1)
         } else if let indicator = indicator as? BarProgressView {
-            indicator.progressColor = color
+            indicator.progressTintColor = color
             indicator.lineColor = color
         } else {
             indicator.tintColor = color

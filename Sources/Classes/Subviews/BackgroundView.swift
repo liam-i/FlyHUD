@@ -22,7 +22,8 @@ public class BackgroundView: UIView {
     /// The background style. Defaults to .blur
     public var style: HUDBackgroundStyle = .blur {
         didSet {
-            if style != oldValue { updateForBackgroundStyle() }
+            guard style != oldValue else { return }
+            updateForBackgroundStyle()
         }
     }
 
@@ -35,7 +36,8 @@ public class BackgroundView: UIView {
         }
     }() {
         didSet {
-            if blurEffectStyle != oldValue { updateForBackgroundStyle() }
+            guard blurEffectStyle != oldValue else { return }
+            updateForBackgroundStyle()
         }
     }
 
@@ -49,7 +51,8 @@ public class BackgroundView: UIView {
         }
     }() {
         didSet {
-            if color != oldValue { backgroundColor = color }
+            guard color != oldValue else { return }
+            backgroundColor = color
         }
     }
 
@@ -84,8 +87,7 @@ public class BackgroundView: UIView {
     }
 
     public override var intrinsicContentSize: CGSize {
-        // Smallest size possible. Content pushes against this.
-        return .zero
+        .zero // Smallest size possible. Content pushes against this.
     }
 
     // MARK: - Views
@@ -94,7 +96,10 @@ public class BackgroundView: UIView {
         effectView?.removeFromSuperview()
         effectView = nil
 
-        if style == .blur {
+        switch style {
+        case .solidColor:
+            backgroundColor = color
+        case .blur:
             let effect = UIBlurEffect(style: blurEffectStyle)
             let effectview = UIVisualEffectView(effect: effect)
             insertSubview(effectview, at: 0)
@@ -103,8 +108,6 @@ public class BackgroundView: UIView {
             backgroundColor = color
             layer.allowsGroupOpacity = false
             effectView = effectview
-        } else {
-            backgroundColor = color
         }
     }
 }
