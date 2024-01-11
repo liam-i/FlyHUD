@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LPHUD'
-  s.version          = '1.3.1'
+  s.version          = '1.3.2'
   s.summary          = 'An iOS activity indicator view.'
   s.description      = <<-DESC
                     LPHUD is an iOS drop-in class that displays a translucent HUD
@@ -19,5 +19,4 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.source_files = 'Sources/**/*'
-  s.resource_bundles = { "LPHUD" => ["Sources/PrivacyInfo.xcprivacy"] }
 end
