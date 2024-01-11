@@ -23,16 +23,29 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 ## Requirements
 
 * iOS 11.0+ 
-* Xcode 12.0+
+* Xcode 14.0+
 * Swift 5.0+
 
 ## Installation
 
-HUD is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+#### Swift Package Manager
+
+- File > Swift Packages > Add Package Dependency
+- Add `https://github.com/liam-i/AutoLayout.git`
+- Select "Up to Next Minor" with "1.3.1"
+
+#### CocoaPods
+
+HUD is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'LPHUD'
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '11.0'
+use_frameworks!
+
+target 'MyApp' do
+  pod 'LPHUD', '~> 1.3.1'
+end
 ```
 
 ## ## Documentation
