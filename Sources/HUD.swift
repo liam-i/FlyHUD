@@ -751,6 +751,9 @@ open class HUD: UIView {
     private func updateProgressFromProgressObject() {
         guard let progressObject = progressObject else { return }
         progress = CGFloat(progressObject.fractionCompleted)
+        // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
+        label.text = progressObject.localizedDescription
+        detailsLabel.text = progressObject.localizedAdditionalDescription
     }
 
     // MARK: - Notifications

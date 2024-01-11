@@ -215,10 +215,16 @@ extension ViewController {
         let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinate
         hud.label.text = "Loading..."
+        
         let progress = Progress(totalUnitCount: 100)
         hud.progressObject = progress
         hud.button.setTitle("Cancel", for: .normal)
         hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
+
+        // label.text and detailLabel.text takes their info from the progressObject.
+        // They can be customized or use the default text.
+        // To suppress one (or both) of the labels, set the descriptions to empty strings.
+//        progress.localizedDescription = "Download Progress"
 
         Network.resume(with: progress) {
             hud.hide(animated: true)
