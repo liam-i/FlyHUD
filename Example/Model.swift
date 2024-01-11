@@ -47,9 +47,9 @@ class Network: NSObject {
         canceled = true
     }
 
-    static func request(_ completion: @escaping () -> Void) {
+    static func request(_ time: UInt32 = 3, completion: @escaping () -> Void) {
         DispatchQueue.global().async {
-            sleep(3) // Simulate by just waiting.
+            sleep(time) // Simulate by just waiting.
 
             DispatchQueue.main.async(execute: completion)
         }
