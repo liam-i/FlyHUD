@@ -30,7 +30,11 @@ public class BackgroundView: UIView {
     /// The blur effect style, when using .blur. Defaults to .light.
     public var blurEffectStyle: UIBlurEffect.Style = {
         if #available(iOS 13.0, *) {
+            #if os(tvOS)
+            return .regular
+            #else
             return .systemThickMaterial
+            #endif
         } else {
             return .light
         }
