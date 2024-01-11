@@ -9,9 +9,38 @@
 import UIKit
 import LPHUD
 
+// MARK: UITableViewDelegate, UITableViewDataSource
+
 class ViewController: UITableViewController {
     // MARK: Getters and Setters
     private lazy var examples: [[Model]] = Model.examples
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return examples.count
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return examples[section].count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = examples[indexPath.section][indexPath.row].title
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10.0
+    }
+
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        perform(examples[indexPath.section][indexPath.row].selector)
+    }
 }
 
 // MARK: Examples
@@ -87,15 +116,24 @@ extension ViewController {
         let hud = HUD.show(to: container, animated: true)
         hud.mode = .text
         hud.label.text = "Wrong password"
-        hud.offset = CGPoint(x: 0.0, y: HUD.maxOffset) // 移动到底部居中
-        hud.hide(animated: true, afterDelay: 3.0)
+        Network.request(2) {
+            // test.
+            hud.layoutConfig.with {
+                $0.offset = CGPoint(x: HUDLayoutConfiguration.maxOffset, y: HUDLayoutConfiguration.maxOffset)
+                $0.margin = 50
+                $0.padding = 40
+                $0.isSquare = true
+            }
+
+            hud.hide(animated: true, afterDelay: 3.0)
+        }
     }
 
     @objc func customViewExample() {
         let hud = HUD.show(to: container, animated: true)
         hud.mode = .customView
         hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
-        hud.isSquare = true
+        hud.layoutConfig.isSquare = true
         hud.label.text = "Done"
         hud.hide(animated: true, afterDelay: 3.0)
     }
@@ -117,21 +155,25 @@ extension ViewController {
     @objc func modeSwitchingExample() {
         let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Preparing..."
-        hud.minSize = CGSize(width: 150.0, height: 100.0)
+        hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
         Network.requestMultiTask {
+            /// Demo `HUD.hud(for:)` method
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             switch $0 {
             case 3:
+                /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.mode = .determinate
                 hud.label.text = "Loading..."
             case 2:
+                /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.mode = .indeterminate
                 hud.label.text = "Cleaning up..."
             case 1:
+                /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
                 hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
                 hud.mode = .customView
@@ -154,7 +196,7 @@ extension ViewController {
     @objc func networkingExample() {
         let hud = HUD.show(to: container, animated: true)
         hud.label.text = "Preparing..."
-        hud.minSize = CGSize(width: 150.0, height: 100.0)
+        hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
         Network.download {
             guard let hud = HUD.hud(for: self.container) else { return }
@@ -212,21 +254,30 @@ extension ViewController {
 
         func request1() {
             let hud = HUD.show(to: container, animated: true)
-            Network.request {
+            Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
+
+                print("response1 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            print("request1  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request2() {
             let hud = HUD.show(to: container, animated: true)
-            Network.request {
+            Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
+
+                print("response2 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            print("request2  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request3() {
             let hud = HUD.show(to: container, animated: true)
-            Network.request {
+            Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
+
+                print("response3 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            print("request3  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
 
         request1()
@@ -234,40 +285,8 @@ extension ViewController {
         request3()
 
         let hud = HUD.hud(for: container)
-        print("开始：\(String(describing: hud?.count))")
         hud?.completionBlock = { hud in
-            print("结束：\(hud.count)")
+            print("结束 --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
-    }
-}
-
-// MARK: UITableViewDelegate, UITableViewDataSource
-
-extension ViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return examples.count
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return examples[section].count
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = examples[indexPath.section][indexPath.row].title
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 10.0
-    }
-
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.1
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        perform(examples[indexPath.section][indexPath.row].selector)
     }
 }

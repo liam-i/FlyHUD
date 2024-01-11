@@ -52,7 +52,8 @@ open class HUD: UIView {
     /// HUD operation mode. The default is indeterminate.
     public var mode: HUDMode = .indeterminate {
         didSet {
-            if mode != oldValue { updateIndicators() }
+            guard mode != oldValue else { return }
+            updateIndicators()
         }
     }
 
@@ -66,57 +67,27 @@ open class HUD: UIView {
         }
     }() {
         didSet {
-            if contentColor != oldValue, !contentColor.isEqual(oldValue) { updateViews(for: contentColor) }
+            guard contentColor != oldValue, !contentColor.isEqual(oldValue) else { return }
+            updateViews(for: contentColor)
         }
     }
 
     /// The animation type that should be used when the HUD is shown and hidden.
     public var animationType: HUDAnimation = .fade
 
-    /// The bezel offset relative to the center of the view. You can use `HUD.maxOffset` and `-HUD.maxOffset`
-    /// to move the HUD all the way to the screen edge in each direction.
-    /// E.g., `CGPoint(x: 0.0, y: HUD.maxOffset)` would position the HUD centered on the bottom edge.
-    public var offset: CGPoint = .zero {
+    /// HUD layout configuration. eg: offset, margin, padding, etc.
+    public var layoutConfig: HUDLayoutConfiguration = .init() {
         didSet {
-            if !offset.equalTo(oldValue) { setNeedsUpdateConstraints() }
-        }
-    }
-    public static let maxOffset: CGFloat = 1000000.0
-
-    /// The amount of space between the HUD edge and the HUD elements (labels, indicators or custom views).
-    /// This also represents the minimum bezel distance to the edge of the HUD view.
-    /// Defaults to 20.0
-    public var margin: CGFloat = 20.0 {
-        didSet {
-            if margin != oldValue { setNeedsUpdateConstraints() }
-        }
-    }
-
-    /// Top and bottom spacing. Defaults to 20.0
-    public var topBottomMargin: CGFloat = 20.0 {
-        didSet {
-            if topBottomMargin != oldValue { setNeedsUpdateConstraints() }
-        }
-    }
-
-    /// The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
-    public var minSize: CGSize = .zero {
-        didSet {
-            if !minSize.equalTo(oldValue) { setNeedsUpdateConstraints() }
-        }
-    }
-
-    /// Force the HUD dimensions to be equal if possible.
-    public var isSquare: Bool = false {
-        didSet {
-            if isSquare != oldValue { setNeedsUpdateConstraints() }
+            guard layoutConfig != oldValue else { return }
+            setNeedsUpdateConstraints()
         }
     }
 
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to false.
     public var isMotionEffectsEnabled: Bool = false {
         didSet {
-            if isMotionEffectsEnabled != oldValue { updateBezelMotionEffects() }
+            guard isMotionEffectsEnabled != oldValue else { return }
+            updateBezelMotionEffects()
         }
     }
 
@@ -133,7 +104,8 @@ open class HUD: UIView {
     /// The NSProgress object feeding the progress information to the progress indicator.
     public var progressObject: Progress? {
         didSet {
-            if progressObject != oldValue { setNSProgressDisplayLink(enabled: true) }
+            guard progressObject != oldValue else { return }
+            setNSProgressDisplayLink(enabled: true)
         }
     }
 
@@ -149,7 +121,8 @@ open class HUD: UIView {
     /// The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
     public var customView: UIView? {
         didSet {
-            if customView != oldValue, mode == .customView { updateIndicators() }
+            guard customView != oldValue, mode == .customView else { return }
+            updateIndicators()
         }
     }
 
@@ -162,6 +135,9 @@ open class HUD: UIView {
 
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public lazy var button = RoundedButton(frame: .zero)
+
+    private static let defaultLabelFontSize: CGFloat = 16.0
+    private static let defaultDetailsLabelFontSize: CGFloat = 12.0
 
     private var useAnimation: Bool = false
     private var isFinished: Bool = false
@@ -182,9 +158,6 @@ open class HUD: UIView {
             progressObjectDisplayLink?.add(to: .main, forMode: .default)
         }
     }
-    private static let defaultPadding: CGFloat = 4.0
-    private static let defaultLabelFontSize: CGFloat = 16.0
-    private static let defaultDetailsLabelFontSize: CGFloat = 12.0
 
     // MARK: - Lifecycle
 
@@ -566,9 +539,10 @@ open class HUD: UIView {
         }
 
         if let indicator = indicator {
+            let priority = UILayoutPriority(rawValue: 998.0)
             indicator.translatesAutoresizingMaskIntoConstraints = false
-            indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
-            indicator.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
+            indicator.setContentCompressionResistancePriority(priority, for: .horizontal)
+            indicator.setContentCompressionResistancePriority(priority, for: .vertical)
 
             if let indicator = indicator as? Progressive {
                 indicator.progress = progress
@@ -627,7 +601,6 @@ open class HUD: UIView {
     // swiftlint:disable function_body_length
     open override func updateConstraints() {
         var bezelConstraints: [NSLayoutConstraint] = []
-        let metrics = ["margin": margin]
         var subviews = [topSpacer, label, detailsLabel, button, bottomSpacer]
 
         if let indicator = indicator {
@@ -644,81 +617,71 @@ open class HUD: UIView {
         }
 
         // Center bezel in container (self), applying the offset if set
-        var centeringConstraints: [NSLayoutConstraint] = []
-        centeringConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .centerX, relatedBy: .equal, toItem: self,
-                                                       attribute: .centerX, multiplier: 1.0, constant: offset.x))
-        centeringConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .centerY, relatedBy: .equal, toItem: self,
-                                                       attribute: .centerY, multiplier: 1.0, constant: offset.y))
+        let centeringConstraints: [NSLayoutConstraint] = [
+            bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layoutConfig.offset.x),
+            bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layoutConfig.offset.y)
+        ]
         apply(priority: UILayoutPriority(rawValue: 998.0), to: centeringConstraints)
         addConstraints(centeringConstraints)
 
         // Ensure minimum side margin is kept
-        var sideConstraints: [NSLayoutConstraint] = []
-        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[bezelView]-(>=margin)-|",
-                                                                          options: NSLayoutConstraint.FormatOptions(rawValue: 0),
-                                                                          metrics: metrics, views: ["bezelView": bezelView]))
-        sideConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|-(>=margin)-[bezelView]-(>=margin)-|",
-                                                                          options: NSLayoutConstraint.FormatOptions(rawValue: 0),
-                                                                          metrics: metrics, views: ["bezelView": bezelView]))
+        let sideConstraints: [NSLayoutConstraint] = [
+            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layoutConfig.margin),
+            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layoutConfig.margin),
+            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layoutConfig.margin),
+            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layoutConfig.margin),
+        ]
         apply(priority: UILayoutPriority(rawValue: 999.0), to: sideConstraints)
         addConstraints(sideConstraints)
 
         // Minimum bezel size, if set
-        if !minSize.equalTo(.zero) {
-            var minSizeConstraints: [NSLayoutConstraint] = []
-            minSizeConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .width, relatedBy: .greaterThanOrEqual, toItem: nil,
-                                                         attribute: .notAnAttribute, multiplier: 1.0, constant: minSize.width))
-            minSizeConstraints.append(NSLayoutConstraint(item: bezelView, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil,
-                                                         attribute: .notAnAttribute, multiplier: 1.0, constant: minSize.height))
+        if !layoutConfig.minSize.equalTo(.zero) {
+            let minSizeConstraints: [NSLayoutConstraint] = [
+                bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.width),
+                bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.height)
+            ]
             apply(priority: UILayoutPriority(rawValue: 997.0), to: minSizeConstraints)
             bezelConstraints.append(contentsOf: minSizeConstraints)
         }
 
         // Square aspect ratio, if set
-        if isSquare {
-            let square = NSLayoutConstraint(item: bezelView, attribute: .height, relatedBy: .equal, toItem: bezelView,
-                                            attribute: .width, multiplier: 1.0, constant: 0.0)
+        if layoutConfig.isSquare {
+            let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
             square.priority = UILayoutPriority(rawValue: 997.0)
             bezelConstraints.append(square)
         }
 
         // Top and bottom spacing
-        topSpacer.addConstraint(NSLayoutConstraint(item: topSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil,
-                                                   attribute: .notAnAttribute, multiplier: 1.0, constant: topBottomMargin))
-        bottomSpacer.addConstraint(NSLayoutConstraint(item: bottomSpacer, attribute: .height, relatedBy: .greaterThanOrEqual, toItem: nil,
-                                                      attribute: .notAnAttribute, multiplier: 1.0, constant: topBottomMargin))
-
+        topSpacer.addConstraint(topSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.margin))
+        bottomSpacer.addConstraint(bottomSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.margin))
         // Top and bottom spaces should be equal
-        bezelConstraints.append(NSLayoutConstraint(item: topSpacer, attribute: .height, relatedBy: .equal, toItem: bottomSpacer,
-                                                   attribute: .height, multiplier: 1.0, constant: 0.0))
+        bezelConstraints.append(topSpacer.heightAnchor.constraint(equalTo: bottomSpacer.heightAnchor))
 
         // Layout subviews in bezel
         var paddingConstraints: [NSLayoutConstraint] = []
+        let lastSubviewIDX = subviews.count - 1
         for (idx, view) in subviews.enumerated() {
             // Center in bezel
-            bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem: bezelView,
-                                                       attribute: .centerX, multiplier: 1.0, constant: 0.0))
+            bezelConstraints.append(view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor))
 
             // Ensure the minimum edge margin is kept
-            bezelConstraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "|-(>=margin)-[view]-(>=margin)-|",
-                                                                               options: NSLayoutConstraint.FormatOptions(rawValue: 0),
-                                                                               metrics: metrics, views: ["view": view]))
+            bezelConstraints.append(contentsOf: [
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layoutConfig.margin),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layoutConfig.margin)
+            ])
 
             // Element spacing
             if idx == 0 {
                 // First, ensure spacing to bezel edge
-                bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: bezelView,
-                                                           attribute: .top, multiplier: 1.0, constant: 0.0))
-            } else if idx == subviews.count - 1 {
+                bezelConstraints.append(view.topAnchor.constraint(equalTo: bezelView.topAnchor))
+            } else if idx == lastSubviewIDX {
                 // Last, ensure spacing to bezel edge
-                bezelConstraints.append(NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: bezelView,
-                                                           attribute: .bottom, multiplier: 1.0, constant: 0.0))
+                bezelConstraints.append(view.bottomAnchor.constraint(equalTo: bezelView.bottomAnchor))
             }
 
             if idx > 0 {
                 // Has previous
-                let padding = NSLayoutConstraint(item: view, attribute: .top, relatedBy: .equal, toItem: subviews[idx - 1],
-                                                 attribute: .bottom, multiplier: 1.0, constant: 0.0)
+                let padding = view.topAnchor.constraint(equalTo: subviews[idx - 1].bottomAnchor)
                 bezelConstraints.append(padding)
                 paddingConstraints.append(padding)
             }
@@ -749,18 +712,18 @@ open class HUD: UIView {
         guard let paddingConstraints = paddingConstraints else { return }
 
         var hasVisibleAncestors = false
-        for padding in paddingConstraints {
+        for paddingConstraint in paddingConstraints {
             var firstVisible = false
             var secondVisible = false
-            if let firstView = padding.firstItem as? UIView {
+            if let firstView = paddingConstraint.firstItem as? UIView {
                 firstVisible = !firstView.isHidden && !firstView.intrinsicContentSize.equalTo(.zero)
             }
-            if let secondView = padding.secondItem as? UIView {
+            if let secondView = paddingConstraint.secondItem as? UIView {
                 secondVisible = !secondView.isHidden && !secondView.intrinsicContentSize.equalTo(.zero)
             }
 
             // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
-            padding.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? HUD.defaultPadding : 0.0
+            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layoutConfig.padding : 0.0
             hasVisibleAncestors = hasVisibleAncestors || secondVisible
         }
     }
