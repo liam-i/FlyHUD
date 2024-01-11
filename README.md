@@ -32,7 +32,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.3.1"
+- Select "Up to Next Minor" with "1.3.2"
 
 #### CocoaPods
 
@@ -44,7 +44,7 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
-  pod 'LPHUD', '~> 1.3.1'
+  pod 'LPHUD', '~> 1.3.2'
 end
 ```
 
