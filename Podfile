@@ -13,6 +13,6 @@ target 'HUD_Example' do
 
   target 'HUD_Tests' do
     inherit! :search_paths
-    
+
   end
 end

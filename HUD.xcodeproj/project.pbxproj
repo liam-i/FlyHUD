@@ -29,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0CA1718E2B4FC97500179E2A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		1828E0952643B700004E75A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		49272EEED1155CB868DD89DB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ./LICENSE; sourceTree = "<group>"; };
 		560C516F554DA412B5D00A24 /* LPHUD.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LPHUD.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -128,6 +129,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				0CA1718E2B4FC97500179E2A /* Package.swift */,
 				560C516F554DA412B5D00A24 /* LPHUD.podspec */,
 				9E0324869DDCF5B38A611744 /* README.md */,
 				49272EEED1155CB868DD89DB /* LICENSE */,
@@ -157,6 +159,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
+				7C1167BBBC8CAAE566EEB747 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -247,6 +250,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7C1167BBBC8CAAE566EEB747 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HUD_Example/Pods-HUD_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8D704D5D4E18C76465623FE7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
