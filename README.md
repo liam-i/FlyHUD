@@ -31,7 +31,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 #### Swift Package Manager
 
 - File > Swift Packages > Add Package Dependency
-- Add `https://github.com/liam-i/AutoLayout.git`
+- Add `https://github.com/liam-i/HUD.git`
 - Select "Up to Next Minor" with "1.3.1"
 
 #### CocoaPods
