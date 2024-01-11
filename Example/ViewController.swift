@@ -215,12 +215,13 @@ extension ViewController {
         let hud = HUD.show(to: container, animated: true)
         hud.mode = .determinate
         hud.label.text = "Loading..."
-        
+
         let progress = Progress(totalUnitCount: 100)
         hud.progressObject = progress
         hud.button.setTitle("Cancel", for: .normal)
         hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
 
+        // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
         // label.text and detailLabel.text takes their info from the progressObject.
         // They can be customized or use the default text.
         // To suppress one (or both) of the labels, set the descriptions to empty strings.

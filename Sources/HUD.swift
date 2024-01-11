@@ -260,6 +260,12 @@ open class HUD: UIView {
         useAnimation = animated
         isFinished = false
 
+        // fix #605: https://github.com/jdg/MBProgressHUD/issues/605
+        // Modified grace time to 0 and show again
+        graceTimer?.invalidate()
+        // Cancel any scheduled hide(animated:afterDelay:) calls
+        hideDelayTimer?.invalidate()
+
         // If the grace time is set, postpone the HUD display
         if graceTime > 0.0 {
             let timer = Timer(timeInterval: graceTime, target: self, selector: #selector(handleGraceTimer), userInfo: nil, repeats: false)
@@ -326,8 +332,9 @@ open class HUD: UIView {
         bezelView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
 
-        // Cancel any scheduled hide(animated:afterDelay:) calls
-        hideDelayTimer?.invalidate()
+        // fix #605: https://github.com/jdg/MBProgressHUD/issues/605
+//        // Cancel any scheduled hide(animated:afterDelay:) calls
+//        hideDelayTimer?.invalidate()
 
         showStarted = Date()
         alpha = 1.0
@@ -751,6 +758,7 @@ open class HUD: UIView {
     private func updateProgressFromProgressObject() {
         guard let progressObject = progressObject else { return }
         progress = CGFloat(progressObject.fractionCompleted)
+        // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
         // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
         label.text = progressObject.localizedDescription
         detailsLabel.text = progressObject.localizedAdditionalDescription
