@@ -756,19 +756,25 @@ open class HUD: UIView {
     // MARK: - Notifications
 
     private func registerForNotifications() {
+#if !os(tvOS)
         NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationDidChange),
                                                name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+#endif
     }
 
     private func unregisterFromNotifications() {
+#if !os(tvOS)
         NotificationCenter.default.removeObserver(self)
+#endif
     }
 
+#if !os(tvOS)
     @objc
     private func statusBarOrientationDidChange(_ notification: Notification) {
         guard superview != nil else { return }
         updateForCurrentOrientation(animated: true)
     }
+#endif
 
     private func updateForCurrentOrientation(animated: Bool) {
         guard let superview = superview else { return }
