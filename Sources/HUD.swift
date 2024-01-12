@@ -704,7 +704,7 @@ open class HUD: UIView {
             }
 
             // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
-            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layoutConfig.padding : 0.0
+            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layoutConfig.spacing : 0.0
             hasVisibleAncestors = hasVisibleAncestors || secondVisible
         }
     }

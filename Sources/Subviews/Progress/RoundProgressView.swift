@@ -18,6 +18,12 @@ public class RoundProgressView: ProgressView {
     /// Display mode - false = round or true = annular. Defaults to round.
     public var isAnnular: Bool = false
 
+    /// Indicator line width. Defaults to 2.0.
+    public var lineWidth: CGFloat = 2.0
+
+    /// Indicator line size. Defaults to 37.0.
+    public var lineSize: CGFloat = 37.0
+
     // MARK: - Lifecycle
 
     public convenience init() {
@@ -27,14 +33,12 @@ public class RoundProgressView: ProgressView {
     // MARK: - Layout
 
     public override var intrinsicContentSize: CGSize {
-        CGSize(width: 37.0, height: 37.0)
+        CGSize(width: lineSize, height: lineSize)
     }
 
     // MARK: - Drawing
 
     public override func draw(_ rect: CGRect) {
-        let lineWidth: CGFloat = 2.0
-
         guard isAnnular else {
             return drawDeterminate(lineWidth)
         }
@@ -52,11 +56,7 @@ public class RoundProgressView: ProgressView {
         let startAngle = -(CGFloat.pi / 2.0) // 90 degrees
         var endAngle = (2 * CGFloat.pi) + startAngle
 
-        processBackgroundPath.addArc(withCenter: center,
-                                     radius: radius,
-                                     startAngle: startAngle,
-                                     endAngle: endAngle,
-                                     clockwise: true)
+        processBackgroundPath.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         trackTintColor.set()
         processBackgroundPath.stroke()
 
@@ -67,11 +67,7 @@ public class RoundProgressView: ProgressView {
 
         endAngle = (progress * 2 * CGFloat.pi) + startAngle
 
-        processPath.addArc(withCenter: center,
-                           radius: radius,
-                           startAngle: startAngle,
-                           endAngle: endAngle,
-                           clockwise: true)
+        processPath.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         progressTintColor.set()
         processPath.stroke()
     }
@@ -80,8 +76,8 @@ public class RoundProgressView: ProgressView {
         guard let context = UIGraphicsGetCurrentContext() else { return assertionFailure() }
 
         // Draw background
-        let allRect = bounds
-        let circleRect = allRect.insetBy(dx: lineWidth / 2.0, dy: lineWidth / 2.0)
+        let lineWidthHalf = lineWidth / 2.0
+        let circleRect = bounds.insetBy(dx: lineWidthHalf, dy: lineWidthHalf)
         let center = CGPoint(x: bounds.midX, y: bounds.midY)
 
         progressTintColor.setStroke()
@@ -98,14 +94,10 @@ public class RoundProgressView: ProgressView {
         processPath.lineWidth = lineWidth * 2.0
         processPath.lineCapStyle = .butt
 
-        let radius = (bounds.width / 2.0) - (processPath.lineWidth / 2.0)
+        let radius = (bounds.width - processPath.lineWidth) / 2.0
         let endAngle = (progress * 2.0 * CGFloat.pi) + startAngle
 
-        processPath.addArc(withCenter: center,
-                           radius: radius,
-                           startAngle: startAngle,
-                           endAngle: endAngle,
-                           clockwise: true)
+        processPath.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
         // Ensure that we don't get color overlaping when progressTintColor alpha < 1.0.
         context.setBlendMode(.copy)

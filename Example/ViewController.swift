@@ -122,7 +122,7 @@ extension ViewController {
                 $0.offset = CGPoint(x: HUDLayoutConfiguration.maxOffset, y: HUDLayoutConfiguration.maxOffset)
                 $0.hMargin = 100
                 $0.vMargin = 50
-                $0.padding = 40
+                $0.spacing = 40
                 $0.isSquare = true
             }
 

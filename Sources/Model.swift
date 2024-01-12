@@ -68,7 +68,7 @@ public struct HUDLayoutConfiguration: Equatable {
     public var vMargin: CGFloat = 20.0
 
     /// The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
-    public var padding: CGFloat = 4.0
+    public var spacing: CGFloat = 4.0
 
     /// The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
     public var minSize: CGSize = .zero

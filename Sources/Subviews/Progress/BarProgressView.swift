@@ -17,6 +17,10 @@ public class BarProgressView: ProgressView {
 
     /// Bar border line color. Defaults to white UIColor(white: 1.0, alpha: 1.0).
     public var lineColor: UIColor = UIColor(white: 1.0, alpha: 1.0)
+    /// Bar border line width. Defaults to 2.0.
+    public var lineWidth: CGFloat = 2.0
+    /// Bar border line spacing. Defaults to 2.0.
+    public var spacing: CGFloat = 2.0
 
     // MARK: - Lifecycle
 
@@ -27,125 +31,101 @@ public class BarProgressView: ProgressView {
     // MARK: - Layout
 
     public override var intrinsicContentSize: CGSize {
-        CGSize(width: 120.0, height: 10.0)
+        CGSize(width: 120.0, height: lineWidth * 3 + spacing * 2)
     }
 
     // MARK: - Drawing
 
+    // swiftlint:disable function_body_length
     public override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setLineWidth(2.0)
+
+        let centerY = rect.height / 2.0
+        var minX = lineWidth / 2.0
+        var radius = centerY - minX
+        var minY = centerY - radius
+        var maxX = rect.width - minX
+        var maxY = centerY + radius
+
+        context.setLineWidth(lineWidth)
         context.setStrokeColor(lineColor.cgColor)
         context.setFillColor(trackTintColor.cgColor)
 
         // Draw background and Border
-
-        var radius = (rect.height / 2.0) - 2.0
-        context.move(to: CGPoint(x: 2.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 2.0, y: 2.0),
-                       tangent2End: CGPoint(x: radius + 2.0, y: 2.0),
-                       radius: radius)
-        context.addArc(tangent1End: CGPoint(x: rect.width - 2.0, y: 2.0),
-                       tangent2End: CGPoint(x: rect.width - 2.0, y: rect.height / 2.0),
-                       radius: radius)
-        context.addArc(tangent1End: CGPoint(x: rect.width - 2.0, y: rect.height - 2.0),
-                       tangent2End: CGPoint(x: rect.width - radius - 2.0, y: rect.height - 2.0),
-                       radius: radius)
-        context.addArc(tangent1End: CGPoint(x: 2.0, y: rect.height - 2.0),
-                       tangent2End: CGPoint(x: 2.0, y: rect.height / 2.0),
-                       radius: radius)
+        context.move(to: CGPoint(x: minX, y: centerY))
+        context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
+        context.addArc(tangent1End: CGPoint(x: maxX, y: minY), tangent2End: CGPoint(x: maxX, y: centerY), radius: radius)
+        context.addArc(tangent1End: CGPoint(x: maxX, y: maxY), tangent2End: CGPoint(x: maxX - radius, y: maxY), radius: radius)
+        context.addArc(tangent1End: CGPoint(x: minX, y: maxY), tangent2End: CGPoint(x: minX, y: maxY - radius), radius: radius)
         context.drawPath(using: .fillStroke)
 
         context.setFillColor(progressTintColor.cgColor)
-        radius -= 2
+
+        minX = lineWidth + spacing
+        radius = centerY - minX
+        minY = centerY - radius
+        maxX = rect.width - minX
+        maxY = centerY + radius
+
         let amount = progress * rect.width
+        let amountRange = radius + minX
+        let amountRangeUpperBound = rect.width - amountRange
 
         // Progress in the middle area
-        if amount >= radius + 4 && amount <= (rect.size.width - radius - 4) {
-            drawMiddleAreaProgress(context, rect: rect, radius: radius, amount: amount)
+        if amount >= amountRange && amount <= amountRangeUpperBound {
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
+            context.addLine(to: CGPoint(x: amount, y: minY))
+            context.addLine(to: CGPoint(x: amount, y: minY + radius))
+
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: maxY), tangent2End: CGPoint(x: minX + radius, y: maxY), radius: radius)
+            context.addLine(to: CGPoint(x: amount, y: maxY))
+            context.addLine(to: CGPoint(x: amount, y: minY + radius))
+
+            context.fillPath()
         }
 
         // Progress in the right arc
-        else if amount > radius + 4 {
-            drawRightArcProgress(context, rect: rect, radius: radius, amount: amount)
+        else if amount > amountRange {
+            let x = amount - amountRangeUpperBound
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
+            context.addLine(to: CGPoint(x: amountRangeUpperBound, y: minY))
+
+            var angle = -acos(x / radius)
+            if angle.isNaN {
+                angle = 0.0
+            }
+            context.addArc(center: CGPoint(x: amountRangeUpperBound, y: centerY), radius: radius, startAngle: .pi, endAngle: angle, clockwise: false)
+            context.addLine(to: CGPoint(x: amount, y: centerY))
+
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: maxY), tangent2End: CGPoint(x: minX + radius, y: maxY), radius: radius)
+            context.addLine(to: CGPoint(x: amountRangeUpperBound, y: maxY))
+
+            angle = acos(x / radius)
+            if angle.isNaN {
+                angle = 0.0
+            }
+            context.addArc(center: CGPoint(x: amountRangeUpperBound, y: centerY), radius: radius, startAngle: -.pi, endAngle: angle, clockwise: true)
+            context.addLine(to: CGPoint(x: amount, y: centerY))
+
+            context.fillPath()
         }
 
         // Progress is in the left arc
-        else if amount < radius + 4 && amount > 0 {
-            drawLeftArcProgress(context, rect: rect, radius: radius)
+        else if amount < amountRange && amount > 0 {
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
+            context.addLine(to: CGPoint(x: minX + radius, y: centerY))
+
+            context.move(to: CGPoint(x: minX, y: centerY))
+            context.addArc(tangent1End: CGPoint(x: minX, y: maxY), tangent2End: CGPoint(x: minX + radius, y: maxY), radius: radius)
+            context.addLine(to: CGPoint(x: minX + radius, y: centerY))
+            
+            context.fillPath()
         }
     }
-
-    private func drawMiddleAreaProgress(_ context: CGContext, rect: CGRect, radius: CGFloat, amount: CGFloat) {
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
-                       tangent2End: CGPoint(x: radius + 4, y: 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: amount, y: 4.0))
-        context.addLine(to: CGPoint(x: amount, y: radius + 4.0))
-
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: rect.height - 4.0),
-                       tangent2End: CGPoint(x: radius + 4.0, y: rect.height - 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: amount, y: rect.height - 4.0))
-        context.addLine(to: CGPoint(x: amount, y: radius + 4.0))
-
-        context.fillPath()
-    }
-
-    private func drawRightArcProgress(_ context: CGContext, rect: CGRect, radius: CGFloat, amount: CGFloat) {
-        let x = amount - (rect.width - radius - 4.0)
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
-                       tangent2End: CGPoint(x: 4.0, y: radius + 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: rect.width - radius - 4.0, y: 4.0))
-
-        var angle = -acos(x / radius)
-        if angle.isNaN {
-            angle = 0.0
-        }
-        context.addArc(center: CGPoint(x: rect.width - radius - 4.0, y: rect.height / 2.0),
-                       radius: radius,
-                       startAngle: CGFloat.pi,
-                       endAngle: angle,
-                       clockwise: false)
-        context.addLine(to: CGPoint(x: amount, y: rect.height / 2.0))
-
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: rect.height - 4.0),
-                       tangent2End: CGPoint(x: radius + 4.0, y: rect.height - 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: rect.width - radius - 4.0, y: rect.height - 4.0))
-
-        angle = acos(x / radius)
-        if angle.isNaN {
-            angle = 0.0
-        }
-        context.addArc(center: CGPoint(x: rect.width - radius - 4.0, y: rect.height / 2.0),
-                       radius: radius,
-                       startAngle: -CGFloat.pi,
-                       endAngle: angle,
-                       clockwise: true)
-        context.addLine(to: CGPoint(x: amount, y: rect.height / 2.0))
-
-        context.fillPath()
-    }
-
-    private func drawLeftArcProgress(_ context: CGContext, rect: CGRect, radius: CGFloat) {
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: 4.0),
-                       tangent2End: CGPoint(x: radius + 4, y: 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: radius + 4.0, y: rect.height / 2.0))
-
-        context.move(to: CGPoint(x: 4.0, y: rect.height / 2.0))
-        context.addArc(tangent1End: CGPoint(x: 4.0, y: rect.height - 4.0),
-                       tangent2End: CGPoint(x: radius + 4.0, y: rect.height - 4.0),
-                       radius: radius)
-        context.addLine(to: CGPoint(x: radius + 4.0, y: rect.height / 2.0))
-
-        context.fillPath()
-    }
+    // swiftlint:enable function_body_length
 }
