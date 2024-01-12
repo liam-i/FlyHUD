@@ -145,8 +145,6 @@ open class HUD: UIView {
     private var showStarted: Date?
     private var paddingConstraints: [NSLayoutConstraint]?
     private var bezelConstraints: [NSLayoutConstraint]?
-    private lazy var topSpacer = UIView(frame: .zero)
-    private lazy var bottomSpacer = UIView(frame: .zero)
     private var graceTimer: Timer?
     private var minShowTimer: Timer?
     private var hideDelayTimer: Timer?
@@ -483,20 +481,12 @@ open class HUD: UIView {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
         button.setTitleColor(defaultColor, for: .normal)
 
-        for view in [label, detailsLabel, button] as [UIView] {
+        for view in [label, detailsLabel, button] {
             view.translatesAutoresizingMaskIntoConstraints = false
             view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
             view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
             bezelView.addSubview(view)
         }
-
-        topSpacer.translatesAutoresizingMaskIntoConstraints = false
-        topSpacer.isHidden = true
-        bezelView.addSubview(topSpacer)
-
-        bottomSpacer.translatesAutoresizingMaskIntoConstraints = false
-        bottomSpacer.isHidden = true
-        bezelView.addSubview(bottomSpacer)
     }
 
     // swiftlint:disable function_body_length
@@ -609,16 +599,14 @@ open class HUD: UIView {
     // swiftlint:disable function_body_length
     open override func updateConstraints() {
         var bezelConstraints: [NSLayoutConstraint] = []
-        var subviews = [topSpacer, label, detailsLabel, button, bottomSpacer]
+        var subviews = [label, detailsLabel, button]
 
         if let indicator = indicator {
-            subviews.insert(indicator, at: 1)
+            subviews.insert(indicator, at: 0)
         }
 
         // Remove existing constraints
         removeConstraints(constraints)
-        topSpacer.removeConstraints(topSpacer.constraints)
-        bottomSpacer.removeConstraints(bottomSpacer.constraints)
         if let bezelConstraints = self.bezelConstraints {
             bezelView.removeConstraints(bezelConstraints)
             self.bezelConstraints = nil
@@ -634,10 +622,10 @@ open class HUD: UIView {
 
         // Ensure minimum side margin is kept
         let sideConstraints: [NSLayoutConstraint] = [
-            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layoutConfig.margin),
-            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layoutConfig.margin),
-            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layoutConfig.margin),
-            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layoutConfig.margin),
+            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layoutConfig.edgeInsets.left),
+            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layoutConfig.edgeInsets.right),
+            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layoutConfig.edgeInsets.top),
+            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layoutConfig.edgeInsets.bottom),
         ]
         apply(priority: UILayoutPriority(rawValue: 999.0), to: sideConstraints)
         addConstraints(sideConstraints)
@@ -659,12 +647,6 @@ open class HUD: UIView {
             bezelConstraints.append(square)
         }
 
-        // Top and bottom spacing
-        topSpacer.addConstraint(topSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.margin))
-        bottomSpacer.addConstraint(bottomSpacer.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.margin))
-        // Top and bottom spaces should be equal
-        bezelConstraints.append(topSpacer.heightAnchor.constraint(equalTo: bottomSpacer.heightAnchor))
-
         // Layout subviews in bezel
         var paddingConstraints: [NSLayoutConstraint] = []
         let lastSubviewIDX = subviews.count - 1
@@ -674,17 +656,17 @@ open class HUD: UIView {
 
             // Ensure the minimum edge margin is kept
             bezelConstraints.append(contentsOf: [
-                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layoutConfig.margin),
-                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layoutConfig.margin)
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layoutConfig.hMargin),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layoutConfig.hMargin)
             ])
 
             // Element spacing
             if idx == 0 {
                 // First, ensure spacing to bezel edge
-                bezelConstraints.append(view.topAnchor.constraint(equalTo: bezelView.topAnchor))
+                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: bezelView.topAnchor, constant: layoutConfig.vMargin))
             } else if idx == lastSubviewIDX {
                 // Last, ensure spacing to bezel edge
-                bezelConstraints.append(view.bottomAnchor.constraint(equalTo: bezelView.bottomAnchor))
+                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: bezelView.bottomAnchor, constant: -layoutConfig.vMargin))
             }
 
             if idx > 0 {
