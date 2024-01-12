@@ -9,7 +9,7 @@
 //  LICENSE file in the root directory of this source tree.
 //
 
-import Foundation
+import UIKit
 
 public enum HUDMode {
     /// UIActivityIndicatorView.
@@ -58,12 +58,16 @@ public struct HUDLayoutConfiguration: Equatable {
     public var offset: CGPoint = .zero
     public static let maxOffset: CGFloat = 1000000.0
 
-    /// The amount of space between the HUD edge and the HUD elements (labels, indicators or custom views).
-    /// This also represents the minimum bezel distance to the edge of the HUD view.
-    /// Defaults to 20.0.
-    public var margin: CGFloat = 20.0
+    /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
+    public var edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
 
-    /// The space between HUD subviews.
+    /// The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
+    public var hMargin: CGFloat = 20.0
+
+    /// The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
+    public var vMargin: CGFloat = 20.0
+
+    /// The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
     public var padding: CGFloat = 4.0
 
     /// The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
