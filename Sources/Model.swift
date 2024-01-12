@@ -30,11 +30,11 @@ public enum HUDAnimation {
     /// Opacity animation
     case fade
     /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
-    case zoom
-    /// Opacity + scale animation (zoom out style)
-    case zoomOut
+    case zoomInOut
     /// Opacity + scale animation (zoom in style)
     case zoomIn
+    /// Opacity + scale animation (zoom out style)
+    case zoomOut
 }
 
 public enum HUDBackgroundStyle {

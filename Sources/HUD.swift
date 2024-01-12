@@ -340,7 +340,7 @@ open class HUD: UIView {
         updateBezelMotionEffects()
 
         if animated {
-            animate(in: true, type: animationType, completion: nil)
+            animate(with: animationType, showing: true, completion: nil)
         } else {
             bezelView.transform = .identity
             bezelView.alpha = 1.0
@@ -356,9 +356,9 @@ open class HUD: UIView {
 
         if animated && showStarted != nil {
             showStarted = nil
-            animate(in: false, type: animationType, completion: { _ in
+            animate(with: animationType, showing: false) { _ in
                 self.done()
-            })
+            }
         } else {
             showStarted = nil
             bezelView.alpha = 0.0
@@ -367,34 +367,35 @@ open class HUD: UIView {
         }
     }
 
-    private func animate(in animating: Bool, type: HUDAnimation, completion: ((Bool) -> Void)?) {
+    private func animate(with type: HUDAnimation, showing: Bool, completion: ((Bool) -> Void)?) {
         var type = type
         // Automatically determine the correct zoom animation type
-        if type == .zoom {
-            type = animating ? .zoomIn : .zoomOut
+        // Opacity + scale animation (zoom in when appearing zoom out when disappearing)
+        if type == .zoomInOut {
+            type = showing ? .zoomIn : .zoomOut
         }
 
         let small = CGAffineTransform(scaleX: 0.5, y: 0.5)
         let large = CGAffineTransform(scaleX: 1.5, y: 1.5)
 
         // Set starting state
-        if animating && bezelView.alpha == 0.0 && type == .zoomIn {
+        if showing && bezelView.alpha == 0.0 && type == .zoomIn {
             bezelView.transform = small
-        } else if animating && bezelView.alpha == 0.0 && type == .zoomOut {
+        } else if showing && bezelView.alpha == 0.0 && type == .zoomOut {
             bezelView.transform = large
         }
 
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0,
                        initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
-            if animating {
+            if showing {
                 self.bezelView.transform = CGAffineTransform.identity
-            } else if !animating && type == .zoomIn {
+            } else if !showing && type == .zoomIn {
                 self.bezelView.transform = large
-            } else if !animating && type == .zoomOut {
+            } else if !showing && type == .zoomOut {
                 self.bezelView.transform = small
             }
 
-            let alpha: CGFloat = animating ? 1.0 : 0.0
+            let alpha: CGFloat = showing ? 1.0 : 0.0
             self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
         }, completion: completion)
