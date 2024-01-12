@@ -348,7 +348,8 @@ open class HUD: UIView {
         if animated {
             animate(in: true, type: animationType, completion: nil)
         } else {
-            bezelView.alpha = 1.0 // self.opacity
+            bezelView.transform = .identity
+            bezelView.alpha = 1.0
             backgroundView.alpha = 1.0
         }
     }
@@ -367,7 +368,7 @@ open class HUD: UIView {
         } else {
             showStarted = nil
             bezelView.alpha = 0.0
-            backgroundView.alpha = 1.0
+            backgroundView.alpha = 0.0
             done()
         }
     }
