@@ -36,7 +36,7 @@ open class HUD: UIView {
     public var graceTime: TimeInterval = 0.0
 
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
-    /// Defaults to 0 (no minimum show time).
+    /// Defaults to 0.0 (no minimum show time).
     public var minShowTime: TimeInterval = 0.0
 
     /// Removes the HUD from its parent view when hidden. Defaults to true.
@@ -150,6 +150,8 @@ open class HUD: UIView {
 
     // MARK: - Lifecycle
 
+    /// A convenience constructor that initializes the HUD with the view's bounds. Calls the designated constructor with view.bounds as the parameter.
+    /// - Parameter view: The view instance that will provide the bounds for the HUD. Should be the same instance as the HUD's superview (i.e., the view that the HUD will be added to).
     public convenience init(with view: UIView) {
         self.init(frame: view.bounds)
     }
