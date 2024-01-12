@@ -51,14 +51,14 @@ extension ViewController {
     }
 
     @objc func indeterminateExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container, using: .zoomOut)
         Network.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container, using: .zoomInOut)
         hud.label.text = "Loading..."
 
         Network.request {
@@ -67,7 +67,7 @@ extension ViewController {
     }
 
     @objc func detailsLabelExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container, using: .zoomOutIn)
         hud.label.text = "Loading..."
         hud.detailsLabel.text = "Parsing data\n(1/1)"
 
@@ -77,7 +77,7 @@ extension ViewController {
     }
 
     @objc func determinateExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .determinate
         hud.detailsLabel.text = "Loading..."
 
@@ -89,7 +89,7 @@ extension ViewController {
     }
 
     @objc func annularDeterminateExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .annularDeterminate
         hud.label.text = "Loading..."
 
@@ -101,7 +101,7 @@ extension ViewController {
     }
 
     @objc func barDeterminateExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .determinateHorizontalBar
         hud.label.text = "Loading..."
 
@@ -113,7 +113,7 @@ extension ViewController {
     }
 
     @objc func textExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .text
         hud.label.text = "Wrong password"
         Network.request(2) {
@@ -131,7 +131,7 @@ extension ViewController {
     }
 
     @objc func customViewExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
         hud.layoutConfig.isSquare = true
         hud.label.text = "Done"
@@ -139,7 +139,7 @@ extension ViewController {
     }
 
     @objc func cancelationExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .determinate
         hud.label.text = "Loading..."
         hud.button.setTitle("Cancel", for: .normal)
@@ -153,7 +153,7 @@ extension ViewController {
     }
 
     @objc func modeSwitchingExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.label.text = "Preparing..."
         hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
@@ -186,14 +186,14 @@ extension ViewController {
     }
 
     @objc func windowExample() {
-        let hud = HUD.show(to: view.window!, animated: true)
+        let hud = HUD.show(to: view.window!)
         Network.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func networkingExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.label.text = "Preparing..."
         hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
@@ -210,7 +210,7 @@ extension ViewController {
     }
 
     @objc func determinateProgressExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.mode = .determinate
         hud.label.text = "Loading..."
 
@@ -231,7 +231,7 @@ extension ViewController {
     }
 
     @objc func dimBackgroundExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.backgroundView.style = .solidColor
         hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
         Network.request {
@@ -240,7 +240,7 @@ extension ViewController {
     }
 
     @objc func colorExample() {
-        let hud = HUD.show(to: container, animated: true)
+        let hud = HUD.show(to: container)
         hud.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
         hud.label.text = "Loading..."
         Network.request {
@@ -258,7 +258,7 @@ extension ViewController {
         HUD.isCountEnabled = true
 
         func request1() {
-            let hud = HUD.show(to: container, animated: true)
+            let hud = HUD.show(to: container)
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
@@ -267,7 +267,7 @@ extension ViewController {
             print("request1  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request2() {
-            let hud = HUD.show(to: container, animated: true)
+            let hud = HUD.show(to: container)
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
@@ -276,7 +276,7 @@ extension ViewController {
             print("request2  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request3() {
-            let hud = HUD.show(to: container, animated: true)
+            let hud = HUD.show(to: container)
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 

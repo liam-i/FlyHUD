@@ -31,10 +31,18 @@ public enum HUDAnimation {
     case fade
     /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
     case zoomInOut
+    /// Opacity + scale animation (zoom out when appearing zoom in when disappearing)
+    case zoomOutIn
     /// Opacity + scale animation (zoom in style)
     case zoomIn
     /// Opacity + scale animation (zoom out style)
     case zoomOut
+    /// Disable animation
+    case none
+
+    func valid(_ animated: Bool) -> HUDAnimation {
+        animated ? self : .none
+    }
 }
 
 public enum HUDBackgroundStyle {
@@ -81,5 +89,13 @@ public struct HUDLayoutConfiguration: Equatable {
     /// - Note: This method is recommended for assigning values to properties.
     public mutating func with(_ populator: (inout HUDLayoutConfiguration) -> Void) {
         populator(&self)
+    }
+}
+
+extension Array where Element == NSLayoutConstraint {
+    func apply(priority: UILayoutPriority) {
+        forEach {
+            $0.priority = priority
+        }
     }
 }
