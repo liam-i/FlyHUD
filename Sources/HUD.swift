@@ -29,8 +29,9 @@ open class HUD: UIView {
     /// Called after the HUD is hidden.
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
-    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
-    /// Defaults to 0 (no minimum show time).
+    /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD. 
+    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks.
+    /// Defaults to 0.0 (no grace time).
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
@@ -130,15 +131,14 @@ open class HUD: UIView {
     private static let defaultLabelFontSize: CGFloat = 16.0
     private static let defaultDetailsLabelFontSize: CGFloat = 12.0
 
-    private var useAnimation: Bool = false
     private var isFinished: Bool = false
     private var indicator: UIView?
     private var showStarted: Date?
     private var paddingConstraints: [NSLayoutConstraint]?
     private var bezelConstraints: [NSLayoutConstraint]?
-    private var graceTimer: Timer?
-    private var minShowTimer: Timer?
-    private var hideDelayTimer: Timer?
+    private var graceWorkItem: DispatchWorkItem?
+    private var minShowWorkItem: DispatchWorkItem?
+    private var hideDelayWorkItem: DispatchWorkItem?
     private var bezelMotionEffects: UIMotionEffectGroup?
     private var progressObjectDisplayLink: CADisplayLink? {
         didSet {
@@ -150,8 +150,8 @@ open class HUD: UIView {
 
     // MARK: - Lifecycle
 
-    /// A convenience constructor that initializes the HUD with the view's bounds. Calls the designated constructor with view.bounds as the parameter.
-    /// - Parameter view: The view instance that will provide the bounds for the HUD. Should be the same instance as the HUD's superview (i.e., the view that the HUD will be added to).
+    /// A convenience constructor that initializes the HUD with the `view's bounds`. Calls the designated constructor with `view.bounds` as the parameter.
+    /// - Parameter view: The view instance that will provide the `bounds` for the HUD. Should be the same instance as the HUD's superview (i.e., the view that the HUD will be added to).
     public convenience init(with view: UIView) {
         self.init(frame: view.bounds)
     }
@@ -247,26 +247,27 @@ open class HUD: UIView {
             count += 1
         }
 
-        minShowTimer?.invalidate()
-        useAnimation = animated
+        cancelMinShowWorkItem()
         isFinished = false
-
-        // fix #605: https://github.com/jdg/MBProgressHUD/issues/605
         // Modified grace time to 0 and show again
-        graceTimer?.invalidate()
+        cancelGraceWorkItem()
         // Cancel any scheduled hide(animated:afterDelay:) calls
-        hideDelayTimer?.invalidate()
+        cancelHideDelayWorkItem()
 
         // If the grace time is set, postpone the HUD display
         if graceTime > 0.0 {
-            let timer = Timer(timeInterval: graceTime, target: self, selector: #selector(handleGraceTimer), userInfo: nil, repeats: false)
-            RunLoop.current.add(timer, forMode: .common)
-            graceTimer = timer
+            let workItem = DispatchWorkItem { [weak self] in
+                // Show the HUD only if the task is still running
+                guard let `self` = self, !self.isFinished else { return }
+                self.show(usingAnimation: animated)
+            }
+            graceWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + graceTime, execute: workItem)
             return
         }
 
         // ... otherwise show the HUD immediately
-        show(usingAnimation: useAnimation)
+        show(usingAnimation: animated)
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
@@ -282,24 +283,27 @@ open class HUD: UIView {
             }
         }
 
-        graceTimer?.invalidate()
-        useAnimation = animated
+        cancelGraceWorkItem()
         isFinished = true
 
         // If the minShow time is set, calculate how long the HUD was shown, and postpone the hiding operation if necessary
         if let showStarted = showStarted, minShowTime > 0.0 {
             let interv = Date().timeIntervalSince(showStarted)
             if interv < minShowTime {
-                let timer = Timer(timeInterval: minShowTime - interv, target: self,
-                                  selector: #selector(handleMinShowTimer), userInfo: nil, repeats: false)
-                RunLoop.current.add(timer, forMode: .common)
-                minShowTimer = timer
+                cancelMinShowWorkItem()
+
+                let workItem = DispatchWorkItem { [weak self] in
+                    guard let `self` = self else { return }
+                    self.hide(usingAnimation: animated)
+                }
+                minShowWorkItem = workItem
+                DispatchQueue.main.asyncAfter(deadline: .now() + (minShowTime - interv), execute: workItem)
                 return
             }
         }
 
         // ... otherwise hide the HUD immediately
-        hide(usingAnimation: useAnimation)
+        hide(usingAnimation: animated)
     }
 
     /// Hides the HUD after a delay. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
@@ -308,12 +312,15 @@ open class HUD: UIView {
     ///   - delay: Delay in seconds until the HUD is hidden.
     /// - SeeAlso: animationType.
     public func hide(animated: Bool = true, afterDelay delay: TimeInterval) {
-        // Cancel any scheduled hideAnimated:afterDelay: calls
-        hideDelayTimer?.invalidate()
+        // Cancel any scheduled hide(animated:afterDelay:) calls
+        cancelHideDelayWorkItem()
 
-        let timer = Timer(timeInterval: delay, target: self, selector: #selector(handleHideTimer), userInfo: animated, repeats: false)
-        RunLoop.current.add(timer, forMode: .common)
-        hideDelayTimer = timer
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let `self` = self else { return }
+            self.hide(animated: animated)
+        }
+        hideDelayWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 
     // MARK: - Internal show & hide operations
@@ -322,10 +329,6 @@ open class HUD: UIView {
         // Cancel any previous animations
         bezelView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
-
-        // fix #605: https://github.com/jdg/MBProgressHUD/issues/605
-//        // Cancel any scheduled hide(animated:afterDelay:) calls
-//        hideDelayTimer?.invalidate()
 
         showStarted = Date()
         alpha = 1.0
@@ -349,7 +352,7 @@ open class HUD: UIView {
         // Cancel any scheduled hide(animated:afterDelay:) calls.
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
-        hideDelayTimer?.invalidate()
+        cancelHideDelayWorkItem()
 
         if animated && showStarted != nil {
             showStarted = nil
@@ -398,8 +401,8 @@ open class HUD: UIView {
     }
 
     private func done() {
-        // Cancel any scheduled hideDelayed: calls
-        hideDelayTimer?.invalidate()
+        // Cancel any scheduled hide(animated:afterDelay:) calls
+        cancelHideDelayWorkItem()
         setNSProgressDisplayLink(enabled: false)
 
         if isFinished {
@@ -413,25 +416,21 @@ open class HUD: UIView {
         delegate?.hudWasHidden(self)
     }
 
-    // MARK: - Timer callbacks
+    // MARK: - Cancel Dispatch Work Item
 
-    @objc
-    private func handleHideTimer(_ timer: Timer) {
-        let animated = timer.userInfo as? Bool ?? true
-        hide(animated: animated)
+    private func cancelHideDelayWorkItem() {
+        hideDelayWorkItem?.cancel()
+        hideDelayWorkItem = nil
     }
 
-    @objc
-    private func handleGraceTimer(_ timer: Timer) {
-        // Show the HUD only if the task is still running
-        if !isFinished {
-            show(usingAnimation: useAnimation)
-        }
+    private func cancelGraceWorkItem() {
+        graceWorkItem?.cancel()
+        graceWorkItem = nil
     }
 
-    @objc
-    private func handleMinShowTimer(_ timer: Timer) {
-        hide(usingAnimation: useAnimation)
+    private func cancelMinShowWorkItem() {
+        minShowWorkItem?.cancel()
+        minShowWorkItem = nil
     }
 
     // MARK: - View Hierarchy
