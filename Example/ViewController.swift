@@ -132,8 +132,7 @@ extension ViewController {
 
     @objc func customViewExample() {
         let hud = HUD.show(to: container, animated: true)
-        hud.mode = .customView
-        hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
+        hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
         hud.layoutConfig.isSquare = true
         hud.label.text = "Done"
         hud.hide(animated: true, afterDelay: 3.0)
@@ -176,8 +175,7 @@ extension ViewController {
             case 1:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
-                hud.mode = .customView
+                hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
                 hud.label.text = "Completed"
             case 0:
                 hud.hide(animated: true)
@@ -205,8 +203,7 @@ extension ViewController {
             hud.progress = $0
         } completion: {
             guard let hud = HUD.hud(for: self.container) else { return }
-            hud.customView = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
-            hud.mode = .customView
+            hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
             hud.label.text = "Completed"
             hud.hide(animated: true, afterDelay: 3.0)
         }
