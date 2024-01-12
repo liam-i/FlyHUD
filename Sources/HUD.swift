@@ -117,15 +117,6 @@ open class HUD: UIView {
     /// View covering the entire HUD area, placed behind bezelView.
     public lazy var backgroundView = BackgroundView(frame: bounds)
 
-    /// The UIView (e.g., a UIImageView) to be shown when the HUD is in HUDModeCustomView.
-    /// The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
-    public var customView: UIView? {
-        didSet {
-            guard customView != oldValue, mode == .customView else { return }
-            updateIndicators()
-        }
-    }
-
     /// A label that holds an optional short message to be displayed below the activity indicator.
     /// The HUD is automatically resized to fit the entire text.
     public lazy var label = UILabel(frame: .zero)
@@ -524,8 +515,8 @@ open class HUD: UIView {
             if mode == .annularDeterminate {
                 (indicator as? RoundProgressView)?.isAnnular = true
             }
-        case .customView:
-            if let customView = customView, customView != indicator {
+        case .customView( let customView):
+            if customView != indicator {
                 // Update custom view indicator
                 indicator?.removeFromSuperview()
                 bezelView.addSubview(customView)

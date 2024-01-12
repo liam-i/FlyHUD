@@ -11,7 +11,9 @@
 
 import UIKit
 
-public enum HUDMode {
+public enum HUDMode: Equatable {
+    /// Shows only labels.
+    case text
     /// UIActivityIndicatorView.
     case indeterminate
     /// A round, pie-chart like, progress view.
@@ -20,10 +22,8 @@ public enum HUDMode {
     case annularDeterminate
     /// Horizontal progress bar.
     case determinateHorizontalBar
-    /// Shows a custom view.
-    case customView
-    /// Shows only labels.
-    case text
+    /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
+    case customView(UIView)
 }
 
 public enum HUDAnimation {
