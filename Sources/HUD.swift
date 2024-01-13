@@ -25,7 +25,6 @@ open class HUD: UIView {
 
     /// The HUD delegate object. Receives HUD state notifications.
     public weak var delegate: HUDDelegate?
-
     /// Called after the HUD is hidden.
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
@@ -35,13 +34,14 @@ open class HUD: UIView {
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
-
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
     /// Defaults to 0.0 (no minimum show time).
     public var minShowTime: TimeInterval = 0.0
 
     /// Removes the HUD from its parent view when hidden. Defaults to true.
     public var removeFromSuperViewOnHide: Bool = true
+    /// The animation type that should be used when the HUD is shown and hidden.
+    public var animationType: HUDAnimation = .fade
 
     /// Handle show `HUD` multiple times in the same `View`.
     public private(set) var count: Int = 0
@@ -57,7 +57,13 @@ open class HUD: UIView {
             updateIndicators()
         }
     }
-
+    /// HUD layout configuration. eg: offset, margin, padding, etc.
+    public var layoutConfig: HUDLayoutConfiguration = .init() {
+        didSet {
+            guard layoutConfig != oldValue else { return }
+            setNeedsUpdateConstraints()
+        }
+    }
     /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views.
     /// Defaults to semi-translucent black.
     public var contentColor: UIColor = {
@@ -72,18 +78,6 @@ open class HUD: UIView {
             updateViews(for: contentColor)
         }
     }
-
-    /// The animation type that should be used when the HUD is shown and hidden.
-    public var animationType: HUDAnimation = .fade
-
-    /// HUD layout configuration. eg: offset, margin, padding, etc.
-    public var layoutConfig: HUDLayoutConfiguration = .init() {
-        didSet {
-            guard layoutConfig != oldValue else { return }
-            setNeedsUpdateConstraints()
-        }
-    }
-
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to false.
     public var isMotionEffectsEnabled: Bool = false {
         didSet {
@@ -101,7 +95,6 @@ open class HUD: UIView {
             indicator.progress = progress
         }
     }
-
     /// The NSProgress object feeding the progress information to the progress indicator.
     public var progressObject: Progress? {
         didSet {
@@ -114,17 +107,13 @@ open class HUD: UIView {
 
     /// The view containing the labels and indicator (or customView).
     public lazy var bezelView = BackgroundView(frame: .zero)
-
     /// View covering the entire HUD area, placed behind bezelView.
     public lazy var backgroundView = BackgroundView(frame: bounds)
-
     /// A label that holds an optional short message to be displayed below the activity indicator.
     /// The HUD is automatically resized to fit the entire text.
     public lazy var label = UILabel(frame: .zero)
-
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
     public lazy var detailsLabel = UILabel(frame: .zero)
-
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public lazy var button = RoundedButton(frame: .zero)
 
