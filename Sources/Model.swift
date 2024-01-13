@@ -37,12 +37,6 @@ public enum HUDAnimation {
     case zoomIn
     /// Opacity + scale animation (zoom out style)
     case zoomOut
-    /// Disable animation
-    case none
-
-    func valid(_ animated: Bool) -> HUDAnimation {
-        animated ? self : .none
-    }
 }
 
 public enum HUDBackgroundStyle {
@@ -92,10 +86,35 @@ public struct HUDLayoutConfiguration: Equatable {
     }
 }
 
+enum HUDAnimationOptions {
+    case animation(HUDAnimation)
+    case none
+
+    init(animated: Bool, animation: @autoclosure () -> HUDAnimation) {
+        self = animated ? .animation(animation()) : .none
+    }
+}
+
 extension Array where Element == NSLayoutConstraint {
-    func apply(priority: UILayoutPriority) {
+    func apply(_ priority: UILayoutPriority) -> Self {
         forEach {
             $0.priority = priority
         }
+        return self
+    }
+}
+
+extension NSLayoutConstraint {
+    func apply(_ priority: UILayoutPriority) -> Self {
+        self.priority = priority
+        return self
+    }
+}
+
+extension UIView {
+    func setContentCompressionResistancePriorityForAxis(_ priority: UILayoutPriority) {
+        translatesAutoresizingMaskIntoConstraints = false
+        setContentCompressionResistancePriority(priority, for: .horizontal)
+        setContentCompressionResistancePriority(priority, for: .vertical)
     }
 }

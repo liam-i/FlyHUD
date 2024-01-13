@@ -17,7 +17,6 @@ public protocol HUDDelegate: AnyObject {
 }
 
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
-///
 /// - NOTE: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - ATTENTION: HUD is a UI class and should therefore only be accessed on the main thread.
 open class HUD: UIView {
@@ -29,28 +28,26 @@ open class HUD: UIView {
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD. 
-    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks.
-    /// Defaults to 0.0 (no grace time).
+    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
-    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
-    /// Defaults to 0.0 (no minimum show time).
+    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. `Defaults to 0.0 (no minimum show time)`.
     public var minShowTime: TimeInterval = 0.0
 
-    /// Removes the HUD from its parent view when hidden. Defaults to true.
+    /// Removes the HUD from its parent view when hidden. `Defaults to true`.
     public var removeFromSuperViewOnHide: Bool = true
-    /// The animation type that should be used when the HUD is shown and hidden.
+    /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
     public var animationType: HUDAnimation = .fade
 
     /// Handle show `HUD` multiple times in the same `View`.
     public private(set) var count: Int = 0
-    /// Enable `count`. Defaults to false.
+    /// Enable `count`. `Defaults to false`.
     public static var isCountEnabled: Bool = false
 
     // MARK: - Appearance
 
-    /// HUD operation mode. The default is indeterminate.
+    /// HUD operation mode. `Default to .indeterminate`.
     public var mode: HUDMode = .indeterminate {
         didSet {
             guard mode != oldValue else { return }
@@ -64,9 +61,8 @@ open class HUD: UIView {
             setNeedsUpdateConstraints()
         }
     }
-    /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views.
-    /// Defaults to semi-translucent black.
-    public var contentColor: UIColor = {
+    /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views. `Defaults to semi-translucent black`.
+    public lazy var contentColor: UIColor = {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return UIColor.label.withAlphaComponent(0.7)
         } else {
@@ -78,7 +74,7 @@ open class HUD: UIView {
             updateViews(for: contentColor)
         }
     }
-    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. Defaults to false.
+    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
     public var isMotionEffectsEnabled: Bool = false {
         didSet {
             guard isMotionEffectsEnabled != oldValue else { return }
@@ -88,7 +84,7 @@ open class HUD: UIView {
 
     // MARK: - Progress
 
-    /// The progress of the progress indicator, from 0.0 to 1.0. Defaults to 0.0.
+    /// The progress of the progress indicator, from 0.0 to 1.0. `Defaults to 0.0`.
     public var progress: CGFloat = 0.0 {
         didSet {
             guard progress != oldValue, let indicator = indicator as? Progressive else { return }
@@ -106,16 +102,16 @@ open class HUD: UIView {
     // MARK: - Views
 
     /// The view containing the labels and indicator (or customView).
-    public lazy var bezelView = BackgroundView(frame: .zero)
+    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
     /// View covering the entire HUD area, placed behind bezelView.
-    public lazy var backgroundView = BackgroundView(frame: bounds)
+    public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
     /// A label that holds an optional short message to be displayed below the activity indicator.
     /// The HUD is automatically resized to fit the entire text.
-    public lazy var label = UILabel(frame: .zero)
+    public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
-    public lazy var detailsLabel = UILabel(frame: .zero)
+    public private(set) lazy var detailsLabel = UILabel(frame: .zero)
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
-    public lazy var button = RoundedButton(frame: .zero)
+    public private(set) lazy var button = RoundedButton(frame: .zero)
 
     private static let defaultLabelFontSize: CGFloat = 16.0
     private static let defaultDetailsLabelFontSize: CGFloat = 12.0
@@ -189,7 +185,7 @@ open class HUD: UIView {
         return nil
     }
 
-    /// Creates a new HUD, adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
+    /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true.`
@@ -198,16 +194,7 @@ open class HUD: UIView {
     /// - SeeAlso: animationType.
     @discardableResult
     public class func show(to view: UIView, animated: Bool = true) -> HUD {
-        if HUD.isCountEnabled, let hud = hud(for: view) {
-            hud.count += 1
-            return hud
-        }
-
-        let hud = HUD(with: view)
-        hud.removeFromSuperViewOnHide = true
-        view.addSubview(hud)
-        hud.show(animated: animated)
-        return hud
+        show(to: view, options: .init(animated: animated, animation: .fade)) // animationType, Default to .fade.
     }
 
     /// Creates a new HUD, adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
@@ -218,17 +205,7 @@ open class HUD: UIView {
     /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func show(to view: UIView, using animation: HUDAnimation) -> HUD {
-        if HUD.isCountEnabled, let hud = hud(for: view) {
-            hud.count += 1
-            return hud
-        }
-
-        let hud = HUD(with: view)
-        hud.animationType = animation
-        hud.removeFromSuperViewOnHide = true
-        view.addSubview(hud)
-        hud.show(using: animation)
-        return hud
+        show(to: view, options: .animation(animation))
     }
 
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:animated:)`.
@@ -240,10 +217,7 @@ open class HUD: UIView {
     /// - SeeAlso: animationType.
     @discardableResult
     public class func hide(for view: UIView, animated: Bool = true) -> Bool {
-        guard let hud = hud(for: view) else { return false }
-        hud.removeFromSuperViewOnHide = true
-        hud.hide(animated: animated)
-        return true
+        hide(for: view, options: animated ? nil : HUDAnimationOptions.none) // nil, Use default animation
     }
 
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:)`.
@@ -253,10 +227,7 @@ open class HUD: UIView {
     /// - Returns: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func hide(for view: UIView, using animation: HUDAnimation) -> Bool {
-        guard let hud = hud(for: view) else { return false }
-        hud.removeFromSuperViewOnHide = true
-        hud.hide(using: animation)
-        return true
+        hide(for: view, options: .animation(animation))
     }
 
     /// Displays the HUD.
@@ -264,21 +235,65 @@ open class HUD: UIView {
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like NSOperation or making an asynchronous call like NSURLRequest).
     /// - SeeAlso: animationType.
     public func show(animated: Bool = true) {
-        show(using: animationType.valid(animated))
+        show(with: .init(animated: animated, animation: animationType))
     }
 
     /// Displays the HUD.
     /// - Parameter animation: Use HUDAnimation, Priority greater than the current animationType.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like NSOperation or making an asynchronous call like NSURLRequest).
     public func show(using animation: HUDAnimation) {
+        show(with: .animation(animation))
+    }
+
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    /// - Parameters:
+    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - SeeAlso: animationType.
+    public func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
+        hide(with: .init(animated: animated, animation: animationType), afterDelay: delay)
+    }
+
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    /// - Parameters:
+    ///   - animation: Use HUDAnimation, Priority greater than the current animationType.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    public func hide(using animation: HUDAnimation, afterDelay delay: TimeInterval = 0.0) {
+        hide(with: .animation(animation), afterDelay: delay)
+    }
+
+    private class func show(to view: UIView, options: HUDAnimationOptions) -> HUD {
+        if HUD.isCountEnabled, let hud = hud(for: view) {
+            hud.count += 1
+            return hud
+        }
+
+        let hud = HUD(with: view) // Creates a new HUD
+        if case .animation(let type) = options {
+            hud.animationType = type // Set as default animation
+        }
+        hud.removeFromSuperViewOnHide = true
+        view.addSubview(hud)
+        hud.show(with: options)
+        return hud
+    }
+
+    private class func hide(for view: UIView, options: HUDAnimationOptions?) -> Bool {
+        guard let hud = hud(for: view) else { return false }
+        hud.removeFromSuperViewOnHide = true
+        hud.hide(with: options ?? .animation(hud.animationType)) // Use default animation, if unknown
+        return true
+    }
+
+    private func show(with options: HUDAnimationOptions) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if HUD.isCountEnabled {
             count += 1
         }
 
-        cancelMinShowWorkItem()
         isFinished = false
+        cancelMinShowWorkItem()
         // Modified grace time to 0 and show again
         cancelGraceWorkItem()
         // Cancel any scheduled hide(animated:afterDelay:) calls
@@ -289,25 +304,53 @@ open class HUD: UIView {
             let workItem = DispatchWorkItem { [weak self] in
                 // Show the HUD only if the task is still running
                 guard let `self` = self, !self.isFinished else { return }
-                self.show(animation)
+                self.performShow(with: options)
             }
             graceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + graceTime, execute: workItem)
             return
         }
 
-        // ... otherwise show the HUD immediately
-        show(animation)
+        performShow(with: options) // ... otherwise show the HUD immediately
     }
 
-    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
-    /// - Parameter animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true.`
-    /// - SeeAlso: animationType.
-    public func hide(animated: Bool = true) {
-        hide(using: animationType.valid(animated))
+    private func performShow(with options: HUDAnimationOptions) {
+        // Cancel any previous animations
+        bezelView.layer.removeAllAnimations()
+        backgroundView.layer.removeAllAnimations()
+
+        showStarted = Date()
+        alpha = 1.0
+
+        // Needed in case we hide and re-show with the same NSProgress object attached.
+        setNSProgressDisplayLink(enabled: true)
+        // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
+        updateBezelMotionEffects()
+
+        switch options {
+        case .animation(let type):
+            animate(with: type, showing: true, completion: nil)
+        case .none:
+            bezelView.transform = .identity
+            bezelView.alpha = 1.0
+            backgroundView.alpha = 1.0
+        }
     }
 
-    public func hide(using animation: HUDAnimation) {
+    private func hide(with options: HUDAnimationOptions, afterDelay delay: TimeInterval) {
+        guard delay > 0.0 else {
+            return hide(with: options)
+        }
+
+        cancelHideDelayWorkItem() // Cancel any scheduled hide(animated:afterDelay:) calls
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.hide(with: options)
+        }
+        hideDelayWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
+    private func hide(with options: HUDAnimationOptions) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if HUD.isCountEnabled {
@@ -325,9 +368,8 @@ open class HUD: UIView {
             let interv = Date().timeIntervalSince(showStarted)
             if interv < minShowTime {
                 cancelMinShowWorkItem()
-
                 let workItem = DispatchWorkItem { [weak self] in
-                    self?.hide(animation)
+                    self?.performHide(with: options)
                 }
                 minShowWorkItem = workItem
                 DispatchQueue.main.asyncAfter(deadline: .now() + (minShowTime - interv), execute: workItem)
@@ -335,62 +377,16 @@ open class HUD: UIView {
             }
         }
 
-        // ... otherwise hide the HUD immediately
-        hide(animation)
+        performHide(with: options) // ... otherwise hide the HUD immediately
     }
 
-    /// Hides the HUD after a delay. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
-    /// - Parameters:
-    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true.`
-    ///   - delay: Delay in seconds until the HUD is hidden.
-    /// - SeeAlso: animationType.
-    public func hide(animated: Bool = true, afterDelay delay: TimeInterval) {
-        hide(using: animationType.valid(animated), afterDelay: delay)
-    }
-
-    public func hide(using animation: HUDAnimation, afterDelay delay: TimeInterval) {
-        // Cancel any scheduled hide(animated:afterDelay:) calls
-        cancelHideDelayWorkItem()
-
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.hide(using: animation)
-        }
-        hideDelayWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
-    }
-
-    // MARK: - Internal show & hide operations
-
-    private func show(_ type: HUDAnimation) {
-        // Cancel any previous animations
-        bezelView.layer.removeAllAnimations()
-        backgroundView.layer.removeAllAnimations()
-
-        showStarted = Date()
-        alpha = 1.0
-
-        // Needed in case we hide and re-show with the same NSProgress object attached.
-        setNSProgressDisplayLink(enabled: true)
-
-        // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
-        updateBezelMotionEffects()
-
-        guard type == .none else {
-            return animate(with: type, showing: true, completion: nil)
-        }
-
-        bezelView.transform = .identity
-        bezelView.alpha = 1.0
-        backgroundView.alpha = 1.0
-    }
-
-    private func hide(_ type: HUDAnimation) {
+    private func performHide(with options: HUDAnimationOptions) {
         // Cancel any scheduled hide(animated:afterDelay:) calls.
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
 
-        if type != .none && showStarted != nil {
+        if case .animation(let type) = options, showStarted != nil {
             showStarted = nil
             animate(with: type, showing: false) { _ in
                 self.done()
@@ -472,12 +468,6 @@ open class HUD: UIView {
         minShowWorkItem = nil
     }
 
-    // MARK: - View Hierarchy
-
-    open override func didMoveToSuperview() {
-        updateForCurrentOrientation(animated: false)
-    }
-
     // MARK: - UI
 
     private func setupViews() {
@@ -513,9 +503,7 @@ open class HUD: UIView {
         button.setTitleColor(defaultColor, for: .normal)
 
         for view in [label, detailsLabel, button] {
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .horizontal)
-            view.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 998.0), for: .vertical)
+            view.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
             bezelView.addSubview(view)
         }
     }
@@ -537,15 +525,13 @@ open class HUD: UIView {
                 bezelView.addSubview(indicatorView)
                 indicator = indicatorView
             }
-        case .determinateHorizontalBar:
-            // Update to bar determinate indicator
+        case .determinateHorizontalBar: // Update to bar determinate indicator
             indicator?.removeFromSuperview()
             let bar = BarProgressView()
             bezelView.addSubview(bar)
             indicator = bar
         case .determinate, .annularDeterminate:
-            if !(indicator is RoundProgressView) {
-                // Update to determinante indicator
+            if !(indicator is RoundProgressView) { // Update to determinante indicator
                 indicator?.removeFromSuperview()
                 let roundView = RoundProgressView()
                 bezelView.addSubview(roundView)
@@ -556,8 +542,7 @@ open class HUD: UIView {
                 (indicator as? RoundProgressView)?.isAnnular = true
             }
         case .customView( let customView):
-            if customView != indicator {
-                // Update custom view indicator
+            if customView != indicator { // Update custom view indicator
                 indicator?.removeFromSuperview()
                 bezelView.addSubview(customView)
                 indicator = customView
@@ -568,14 +553,8 @@ open class HUD: UIView {
         }
 
         if let indicator = indicator {
-            let priority = UILayoutPriority(rawValue: 998.0)
-            indicator.translatesAutoresizingMaskIntoConstraints = false
-            indicator.setContentCompressionResistancePriority(priority, for: .horizontal)
-            indicator.setContentCompressionResistancePriority(priority, for: .vertical)
-
-            if let indicator = indicator as? Progressive {
-                indicator.progress = progress
-            }
+            indicator.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
+            (indicator as? Progressive)?.progress = progress
         }
 
         updateViews(for: contentColor)
@@ -648,8 +627,7 @@ open class HUD: UIView {
             bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layoutConfig.offset.x),
             bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layoutConfig.offset.y)
         ]
-        centeringConstraints.apply(priority: UILayoutPriority(rawValue: 998.0))
-        addConstraints(centeringConstraints)
+        addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
 
         // Ensure minimum side margin is kept
         let sideConstraints: [NSLayoutConstraint] = [
@@ -658,8 +636,7 @@ open class HUD: UIView {
             bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layoutConfig.edgeInsets.top),
             bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layoutConfig.edgeInsets.bottom),
         ]
-        sideConstraints.apply(priority: UILayoutPriority(rawValue: 999.0))
-        addConstraints(sideConstraints)
+        addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
 
         // Minimum bezel size, if set
         if !layoutConfig.minSize.equalTo(.zero) {
@@ -667,26 +644,23 @@ open class HUD: UIView {
                 bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.width),
                 bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.height)
             ]
-            minSizeConstraints.apply(priority: UILayoutPriority(rawValue: 997.0))
-            bezelConstraints.append(contentsOf: minSizeConstraints)
+            bezelConstraints.append(contentsOf: minSizeConstraints.apply(UILayoutPriority(997.0)))
         }
 
         // Square aspect ratio, if set
         if layoutConfig.isSquare {
             let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
-            square.priority = UILayoutPriority(rawValue: 997.0)
-            bezelConstraints.append(square)
+            bezelConstraints.append(square.apply(UILayoutPriority(997.0)))
         }
 
         // Layout subviews in bezel
         var paddingConstraints: [NSLayoutConstraint] = []
         let lastSubviewIDX = subviews.count - 1
         for (idx, view) in subviews.enumerated() {
-            // Center in bezel
-            bezelConstraints.append(view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor))
-
-            // Ensure the minimum edge margin is kept
             bezelConstraints.append(contentsOf: [
+                // Center in bezel
+                view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor),
+                // Ensure the minimum edge margin is kept
                 view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layoutConfig.hMargin),
                 view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layoutConfig.hMargin)
             ])
@@ -718,10 +692,8 @@ open class HUD: UIView {
     // swiftlint:enable function_body_length
 
     open override func layoutSubviews() {
-        // There is no need to update constraints if they are going to
-        // be recreated in [super layoutSubviews] due to needsUpdateConstraints being set.
-        // This also avoids an issue on iOS 8, where updatePaddingConstraints
-        // would trigger a zombie object access.
+        // There is no need to update constraints if they are going to be recreated in super.layoutSubviews() due to needsUpdateConstraints
+        // being set. This also avoids an issue on iOS 8, where updatePaddingConstraints would trigger a zombie object access.
         if !needsUpdateConstraints() {
             updatePaddingConstraints()
         }
@@ -767,8 +739,7 @@ open class HUD: UIView {
         // We're using CADisplayLink, because NSProgress can change very quickly and observing it may starve the main thread,
         // so we're refreshing the progress only every frame draw
         if enabled && progressObject != nil {
-            // Only create if not already active.
-            if progressObjectDisplayLink == nil {
+            if progressObjectDisplayLink == nil { // Only create if not already active.
                 progressObjectDisplayLink = CADisplayLink(target: WeakProxy(self), selector: #selector(WeakProxy.onScreenUpdate))
             }
         } else {
@@ -808,6 +779,12 @@ open class HUD: UIView {
         updateForCurrentOrientation(animated: true)
     }
 #endif
+
+    // MARK: - View Hierarchy
+
+    open override func didMoveToSuperview() {
+        updateForCurrentOrientation(animated: false)
+    }
 
     private func updateForCurrentOrientation(animated: Bool) {
         guard let superview = superview else { return }
