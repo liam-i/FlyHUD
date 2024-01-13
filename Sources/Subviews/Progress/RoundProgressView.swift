@@ -17,10 +17,8 @@ public class RoundProgressView: ProgressView {
 
     /// Display mode - false = round or true = annular. Defaults to round.
     public var isAnnular: Bool = false
-
     /// Indicator line width. Defaults to 2.0.
     public var lineWidth: CGFloat = 2.0
-
     /// Indicator line size. Defaults to 37.0.
     public var lineSize: CGFloat = 37.0
 
