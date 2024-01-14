@@ -113,9 +113,6 @@ open class HUD: BaseView {
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public private(set) lazy var button = RoundedButton(frame: .zero)
 
-    private static let defaultLabelFontSize: CGFloat = 16.0
-    private static let defaultDetailsLabelFontSize: CGFloat = 12.0
-
     private var isFinished: Bool = false
     private var indicator: UIView?
     private var showStarted: Date?
@@ -464,7 +461,7 @@ open class HUD: BaseView {
         label.adjustsFontSizeToFitWidth = false
         label.textAlignment = .center
         label.textColor = defaultColor
-        label.font = .boldSystemFont(ofSize: HUD.defaultLabelFontSize)
+        label.font = .boldSystemFont(ofSize: 16.0) // Default to 16.0
         label.isOpaque = false
         label.backgroundColor = .clear
 
@@ -472,12 +469,12 @@ open class HUD: BaseView {
         detailsLabel.textAlignment = .center
         detailsLabel.textColor = defaultColor
         detailsLabel.numberOfLines = 0
-        detailsLabel.font = .boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
+        detailsLabel.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
         detailsLabel.isOpaque = false
         detailsLabel.backgroundColor = .clear
 
         button.titleLabel?.textAlignment = .center
-        button.titleLabel?.font = .boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
         button.setTitleColor(defaultColor, for: .normal)
 
         for view in [label, detailsLabel, button] {
