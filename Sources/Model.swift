@@ -39,11 +39,21 @@ public enum HUDAnimation {
     case zoomOut
 }
 
-public enum HUDBackgroundStyle {
+public enum HUDBackgroundStyle: Equatable {
     /// Solid color background
     case solidColor
-    /// UIVisualEffectView background view
-    case blur
+    /// UIVisualEffectView background view. `Defaults to .light`.
+    case blur(UIBlurEffect.Style = {
+        if #available(iOS 13.0, *) {
+            #if os(tvOS)
+            return .regular
+            #else
+            return .systemThickMaterial
+            #endif
+        } else {
+            return .light
+        }
+    }())
 }
 
 public enum RoundedCorners {

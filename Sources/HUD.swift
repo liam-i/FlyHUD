@@ -44,6 +44,8 @@ open class HUD: BaseView {
     public private(set) var count: Int = 0
     /// Enable `count`. `Defaults to false`.
     public var isCountEnabled: Bool = false
+    /// A Boolean value indicating whether the `HUD` is currently showing.
+    public var isShowing: Bool { isHidden == false }
 
     // MARK: - Appearance
 
@@ -140,11 +142,9 @@ open class HUD: BaseView {
 
     /// Common initialization method, allowing overriding
     open override func commonInit() {
-        // Transparent background
-        isOpaque = false
+        isOpaque = false // Transparent background
         backgroundColor = .clear
-        // Make it invisible for now
-        isHidden = true
+        isHidden = true // Make it invisible for now
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
 
@@ -433,7 +433,6 @@ open class HUD: BaseView {
 
     private func setupViews() {
         let defaultColor = contentColor
-
         backgroundView.style = .solidColor
         backgroundView.color = .clear
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -471,10 +470,15 @@ open class HUD: BaseView {
 
     // swiftlint:disable function_body_length
     private func updateIndicators() {
+        func setIndicator(_ newValue: UIView?) {
+            indicator?.removeFromSuperview()
+            if let newValue = newValue { bezelView.addSubview(newValue) }
+            indicator = newValue
+        }
+
         switch mode {
         case .indeterminate:
             if !(indicator is UIActivityIndicatorView) {
-                indicator?.removeFromSuperview()
                 let indicatorView: UIActivityIndicatorView // Update to indeterminate indicator
                 if #available(iOS 13.0, tvOS 13.0, *) {
                     indicatorView = UIActivityIndicatorView(style: .large)
@@ -483,34 +487,23 @@ open class HUD: BaseView {
                     indicatorView = UIActivityIndicatorView(style: .whiteLarge)
                 }
                 indicatorView.startAnimating()
-                bezelView.addSubview(indicatorView)
-                indicator = indicatorView
+                setIndicator(indicatorView)
             }
         case .determinateHorizontalBar: // Update to bar determinate indicator
-            indicator?.removeFromSuperview()
-            let bar = BarProgressView()
-            bezelView.addSubview(bar)
-            indicator = bar
+            setIndicator(BarProgressView())
         case .determinate, .annularDeterminate:
             if !(indicator is RoundProgressView) { // Update to determinante indicator
-                indicator?.removeFromSuperview()
-                let roundView = RoundProgressView()
-                bezelView.addSubview(roundView)
-                indicator = roundView
+                setIndicator(RoundProgressView())
             }
-
             if mode == .annularDeterminate {
                 (indicator as? RoundProgressView)?.isAnnular = true
             }
         case .customView( let customView):
             if customView != indicator { // Update custom view indicator
-                indicator?.removeFromSuperview()
-                bezelView.addSubview(customView)
-                indicator = customView
+                setIndicator(customView)
             }
         case .text:
-            indicator?.removeFromSuperview()
-            indicator = nil
+            setIndicator(nil)
         }
 
         if let indicator = indicator {

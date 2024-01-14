@@ -19,34 +19,15 @@ public class BackgroundView: BaseView {
 
     // MARK: - Properties
 
-    /// The background style. Defaults to .blur
-    public var style: HUDBackgroundStyle = .blur {
+    /// The background style. `Defaults to .blur`.
+    public var style: HUDBackgroundStyle = .blur() {
         didSet {
             guard style != oldValue else { return }
             updateForBackgroundStyle()
         }
     }
 
-    /// The blur effect style, when using .blur. Defaults to .light.
-    public var blurEffectStyle: UIBlurEffect.Style = {
-        if #available(iOS 13.0, *) {
-            #if os(tvOS)
-            return .regular
-            #else
-            return .systemThickMaterial
-            #endif
-        } else {
-            return .light
-        }
-    }() {
-        didSet {
-            guard blurEffectStyle != oldValue else { return }
-            updateForBackgroundStyle()
-        }
-    }
-
-    /// The background color or the blur tint color.
-    ///  - Note: Defaults to nil on iOS 13 and later and. UIColor(white: 0.8, alpha: 0.6) on older systems.
+    /// The background color or the blur tint color. Defaults to nil on iOS 13 and later and. UIColor(white: 0.8, alpha: 0.6) on older systems.
     public var color: UIColor? = {
         if #available(iOS 13.0, *) {
             return nil
@@ -94,8 +75,8 @@ public class BackgroundView: BaseView {
         switch style {
         case .solidColor:
             backgroundColor = color
-        case .blur:
-            let effect = UIBlurEffect(style: blurEffectStyle)
+        case .blur(let effectStyle):
+            let effect = UIBlurEffect(style: effectStyle)
             let effectview = UIVisualEffectView(effect: effect)
             insertSubview(effectview, at: 0)
             effectview.frame = bounds
