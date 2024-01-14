@@ -317,16 +317,7 @@ open class HUD: BaseView {
         // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
         updateBezelMotionEffects()
 
-        let completion: () -> Void = {
-            self.bezelView.alpha = 1.0
-            self.backgroundView.alpha = 1.0
-        }
-        switch options {
-        case .animation(let type):
-            animate(with: type, showing: true, completion: completion)
-        case .none:
-            completion()
-        }
+        perform(with: options, showing: true, completion: nil)
     }
 
     private func hide(with options: HUDAnimationOptions, afterDelay delay: TimeInterval) {
@@ -377,11 +368,7 @@ open class HUD: BaseView {
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
-
-        let completion: () -> Void = {
-            self.bezelView.alpha = 0.0
-            self.backgroundView.alpha = 0.0
-
+        perform(with: options, showing: false) {
             // Cancel any scheduled hide(animated:afterDelay:) calls
             self.cancelHideDelayWorkItem()
             self.setNSProgressDisplayLink(enabled: false)
@@ -396,20 +383,23 @@ open class HUD: BaseView {
             self.completionBlock?(self)
             self.delegate?.hudWasHidden(self)
         }
-
-        if case .animation(let type) = options, showStarted != nil {
-            showStarted = nil
-            animate(with: type, showing: false, completion: completion)
-        } else {
-            showStarted = nil
-            completion()
-        }
+        showStarted = nil
     }
 
-    private func animate(with type: HUDAnimation, showing: Bool, completion: @escaping() -> Void) {
-        var type = type
+    private func perform(with options: HUDAnimationOptions, showing: Bool, completion: (() -> Void)?) {
+        let alpha: CGFloat = showing ? 1.0 : 0.0
+        let completionBlock: (Bool) -> Void = { _ in
+            self.bezelView.transform = .identity // Reset, after the animation is completed
+            self.bezelView.alpha = alpha
+            self.backgroundView.alpha = alpha
+            completion?()
+        }
+
+        guard case .animation(var type) = options, showStarted != nil else {
+            return completionBlock(true)
+        }
+
         // Automatically determine the correct zoom animation type
-        // Opacity + scale animation (zoom in when appearing zoom out when disappearing)
         if type == .zoomInOut {
             type = showing ? .zoomIn : .zoomOut
         } else if type == .zoomOutIn {
@@ -426,7 +416,7 @@ open class HUD: BaseView {
             bezelView.transform = large
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .beginFromCurrentState) {
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
             if showing {
                 self.bezelView.transform = .identity
             } else if !showing && type == .zoomIn {
@@ -434,14 +424,9 @@ open class HUD: BaseView {
             } else if !showing && type == .zoomOut {
                 self.bezelView.transform = small
             }
-
-            let alpha: CGFloat = showing ? 1.0 : 0.0
             self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
-        } completion: { _ in
-            self.bezelView.transform = .identity // Reset, after the animation is completed
-            completion()
-        }
+        }, completion: completionBlock)
     }
 
     // MARK: - Cancel Dispatch Work Item
