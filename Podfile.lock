@@ -1,5 +1,5 @@
 PODS:
-  - LPHUD (1.3.3)
+  - LPHUD (1.3.5)
 
 DEPENDENCIES:
   - LPHUD (from `./`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  LPHUD: ac251ac72bd14e9c9b780686008f0f79b843074d
+  LPHUD: 0fe3697bd3c5eeb4dccb9efab48bae97d997697c
 
 PODFILE CHECKSUM: 88cd1dbb4c45cc165e5f213ecd7e25e6692e0a64
 
