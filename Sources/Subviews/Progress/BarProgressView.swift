@@ -18,20 +18,28 @@ public class BarProgressView: ProgressView {
     /// Bar border line color. Defaults to white UIColor(white: 1.0, alpha: 1.0).
     public var lineColor: UIColor = UIColor(white: 1.0, alpha: 1.0)
     /// Bar border line width. Defaults to 2.0.
-    public var lineWidth: CGFloat = 2.0
+    public private(set) var lineWidth: CGFloat = 2.0
     /// Bar border line spacing. Defaults to 2.0.
-    public var spacing: CGFloat = 2.0
+    public private(set) var spacing: CGFloat = 2.0
 
     // MARK: - Lifecycle
 
-    public convenience init() {
-        self.init(frame: CGRect(x: 0.0, y: 0.0, width: 120.0, height: 10.0))
+    /// Initialization method
+    /// - Parameters:
+    ///   - lineWidth: Bar border line width.
+    ///   - spacing: Bar border line spacing.
+    public convenience init(lineWidth: CGFloat, spacing: CGFloat) {
+        let height = lineWidth * 3 + spacing * 2
+        self.init(frame: CGRect(x: 0.0, y: 0.0, width: 12.0 * height, height: height))
+        self.lineWidth = lineWidth
+        self.spacing = spacing
     }
 
     // MARK: - Layout
 
     public override var intrinsicContentSize: CGSize {
-        CGSize(width: 120.0, height: lineWidth * 3 + spacing * 2)
+        let height = lineWidth * 3 + spacing * 2
+        return CGSize(width: 12.0 * height, height: height)
     }
 
     // MARK: - Drawing

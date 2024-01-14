@@ -52,16 +52,20 @@ extension ViewController {
 
     @objc func indeterminateExample() {
         let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
-        Network.request {
+        Task.request(3) {
             hud.hide(animated: true)
+        }
+        Task.request(1) {
+            if #available(iOS 13.0, *) {
+                hud.mode = .indeterminate(.medium) // test.
+            }
         }
     }
 
     @objc func labelExample() {
         let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         hud.label.text = "Loading..."
-
-        Network.request {
+        Task.request {
             hud.hide(animated: true)
         }
     }
@@ -70,30 +74,37 @@ extension ViewController {
         let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         hud.label.text = "Loading..."
         hud.detailsLabel.text = "Parsing data\n(1/1)"
-
-        Network.request {
+        Task.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func determinateExample() {
         let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
-        hud.mode = .determinate
+        hud.mode = .determinate()
         hud.detailsLabel.text = "Loading..."
-
-        Network.request {
+        Task.request(5) {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
+        }
+        Task.request(1) {
+            hud.mode = .determinate(isAnnular: false, lineWidth: 4) // test.
+        }
+        Task.request(2) {
+            hud.mode = .determinate(isAnnular: false, lineWidth: 8, lineSize: 60) // test.
+        }
+        Task.request(3) {
+            hud.mode = .determinate(isAnnular: true, lineWidth: 12, lineSize: 80) // test.
         }
     }
 
     @objc func annularDeterminateExample() {
         let hud = HUD.show(to: container)
-        hud.mode = .annularDeterminate
+        hud.mode = .determinate(isAnnular: true)
         hud.label.text = "Loading..."
 
-        Network.request {
+        Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
@@ -102,13 +113,16 @@ extension ViewController {
 
     @objc func barDeterminateExample() {
         let hud = HUD.show(to: container)
-        hud.mode = .determinateHorizontalBar
+        hud.mode = .determinateHorizontalBar()
         hud.label.text = "Loading..."
 
-        Network.request {
+        Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
+        }
+        Task.request(1) {
+            hud.mode = .determinateHorizontalBar(lineWidth: 20, spacing: 10) // test.
         }
     }
 
@@ -116,7 +130,7 @@ extension ViewController {
         let hud = HUD.show(to: container)
         hud.mode = .text
         hud.label.text = "Wrong password"
-        Network.request(2) {
+        Task.request(2) {
             // test.
             hud.layoutConfig.with {
                 $0.offset = CGPoint(x: HUDLayoutConfiguration.maxOffset, y: HUDLayoutConfiguration.maxOffset)
@@ -140,15 +154,19 @@ extension ViewController {
 
     @objc func cancelationExample() {
         let hud = HUD.show(to: container)
-        hud.mode = .determinate
+        hud.mode = .determinate()
         hud.label.text = "Loading..."
         hud.button.setTitle("Cancel", for: .normal)
         hud.button.addTarget(self, action: #selector(cancelWork), for: .touchUpInside)
-
-        Network.request {
+        Task.request(3) {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
+        }
+        Task.request(1) {
+            hud.label.font = .boldSystemFont(ofSize: 20)
+            hud.button.titleLabel?.font = .boldSystemFont(ofSize: 17)
+            hud.button.borderWidth = 2
         }
     }
 
@@ -157,7 +175,7 @@ extension ViewController {
         hud.label.text = "Preparing..."
         hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
-        Network.requestMultiTask {
+        Task.requestMultiTask {
             /// Demo `HUD.hud(for:)` method
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
@@ -165,12 +183,12 @@ extension ViewController {
             case 3:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.mode = .determinate
+                hud.mode = .determinate()
                 hud.label.text = "Loading..."
             case 2:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.mode = .indeterminate
+                hud.mode = .indeterminate()
                 hud.label.text = "Cleaning up..."
             case 1:
                 /// Demo `HUD.hud(for:)` method
@@ -187,7 +205,7 @@ extension ViewController {
 
     @objc func windowExample() {
         let hud = HUD.show(to: view.window!)
-        Network.request {
+        Task.request {
             hud.hide(animated: true)
         }
     }
@@ -197,9 +215,9 @@ extension ViewController {
         hud.label.text = "Preparing..."
         hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
 
-        Network.download {
+        Task.download {
             guard let hud = HUD.hud(for: self.container) else { return }
-            hud.mode = .determinate
+            hud.mode = .determinate()
             hud.progress = $0
         } completion: {
             guard let hud = HUD.hud(for: self.container) else { return }
@@ -211,7 +229,7 @@ extension ViewController {
 
     @objc func determinateProgressExample() {
         let hud = HUD.show(to: container)
-        hud.mode = .determinate
+        hud.mode = .determinate()
         hud.label.text = "Loading..."
 
         let progress = Progress(totalUnitCount: 100)
@@ -225,7 +243,7 @@ extension ViewController {
         // To suppress one (or both) of the labels, set the descriptions to empty strings.
 //        progress.localizedDescription = "Download Progress"
 
-        Network.resume(with: progress) {
+        Task.resume(with: progress) {
             hud.hide(animated: true)
         }
     }
@@ -234,7 +252,7 @@ extension ViewController {
         let hud = HUD.show(to: container)
         hud.backgroundView.style = .solidColor
         hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
-        Network.request {
+        Task.request {
             hud.hide(animated: true)
         }
     }
@@ -243,20 +261,20 @@ extension ViewController {
         let hud = HUD.show(to: container)
         hud.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
         hud.label.text = "Loading..."
-        Network.request {
+        Task.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func cancelWork(_ sender: UIButton) {
-        Network.cancelTask()
+        Task.cancelTask()
     }
 
     @objc func multipleHUDExample() {
         /// Handle show `HUD` multiple times in the same `View`.
         func request1() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
-            Network.request(.random(in: 1...3)) {
+            Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
                 print("response1 --> hud(\(hud.hashValue)).count=\(hud.count)")
@@ -265,7 +283,7 @@ extension ViewController {
         }
         func request2() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
-            Network.request(.random(in: 1...3)) {
+            Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
                 print("response2 --> hud(\(hud.hashValue)).count=\(hud.count)")
@@ -274,7 +292,7 @@ extension ViewController {
         }
         func request3() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
-            Network.request(.random(in: 1...3)) {
+            Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
                 print("response3 --> hud(\(hud.hashValue)).count=\(hud.count)")

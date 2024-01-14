@@ -37,6 +37,7 @@ extension UIView {
 
 protocol WithType: AnyObject {}
 extension WithType {
+    @discardableResult
     func with(_ populator: (Self) -> Void) -> Self {
         populator(self)
         return self
