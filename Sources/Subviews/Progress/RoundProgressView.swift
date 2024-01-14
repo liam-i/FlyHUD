@@ -20,12 +20,20 @@ public class RoundProgressView: ProgressView {
     /// Indicator line width. Defaults to 2.0.
     public var lineWidth: CGFloat = 2.0
     /// Indicator line size. Defaults to 37.0.
-    public var lineSize: CGFloat = 37.0
+    public private(set) var lineSize: CGFloat = 37.0
 
     // MARK: - Lifecycle
 
-    public convenience init() {
-        self.init(frame: CGRect(x: 0.0, y: 0.0, width: 37.0, height: 37.0))
+    /// Initialization method
+    /// - Parameters:
+    ///   - isAnnular: Display mode - false = round or true = annular.
+    ///   - lineWidth: Indicator line width.
+    ///   - lineSize: Indicator line size.
+    public convenience init(isAnnular: Bool, lineWidth: CGFloat, lineSize: CGFloat) {
+        self.init(frame: CGRect(x: 0.0, y: 0.0, width: lineSize, height: lineSize))
+        self.isAnnular = isAnnular
+        self.lineWidth = lineWidth
+        self.lineSize = lineSize
     }
 
     // MARK: - Layout

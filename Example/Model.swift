@@ -40,22 +40,22 @@ extension Model {
 
 // MARK: Tasks
 
-class Network: NSObject {
+class Task: NSObject {
     private static var canceled: Bool = false
 
     static func cancelTask() {
         canceled = true
     }
 
-    static func request(_ time: UInt32 = 3, completion: @escaping () -> Void) {
+    static func request(_ sec: UInt32 = 3, completion: @escaping () -> Void) {
         DispatchQueue.global().async {
-            sleep(time) // Simulate by just waiting.
-
+            sleep(sec) // Simulate by just waiting.
             DispatchQueue.main.async(execute: completion)
         }
     }
 
-    static func request(_ progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
+    static func request(_ sec: UInt32 = 3, progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
+        let us = sec * 1000 * 1000 / 100
         DispatchQueue.global().async {
             canceled = false
 
@@ -64,21 +64,22 @@ class Network: NSObject {
             while progressValue < 1.0 {
                 if canceled { break }
 
-                progressValue += 0.01
+                progressValue += 0.01 // 1 / 0.01 = 100
 
                 /// 回到主线程刷新UI
                 DispatchQueue.main.async {
                     progress(progressValue)
                 }
 
-                usleep(50000)
+                usleep(us)
             }
 
             DispatchQueue.main.async(execute: completion)
         }
     }
 
-    static func resume(with progress: Progress, completion: @escaping () -> Void) {
+    static func resume(with progress: Progress, sec: UInt32 = 3, completion: @escaping () -> Void) {
+        let us = sec * 1000 * 1000 / 100
         DispatchQueue.global().async {
             while progress.fractionCompleted < 1.0 {
                 if progress.isCancelled { break }
@@ -86,7 +87,7 @@ class Network: NSObject {
                 progress.becomeCurrent(withPendingUnitCount: 1)
                 progress.resignCurrent()
 
-                usleep(50000)
+                usleep(us)
             }
 
             DispatchQueue.main.async(execute: completion)
@@ -130,7 +131,7 @@ class Network: NSObject {
         }
     }
 
-    private static let shared = { Network() }()
+    private static let shared = { Task() }()
     private var progress: ((CGFloat) -> Void)?
     private var completion: (() -> Void)?
     static func download(_ progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
@@ -144,10 +145,10 @@ class Network: NSObject {
     }
 }
 
-extension Network: URLSessionDelegate, URLSessionDownloadDelegate {
+extension Task: URLSessionDelegate, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         DispatchQueue.main.async {
-            Network.shared.completion?()
+            Task.shared.completion?()
         }
     }
 
@@ -156,7 +157,7 @@ extension Network: URLSessionDelegate, URLSessionDownloadDelegate {
         print("download progress: \(progress)")
 
         DispatchQueue.main.async {
-            Network.shared.progress?(progress)
+            Task.shared.progress?(progress)
         }
     }
 }

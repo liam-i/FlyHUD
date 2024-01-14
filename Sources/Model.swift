@@ -14,14 +14,25 @@ import UIKit
 public enum HUDMode: Equatable {
     /// Shows only labels.
     case text
-    /// UIActivityIndicatorView.
-    case indeterminate
-    /// A round, pie-chart like, progress view.
-    case determinate
-    /// Ring-shaped progress view.
-    case annularDeterminate
+    /// UIActivityIndicatorView. `Defalut to .large`.
+    case indeterminate(UIActivityIndicatorView.Style = {
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            return .large
+        } else {
+            return .whiteLarge
+        }
+    }())
+    /// Progress view.
+    /// - Parameters:
+    ///   - isAnnular:Display mode. (false, A round, pie-chart like; true, Ring-shaped). `Defaults to false (round)`.
+    ///   - lineWidth: Indicator line width. `Defaults to 2.0`.
+    ///   - radius: Indicator line size. `Defaults to 37.0`.
+    case determinate(isAnnular: Bool = false, lineWidth: CGFloat = 2.0, lineSize: CGFloat = 37.0)
     /// Horizontal progress bar.
-    case determinateHorizontalBar
+    /// - Parameters:
+    ///   - lineWidth: Bar border line width. `Defaults to 2.0`.
+    ///   - spacing: Bar border line spacing. `Defaults to 2.0`.
+    case determinateHorizontalBar(lineWidth: CGFloat = 2.0, spacing: CGFloat = 2.0)
     /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
     case customView(UIView)
 }

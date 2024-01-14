@@ -49,8 +49,8 @@ open class HUD: BaseView {
 
     // MARK: - Appearance
 
-    /// HUD operation mode. `Default to .indeterminate`.
-    public var mode: HUDMode = .indeterminate {
+    /// HUD operation mode. `Default to .indeterminate(.large)`.
+    public var mode: HUDMode = .indeterminate() {
         didSet {
             guard mode != oldValue else { return }
             updateIndicators()
@@ -473,33 +473,33 @@ open class HUD: BaseView {
         }
 
         switch mode {
-        case .indeterminate:
-            if !(indicator is UIActivityIndicatorView) {
-                let indicatorView: UIActivityIndicatorView // Update to indeterminate indicator
-                if #available(iOS 13.0, tvOS 13.0, *) {
-                    indicatorView = UIActivityIndicatorView(style: .large)
-                    indicatorView.color = .white
-                } else {
-                    indicatorView = UIActivityIndicatorView(style: .whiteLarge)
+        case .text:
+            setIndicator(nil)
+        case let .indeterminate(style): // Update to indeterminate indicator
+            if let indicator = indicator as? UIActivityIndicatorView {
+                indicator.style = style
+            } else {
+                setIndicator(UIActivityIndicatorView(style: style).with {
+                    $0.startAnimating()
+                })
+            }
+        case let .determinateHorizontalBar(lineWidth, spacing): // Update to bar determinate indicator
+            setIndicator(BarProgressView(lineWidth: lineWidth, spacing: spacing))
+        case let .determinate(isAnnular, lineWidth, lineSize): // Update to determinante indicator
+            if let indicator = indicator as? RoundProgressView {
+                indicator.isAnnular = isAnnular
+                indicator.lineWidth = lineWidth
+
+                if lineSize != indicator.lineSize {
+                    setIndicator(RoundProgressView(isAnnular: isAnnular, lineWidth: lineWidth, lineSize: lineSize))
                 }
-                indicatorView.startAnimating()
-                setIndicator(indicatorView)
+            } else {
+                setIndicator(RoundProgressView(isAnnular: isAnnular, lineWidth: lineWidth, lineSize: lineSize))
             }
-        case .determinateHorizontalBar: // Update to bar determinate indicator
-            setIndicator(BarProgressView())
-        case .determinate, .annularDeterminate:
-            if !(indicator is RoundProgressView) { // Update to determinante indicator
-                setIndicator(RoundProgressView())
-            }
-            if mode == .annularDeterminate {
-                (indicator as? RoundProgressView)?.isAnnular = true
-            }
-        case .customView( let customView):
+        case let .customView(customView):
             if customView != indicator { // Update custom view indicator
                 setIndicator(customView)
             }
-        case .text:
-            setIndicator(nil)
         }
 
         if let indicator = indicator {
