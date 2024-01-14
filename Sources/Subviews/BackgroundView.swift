@@ -14,7 +14,7 @@
 
 import UIKit
 
-public class BackgroundView: UIView {
+public class BackgroundView: BaseView {
     public var roundedCorners: RoundedCorners = .radius(5.0)
 
     // MARK: - Properties
@@ -60,21 +60,12 @@ public class BackgroundView: UIView {
         }
     }
 
-    var effectView: UIVisualEffectView?
+    private var effectView: UIVisualEffectView?
 
     // MARK: - Lifecycle
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    public override func commonInit() {
         clipsToBounds = true
-
-        updateForBackgroundStyle()
-    }
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        clipsToBounds = true
-
         updateForBackgroundStyle()
     }
 

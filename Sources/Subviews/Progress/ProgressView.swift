@@ -15,7 +15,7 @@ public protocol Progressive: AnyObject {
     var progress: CGFloat { get set }
 }
 
-public class ProgressView: UIView, Progressive {
+public class ProgressView: BaseView, Progressive {
     // MARK: - Properties
 
     /// Progress (0.0 to 1.0)
@@ -44,14 +44,7 @@ public class ProgressView: UIView, Progressive {
 
     // MARK: - Lifecycle
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-        isOpaque = false
-    }
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    public override func commonInit() {
         backgroundColor = .clear
         isOpaque = false
     }

@@ -61,7 +61,7 @@ public class RoundedButton: UIButton {
     public override var isHighlighted: Bool {
         didSet {
             let baseColor = titleColor(for: .selected)
-            backgroundColor = isHighlighted ? baseColor?.withAlphaComponent(0.1) : UIColor.clear
+            backgroundColor = isHighlighted ? baseColor?.withAlphaComponent(0.1) : .clear
         }
     }
 }

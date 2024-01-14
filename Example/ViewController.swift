@@ -51,14 +51,14 @@ extension ViewController {
     }
 
     @objc func indeterminateExample() {
-        let hud = HUD.show(to: container, using: .zoomOut)
+        let hud = HUD.show(to: container, using: .zoomInOut)
         Network.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: container, using: .zoomInOut)
+        let hud = HUD.show(to: container, using: .zoomOutIn)
         hud.label.text = "Loading..."
 
         Network.request {
@@ -67,7 +67,7 @@ extension ViewController {
     }
 
     @objc func detailsLabelExample() {
-        let hud = HUD.show(to: container, using: .zoomOutIn)
+        let hud = HUD.show(to: container, using: .zoomOut)
         hud.label.text = "Loading..."
         hud.detailsLabel.text = "Parsing data\n(1/1)"
 
@@ -77,7 +77,7 @@ extension ViewController {
     }
 
     @objc func determinateExample() {
-        let hud = HUD.show(to: container)
+        let hud = HUD.show(to: container, using: .zoomIn)
         hud.mode = .determinate
         hud.detailsLabel.text = "Loading..."
 

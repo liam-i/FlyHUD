@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - NOTE: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - ATTENTION: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: UIView {
+open class HUD: BaseView {
     // MARK: - Properties
 
     /// The HUD delegate object. Receives HUD state notifications.
@@ -141,18 +141,8 @@ open class HUD: UIView {
         self.init(frame: view.bounds)
     }
 
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-    }
-
     /// Common initialization method, allowing overriding
-    open func commonInit() {
+    open override func commonInit() {
         // Transparent background
         isOpaque = false
         backgroundColor = UIColor.clear
@@ -327,13 +317,15 @@ open class HUD: UIView {
         // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
         updateBezelMotionEffects()
 
+        let completion: () -> Void = {
+            self.bezelView.alpha = 1.0
+            self.backgroundView.alpha = 1.0
+        }
         switch options {
         case .animation(let type):
-            animate(with: type, showing: true, completion: nil)
+            animate(with: type, showing: true, completion: completion)
         case .none:
-            bezelView.transform = .identity
-            bezelView.alpha = 1.0
-            backgroundView.alpha = 1.0
+            completion()
         }
     }
 
@@ -385,21 +377,35 @@ open class HUD: UIView {
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
+        showStarted = nil
+
+        let completion: () -> Void = {
+            self.bezelView.alpha = 0.0
+            self.backgroundView.alpha = 0.0
+
+            // Cancel any scheduled hide(animated:afterDelay:) calls
+            self.cancelHideDelayWorkItem()
+            self.setNSProgressDisplayLink(enabled: false)
+
+            if self.isFinished {
+                self.alpha = 0.0
+                if self.removeFromSuperViewOnHide {
+                    self.removeFromSuperview()
+                }
+            }
+
+            self.completionBlock?(self)
+            self.delegate?.hudWasHidden(self)
+        }
 
         if case .animation(let type) = options, showStarted != nil {
-            showStarted = nil
-            animate(with: type, showing: false) { _ in
-                self.done()
-            }
+            animate(with: type, showing: false, completion: completion)
         } else {
-            showStarted = nil
-            bezelView.alpha = 0.0
-            backgroundView.alpha = 0.0
-            done()
+            completion()
         }
     }
 
-    private func animate(with type: HUDAnimation, showing: Bool, completion: ((Bool) -> Void)?) {
+    private func animate(with type: HUDAnimation, showing: Bool, completion: @escaping() -> Void) {
         var type = type
         // Automatically determine the correct zoom animation type
         // Opacity + scale animation (zoom in when appearing zoom out when disappearing)
@@ -419,8 +425,7 @@ open class HUD: UIView {
             bezelView.transform = large
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0,
-                       initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .beginFromCurrentState) {
             if showing {
                 self.bezelView.transform = .identity
             } else if !showing && type == .zoomIn {
@@ -432,23 +437,10 @@ open class HUD: UIView {
             let alpha: CGFloat = showing ? 1.0 : 0.0
             self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
-        }, completion: completion)
-    }
-
-    private func done() {
-        // Cancel any scheduled hide(animated:afterDelay:) calls
-        cancelHideDelayWorkItem()
-        setNSProgressDisplayLink(enabled: false)
-
-        if isFinished {
-            alpha = 0.0
-            if removeFromSuperViewOnHide {
-                removeFromSuperview()
-            }
+        } completion: { _ in
+            self.bezelView.transform = .identity // Reset, after the animation is completed
+            completion()
         }
-
-        completionBlock?(self)
-        delegate?.hudWasHidden(self)
     }
 
     // MARK: - Cancel Dispatch Work Item
