@@ -51,14 +51,14 @@ extension ViewController {
     }
 
     @objc func indeterminateExample() {
-        let hud = HUD.show(to: container, using: .zoomInOut)
+        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         Network.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: container, using: .zoomOutIn)
+        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         hud.label.text = "Loading..."
 
         Network.request {
@@ -67,7 +67,7 @@ extension ViewController {
     }
 
     @objc func detailsLabelExample() {
-        let hud = HUD.show(to: container, using: .zoomOut)
+        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         hud.label.text = "Loading..."
         hud.detailsLabel.text = "Parsing data\n(1/1)"
 
@@ -77,7 +77,7 @@ extension ViewController {
     }
 
     @objc func determinateExample() {
-        let hud = HUD.show(to: container, using: .zoomIn)
+        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
         hud.mode = .determinate
         hud.detailsLabel.text = "Loading..."
 
@@ -254,11 +254,8 @@ extension ViewController {
 
     @objc func multipleHUDExample() {
         /// Handle show `HUD` multiple times in the same `View`.
-
-        HUD.isCountEnabled = true
-
         func request1() {
-            let hud = HUD.show(to: container)
+            let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
@@ -267,7 +264,7 @@ extension ViewController {
             print("request1  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request2() {
-            let hud = HUD.show(to: container)
+            let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
@@ -276,7 +273,7 @@ extension ViewController {
             print("request2  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request3() {
-            let hud = HUD.show(to: container)
+            let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Network.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
 
