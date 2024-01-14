@@ -107,8 +107,7 @@ open class HUD: BaseView {
     public private(set) lazy var bezelView = BackgroundView(frame: .zero)
     /// View covering the entire HUD area, placed behind bezelView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
-    /// A label that holds an optional short message to be displayed below the activity indicator.
-    /// The HUD is automatically resized to fit the entire text.
+    /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
     public private(set) lazy var detailsLabel = UILabel(frame: .zero)
@@ -147,7 +146,6 @@ open class HUD: BaseView {
         isHidden = true // Make it invisible for now
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
-
         setupViews()
         updateIndicators()
         registerForNotifications()
@@ -186,13 +184,12 @@ open class HUD: BaseView {
             hud.count += 1
             return hud
         }
-
-        let hud = HUD(with: view) // Creates a new HUD
-        populator?(hud)
-        hud.removeFromSuperViewOnHide = true
-        view.addSubview(hud)
-        hud.show(animated: animated)
-        return hud
+        return HUD(with: view).with { // Creates a new HUD
+            populator?($0)
+            $0.removeFromSuperViewOnHide = true
+            view.addSubview($0)
+            $0.show(animated: animated)
+        }
     }
 
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:animated:)`.
@@ -267,10 +264,8 @@ open class HUD: BaseView {
 
         isFinished = false
         cancelMinShowWorkItem()
-        // Modified grace time to 0 and show again
-        cancelGraceWorkItem()
-        // Cancel any scheduled hide(animated:afterDelay:) calls
-        cancelHideDelayWorkItem()
+        cancelGraceWorkItem() // Modified grace time to 0 and show again
+        cancelHideDelayWorkItem() // Cancel any scheduled hide(animated:afterDelay:) calls
 
         // If the grace time is set, postpone the HUD display
         if graceTime > 0.0 {
@@ -295,10 +290,8 @@ open class HUD: BaseView {
         showStarted = Date()
         isHidden = false
 
-        // Needed in case we hide and re-show with the same NSProgress object attached.
-        setNSProgressDisplayLink(enabled: true)
-        // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
-        updateBezelMotionEffects()
+        setNSProgressDisplayLink(enabled: true) // Needed in case we hide and re-show with the same NSProgress object attached.
+        updateBezelMotionEffects() // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
 
         perform(with: options, showing: true, completion: nil)
     }
@@ -433,38 +426,41 @@ open class HUD: BaseView {
 
     private func setupViews() {
         let defaultColor = contentColor
-        backgroundView.style = .solidColor
-        backgroundView.color = .clear
-        backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundView.alpha = 0.0
-        addSubview(backgroundView)
-
-        bezelView.translatesAutoresizingMaskIntoConstraints = false
-        bezelView.alpha = 0.0
-        addSubview(bezelView)
-
-        label.adjustsFontSizeToFitWidth = false
-        label.textAlignment = .center
-        label.textColor = defaultColor
-        label.font = .boldSystemFont(ofSize: 16.0) // Default to 16.0
-        label.isOpaque = false
-        label.backgroundColor = .clear
-
-        detailsLabel.adjustsFontSizeToFitWidth = false
-        detailsLabel.textAlignment = .center
-        detailsLabel.textColor = defaultColor
-        detailsLabel.numberOfLines = 0
-        detailsLabel.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
-        detailsLabel.isOpaque = false
-        detailsLabel.backgroundColor = .clear
-
-        button.titleLabel?.textAlignment = .center
-        button.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
-        button.setTitleColor(defaultColor, for: .normal)
+        addSubview(backgroundView.with {
+            $0.style = .solidColor
+            $0.color = .clear
+            $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            $0.alpha = 0.0
+        })
+        addSubview(bezelView.with {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.alpha = 0.0
+        })
+        bezelView.addSubview(label.with {
+            $0.adjustsFontSizeToFitWidth = false
+            $0.textAlignment = .center
+            $0.textColor = defaultColor
+            $0.font = .boldSystemFont(ofSize: 16.0) // Default to 16.0
+            $0.isOpaque = false
+            $0.backgroundColor = .clear
+        })
+        bezelView.addSubview(detailsLabel.with {
+            $0.adjustsFontSizeToFitWidth = false
+            $0.textAlignment = .center
+            $0.textColor = defaultColor
+            $0.numberOfLines = 0
+            $0.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
+            $0.isOpaque = false
+            $0.backgroundColor = .clear
+        })
+        bezelView.addSubview(button.with {
+            $0.titleLabel?.textAlignment = .center
+            $0.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
+            $0.setTitleColor(defaultColor, for: .normal)
+        })
 
         for view in [label, detailsLabel, button] {
             view.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
-            bezelView.addSubview(view)
         }
     }
 
@@ -523,15 +519,16 @@ open class HUD: BaseView {
 
         // UIAppearance settings are prioritized. If they are preset the set color is ignored.
         guard let indicator = indicator else { return }
-        if let indicator = indicator as? UIActivityIndicatorView {
+        switch indicator {
+        case let indicator as UIActivityIndicatorView:
             indicator.color = color
-        } else if let indicator = indicator as? RoundProgressView {
+        case let indicator as RoundProgressView:
             indicator.progressTintColor = color
             indicator.trackTintColor = color.withAlphaComponent(0.1)
-        } else if let indicator = indicator as? BarProgressView {
+        case let indicator as BarProgressView:
             indicator.progressTintColor = color
             indicator.lineColor = color
-        } else {
+        default:
             indicator.tintColor = color
         }
     }
@@ -539,19 +536,19 @@ open class HUD: BaseView {
     private func updateBezelMotionEffects() {
         if isMotionEffectsEnabled && bezelMotionEffects == nil {
             let effectOffset = 10.0
-            let effectX = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
-            effectX.maximumRelativeValue = effectOffset
-            effectX.minimumRelativeValue = -effectOffset
-
-            let effectY = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
-            effectY.maximumRelativeValue = effectOffset
-            effectY.minimumRelativeValue = -effectOffset
-
-            let group = UIMotionEffectGroup()
-            group.motionEffects = [effectX, effectY]
-            bezelView.addMotionEffect(group)
-
-            bezelMotionEffects = group
+            bezelMotionEffects = UIMotionEffectGroup().with {
+                $0.motionEffects = [
+                    UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis).with {
+                        $0.maximumRelativeValue = effectOffset
+                        $0.minimumRelativeValue = -effectOffset
+                    },
+                    UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis).with {
+                        $0.maximumRelativeValue = effectOffset
+                        $0.minimumRelativeValue = -effectOffset
+                    }
+                ]
+                bezelView.addMotionEffect($0)
+            }
         } else if let motionEffects = bezelMotionEffects {
             bezelMotionEffects = nil
             bezelView.removeMotionEffect(motionEffects)

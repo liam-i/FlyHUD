@@ -104,27 +104,3 @@ enum HUDAnimationOptions {
         self = animated ? .animation(animation()) : .none
     }
 }
-
-extension Array where Element == NSLayoutConstraint {
-    func apply(_ priority: UILayoutPriority) -> Self {
-        forEach {
-            $0.priority = priority
-        }
-        return self
-    }
-}
-
-extension NSLayoutConstraint {
-    func apply(_ priority: UILayoutPriority) -> Self {
-        self.priority = priority
-        return self
-    }
-}
-
-extension UIView {
-    func setContentCompressionResistancePriorityForAxis(_ priority: UILayoutPriority) {
-        translatesAutoresizingMaskIntoConstraints = false
-        setContentCompressionResistancePriority(priority, for: .horizontal)
-        setContentCompressionResistancePriority(priority, for: .vertical)
-    }
-}

@@ -76,14 +76,13 @@ public class BackgroundView: BaseView {
         case .solidColor:
             backgroundColor = color
         case .blur(let effectStyle):
-            let effect = UIBlurEffect(style: effectStyle)
-            let effectview = UIVisualEffectView(effect: effect)
-            insertSubview(effectview, at: 0)
-            effectview.frame = bounds
-            effectview.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+            effectView = UIVisualEffectView(effect: UIBlurEffect(style: effectStyle)).with {
+                $0.frame = bounds
+                $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+                insertSubview($0, at: 0)
+            }
             backgroundColor = color
             layer.allowsGroupOpacity = false
-            effectView = effectview
         }
     }
 }

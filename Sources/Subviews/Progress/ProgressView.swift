@@ -2,7 +2,7 @@
 //  ProgressView.swift
 //  HUD <https://github.com/liam-i/HUD>
 //
-//  Created by Liam on 2021/7/9.
+//  Created by Liam on 2024/1/12.
 //  Copyright (c) 2021 Liam. All rights reserved.
 //
 //  This source code is licensed under the MIT-style license found in the
