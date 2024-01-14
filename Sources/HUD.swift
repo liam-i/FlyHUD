@@ -145,9 +145,9 @@ open class HUD: BaseView {
     open override func commonInit() {
         // Transparent background
         isOpaque = false
-        backgroundColor = UIColor.clear
+        backgroundColor = .clear
         // Make it invisible for now
-        alpha = 0.0
+        isHidden = true
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
 
@@ -310,7 +310,7 @@ open class HUD: BaseView {
         backgroundView.layer.removeAllAnimations()
 
         showStarted = Date()
-        alpha = 1.0
+        isHidden = false
 
         // Needed in case we hide and re-show with the same NSProgress object attached.
         setNSProgressDisplayLink(enabled: true)
@@ -387,7 +387,7 @@ open class HUD: BaseView {
             self.setNSProgressDisplayLink(enabled: false)
 
             if self.isFinished {
-                self.alpha = 0.0
+                self.isHidden = true
                 if self.removeFromSuperViewOnHide {
                     self.removeFromSuperview()
                 }
@@ -467,7 +467,7 @@ open class HUD: BaseView {
         let defaultColor = contentColor
 
         backgroundView.style = .solidColor
-        backgroundView.backgroundColor = UIColor.clear
+        backgroundView.color = .clear
         backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         backgroundView.alpha = 0.0
         addSubview(backgroundView)
@@ -479,20 +479,20 @@ open class HUD: BaseView {
         label.adjustsFontSizeToFitWidth = false
         label.textAlignment = .center
         label.textColor = defaultColor
-        label.font = UIFont.boldSystemFont(ofSize: HUD.defaultLabelFontSize)
+        label.font = .boldSystemFont(ofSize: HUD.defaultLabelFontSize)
         label.isOpaque = false
-        label.backgroundColor = UIColor.clear
+        label.backgroundColor = .clear
 
         detailsLabel.adjustsFontSizeToFitWidth = false
         detailsLabel.textAlignment = .center
         detailsLabel.textColor = defaultColor
         detailsLabel.numberOfLines = 0
-        detailsLabel.font = UIFont.boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
+        detailsLabel.font = .boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
         detailsLabel.isOpaque = false
-        detailsLabel.backgroundColor = UIColor.clear
+        detailsLabel.backgroundColor = .clear
 
         button.titleLabel?.textAlignment = .center
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
+        button.titleLabel?.font = .boldSystemFont(ofSize: HUD.defaultDetailsLabelFontSize)
         button.setTitleColor(defaultColor, for: .normal)
 
         for view in [label, detailsLabel, button] {
@@ -510,7 +510,7 @@ open class HUD: BaseView {
                 let indicatorView: UIActivityIndicatorView // Update to indeterminate indicator
                 if #available(iOS 13.0, tvOS 13.0, *) {
                     indicatorView = UIActivityIndicatorView(style: .large)
-                    indicatorView.color = UIColor.white
+                    indicatorView.color = .white
                 } else {
                     indicatorView = UIActivityIndicatorView(style: .whiteLarge)
                 }
