@@ -42,7 +42,7 @@ public enum HUDAnimation {
 public enum HUDBackgroundStyle {
     /// Solid color background
     case solidColor
-    /// UIVisualEffectView or UIToolbar.layer background view
+    /// UIVisualEffectView background view
     case blur
 }
 
