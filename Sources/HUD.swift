@@ -377,7 +377,6 @@ open class HUD: BaseView {
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
-        showStarted = nil
 
         let completion: () -> Void = {
             self.bezelView.alpha = 0.0
@@ -399,8 +398,10 @@ open class HUD: BaseView {
         }
 
         if case .animation(let type) = options, showStarted != nil {
+            showStarted = nil
             animate(with: type, showing: false, completion: completion)
         } else {
+            showStarted = nil
             completion()
         }
     }
