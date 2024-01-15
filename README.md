@@ -9,12 +9,13 @@ A Swift version of [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
 
 ## ScreenShots
 
-![](ScreenShots/ScreenShot1.png)
-![](ScreenShots/ScreenShot2.png)
-![](ScreenShots/ScreenShot3.png)
-![](ScreenShots/ScreenShot4.png)
-![](ScreenShots/ScreenShot5.png)
-![](ScreenShots/ScreenShot6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/2.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/3.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/4.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/5-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/5.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/7.png)
 
 ## Example
 
