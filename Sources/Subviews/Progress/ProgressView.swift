@@ -34,8 +34,8 @@ public class ProgressView: BaseView, Progressive {
         }
     }
 
-    /// background (non-progress) color. Defaults to clear UIColor.clear.
-    public var trackTintColor: UIColor = UIColor.clear {
+    /// background (non-progress) color. Defaults to clear.
+    public var trackTintColor: UIColor = .clear {
         didSet {
             guard trackTintColor != oldValue && !trackTintColor.isEqual(oldValue) else { return }
             setNeedsDisplay()
