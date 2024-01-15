@@ -273,27 +273,30 @@ extension ViewController {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
-
+                hud.label.text = "Count: \(hud.count)"
                 print("response1 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            hud.label.text = "Count: \(hud.count)"
             print("request1  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request2() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
-
+                hud.label.text = "Count: \(hud.count)"
                 print("response2 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            hud.label.text = "Count: \(hud.count)"
             print("request2  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
         func request3() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
                 hud.hide(animated: true)
-
+                hud.label.text = "Count: \(hud.count)"
                 print("response3 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
+            hud.label.text = "Count: \(hud.count)"
             print("request3  --> hud(\(hud.hashValue)).count=\(hud.count)")
         }
 
