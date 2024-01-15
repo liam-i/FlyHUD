@@ -13,7 +13,12 @@ import UIKit
 
 public class RoundedButton: UIButton {
     /// The rounded corner mode of the button. `Default to .fully`.
-    public var roundedCorners: RoundedCorners = .fully
+    public var roundedCorners: RoundedCorners = .fully {
+        didSet {
+            guard roundedCorners != oldValue else { return }
+            setNeedsLayout()
+        }
+    }
     /// Button border width. `Default to 1`.
     public var borderWidth: CGFloat = 1.0 {
         didSet {

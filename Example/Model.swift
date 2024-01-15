@@ -25,7 +25,8 @@ extension Model {
         ],
         [Model(title: "Text only", selector: #selector(ViewController.textExample)),
          Model(title: "Custom view", selector: #selector(ViewController.customViewExample)),
-         Model(title: "With action button", selector: #selector(ViewController.cancelationExample)),
+        ],
+        [Model(title: "With action button", selector: #selector(ViewController.cancelationExample)),
          Model(title: "Mode switching", selector: #selector(ViewController.modeSwitchingExample))
         ],
         [Model(title: "On window", selector: #selector(ViewController.windowExample)),
@@ -45,6 +46,10 @@ class Task: NSObject {
 
     static func cancelTask() {
         canceled = true
+    }
+
+    static func test(_ sec: UInt32 = 3, completion: @escaping () -> Void) {
+        request(sec, completion: completion)
     }
 
     static func request(_ sec: UInt32 = 3, completion: @escaping () -> Void) {
