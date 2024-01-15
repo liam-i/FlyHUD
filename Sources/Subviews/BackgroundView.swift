@@ -15,7 +15,12 @@
 import UIKit
 
 public class BackgroundView: BaseView {
-    public var roundedCorners: RoundedCorners = .radius(5.0)
+    public var roundedCorners: RoundedCorners = .radius(5.0) {
+        didSet {
+            guard roundedCorners != oldValue else { return }
+            setNeedsLayout()
+        }
+    }
 
     // MARK: - Properties
 

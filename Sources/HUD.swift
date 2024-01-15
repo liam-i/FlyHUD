@@ -20,34 +20,16 @@ public protocol HUDDelegate: AnyObject {
 /// - NOTE: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - ATTENTION: HUD is a UI class and should therefore only be accessed on the main thread.
 open class HUD: BaseView {
-    // MARK: - Properties
-
-    /// The HUD delegate object. Receives HUD state notifications.
-    public weak var delegate: HUDDelegate?
-    /// Called after the HUD is hidden.
-    public var completionBlock: ((_ hud: HUD) -> Void)?
-
-    /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD. 
-    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
-    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
-    ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
-    public var graceTime: TimeInterval = 0.0
-    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. `Defaults to 0.0 (no minimum show time)`.
-    public var minShowTime: TimeInterval = 0.0
-
-    /// Removes the HUD from its parent view when hidden. `Defaults to true`.
-    public var removeFromSuperViewOnHide: Bool = true
-    /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
-    public var animationType: HUDAnimation = .fade
-
-    /// Handle show `HUD` multiple times in the same `View` page.
-    public private(set) var count: Int = 0
-    /// Enable `count`. `Defaults to false`.
-    public var isCountEnabled: Bool = false
-    /// A Boolean value indicating whether the `HUD` is currently showing.
-    public var isShowing: Bool { isHidden == false }
-
-    // MARK: - Appearance
+    /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
+    public private(set) lazy var label = UILabel(frame: .zero)
+    /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
+    public private(set) lazy var detailsLabel = UILabel(frame: .zero)
+    /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
+    public private(set) lazy var button = RoundedButton(frame: .zero)
+    /// The view containing the labels and indicator (or customView).
+    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
+    /// View covering the entire HUD area, placed behind bezelView.
+    public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
     /// HUD operation mode. `Default to .indeterminate(.large)`.
     public var mode: HUDMode = .indeterminate() {
@@ -76,15 +58,6 @@ open class HUD: BaseView {
             updateViews(for: contentColor)
         }
     }
-    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
-    public var isMotionEffectsEnabled: Bool = false {
-        didSet {
-            guard isMotionEffectsEnabled != oldValue else { return }
-            updateBezelMotionEffects()
-        }
-    }
-
-    // MARK: - Progress
 
     /// The progress of the progress indicator, from 0.0 to 1.0. `Defaults to 0.0`.
     public var progress: CGFloat = 0.0 {
@@ -101,18 +74,37 @@ open class HUD: BaseView {
         }
     }
 
-    // MARK: - Views
+    /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
+    public var animationType: HUDAnimation = .fade
+    /// A Boolean value indicating whether the `HUD` is currently showing.
+    public var isShowing: Bool { isHidden == false }
+    /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
+    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
+    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
+    ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
+    public var graceTime: TimeInterval = 0.0
+    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. `Defaults to 0.0 (no minimum show time)`.
+    public var minShowTime: TimeInterval = 0.0
+    /// Removes the HUD from its parent view when hidden. `Defaults to true`.
+    public var removeFromSuperViewOnHide: Bool = true
 
-    /// The view containing the labels and indicator (or customView).
-    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
-    /// View covering the entire HUD area, placed behind bezelView.
-    public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
-    /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    public private(set) lazy var label = UILabel(frame: .zero)
-    /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
-    public private(set) lazy var detailsLabel = UILabel(frame: .zero)
-    /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
-    public private(set) lazy var button = RoundedButton(frame: .zero)
+    /// Handle show `HUD` multiple times in the same `View` page.
+    public private(set) var count: Int = 0
+    /// Enable `count`. `Defaults to false`.
+    public var isCountEnabled: Bool = false
+
+    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
+    public var isMotionEffectsEnabled: Bool = false {
+        didSet {
+            guard isMotionEffectsEnabled != oldValue else { return }
+            updateBezelMotionEffects()
+        }
+    }
+
+    /// The HUD delegate object. Receives HUD state notifications.
+    public weak var delegate: HUDDelegate?
+    /// Called after the HUD is hidden.
+    public var completionBlock: ((_ hud: HUD) -> Void)?
 
     private var isFinished: Bool = false
     private var indicator: UIView?
@@ -168,6 +160,76 @@ open class HUD: BaseView {
             return hud
         }
         return nil
+    }
+
+    /// Creates a new HUD. Shows only labels. adds it to provided view and shows it. And auto hides the HUD after a duration.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
+    ///   - animation: Use HUDAnimation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
+    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.
+    ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to CGPoint(x: 0.0, y: .HUDMaxOffset)`.
+    /// - Returns: A reference to the created HUD.
+    /// - Note: This method sets mode to .text. Shows only labels.
+    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
+    @discardableResult
+    public class func showText(
+        to view: UIView,
+        duration: TimeInterval = 2.0,
+        using animation: HUDAnimation? = .fade,
+        label: String? = nil,
+        detailsLabel: String? = nil,
+        offset: CGPoint = CGPoint(x: 0.0, y: .HUDMaxOffset)
+    ) -> HUD {
+        showStatus(to: view, animated: animation != nil) {
+            $0.animationType = animation ?? .fade
+            $0.mode = .text
+            $0.label.text = label
+            $0.detailsLabel.text = detailsLabel
+            $0.layoutConfig.offset = offset
+        }
+    }
+
+    /// Creates a new HUD. Shows only labels. adds it to provided view and shows it. And auto hides the HUD after a duration.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
+    ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    /// - Returns: A reference to the created HUD.
+    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
+    @discardableResult
+    public class func showStatus(to view: UIView, duration: TimeInterval = 2.0, animated: Bool = true, populator: ((HUD) -> Void)? = nil) -> HUD {
+        assert(duration > 0.0, "`duration` must be greater than 0")
+        return show(to: view, animated: animated, populator: populator).with {
+            $0.hide(animated: animated, afterDelay: duration)
+        }
+    }
+
+    /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - animation: Use HUDAnimation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
+    ///   - mode: HUD operation mode. `Default to .indeterminate(.large)`.
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
+    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
+    /// - Returns: A reference to the created HUD.
+    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
+    @discardableResult
+    public class func show(
+        to view: UIView,
+        using animation: HUDAnimation? = .fade,
+        mode: HUDMode = .indeterminate(),
+        label: String? = nil,
+        detailsLabel: String? = nil
+    ) -> HUD {
+        show(to: view, animated: animation != nil) {
+            $0.animationType = animation ?? .fade
+            $0.mode = mode
+            $0.label.text = label
+            $0.detailsLabel.text = detailsLabel
+        }
     }
 
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.

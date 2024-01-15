@@ -67,20 +67,20 @@ public enum HUDBackgroundStyle: Equatable {
     }())
 }
 
-public enum RoundedCorners {
+public enum RoundedCorners: Equatable {
     /// corner Radius
     case radius(CGFloat)
     /// Fully rounded corners
     case fully
 }
 
+extension CGFloat {
+    public static let HUDMaxOffset: CGFloat = 1000000.0
+}
 public struct HUDLayoutConfiguration: Equatable {
-    /// The bezel offset relative to the center of the view. You can use `HUDLayoutConfiguration.maxOffset` and `-HUDLayoutConfiguration.maxOffset`
-    /// to move the HUD all the way to the screen edge in each direction.
-    /// E.g., `CGPoint(x: 0.0, y: HUDLayoutConfiguration.maxOffset)` would position the HUD centered on the bottom edge.
+    /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction.
+    /// E.g., `CGPoint(x: 0.0, y: .HUDMaxOffset)` would position the HUD centered on the bottom edge.
     public var offset: CGPoint = .zero
-    public static let maxOffset: CGFloat = 1000000.0
-
     /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
     public var edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
 

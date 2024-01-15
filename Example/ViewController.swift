@@ -51,130 +51,127 @@ extension ViewController {
     }
 
     @objc func indeterminateExample() {
-        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
+        let hud = HUD.show(to: container, using: .zoomInOut)
         Task.request(3) {
             hud.hide(animated: true)
         }
-        Task.request(1) {
+        Task.test(1) {
             if #available(iOS 13.0, *) {
                 hud.mode = .indeterminate(.medium) // test.
             }
         }
+        Task.test(2) {
+            hud.layoutConfig.offset = CGPoint(x: 50, y: 0) // test.
+        }
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
-        hud.label.text = "Loading..."
+        let hud = HUD.show(to: container, using: .zoomInOut, label: "Loading...")
         Task.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func detailsLabelExample() {
-        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
-        hud.label.text = "Loading..."
-        hud.detailsLabel.text = "Parsing data\n(1/1)"
+        let hud = HUD.show(to: container) {
+            $0.animationType = .zoomInOut
+            $0.label.text = "Loading..."
+            $0.detailsLabel.text = "Parsing data\n(1/1)"
+        }
         Task.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func determinateExample() {
-        let hud = HUD.show(to: container) { $0.animationType = .zoomInOut }
-        hud.mode = .determinate()
-        hud.detailsLabel.text = "Loading..."
+        let hud = HUD.show(to: container, using: .zoomInOut, mode: .determinate(), label: "Loading...")
         Task.request(5) {
-            HUD.hud(for: self.container)?.progress = $0
+            HUD.hud(for: self.container)?.progress = $0 // test.
+            //hud.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
-        Task.request(1) {
+        Task.test(1) {
             hud.mode = .determinate(isAnnular: false, lineWidth: 4) // test.
         }
-        Task.request(2) {
+        Task.test(2) {
             hud.mode = .determinate(isAnnular: false, lineWidth: 8, lineSize: 60) // test.
         }
-        Task.request(3) {
+        Task.test(3) {
             hud.mode = .determinate(isAnnular: true, lineWidth: 12, lineSize: 80) // test.
+            hud.label.font = .boldSystemFont(ofSize: 32)
         }
     }
 
     @objc func annularDeterminateExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .determinate(isAnnular: true)
-        hud.label.text = "Loading..."
-
+        let hud = HUD.show(to: container, mode: .determinate(isAnnular: true), label: "Loading...")
         Task.request {
-            HUD.hud(for: self.container)?.progress = $0
+            hud.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
     }
 
     @objc func barDeterminateExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .determinateHorizontalBar()
-        hud.label.text = "Loading..."
-
+        let hud = HUD.show(to: container, mode: .determinateHorizontalBar(), label: "Loading...")
         Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
-        Task.request(1) {
+        Task.test(1) {
             hud.mode = .determinateHorizontalBar(lineWidth: 20, spacing: 10) // test.
         }
     }
 
     @objc func textExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .text
-        hud.label.text = "Wrong password"
-        Task.request(2) {
-            // test.
+        let hud = HUD.showText(to: container, duration: 3.0, label: "Wrong password")
+        Task.test(1) {
             hud.layoutConfig.with {
-                $0.offset = CGPoint(x: HUDLayoutConfiguration.maxOffset, y: HUDLayoutConfiguration.maxOffset)
+                $0.offset = .zero
                 $0.hMargin = 100
                 $0.vMargin = 50
                 $0.spacing = 40
                 $0.isSquare = true
             }
-
-            hud.hide(animated: true, afterDelay: 3.0)
         }
     }
 
     @objc func customViewExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
-        hud.layoutConfig.isSquare = true
-        hud.label.text = "Done"
-        hud.hide(animated: true, afterDelay: 3.0)
+        HUD.showStatus(to: container, duration: 3.0) {
+            $0.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+            $0.label.text = "Done"
+            $0.layoutConfig.with {
+                $0.isSquare = true
+                $0.offset = .zero
+            }
+        }
     }
 
     @objc func cancelationExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .determinate()
-        hud.label.text = "Loading..."
-        hud.button.setTitle("Cancel", for: .normal)
-        hud.button.addTarget(self, action: #selector(cancelWork), for: .touchUpInside)
+        let hud = HUD.show(to: container) {
+            $0.label.text = "Loading..."
+            $0.button.setTitle("Cancel", for: .normal)
+            $0.button.addTarget(self, action: #selector(self.cancelWork), for: .touchUpInside)
+        }
         Task.request(3) {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
-        Task.request(1) {
+        Task.test(1) {
             hud.label.font = .boldSystemFont(ofSize: 20)
             hud.button.titleLabel?.font = .boldSystemFont(ofSize: 17)
             hud.button.borderWidth = 2
+            hud.button.roundedCorners = .radius(4)
         }
     }
 
     @objc func modeSwitchingExample() {
-        let hud = HUD.show(to: container)
-        hud.label.text = "Preparing..."
-        hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
-
+        let hud = HUD.show(to: container) {
+            $0.label.text = "Preparing..."
+            $0.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
+        }
         Task.requestMultiTask {
             /// Demo `HUD.hud(for:)` method
             HUD.hud(for: self.container)?.progress = $0
@@ -211,10 +208,10 @@ extension ViewController {
     }
 
     @objc func networkingExample() {
-        let hud = HUD.show(to: container)
-        hud.label.text = "Preparing..."
-        hud.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
-
+        HUD.show(to: container) {
+            $0.label.text = "Preparing..."
+            $0.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
+        }
         Task.download {
             guard let hud = HUD.hud(for: self.container) else { return }
             hud.mode = .determinate()
@@ -228,9 +225,7 @@ extension ViewController {
     }
 
     @objc func determinateProgressExample() {
-        let hud = HUD.show(to: container)
-        hud.mode = .determinate()
-        hud.label.text = "Loading..."
+        let hud = HUD.show(to: container, mode: .determinate(), label: "Loading...")
 
         let progress = Progress(totalUnitCount: 100)
         hud.progressObject = progress
@@ -249,18 +244,20 @@ extension ViewController {
     }
 
     @objc func dimBackgroundExample() {
-        let hud = HUD.show(to: container)
-        hud.backgroundView.style = .solidColor
-        hud.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
+        let hud = HUD.show(to: container) {
+            $0.backgroundView.style = .solidColor
+            $0.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
+        }
         Task.request {
             hud.hide(animated: true)
         }
     }
 
     @objc func colorExample() {
-        let hud = HUD.show(to: container)
-        hud.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
-        hud.label.text = "Loading..."
+        let hud = HUD.show(to: container) {
+            $0.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
+            $0.label.text = "Loading..."
+        }
         Task.request {
             hud.hide(animated: true)
         }
