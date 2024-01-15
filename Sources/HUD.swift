@@ -182,7 +182,7 @@ open class HUD: BaseView {
         detailsLabel: String? = nil,
         offset: CGPoint = CGPoint(x: 0.0, y: .HUDMaxOffset)
     ) -> HUD {
-        showStatus(to: view, animated: animation != nil) {
+        showStatus(to: view, duration: duration, animated: animation != nil) {
             $0.animationType = animation ?? .fade
             $0.mode = .text
             $0.label.text = label
