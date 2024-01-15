@@ -129,8 +129,8 @@ extension ViewController {
         Task.test(1) {
             hud.layoutConfig.with {
                 $0.offset = .zero
-                $0.hMargin = 100
-                $0.vMargin = 50
+                $0.hMargin = 50
+                $0.vMargin = 40
                 $0.spacing = 40
                 $0.isSquare = true
             }

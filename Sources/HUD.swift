@@ -172,7 +172,6 @@ open class HUD: BaseView {
     ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to CGPoint(x: 0.0, y: .HUDMaxOffset)`.
     /// - Returns: A reference to the created HUD.
     /// - Note: This method sets mode to .text. Shows only labels.
-    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func showText(
         to view: UIView,
@@ -198,11 +197,11 @@ open class HUD: BaseView {
     ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
-    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func showStatus(to view: UIView, duration: TimeInterval = 2.0, animated: Bool = true, populator: ((HUD) -> Void)? = nil) -> HUD {
         assert(duration > 0.0, "`duration` must be greater than 0")
         return show(to: view, animated: animated, populator: populator).with {
+            //$0.removeFromSuperViewOnHide = true
             $0.hide(animated: animated, afterDelay: duration)
         }
     }
@@ -215,7 +214,6 @@ open class HUD: BaseView {
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
     /// - Returns: A reference to the created HUD.
-    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func show(
         to view: UIView,
@@ -238,7 +236,6 @@ open class HUD: BaseView {
     ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
-    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     /// - SeeAlso: animationType.
     @discardableResult
     public class func show(to view: UIView, animated: Bool = true, populator: ((HUD) -> Void)? = nil) -> HUD {
@@ -248,7 +245,7 @@ open class HUD: BaseView {
         }
         return HUD(with: view).with { // Creates a new HUD
             populator?($0)
-            $0.removeFromSuperViewOnHide = true
+            //$0.removeFromSuperViewOnHide = true
             view.addSubview($0)
             $0.show(animated: animated)
         }
@@ -260,7 +257,6 @@ open class HUD: BaseView {
     ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true`.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
-    /// - Note: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     /// - SeeAlso: animationType.
     @discardableResult
     public class func hide(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
@@ -272,7 +268,6 @@ open class HUD: BaseView {
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUDAnimation, Priority greater than the current animationType.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    /// - Returns: This method sets removeFromSuperViewOnHide. The HUD will automatically be removed from the view hierarchy when hidden.
     @discardableResult
     public class func hide(for view: UIView, using animation: HUDAnimation, afterDelay delay: TimeInterval = 0.0) -> Bool {
         hide(for: view, options: .animation(animation), afterDelay: delay)
@@ -312,7 +307,7 @@ open class HUD: BaseView {
 
     private class func hide(for view: UIView, options: HUDAnimationOptions?, afterDelay delay: TimeInterval) -> Bool {
         guard let hud = hud(for: view) else { return false }
-        hud.removeFromSuperViewOnHide = true
+        //hud.removeFromSuperViewOnHide = true
         hud.hide(with: options ?? .animation(hud.animationType), afterDelay: delay) // Use default animation, if unknown
         return true
     }
