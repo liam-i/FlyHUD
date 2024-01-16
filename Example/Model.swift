@@ -25,6 +25,7 @@ extension Model {
         ],
         [Model(title: "Text only", selector: #selector(ViewController.textExample)),
          Model(title: "Custom view", selector: #selector(ViewController.customViewExample)),
+         Model(title: "Custom Progress view", selector: #selector(ViewController.customProgressViewExample))
         ],
         [Model(title: "With action button", selector: #selector(ViewController.cancelationExample)),
          Model(title: "Mode switching", selector: #selector(ViewController.modeSwitchingExample))
