@@ -148,6 +148,42 @@ extension ViewController {
         }
     }
 
+    @objc func customProgressViewExample() {
+        class CustomProgressive: BaseView, Progressive {
+            var progress: CGFloat = 0.0 {
+                didSet {
+                    progressView.progress = Float(progress)
+                    label.text = "Progress(\(String(format: "%.2f", progress)))"
+                }
+            }
+            let progressView: UIProgressView = .init(progressViewStyle: .default)
+            let label: UILabel = .init()
+            override func commonInit() {
+                label.textAlignment = .center
+                addSubview(progressView)
+                addSubview(label)
+                progressView.translatesAutoresizingMaskIntoConstraints = false
+                label.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    widthAnchor.constraint(equalToConstant: 150),
+                    progressView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                    progressView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                    progressView.topAnchor.constraint(equalTo: topAnchor),
+                    label.leadingAnchor.constraint(equalTo: leadingAnchor),
+                    label.trailingAnchor.constraint(equalTo: trailingAnchor),
+                    label.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 10),
+                    label.bottomAnchor.constraint(equalTo: bottomAnchor)
+                ])
+            }
+        }
+        let hud = HUD.show(to: container, using: .zoomInOut, mode: .customView(CustomProgressive()))
+        Task.request {
+            hud.progress = $0
+        } completion: {
+            hud.hide(afterDelay: 0.5)
+        }
+    }
+
     @objc func cancelationExample() {
         let hud = HUD.show(to: container) {
             $0.label.text = "Loading..."
