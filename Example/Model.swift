@@ -15,9 +15,10 @@ struct Model {
 
 extension Model {
     static var examples: [[Model]] {[
-        [Model(title: "Indeterminate mode", selector: #selector(ViewController.indeterminateExample)),
+        [Model(title: "UIActivityIndicator mode", selector: #selector(ViewController.activityIndicatorExample)),
          Model(title: "With label", selector: #selector(ViewController.labelExample)),
-         Model(title: "With details label", selector: #selector(ViewController.detailsLabelExample))
+         Model(title: "With details label", selector: #selector(ViewController.detailsLabelExample)),
+         Model(title: "Ring Clip Rotate", selector: #selector(ViewController.customActivityIndicatorExample))
         ],
         [Model(title: "Determinate mode", selector: #selector(ViewController.determinateExample)),
          Model(title: "Annular determinate mode", selector: #selector(ViewController.annularDeterminateExample)),
@@ -60,13 +61,13 @@ class Task: NSObject {
         }
     }
 
-    static func request(_ sec: UInt32 = 3, progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
+    static func request(_ sec: UInt32 = 3, progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
         let us = sec * 1000 * 1000 / 100
         DispatchQueue.global().async {
             canceled = false
 
             // 模拟一个任务的完成进度
-            var progressValue: CGFloat = 0.0
+            var progressValue: Float = 0.0
             while progressValue < 1.0 {
                 if canceled { break }
 
@@ -100,9 +101,9 @@ class Task: NSObject {
         }
     }
 
-    static func requestMultiTask(_ progress: @escaping (CGFloat) -> Void, completion: @escaping (UInt8) -> Void) {
+    static func requestMultiTask(_ progress: @escaping (Float) -> Void, completion: @escaping (UInt8) -> Void) {
         DispatchQueue.global().async {
-            // Indeterminate mode
+            // activityIndicator mode
             sleep(2)
 
             // Switch to determinate mode
@@ -110,7 +111,7 @@ class Task: NSObject {
                 completion(3)
             }
 
-            var progressValue: CGFloat = 0.0
+            var progressValue: Float = 0.0
             while progressValue < 1.0 {
                 progressValue += 0.01
                 DispatchQueue.main.async {
@@ -119,7 +120,7 @@ class Task: NSObject {
                 usleep(50000)
             }
 
-            // Back to indeterminate mode
+            // Back to activityIndicator mode
             DispatchQueue.main.async {
                 completion(2)
             }
@@ -138,9 +139,9 @@ class Task: NSObject {
     }
 
     private static let shared = { Task() }()
-    private var progress: ((CGFloat) -> Void)?
+    private var progress: ((Float) -> Void)?
     private var completion: (() -> Void)?
-    static func download(_ progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
+    static func download(_ progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
         shared.progress = progress
         shared.completion = completion
 
@@ -159,7 +160,7 @@ extension Task: URLSessionDelegate, URLSessionDownloadDelegate {
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let progress = CGFloat(totalBytesWritten) / CGFloat(totalBytesExpectedToWrite)
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
         print("download progress: \(progress)")
 
         DispatchQueue.main.async {

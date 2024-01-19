@@ -11,9 +11,11 @@
 
 import UIKit
 
+
+
 public class RoundedButton: UIButton {
     /// The rounded corner mode of the button. `Default to .fully`.
-    public var roundedCorners: RoundedCorners = .fully {
+    public var roundedCorners: BackgroundView.RoundedCorners = .fully {
         didSet {
             guard roundedCorners != oldValue else { return }
             setNeedsLayout()
@@ -22,8 +24,7 @@ public class RoundedButton: UIButton {
     /// Button border width. `Default to 1`.
     public var borderWidth: CGFloat = 1.0 {
         didSet {
-            guard borderWidth != oldValue else { return }
-            layer.borderWidth = borderWidth
+            borderWidth.notEqual(oldValue, do: layer.borderWidth = borderWidth)
         }
     }
 

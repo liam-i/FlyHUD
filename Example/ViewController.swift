@@ -50,23 +50,30 @@ extension ViewController {
         navigationController!.view
     }
 
-    @objc func indeterminateExample() {
-        let hud = HUD.show(to: container, using: .zoomInOut)
+    @objc func activityIndicatorExample() {
+//        let hud = HUD.show(to: container, using: .zoomInOut)
+
+        let indicator = ActivityIndicatorView(style: .circleArcDotSpin)
+        let hud = HUD.show(to: container, using: .zoomInOut, mode: .custom(indicator))
+
         Task.request(3) {
             hud.hide(animated: true)
         }
-        Task.test(1) {
-            if #available(iOS 13.0, *) {
-                hud.mode = .indeterminate(.medium) // test.
-            }
-        }
-        Task.test(2) {
-            hud.layoutConfig.offset = CGPoint(x: 50, y: 0) // test.
-        }
+//        Task.test(1) {
+//            if #available(iOS 13.0, *) {
+//                hud.mode = .indicator(.medium) // test.
+//            }
+//        }
+//        Task.test(2) {
+//            hud.layout.offset = CGPoint(x: 50, y: 0) // test.
+//        }
+        
+
+
     }
 
     @objc func labelExample() {
-        let hud = HUD.show(to: container, using: .zoomInOut, label: "Loading...")
+        let hud = HUD.show(to: container, using: .zoomOutIn, label: "Loading...")
         Task.request {
             hud.hide(animated: true)
         }
@@ -74,7 +81,7 @@ extension ViewController {
 
     @objc func detailsLabelExample() {
         let hud = HUD.show(to: container) {
-            $0.animationType = .zoomInOut
+            $0.animation.style = .zoomIn
             $0.label.text = "Loading..."
             $0.detailsLabel.text = "Parsing data\n(1/1)"
         }
@@ -83,28 +90,45 @@ extension ViewController {
         }
     }
 
+    @objc func customActivityIndicatorExample() {
+        let hud = HUD.show(to: container) {
+            $0.label.text = "Loading..."
+            $0.contentColor = UIColor(red: 0.0, green: 0.6, blue: 0.7, alpha: 1.0)
+            $0.animation.style = .zoomOut
+        }
+        Task.request {
+            hud.hide(animated: true)
+        }
+    }
+
     @objc func determinateExample() {
-        let hud = HUD.show(to: container, using: .zoomInOut, mode: .determinate(), label: "Loading...")
+        let hud = HUD.show(to: container, using: .slideUpDown, mode: .custom(ProgressView(style: .round())), label: "Loading...")
         Task.request(5) {
             HUD.hud(for: self.container)?.progress = $0 // test.
             //hud.progress = $0
         } completion: {
             hud.hide(animated: true)
         }
-        Task.test(1) {
-            hud.mode = .determinate(isAnnular: false, lineWidth: 4) // test.
-        }
-        Task.test(2) {
-            hud.mode = .determinate(isAnnular: false, lineWidth: 8, lineSize: 60) // test.
-        }
-        Task.test(3) {
-            hud.mode = .determinate(isAnnular: true, lineWidth: 12, lineSize: 80) // test.
-            hud.label.font = .boldSystemFont(ofSize: 32)
-        }
+//        Task.test(1) {
+//            hud.mode = .custom(ProgressView(style: .round(), populator: { $0.lineWidth = 4 })) // test.
+//        }
+//        Task.test(2) {
+//            hud.mode = .custom(ProgressView(style: .round(), populator: {
+//                $0.lineWidth = 4
+//                $0.frame.size = CGSize(width: 80, height: 80)
+//            })) // test.
+//        }
+//        Task.test(3) {
+//            hud.mode = .custom(ProgressView(style: .round(true), populator: {
+//                $0.lineWidth = 12
+//                $0.frame.size = CGSize(width: 80, height: 80)
+//            })) // test.
+//            hud.label.font = .boldSystemFont(ofSize: 32)
+//        }
     }
 
     @objc func annularDeterminateExample() {
-        let hud = HUD.show(to: container, mode: .determinate(isAnnular: true), label: "Loading...")
+        let hud = HUD.show(to: container, using: .slideDownUp, mode: .custom(ProgressView(style: .round(true))), label: "Loading...")
         Task.request {
             hud.progress = $0
         } completion: {
@@ -113,47 +137,64 @@ extension ViewController {
     }
 
     @objc func barDeterminateExample() {
-        let hud = HUD.show(to: container, mode: .determinateHorizontalBar(), label: "Loading...")
+        let prog = ProgressView(style: .pie, size: CGSize(width: 320, height: 50))
+//        {
+//            $0.lineWidth = 10
+//            $0.progressTintColor = .red
+//            $0.trackTintColor = .blue
+//        }
+        let hud = HUD.show(to: container, using: .slideUp, mode: .custom(prog), label: "Loading...")
         Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
-            hud.hide(animated: true)
+            hud.hide(animated: true, afterDelay: 0)
         }
-        Task.test(1) {
-            hud.mode = .determinateHorizontalBar(lineWidth: 20, spacing: 10) // test.
-        }
+
+//        Task.test(1) {
+//            hud.mode = .custom(ProgressView(style: .bar(), populator: {
+//                $0.lineWidth = 20
+//                $0.frame.size = CGSize(width: 320, height: 80)
+//            })) // test.
+//        }
     }
 
     @objc func textExample() {
-        let hud = HUD.showText(to: container, duration: 3.0, label: "Wrong password")
-        Task.test(1) {
-            hud.layoutConfig.with {
-                $0.offset = .zero
-                $0.hMargin = 50
-                $0.vMargin = 40
-                $0.spacing = 40
-                $0.isSquare = true
-            }
-        }
+        let hud = HUD.showText(to: container, duration: 3.0, using: .slideUpDown, label: "Wrong password")
+//        Task.test(1) {
+//            hud.layout.with {
+//                $0.offset = .zero
+//                $0.hMargin = 50
+//                $0.vMargin = 40
+//                $0.spacing = 40
+//            }
+//        }
     }
 
     @objc func customViewExample() {
         HUD.showStatus(to: container, duration: 3.0) {
-            $0.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+            $0.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
             $0.label.text = "Done"
-            $0.layoutConfig.with {
+            $0.layout.with {
                 $0.isSquare = true
                 $0.offset = .zero
             }
+            $0.animation.style = .fade
         }
     }
 
     @objc func customProgressViewExample() {
-        class CustomProgressive: BaseView, Progressive {
-            var progress: CGFloat = 0.0 {
+        class CustomProgressive: BaseView, ProgressViewable {
+            var progressTintColor: UIColor? = nil
+            var trackTintColor: UIColor? = nil
+
+            var progress: Float = 0.0 {
                 didSet {
                     progressView.progress = Float(progress)
+                    progressView.progressTintColor = progressTintColor
+                    progressView.trackTintColor = trackTintColor
+
                     label.text = "Progress(\(String(format: "%.2f", progress)))"
+                    label.textColor = progressTintColor
                 }
             }
             let progressView: UIProgressView = .init(progressViewStyle: .default)
@@ -162,6 +203,7 @@ extension ViewController {
                 label.textAlignment = .center
                 addSubview(progressView)
                 addSubview(label)
+                progressView.progress = 0.0
                 progressView.translatesAutoresizingMaskIntoConstraints = false
                 label.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
@@ -169,6 +211,7 @@ extension ViewController {
                     progressView.leadingAnchor.constraint(equalTo: leadingAnchor),
                     progressView.trailingAnchor.constraint(equalTo: trailingAnchor),
                     progressView.topAnchor.constraint(equalTo: topAnchor),
+//                    progressView.heightAnchor.constraint(equalToConstant: 20),
                     label.leadingAnchor.constraint(equalTo: leadingAnchor),
                     label.trailingAnchor.constraint(equalTo: trailingAnchor),
                     label.topAnchor.constraint(equalTo: progressView.bottomAnchor, constant: 10),
@@ -176,7 +219,7 @@ extension ViewController {
                 ])
             }
         }
-        let hud = HUD.show(to: container, using: .zoomInOut, mode: .customView(CustomProgressive()))
+        let hud = HUD.show(to: container, using: .zoomInOut, mode: .custom(CustomProgressive()))
         Task.request {
             hud.progress = $0
         } completion: {
@@ -206,7 +249,7 @@ extension ViewController {
     @objc func modeSwitchingExample() {
         let hud = HUD.show(to: container) {
             $0.label.text = "Preparing..."
-            $0.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
+            $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
         }
         Task.requestMultiTask {
             /// Demo `HUD.hud(for:)` method
@@ -216,17 +259,17 @@ extension ViewController {
             case 3:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.mode = .determinate()
+                hud.mode = .custom(ProgressView(style: .round()))
                 hud.label.text = "Loading..."
             case 2:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.mode = .indeterminate()
+                hud.mode = .indicator()
                 hud.label.text = "Cleaning up..."
             case 1:
                 /// Demo `HUD.hud(for:)` method
                 guard let hud = HUD.hud(for: self.container) else { return assertionFailure() }
-                hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
                 hud.label.text = "Completed"
             case 0:
                 hud.hide(animated: true)
@@ -244,24 +287,26 @@ extension ViewController {
     }
 
     @objc func networkingExample() {
+        HUD.show(to: container, mode: .progress(.bar()))
+
         HUD.show(to: container) {
             $0.label.text = "Preparing..."
-            $0.layoutConfig.minSize = CGSize(width: 150.0, height: 100.0)
+            $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
         }
         Task.download {
             guard let hud = HUD.hud(for: self.container) else { return }
-            hud.mode = .determinate()
+            hud.mode = .custom(ProgressView(style: .round()))
             hud.progress = $0
         } completion: {
             guard let hud = HUD.hud(for: self.container) else { return }
-            hud.mode = .customView(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+            hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
             hud.label.text = "Completed"
             hud.hide(animated: true, afterDelay: 3.0)
         }
     }
 
     @objc func determinateProgressExample() {
-        let hud = HUD.show(to: container, mode: .determinate(), label: "Loading...")
+        let hud = HUD.show(to: container, mode: .custom(ProgressView(style: .round())), label: "Loading...")
 
         let progress = Progress(totalUnitCount: 100)
         hud.progressObject = progress
