@@ -31,51 +31,41 @@ open class HUD: BaseView {
     /// View covering the entire HUD area, placed behind bezelView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
-    /// HUD operation mode. `Default to .indeterminate(.large)`.
-    public var mode: HUDMode = .indeterminate() {
+    /// HUD operation mode. `Default to .indicator(.large)`.
+    public var mode: Mode = .indicator() {
         didSet {
-            guard mode != oldValue else { return }
-            updateIndicators()
+            mode.notEqual(oldValue, do: updateIndicators())
         }
     }
     /// HUD layout configuration. eg: offset, margin, padding, etc.
-    public var layoutConfig: HUDLayoutConfiguration = .init() {
+    public var layout: Layout = .init() {
         didSet {
-            guard layoutConfig != oldValue else { return }
-            setNeedsUpdateConstraints()
+            layout.notEqual(oldValue, do: setNeedsUpdateConstraints())
         }
     }
-    /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views. `Defaults to semi-translucent black`.
-    public lazy var contentColor: UIColor = {
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            return UIColor.label.withAlphaComponent(0.7)
-        } else {
-            return UIColor(white: 0.0, alpha: 0.7)
-        }
-    }() {
+
+    /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views. `Defaults to UIColor.label.withAlphaComponent(0.7)`.
+    public var contentColor: UIColor = .contentOfHUD {
         didSet {
-            guard contentColor != oldValue, !contentColor.isEqual(oldValue) else { return }
-            updateViews(for: contentColor)
+            contentColor.notEqual(oldValue, do: updateViewsContentColor())
         }
     }
 
     /// The progress of the progress indicator, from 0.0 to 1.0. `Defaults to 0.0`.
-    public var progress: CGFloat = 0.0 {
+    public var progress: Float = 0.0 {
         didSet {
-            guard progress != oldValue, let indicator = indicator as? Progressive else { return }
-            indicator.progress = progress
+            progress.notEqual(oldValue, do: (indicator as? ProgressViewable)?.progress = progress)
         }
     }
     /// The NSProgress object feeding the progress information to the progress indicator.
     public var progressObject: Progress? {
         didSet {
-            guard progressObject != oldValue else { return }
-            setNSProgressDisplayLink(enabled: true)
+            progressObject.notEqual(oldValue, do: setNSProgressDisplayLink(enabled: true))
         }
     }
 
-    /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
-    public var animationType: HUDAnimation = .fade
+    /// The animation (type, duration, springDamping) that should be used when the HUD is shown and hidden.
+    public var animation: Animation = .init()
     /// A Boolean value indicating whether the `HUD` is currently showing.
     public var isShowing: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
@@ -96,8 +86,7 @@ open class HUD: BaseView {
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
     public var isMotionEffectsEnabled: Bool = false {
         didSet {
-            guard isMotionEffectsEnabled != oldValue else { return }
-            updateBezelMotionEffects()
+            isMotionEffectsEnabled.notEqual(oldValue, do: updateBezelMotionEffects())
         }
     }
 
@@ -117,9 +106,10 @@ open class HUD: BaseView {
     private var bezelMotionEffects: UIMotionEffectGroup?
     private var progressObjectDisplayLink: CADisplayLink? {
         didSet {
-            guard progressObjectDisplayLink != oldValue else { return }
-            oldValue?.invalidate()
-            progressObjectDisplayLink?.add(to: .main, forMode: .default)
+            progressObjectDisplayLink.notEqual(oldValue, do: {
+                oldValue?.invalidate()
+                progressObjectDisplayLink?.add(to: .main, forMode: .default)
+            }())
         }
     }
 
@@ -166,7 +156,7 @@ open class HUD: BaseView {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
-    ///   - animation: Use HUDAnimation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
+    ///   - animation: Use HUD.Animation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.
     ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to CGPoint(x: 0.0, y: .HUDMaxOffset)`.
@@ -176,17 +166,17 @@ open class HUD: BaseView {
     public class func showText(
         to view: UIView,
         duration: TimeInterval = 2.0,
-        using animation: HUDAnimation? = .fade,
+        using animation: Animation.Style? = .fade,
         label: String? = nil,
         detailsLabel: String? = nil,
         offset: CGPoint = CGPoint(x: 0.0, y: .HUDMaxOffset)
     ) -> HUD {
         showStatus(to: view, duration: duration, animated: animation != nil) {
-            $0.animationType = animation ?? .fade
+            $0.animation.style = animation ?? .fade
             $0.mode = .text
             $0.label.text = label
             $0.detailsLabel.text = detailsLabel
-            $0.layoutConfig.offset = offset
+            $0.layout.offset = offset
         }
     }
 
@@ -194,7 +184,7 @@ open class HUD: BaseView {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
-    ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
+    ///   - animated: If set to true the HUD will appear using the current animation.style. If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
     @discardableResult
@@ -209,21 +199,21 @@ open class HUD: BaseView {
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - animation: Use HUDAnimation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
-    ///   - mode: HUD operation mode. `Default to .indeterminate(.large)`.
+    ///   - animation: Use HUD.Animation, If set to `nil` the HUD will not use animations while appearing. `Default to .fade`.
+    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
     /// - Returns: A reference to the created HUD.
     @discardableResult
     public class func show(
         to view: UIView,
-        using animation: HUDAnimation? = .fade,
-        mode: HUDMode = .indeterminate(),
+        using animation: Animation.Style? = .fade,
+        mode: Mode = .indicator(),
         label: String? = nil,
         detailsLabel: String? = nil
     ) -> HUD {
         show(to: view, animated: animation != nil) {
-            $0.animationType = animation ?? .fade
+            $0.animation.style = animation ?? .fade
             $0.mode = mode
             $0.label.text = label
             $0.detailsLabel.text = detailsLabel
@@ -233,10 +223,10 @@ open class HUD: BaseView {
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
+    ///   - animated: If set to true the HUD will appear using the current animation.style. If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
-    /// - SeeAlso: animationType.
+    /// - SeeAlso: animation.style.
     @discardableResult
     public class func show(to view: UIView, animated: Bool = true, populator: ((HUD) -> Void)? = nil) -> HUD {
         if let hud = hud(for: view), hud.isCountEnabled {
@@ -254,65 +244,65 @@ open class HUD: BaseView {
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:animated:)`.
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
-    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - animated: If set to true the HUD will disappear using the current animation.style. If set to false the HUD will not use animations while disappearing. `Default to true`.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
-    /// - SeeAlso: animationType.
+    /// - SeeAlso: animation.style.
     @discardableResult
     public class func hide(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
-        hide(for: view, options: animated ? nil : HUDAnimationOptions.none, afterDelay: delay) // nil, Use default animation
+        hide(for: view, options: animated ? nil : Animation.Usable.none, afterDelay: delay) // nil, Use default animation
     }
 
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:)`.
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
-    ///   - animation: Use HUDAnimation, Priority greater than the current animationType.
+    ///   - animation: Use HUD.Animation, Priority greater than the current animation.style.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     @discardableResult
-    public class func hide(for view: UIView, using animation: HUDAnimation, afterDelay delay: TimeInterval = 0.0) -> Bool {
-        hide(for: view, options: .animation(animation), afterDelay: delay)
+    public class func hide(for view: UIView, using animation: Animation.Style, afterDelay delay: TimeInterval = 0.0) -> Bool {
+        hide(for: view, options: .style(animation), afterDelay: delay)
     }
 
     /// Displays the HUD.
-    /// - Parameter animated: If set to true the HUD will appear using the current animationType. If set to false the HUD will not use animations while appearing. `Default to true`.
+    /// - Parameter animated: If set to true the HUD will appear using the current animation.style. If set to false the HUD will not use animations while appearing. `Default to true`.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like NSOperation or making an asynchronous call like NSURLRequest).
-    /// - SeeAlso: animationType.
+    /// - SeeAlso: animation.style.
     public func show(animated: Bool = true) {
-        show(with: .init(animated: animated, animation: animationType))
+        show(with: .init(animated: animated, animation: animation.style))
     }
 
     /// Displays the HUD.
-    /// - Parameter animation: Use HUDAnimation, Priority greater than the current animationType.
+    /// - Parameter animation: Use HUD.Animation, Priority greater than the current animation.style.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like NSOperation or making an asynchronous call like NSURLRequest).
-    public func show(using animation: HUDAnimation) {
-        show(with: .animation(animation))
+    public func show(using animation: Animation.Style) {
+        show(with: .style(animation))
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
     /// - Parameters:
-    ///   - animated: If set to true the HUD will disappear using the current animationType. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - animated: If set to true the HUD will disappear using the current animation.style. If set to false the HUD will not use animations while disappearing. `Default to true`.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    /// - SeeAlso: animationType.
+    /// - SeeAlso: animation.style.
     public func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
-        hide(with: .init(animated: animated, animation: animationType), afterDelay: delay)
+        hide(with: .init(animated: animated, animation: animation.style), afterDelay: delay)
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
     /// - Parameters:
-    ///   - animation: Use HUDAnimation, Priority greater than the current animationType.
+    ///   - animation: Use HUD.Animation, Priority greater than the current animation.style.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    public func hide(using animation: HUDAnimation, afterDelay delay: TimeInterval = 0.0) {
-        hide(with: .animation(animation), afterDelay: delay)
+    public func hide(using animation: Animation.Style, afterDelay delay: TimeInterval = 0.0) {
+        hide(with: .style(animation), afterDelay: delay)
     }
 
-    private class func hide(for view: UIView, options: HUDAnimationOptions?, afterDelay delay: TimeInterval) -> Bool {
+    private class func hide(for view: UIView, options: Animation.Usable?, afterDelay delay: TimeInterval) -> Bool {
         guard let hud = hud(for: view) else { return false }
         //hud.removeFromSuperViewOnHide = true
-        hud.hide(with: options ?? .animation(hud.animationType), afterDelay: delay) // Use default animation, if unknown
+        hud.hide(with: options ?? .style(hud.animation.style), afterDelay: delay) // Use default animation, if unknown
         return true
     }
 
-    private func show(with options: HUDAnimationOptions) {
+    private func show(with options: Animation.Usable) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if isCountEnabled {
@@ -339,7 +329,7 @@ open class HUD: BaseView {
         performShow(with: options) // ... otherwise show the HUD immediately
     }
 
-    private func performShow(with options: HUDAnimationOptions) {
+    private func performShow(with options: Animation.Usable) {
         // Cancel any previous animations
         bezelView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
@@ -353,7 +343,7 @@ open class HUD: BaseView {
         perform(with: options, showing: true, completion: nil)
     }
 
-    private func hide(with options: HUDAnimationOptions, afterDelay delay: TimeInterval) {
+    private func hide(with options: Animation.Usable, afterDelay delay: TimeInterval) {
         guard delay > 0.0 else {
             return hide(with: options)
         }
@@ -366,7 +356,7 @@ open class HUD: BaseView {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
     }
 
-    private func hide(with options: HUDAnimationOptions) {
+    private func hide(with options: Animation.Usable) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
 
         if isCountEnabled {
@@ -396,7 +386,7 @@ open class HUD: BaseView {
         performHide(with: options) // ... otherwise hide the HUD immediately
     }
 
-    private func performHide(with options: HUDAnimationOptions) {
+    private func performHide(with options: Animation.Usable) {
         // Cancel any scheduled hide(animated:afterDelay:) calls.
         // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
         // call comes in while the HUD is animating out.
@@ -419,16 +409,16 @@ open class HUD: BaseView {
         showStarted = nil
     }
 
-    private func perform(with options: HUDAnimationOptions, showing: Bool, completion: (() -> Void)?) {
-        let alpha: CGFloat = showing ? 1.0 : 0.0
+    private func perform(with options: Animation.Usable, showing: Bool, completion: (() -> Void)?) {
         let completionBlock: (Bool) -> Void = { _ in
+            let alpha: CGFloat = showing ? 1.0 : 0.0
             self.bezelView.transform = .identity // Reset, after the animation is completed
             self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
             completion?()
         }
 
-        guard case .animation(var type) = options, showStarted != nil else {
+        guard case .style(var type) = options, showStarted != nil else {
             return completionBlock(true)
         }
 
@@ -437,29 +427,72 @@ open class HUD: BaseView {
             type = showing ? .zoomIn : .zoomOut
         } else if type == .zoomOutIn {
             type = showing ? .zoomOut : .zoomIn
+        } else if type == .slideUpDown {
+            type = showing ? .slideUp : .slideDown
+        } else if type == .slideDownUp {
+            type = showing ? .slideDown : .slideUp
         }
-
-        let small = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        let large = CGAffineTransform(scaleX: 1.5, y: 1.5)
 
         // Set starting state
-        if showing && bezelView.alpha == 0.0 && type == .zoomIn {
-            bezelView.transform = small
-        } else if showing && bezelView.alpha == 0.0 && type == .zoomOut {
-            bezelView.transform = large
+        if showing && bezelView.alpha == 0.0 {
+            if type == .zoomIn {
+                transform(to: .zoomOut)
+            } else if type == .zoomOut {
+                transform(to: .zoomIn)
+            } else if type == .slideUp {
+                transform(to: .slideDown)
+            } else if type == .slideDown {
+                transform(to: .slideUp)
+            }
         }
 
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
+        UIView.animate(withDuration: animation.duration, delay: 0.0, usingSpringWithDamping: animation.springDamping.value,
+                       initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
             if showing {
-                self.bezelView.transform = .identity
-            } else if !showing && type == .zoomIn {
-                self.bezelView.transform = large
-            } else if !showing && type == .zoomOut {
-                self.bezelView.transform = small
+                self.transform(to: .fade)
+            } else {
+                if type == .zoomIn {
+                    self.transform(to: .zoomIn)
+                } else if type == .zoomOut {
+                    self.transform(to: .zoomOut)
+                } else if type == .slideUp {
+                    self.transform(to: .slideUp)
+                } else if type == .slideDown {
+                    self.transform(to: .slideDown)
+                }
             }
+            let alpha: CGFloat = showing ? 1.0 : 0.0
             self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
         }, completion: completionBlock)
+    }
+
+    private func transform(to type: Animation.Style) {
+        var y = UIScreen.main.bounds.height
+        switch type {
+        case .zoomIn:  
+            bezelView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        case .zoomOut:
+            bezelView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        case .slideUp:
+            if layout.isOffsetMinY {
+                y = -50.0
+            } else if layout.isOffsetMaxY {
+                y = -y
+            } else {
+                y = y / 2.0
+            }
+            bezelView.transform = CGAffineTransform(translationX: 0.0, y: y)
+        case .slideDown:
+            if layout.isOffsetMaxY {
+                y = 50.0
+            } else {
+                y = -y / 2.0
+            }
+            bezelView.transform = CGAffineTransform(translationX: 0.0, y: y)
+        default:
+            bezelView.transform = .identity
+        }
     }
 
     // MARK: - Cancel Dispatch Work Item
@@ -521,7 +554,6 @@ open class HUD: BaseView {
         }
     }
 
-    // swiftlint:disable function_body_length
     private func updateIndicators() {
         func setIndicator(_ newValue: UIView?) {
             indicator?.removeFromSuperview()
@@ -532,61 +564,54 @@ open class HUD: BaseView {
         switch mode {
         case .text:
             setIndicator(nil)
-        case let .indeterminate(style): // Update to indeterminate indicator
+        case let .indicator(style): // Update to UIActivityIndicatorView
             if let indicator = indicator as? UIActivityIndicatorView {
                 indicator.style = style
             } else {
-                setIndicator(UIActivityIndicatorView(style: style).with {
-                    $0.startAnimating()
-                })
+                setIndicator(UIActivityIndicatorView(style: style))
             }
-        case let .determinateHorizontalBar(lineWidth, spacing): // Update to bar determinate indicator
-            setIndicator(BarProgressView(lineWidth: lineWidth, spacing: spacing))
-        case let .determinate(isAnnular, lineWidth, lineSize): // Update to determinante indicator
-            if let indicator = indicator as? RoundProgressView {
-                indicator.isAnnular = isAnnular
-                indicator.lineWidth = lineWidth
-
-                if lineSize != indicator.lineSize {
-                    setIndicator(RoundProgressView(isAnnular: isAnnular, lineWidth: lineWidth, lineSize: lineSize))
-                }
+        case let .progress(style):
+            if let indicator = indicator as? iOSUIProgressView {
+                indicator.progressViewStyle = style
             } else {
-                setIndicator(RoundProgressView(isAnnular: isAnnular, lineWidth: lineWidth, lineSize: lineSize))
+                setIndicator(iOSUIProgressView(progressViewStyle: style))
             }
-        case let .customView(customView):
-            if customView != indicator { // Update custom view indicator
-                setIndicator(customView)
+        case let .custom(view):
+            if view != indicator { // Update custom view indicator
+                setIndicator(view)
             }
         }
 
         if let indicator = indicator {
             indicator.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
-            (indicator as? Progressive)?.progress = progress
+            if let activityIndicator = indicator as? ActivityIndicatorViewable, activityIndicator.isAnimating == false {
+                activityIndicator.startAnimating()
+            }
+            if let progressIndicator = indicator as? ProgressViewable {
+                progressIndicator.progress = progress
+            }
         }
 
-        updateViews(for: contentColor)
+        updateViewsContentColor()
         setNeedsUpdateConstraints()
     }
-    // swiftlint:enable function_body_length
 
-    private func updateViews(for color: UIColor) {
-        label.textColor = color
-        detailsLabel.textColor = color
-        button.setTitleColor(color, for: .normal)
+    private func updateViewsContentColor() {
+        let contentColor = contentColor
+
+        label.textColor = contentColor
+        detailsLabel.textColor = contentColor
+        button.setTitleColor(contentColor, for: .normal)
 
         // UIAppearance settings are prioritized. If they are preset the set color is ignored.
         guard let indicator = indicator else { return }
         switch indicator {
-        case let indicator as UIActivityIndicatorView:
-            indicator.color = color
-        case let indicator as RoundProgressView:
-            indicator.progressTintColor = color
-            indicator.trackTintColor = color.withAlphaComponent(0.1)
-        case let indicator as BarProgressView:
-            indicator.progressTintColor = color
-            indicator.lineColor = color
+        case let indicator as ActivityIndicatorViewable:
+            indicator.color = contentColor
+        case let indicator as ProgressViewable:
+            indicator.progressTintColor = contentColor
         default:
-            indicator.tintColor = color
+            indicator.tintColor = contentColor
         }
     }
 
@@ -632,31 +657,31 @@ open class HUD: BaseView {
 
         // Center bezel in container (self), applying the offset if set
         let centeringConstraints: [NSLayoutConstraint] = [
-            bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layoutConfig.offset.x),
-            bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layoutConfig.offset.y)
+            bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
+            bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
         ]
         addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
 
         // Ensure minimum side margin is kept
         let sideConstraints: [NSLayoutConstraint] = [
-            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layoutConfig.edgeInsets.left),
-            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layoutConfig.edgeInsets.right),
-            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layoutConfig.edgeInsets.top),
-            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layoutConfig.edgeInsets.bottom),
+            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layout.edgeInsets.left),
+            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layout.edgeInsets.right),
+            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layout.edgeInsets.top),
+            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layout.edgeInsets.bottom),
         ]
         addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
 
         // Minimum bezel size, if set
-        if !layoutConfig.minSize.equalTo(.zero) {
+        if !layout.minSize.equalTo(.zero) {
             let minSizeConstraints: [NSLayoutConstraint] = [
-                bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.width),
-                bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layoutConfig.minSize.height)
+                bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
+                bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
             ]
             bezelConstraints.append(contentsOf: minSizeConstraints.apply(UILayoutPriority(997.0)))
         }
 
         // Square aspect ratio, if set
-        if layoutConfig.isSquare {
+        if layout.isSquare {
             let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
             bezelConstraints.append(square.apply(UILayoutPriority(997.0)))
         }
@@ -669,17 +694,17 @@ open class HUD: BaseView {
                 // Center in bezel
                 view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor),
                 // Ensure the minimum edge margin is kept
-                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layoutConfig.hMargin),
-                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layoutConfig.hMargin)
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layout.hMargin),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layout.hMargin)
             ])
 
             // Element spacing
             if idx == 0 {
                 // First, ensure spacing to bezel edge
-                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: bezelView.topAnchor, constant: layoutConfig.vMargin))
+                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: bezelView.topAnchor, constant: layout.vMargin))
             } else if idx == lastSubviewIDX {
                 // Last, ensure spacing to bezel edge
-                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: bezelView.bottomAnchor, constant: -layoutConfig.vMargin))
+                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: bezelView.bottomAnchor, constant: -layout.vMargin))
             }
 
             if idx > 0 {
@@ -724,7 +749,7 @@ open class HUD: BaseView {
             }
 
             // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
-            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layoutConfig.spacing : 0.0
+            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layout.spacing : 0.0
             hasVisibleAncestors = hasVisibleAncestors || secondVisible
         }
     }
@@ -758,7 +783,7 @@ open class HUD: BaseView {
 
     private func updateProgressFromProgressObject() {
         guard let progressObject = progressObject else { return }
-        progress = CGFloat(progressObject.fractionCompleted)
+        progress = Float(progressObject.fractionCompleted)
         // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
         // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
         label.text = progressObject.localizedDescription

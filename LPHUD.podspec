@@ -18,5 +18,17 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '11.0'
   s.swift_versions = ['5.0']
 
-  s.source_files = 'Sources/**/*'
+  s.subspec 'HUD' do |ss|
+    ss.source_files = ['Sources/*.swift', 'Sources/Core']
+  end
+
+  s.subspec 'IndicatorView' do |ss|
+    ss.source_files = ['Sources/ActivityIndicatorView/**/*']
+    ss.dependency 'LPHUD/HUD'
+  end
+
+  s.subspec 'ProgressView' do |ss|
+    ss.source_files = ['Sources/ProgressView/**/*']
+    ss.dependency 'LPHUD/HUD'
+  end
 end

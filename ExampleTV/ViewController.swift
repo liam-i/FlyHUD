@@ -20,7 +20,9 @@ class ViewController: UIViewController {
         sender.isEnabled = false
         
         let hud = HUD.show(to: view) {
-            $0.mode = .determinateHorizontalBar(lineWidth: 10, spacing: 5)
+            $0.mode = .custom(ProgressView(style: .bar(), size: CGSize(width: 320, height: 40), populator: {
+                $0.lineWidth = 10
+            }))
             $0.label.text = NSLocalizedString("Loading...", comment: "HUD loading title")
             $0.label.font = .boldSystemFont(ofSize: 36)
         }
@@ -34,12 +36,12 @@ class ViewController: UIViewController {
         }
     }
     
-    static func request(_ sec: UInt32 = 3, progress: @escaping (CGFloat) -> Void, completion: @escaping () -> Void) {
+    static func request(_ sec: UInt32 = 3, progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
         let us = sec * 1000 * 1000 / 100
 
         DispatchQueue.global().async {
             // 模拟一个任务的完成进度
-            var progressValue: CGFloat = 0.0
+            var progressValue: Float = 0.0
             while progressValue < 1.0 {
                 progressValue += 0.01 // 1 / 0.01 = 100
 

@@ -14,6 +14,32 @@
 
 import UIKit
 
+extension BackgroundView {
+    public enum Style: Equatable {
+        /// Solid color background
+        case solidColor
+        /// UIVisualEffectView background view. `Defaults to .light`.
+        case blur(UIBlurEffect.Style = {
+            if #available(iOS 13.0, *) {
+                #if os(tvOS)
+                return .regular
+                #else
+                return .systemThickMaterial
+                #endif
+            } else {
+                return .light
+            }
+        }())
+    }
+
+    public enum RoundedCorners: Equatable {
+        /// corner Radius
+        case radius(CGFloat)
+        /// Fully rounded corners
+        case fully
+    }
+}
+
 public class BackgroundView: BaseView {
     public var roundedCorners: RoundedCorners = .radius(5.0) {
         didSet {
@@ -25,7 +51,7 @@ public class BackgroundView: BaseView {
     // MARK: - Properties
 
     /// The background style. `Defaults to .blur`.
-    public var style: HUDBackgroundStyle = .blur() {
+    public var style: Style = .blur() {
         didSet {
             guard style != oldValue else { return }
             updateForBackgroundStyle()
