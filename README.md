@@ -46,6 +46,10 @@ use_frameworks!
 
 target 'MyApp' do
   pod 'LPHUD', '~> 1.3.6'
+  # or
+  pod 'LPHUD', '~> 1.3.6', :subspecs => ['HUDIndicatorView']
+  # or
+  pod 'LPHUD', '~> 1.3.6', :subspecs => ['HUDProgressView']
 end
 ```
 

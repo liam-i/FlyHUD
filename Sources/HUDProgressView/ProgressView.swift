@@ -1,6 +1,6 @@
 //
 //  ProgressView.swift
-//  LPHUD
+//  HUD
 //
 //  Created by liam on 2024/1/16.
 //
