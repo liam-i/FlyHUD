@@ -5,17 +5,32 @@ import PackageDescription
 
 let package = Package(
     name: "HUD",
-    platforms: [.iOS(.v11), .tvOS(.v11)],
+    platforms: [.iOS(.v12), .tvOS(.v12)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(name: "HUD", 
-                 targets: ["HUD"])
+        .library(
+            name: "HUD",
+            targets: ["HUD"]
+        ),
+        .library(
+            name: "HUDIndicatorView",
+            targets: ["HUDIndicatorView"]
+        ),
+        .library(
+            name: "HUDProgressView",
+            targets: ["HUDProgressView"]
+        ),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(name: "HUD", 
-                path: "Sources")
-//        .testTarget(name: "HUDTests", dependencies: ["HUD"]),
+        .target(
+            name: "HUD"
+        ),
+        .target(
+            name: "HUDIndicatorView",
+            dependencies: ["HUD"]
+        ),
+        .target(
+            name: "HUDProgressView",
+            dependencies: ["HUD"]
+        ),
     ]
 )

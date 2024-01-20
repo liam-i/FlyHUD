@@ -15,9 +15,9 @@ extension HUD {
     public enum Mode: Equatable {
         /// Shows only labels.
         case text
-        /// UIActivityIndicatorView. `Defalut to .large`.
+        /// UIActivityIndicatorView. Style `Defalut to .large`.
         case indicator(UIActivityIndicatorView.Style = .largeOfHUD)
-        /// UIProgressView. `Defalut to .default`.
+        /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
         /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
@@ -37,16 +37,25 @@ extension HUD {
         public mutating func with(_ populator: (inout Animation) -> Void) {
             populator(&self)
         }
+
+        mutating func set(style: Animation.Style?) -> Animation {
+            guard let style = style else { return self }
+            self.style = style
+            return self
+        }
     }
 }
 
 extension CGFloat {
     public static let HUDMaxOffset: CGFloat = 1000000.0
 }
+extension CGPoint {
+    public static let HUDVMaxOffset: CGPoint = .init(x: 0.0, y: .HUDMaxOffset)
+}
 extension HUD {
     public struct Layout: Equatable {
         /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction.
-        /// E.g., `CGPoint(x: 0.0, y: .HUDMaxOffset)` would position the HUD centered on the bottom edge.
+        /// - Note: If set to `.HUDVMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint = .zero
         /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         public var edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
@@ -79,6 +88,8 @@ extension HUD {
 
 extension HUD.Animation {
     public enum Style {
+        /// Disable animation. The HUD will not use animations while appearing and disappearing
+        case none
         /// Opacity animation
         case fade
         /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
@@ -112,15 +123,6 @@ extension HUD.Animation {
             case .disable: return 1.0
             case .dampingRatio(let value): return value
             }
-        }
-    }
-
-    enum Usable {
-        case style(HUD.Animation.Style)
-        case none
-
-        init(animated: Bool, animation: @autoclosure () -> HUD.Animation.Style) {
-            self = animated ? .style(animation()) : .none
         }
     }
 }

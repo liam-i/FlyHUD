@@ -11,6 +11,7 @@
 
 import UIKit
 
+/// A base view only provides one `commonInit` method.
 open class BaseView: UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)

@@ -6,7 +6,11 @@
 //
 
 import UIKit
+#if canImport(HUD)
+import HUD
+#endif
 
+/// Animation Builder
 public protocol ProgressAnimationBuildable {
     func draw(progress: Float, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
 }
@@ -137,22 +141,22 @@ enum ProgressAnimation {
             let radius = (bounds.width - lineWidth) / 2.0
             let startAngle = -(CGFloat.pi / 2.0) // 90 degrees
             var endAngle = (2 * CGFloat.pi) + startAngle
+            let lineCapStyle: CGLineCap = trackColor == .clear ? .round : .square
 
             // Draw background
             UIBezierPath().with {
                 $0.lineWidth = lineWidth
-                $0.lineCapStyle = .butt
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
                 trackColor.set()
                 $0.stroke()
             }
 
-            endAngle = (CGFloat(progress) * 2 * CGFloat.pi) + startAngle
+            endAngle = (progress * 2 * CGFloat.pi) + startAngle
 
             // Draw progress
             UIBezierPath().with {
                 $0.lineWidth = lineWidth
-                $0.lineCapStyle = .square
+                $0.lineCapStyle = lineCapStyle
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
                 color.set()
                 $0.stroke()
@@ -177,7 +181,7 @@ enum ProgressAnimation {
             let startAngle = -(CGFloat.pi / 2.0)
             let lineWidth = lineWidth * 2.0
             let radius = (bounds.width - lineWidth) / 2.0
-            let endAngle = (CGFloat(progress) * 2.0 * CGFloat.pi) + startAngle
+            let endAngle = (progress * 2.0 * CGFloat.pi) + startAngle
 
             // Draw progress
             UIBezierPath().with {

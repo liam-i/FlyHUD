@@ -37,7 +37,7 @@ extension UIView {
 
 extension UIColor {
     /// Defaults to UIColor.label.withAlphaComponent(0.7)
-    public static var contentOfHUD: UIColor = {
+    public static let contentOfHUD: UIColor = {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return UIColor.label.withAlphaComponent(0.7)
         } else {
@@ -46,25 +46,25 @@ extension UIColor {
     }()
 }
 
-protocol WithType: AnyObject {}
-extension WithType {
-    @discardableResult
-    func with(_ populator: (Self) -> Void) -> Self {
-        populator(self)
-        return self
-    }
-}
-extension NSObject: WithType {}
-
 extension Equatable {
-    func notEqual(_ value: Self, do block: @autoclosure() -> Void?) {
+    public func notEqual(_ value: Self, do block: @autoclosure() -> Void?) {
         guard self != value else { return }
         block()
     }
 }
 extension Equatable where Self: NSObjectProtocol {
-    func notEqual(_ value: Self?, do block: @autoclosure() -> Void?) {
+    public func notEqual(_ value: Self?, do block: @autoclosure() -> Void?) {
         guard self != value, isEqual(value) == false else { return }
         block()
     }
 }
+
+public protocol WithType: AnyObject {}
+extension WithType {
+    @discardableResult
+    public func with(_ populator: (Self) -> Void) -> Self {
+        populator(self)
+        return self
+    }
+}
+extension NSObject: WithType {}

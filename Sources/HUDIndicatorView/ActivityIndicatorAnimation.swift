@@ -5,8 +5,12 @@
 //  Created by liam on 2024/1/16.
 //
 
-import Foundation
+import UIKit
+#if canImport(HUD)
+import HUD
+#endif
 
+/// Animation Builder
 public protocol ActivityIndicatorAnimationBuildable {
     func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
 }
@@ -123,16 +127,7 @@ enum ActivityIndicatorAnimation {
 
     struct CircleArcDotSpin: ActivityIndicatorAnimationBuildable {
         func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
-            var bounds = layer.bounds
-            let space = bounds.width / 8.0
-
-            let container = CALayer().with {
-                $0.frame = CGRect(x: bounds.minX + space / 2.0,
-                                  y: bounds.minY + space / 2.0, width: bounds.width - space, height: bounds.height - space)
-                layer.addSublayer($0)
-            }
-
-            bounds = container.bounds
+            let bounds = layer.bounds
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
             let lineWidth = bounds.width / 6.0
             let radius = (bounds.width - lineWidth) / 2.0
@@ -146,7 +141,7 @@ enum ActivityIndicatorAnimation {
                                       y: center.y + radius * sin(angle) - size / 2.0, width: size, height: size)
                     $0.backgroundColor = color?.cgColor
                     $0.cornerRadius = size / 2.0
-                    container.addSublayer($0)
+                    layer.addSublayer($0)
                 }
                 let animation = CAKeyframeAnimation(keyPath: "position").with {
                     $0.path = UIBezierPath(arcCenter: center, radius: radius, startAngle: angle, endAngle: angle + 2 * .pi, clockwise: true).cgPath
@@ -157,10 +152,6 @@ enum ActivityIndicatorAnimation {
                 circle.add(animation, forKey: "circleAnimation")
             }
 
-            animateArcRotation(container, color: color, lineWidth: lineWidth)
-        }
-
-        private func animateArcRotation(_ container: CALayer, color: UIColor?, lineWidth: CGFloat) {
             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").with {
                 $0.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 $0.byValue = 4 * Float.pi
@@ -180,10 +171,10 @@ enum ActivityIndicatorAnimation {
                 $0.repeatCount = .infinity
                 $0.fillMode = .forwards
             }
-            ShapeBuilder.ringOneFour.make(with: container.bounds.size, color: color, lineWidth: lineWidth).with {
+            ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).with {
                 $0.lineCap = .round
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
-                container.addSublayer($0)
+                layer.addSublayer($0)
             }
         }
     }

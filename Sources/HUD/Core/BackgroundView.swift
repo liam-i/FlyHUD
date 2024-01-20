@@ -41,10 +41,10 @@ extension BackgroundView {
 }
 
 public class BackgroundView: BaseView {
+    /// The rounded corner mode of the button. `Default to .radius(5.0)`.
     public var roundedCorners: RoundedCorners = .radius(5.0) {
         didSet {
-            guard roundedCorners != oldValue else { return }
-            setNeedsLayout()
+            roundedCorners.notEqual(oldValue, do: setNeedsLayout())
         }
     }
 
@@ -53,8 +53,7 @@ public class BackgroundView: BaseView {
     /// The background style. `Defaults to .blur`.
     public var style: Style = .blur() {
         didSet {
-            guard style != oldValue else { return }
-            updateForBackgroundStyle()
+            style.notEqual(oldValue, do: updateForBackgroundStyle())
         }
     }
 
@@ -67,8 +66,7 @@ public class BackgroundView: BaseView {
         }
     }() {
         didSet {
-            guard color != oldValue else { return }
-            backgroundColor = color
+            color.notEqual(oldValue, do: backgroundColor = color)
         }
     }
 
