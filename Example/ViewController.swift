@@ -51,13 +51,13 @@ extension ViewController {
     }
 
     @objc func activityIndicatorExample() {
-//        let hud = HUD.show(to: container, using: .zoomInOut)
+        let hud = HUD.show(to: container, using: .zoomInOut)
 
-        let indicator = ActivityIndicatorView(style: .circleArcDotSpin)
-        let hud = HUD.show(to: container, using: .zoomInOut, mode: .custom(indicator))
+//        let indicator = ActivityIndicatorView(style: .circleArcDotSpin)
+//        let hud = HUD.show(to: container, using: .zoomInOut, mode: .custom(indicator))
 
         Task.request(3) {
-            hud.hide(animated: true)
+            hud.hide()
         }
 //        Task.test(1) {
 //            if #available(iOS 13.0, *) {
@@ -75,7 +75,7 @@ extension ViewController {
     @objc func labelExample() {
         let hud = HUD.show(to: container, using: .zoomOutIn, label: "Loading...")
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -86,7 +86,7 @@ extension ViewController {
             $0.detailsLabel.text = "Parsing data\n(1/1)"
         }
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -97,7 +97,7 @@ extension ViewController {
             $0.animation.style = .zoomOut
         }
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -107,7 +107,7 @@ extension ViewController {
             HUD.hud(for: self.container)?.progress = $0 // test.
             //hud.progress = $0
         } completion: {
-            hud.hide(animated: true)
+            hud.hide()
         }
 //        Task.test(1) {
 //            hud.mode = .custom(ProgressView(style: .round(), populator: { $0.lineWidth = 4 })) // test.
@@ -132,7 +132,7 @@ extension ViewController {
         Task.request {
             hud.progress = $0
         } completion: {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -147,7 +147,7 @@ extension ViewController {
         Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
-            hud.hide(animated: true, afterDelay: 0)
+            hud.hide(afterDelay: 0)
         }
 
 //        Task.test(1) {
@@ -159,7 +159,7 @@ extension ViewController {
     }
 
     @objc func textExample() {
-        let hud = HUD.showText(to: container, duration: 3.0, using: .slideUpDown, label: "Wrong password")
+        let hud = HUD.showStatus(to: container, duration: 3.0, using: .slideUpDown, label: "Wrong password")
 //        Task.test(1) {
 //            hud.layout.with {
 //                $0.offset = .zero
@@ -236,7 +236,7 @@ extension ViewController {
         Task.request(3) {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
-            hud.hide(animated: true)
+            hud.hide()
         }
         Task.test(1) {
             hud.label.font = .boldSystemFont(ofSize: 20)
@@ -272,7 +272,7 @@ extension ViewController {
                 hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
                 hud.label.text = "Completed"
             case 0:
-                hud.hide(animated: true)
+                hud.hide()
             default:
                 assertionFailure()
             }
@@ -282,7 +282,7 @@ extension ViewController {
     @objc func windowExample() {
         let hud = HUD.show(to: view.window!)
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -301,7 +301,7 @@ extension ViewController {
             guard let hud = HUD.hud(for: self.container) else { return }
             hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
             hud.label.text = "Completed"
-            hud.hide(animated: true, afterDelay: 3.0)
+            hud.hide(afterDelay: 3.0)
         }
     }
 
@@ -309,7 +309,7 @@ extension ViewController {
         let hud = HUD.show(to: container, mode: .custom(ProgressView(style: .round())), label: "Loading...")
 
         let progress = Progress(totalUnitCount: 100)
-        hud.progressObject = progress
+        hud.observedProgress = progress
         hud.button.setTitle("Cancel", for: .normal)
         hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
 
@@ -320,7 +320,7 @@ extension ViewController {
 //        progress.localizedDescription = "Download Progress"
 
         Task.resume(with: progress) {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -330,7 +330,7 @@ extension ViewController {
             $0.backgroundView.color = UIColor(white: 0.0, alpha: 0.1)
         }
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -340,7 +340,7 @@ extension ViewController {
             $0.label.text = "Loading..."
         }
         Task.request {
-            hud.hide(animated: true)
+            hud.hide()
         }
     }
 
@@ -353,7 +353,7 @@ extension ViewController {
         func request1() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
-                hud.hide(animated: true)
+                hud.hide()
                 hud.label.text = "Count: \(hud.count)"
                 print("response1 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
@@ -363,7 +363,7 @@ extension ViewController {
         func request2() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
-                hud.hide(animated: true)
+                hud.hide()
                 hud.label.text = "Count: \(hud.count)"
                 print("response2 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }
@@ -373,7 +373,7 @@ extension ViewController {
         func request3() {
             let hud = HUD.show(to: container) { $0.isCountEnabled = true }
             Task.request(.random(in: 1...3)) {
-                hud.hide(animated: true)
+                hud.hide()
                 hud.label.text = "Count: \(hud.count)"
                 print("response3 --> hud(\(hud.hashValue)).count=\(hud.count)")
             }

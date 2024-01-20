@@ -7,18 +7,18 @@
 
 import UIKit
 
-public protocol ShapeBuildable {
+protocol ShapeBuildable {
     func make(with size: CGSize, color: UIColor?, lineWidth: CGFloat) -> CAShapeLayer
 }
 
-public enum ShapeBuilder: ShapeBuildable {
+enum ShapeBuilder: ShapeBuildable {
     case ring
     case ringOneThird
     case ringOneFour
     case circle(_ radius: CGFloat)
     case stroke
 
-    public func make(with size: CGSize, color: UIColor?, lineWidth: CGFloat) -> CAShapeLayer {
+    func make(with size: CGSize, color: UIColor?, lineWidth: CGFloat) -> CAShapeLayer {
         let layer = CAShapeLayer()
         let path = UIBezierPath()
         let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)

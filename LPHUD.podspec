@@ -19,16 +19,16 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.subspec 'HUD' do |ss|
-    ss.source_files = ['Sources/*.swift', 'Sources/Core']
+    ss.source_files = ['Sources/HUD/**/*']
   end
 
-  s.subspec 'IndicatorView' do |ss|
-    ss.source_files = ['Sources/ActivityIndicatorView/**/*']
+  s.subspec 'HUDIndicatorView' do |ss|
+    ss.source_files = ['Sources/HUDIndicatorView/**/*']
     ss.dependency 'LPHUD/HUD'
   end
 
-  s.subspec 'ProgressView' do |ss|
-    ss.source_files = ['Sources/ProgressView/**/*']
+  s.subspec 'HUDProgressView' do |ss|
+    ss.source_files = ['Sources/HUDProgressView/**/*']
     ss.dependency 'LPHUD/HUD'
   end
 end

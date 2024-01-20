@@ -11,14 +11,11 @@
 
 import UIKit
 
-
-
 public class RoundedButton: UIButton {
     /// The rounded corner mode of the button. `Default to .fully`.
     public var roundedCorners: BackgroundView.RoundedCorners = .fully {
         didSet {
-            guard roundedCorners != oldValue else { return }
-            setNeedsLayout()
+            roundedCorners.notEqual(oldValue, do: setNeedsLayout())
         }
     }
     /// Button border width. `Default to 1`.

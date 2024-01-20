@@ -26,7 +26,7 @@ extension Model {
         ],
         [Model(title: "Text only", selector: #selector(ViewController.textExample)),
          Model(title: "Custom view", selector: #selector(ViewController.customViewExample)),
-         Model(title: "Custom Progress view", selector: #selector(ViewController.customProgressViewExample))
+         Model(title: "Custom progress view", selector: #selector(ViewController.customProgressViewExample))
         ],
         [Model(title: "With action button", selector: #selector(ViewController.cancelationExample)),
          Model(title: "Mode switching", selector: #selector(ViewController.modeSwitchingExample))
@@ -138,7 +138,7 @@ class Task: NSObject {
         }
     }
 
-    private static let shared = { Task() }()
+    private static let shared = Task()
     private var progress: ((Float) -> Void)?
     private var completion: (() -> Void)?
     static func download(_ progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
