@@ -1,6 +1,6 @@
 //
 //  Model+ActivityIndicatorView.swift
-//  LPHUD
+//  HUD
 //
 //  Created by liam on 2024/1/19.
 //
