@@ -12,22 +12,22 @@ import LPHUD
 // MARK: - Examples
 
 extension ViewController {
-    @objc func progressButtonClicked(_ sender: UIButton) {
-        let style = progressViews[sender.tag].style
-        HUD.show(to: view, mode: .progress(style), label: String(describing: style)).with { hud in
-            Task.request {
-                hud.progress = $0
-            } completion: {
-                hud.hide()
+    func makeProgressAndIndicatorViews() {
+        progressCell.makeProgressView { style in
+            HUD.show(to: self.view, mode: .progress(style), label: String(describing: style)).with { hud in
+                Task.request {
+                    hud.progress = $0
+                } completion: {
+                    hud.hide()
+                }
             }
         }
-    }
 
-    @objc func indicatorButtonClicked(_ sender: UIButton) {
-        let style = indicatorViews[sender.tag].style
-        HUD.show(to: view, mode: .indicator(style), label: String(describing: style)).with { hud in
-            Task.request {
-                hud.hide()
+        indicatorCell.makeIndicatorView { style in
+            HUD.show(to: self.view, mode: .indicator(style), label: String(describing: style)).with { hud in
+                Task.request {
+                    hud.hide()
+                }
             }
         }
     }
@@ -401,80 +401,82 @@ extension ViewController {
 }
 
 // MARK: - Class ViewController
-
 class ViewController: UITableViewController {
-    @IBOutlet weak var progressStackView: UIStackView!
-    @IBOutlet weak var indicatorStackView: UIStackView!
-
-    var progressViews: [ProgressView] = []
-    var indicatorViews: [ActivityIndicatorView] = []
+    @IBOutlet weak var progressCell: IndicatorCell!
+    @IBOutlet weak var indicatorCell: IndicatorCell!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var idx = 0
-        progressStackView.arrangedSubviews.forEach { stack in
-            (stack as! UIStackView).arrangedSubviews.forEach { container in
-                guard idx < ProgressView.Style.allCases.count else { return }
-                let style = ProgressView.Style.allCases[idx]
-                let view = ProgressView(style: style)
-                for case let button as UIButton in container.subviews {
-                    button.addTarget(self, action: #selector(progressButtonClicked(_:)), for: .primaryActionTriggered)
-                    button.tag = idx
+        makeProgressAndIndicatorViews()
+    }
+}
+
+class IndicatorCell: UITableViewCell {
+    var progressViews: [ProgressView] = []
+    var indicatorViews: [ActivityIndicatorView] = []
+    var progressAction: ((ProgressViewStyleable) -> Void)?
+    var indicatorAction: ((ActivityIndicatorViewStyleable) -> Void)?
+
+    func makeProgressView(_ action: @escaping(ProgressViewStyleable) -> Void) {
+        self.progressAction = action
+        var (width, height, x, y) = (UIScreen.main.bounds.width / 2.0 - 10, frame.height / 2.0, 0.0, 0.0)
+        ProgressView.Style.allCases.enumerated().forEach { (offset, style) in
+            ProgressView(style: style).with { view in
+                if offset == 2 {
+                    x = 0.0
+                    width = UIScreen.main.bounds.width / 3.0
+                    y = height - 5.0
                 }
-                container.insertSubview(view, at: 0)
-                if style == .buttBar || style == .roundBar {
-                    view.lineWidth = 3.0
-                    view.edge(to: container, height: 15)
-                } else {
-                    view.edge(to: container)
-                }
-                idx += 1
+                let dy = style == .buttBar || style == .roundBar ? 22.0 : 10.0
+                view.frame = CGRect(x: x * width + 10, y: y, width: width, height: height).insetBy(dx: 5, dy: dy)
+                contentView.addSubview(view)
+                x += 1
                 progressViews.append(view)
+                makeButton(frame: view.frame, offset: offset, isProgress: true)
             }
         }
-        ActivityIndicatorView.Style.allCases.enumerated().forEach { (offset, style) in
-            let container = indicatorStackView.arrangedSubviews[offset]
-            let view = ActivityIndicatorView(style: style)
 
-            for case let button as UIButton in container.subviews {
-                button.addTarget(self, action: #selector(indicatorButtonClicked(_:)), for: .primaryActionTriggered)
-                button.tag = offset
+        func updateProgress() {
+            Task.request { progress in
+                self.progressViews.forEach {
+                    $0.progress = progress
+                }
+            } completion: {
+                Task.request(1) { updateProgress() }
             }
-            container.insertSubview(view, at: 0)
-            view.edge(to: container)
-            view.startAnimating()
-            indicatorViews.append(view)
         }
         updateProgress()
     }
 
-    private func updateProgress() {
-        Task.request { progress in
-            self.progressViews.forEach {
-                $0.progress = progress
+    func makeIndicatorView(_ action: @escaping(ActivityIndicatorViewStyleable) -> Void) {
+        self.indicatorAction = action
+        let (width, height) = (UIScreen.main.bounds.width / 4.0, frame.height)
+        ActivityIndicatorView.Style.allCases.enumerated().forEach { (offset, style) in
+            ActivityIndicatorView(style: style).with { view in
+                view.frame = CGRect(x: CGFloat(offset) * width, y: 0, width: width, height: height).insetBy(dx: 10, dy: 10)
+                contentView.addSubview(view)
+                view.startAnimating()
+                indicatorViews.append(view)
+                makeButton(frame: view.frame, offset: offset, isProgress: false)
             }
-        } completion: {
-            Task.request(1) { self.updateProgress() }
         }
     }
-}
 
-extension UIView {
-    func edge(to view: UIView, height: CGFloat? = nil) {
-        translatesAutoresizingMaskIntoConstraints = false
-        var constraints: [NSLayoutConstraint] = [
-            leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-        ]
-        if let height = height {
-            constraints.append(contentsOf: [
-                centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                heightAnchor.constraint(equalToConstant: height)])
-        } else {
-            constraints.append(contentsOf: [
-                topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
-                bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)])
+    private func makeButton(frame: CGRect, offset: Int, isProgress: Bool) {
+        UIButton(frame: frame).with {
+            $0.tag = offset
+            $0.setTitle(isProgress ? "progress" : "indicator", for: .normal)
+            $0.setTitleColor(.clear, for: .normal)
+            $0.addTarget(self, action: #selector(buttonClicked(_:)), for: .primaryActionTriggered)
+            contentView.addSubview($0)
         }
-        NSLayoutConstraint.activate(constraints)
+    }
+
+    @objc private func buttonClicked(_ sender: UIButton) {
+        if sender.title(for: .normal) == "progress" {
+            progressAction?(progressViews[sender.tag].style)
+        } else {
+            indicatorAction?(indicatorViews[sender.tag].style)
+        }
     }
 }
