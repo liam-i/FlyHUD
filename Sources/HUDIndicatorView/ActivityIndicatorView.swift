@@ -35,7 +35,7 @@ extension ActivityIndicatorViewStyleable {
 extension ActivityIndicatorView {
     /// The visual style of the activity indicator.
     /// - Note: You set the value of the style property with these constants.
-    public enum Style: Equatable, ActivityIndicatorViewStyleable {
+    public enum Style: Equatable, CaseIterable, ActivityIndicatorViewStyleable {
         case ringClipRotate
         case ballSpinFade
         case circleStrokeSpin
@@ -64,11 +64,23 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
     public let style: ActivityIndicatorViewStyleable
     /// The color of the activity indicator.
     /// - Note: If you set a color for an activity indicator, it overrides the color provided by the style property.
-    public lazy var color: UIColor! = style.defaultColor
+    public lazy var color: UIColor! = style.defaultColor {
+        didSet {
+            color.notEqual(oldValue, do: makeAnimationIfNeeded())
+        }
+    }
     /// The track color of the activity indicator.
-    public lazy var trackColor: UIColor? = style.defaultTrackColor
+    public lazy var trackColor: UIColor? = style.defaultTrackColor {
+        didSet {
+            trackColor.notEqual(oldValue, do: makeAnimationIfNeeded())
+        }
+    }
     /// The line width of the activity indicator.
-    public lazy var lineWidth: CGFloat = style.defaultLineWidth
+    public lazy var lineWidth: CGFloat = style.defaultLineWidth {
+        didSet {
+            lineWidth.notEqual(oldValue, do: makeAnimationIfNeeded())
+        }
+    }
     /// A Boolean value that controls whether the activity indicator is hidden when the animation is stopped.
     /// - Note: If the value of this property is true (the default), the receiver sets its isHidden property (UIView) to true when receiver is not animating. If the hidesWhenStopped property is false, the receiver is not hidden when animation stops. You stop an animating activity indicator with the stopAnimating() method.
     public lazy var hidesWhenStopped: Bool = true
@@ -99,6 +111,10 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
         backgroundColor = .clear
         isOpaque = false
         isHidden = true
+
+        //if #available(iOS 17.0, *) {
+        //    registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
+        //}
     }
 
     required init?(coder: NSCoder) {
@@ -152,5 +168,15 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
         layer.sublayers = nil
         let animation = style.makeAnimation()
         animation.make(in: layer, color: color, trackColor: trackColor, lineWidth: lineWidth)
+    }
+
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        makeAnimationIfNeeded()
+    }
+
+    @objc private func makeAnimationIfNeeded() {
+        guard isAnimating else { return }
+        makeAnimation() // setup the animation again for the new bounds
     }
 }
