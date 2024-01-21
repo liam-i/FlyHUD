@@ -111,10 +111,7 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
         backgroundColor = .clear
         isOpaque = false
         isHidden = true
-
-        //if #available(iOS 17.0, *) {
-        //    registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
-        //}
+        registerForTraitChanges()
     }
 
     required init?(coder: NSCoder) {
@@ -172,7 +169,17 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        makeAnimationIfNeeded()
+        if #available(iOS 17.0, *) {
+            // Use the trait change registration APIs
+        } else {
+            makeAnimationIfNeeded()
+        }
+    }
+
+    private func registerForTraitChanges() {
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
+        }
     }
 
     @objc private func makeAnimationIfNeeded() {
