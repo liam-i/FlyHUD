@@ -35,30 +35,32 @@ extension ProgressViewStyleable {
 extension ProgressView {
     /// The styles permitted for the progress bar.
     /// - Note: You can retrieve the current style of progress view through the `ProgressView.style` property.
-    public enum Style: Equatable, ProgressViewStyleable {
-        /// A flat bar progress view.
-        /// - Parameter isRound: Display mode - false = square or true = round. Defaults to square.
-        case bar(_ isRound: Bool = false)
-        /// A progress view for showing definite progress by filling up a circle (pie chart)..
-        /// - Parameter isAnnular: Display mode - false = round or true = annular. Defaults to round.
-        case round(_ isAnnular: Bool = false)
+    public enum Style: Equatable, CaseIterable, ProgressViewStyleable {
+        /// A flat bar progress view. Display mode butt.
+        case buttBar
+        /// A flat bar progress view. Display mode round.
+        case roundBar
+        /// A round, pie-chart like, progress view.
+        case round
+        /// Ring-shaped progress view.
+        case annularRound
         /// A pie progress view.
         case pie
 
         /// Creates an animation builder
         public func makeAnimation() -> ProgressAnimationBuildable {
             switch self {
-            case .bar(let isRound):     return ProgressAnimation.Bar(isRound: isRound)
-            case .round(let isAnnular): return ProgressAnimation.Round(isAnnular: isAnnular)
+            case .buttBar, .roundBar:   return ProgressAnimation.Bar(isRound: self == .roundBar)
+            case .round, .annularRound: return ProgressAnimation.Round(isAnnular: self == .annularRound)
             case .pie:                  return ProgressAnimation.Pie()
             }
         }
 
         public var defaultSize: CGSize {
             switch self {
-            case .bar:      return CGSize(width: 120.0, height: 10.0)
-            case .round:    return CGSize(width: 37.0, height: 37.0)
-            case .pie:      return CGSize(width: 37.0, height: 37.0)
+            case .buttBar, .roundBar:   return CGSize(width: 120.0, height: 10.0)
+            case .round, .annularRound: return CGSize(width: 37.0, height: 37.0)
+            case .pie:                  return CGSize(width: 37.0, height: 37.0)
             }
         }
     }
@@ -121,7 +123,7 @@ public class ProgressView: UIView, ProgressViewable {
     ///   - size: Specifying the size of the progress view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(style: Style = .bar(), size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(style: Style = .buttBar, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
         self.init(styleable: style, size: size, populator: populator)
     }
 
@@ -170,7 +172,12 @@ public class ProgressView: UIView, ProgressViewable {
             return builder
         }
 
-        animationBuilder.draw(progress: progress, in: layer, color: progressTintColor, trackColor: trackTintColor, lineWidth: lineWidth)
+        animationBuilder.draw(
+            progress: CGFloat(min(progress, 1.0)),
+            in: layer,
+            color: progressTintColor,
+            trackColor: trackTintColor,
+            lineWidth: lineWidth)
     }
 
     private class WeakProxy {

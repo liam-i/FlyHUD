@@ -12,7 +12,7 @@ import HUD
 
 /// Animation Builder
 public protocol ProgressAnimationBuildable {
-    func draw(progress: Float, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
+    func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
 }
 
 enum ProgressAnimation {
@@ -20,9 +20,8 @@ enum ProgressAnimation {
     struct Bar: ProgressAnimationBuildable {
         let isRound: Bool
 
-        func draw(progress: Float, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
             let color = color ?? .clear
-            let progress = CGFloat(min(progress, 1.0))
             let size = layer.frame.size
 
             let lineWidthHalf = lineWidth / 2.0
@@ -129,16 +128,15 @@ enum ProgressAnimation {
         /// Display mode - false = round or true = annular. Defaults to round.
         let isAnnular: Bool
 
-        func draw(progress: Float, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
-            let (color, trackColor) = (color ?? .clear, trackColor ?? .clear)
-            let (progress, bounds) = (CGFloat(min(progress, 1.0)), layer.bounds)
+        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+            let (color, trackColor, bounds) = (color ?? .clear, trackColor ?? .clear, layer.bounds)
 
             guard isAnnular else {
                 return drawRound(progress, in: bounds, color: color, trackColor: trackColor, lineWidth: lineWidth)
             }
 
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
-            let radius = (bounds.width - lineWidth) / 2.0
+            let radius = (min(bounds.width, bounds.height) - lineWidth) / 2.0
             let startAngle = -(CGFloat.pi / 2.0) // 90 degrees
             var endAngle = (2 * CGFloat.pi) + startAngle
             let lineCapStyle: CGLineCap = trackColor == .clear ? .round : .square
@@ -167,8 +165,10 @@ enum ProgressAnimation {
             guard let context = UIGraphicsGetCurrentContext() else { return assertionFailure() }
 
             // Draw background
+            let minSize = min(bounds.width, bounds.height)
             let lineWidthHalf = lineWidth / 2.0
-            let circleRect = bounds.insetBy(dx: lineWidthHalf, dy: lineWidthHalf)
+            let circleRect = CGRect(x: (bounds.width - minSize) / 2.0, y: (bounds.height - minSize) / 2.0,
+                                    width: minSize, height: minSize).insetBy(dx: lineWidthHalf, dy: lineWidthHalf)
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
 
             color.setStroke()
@@ -180,7 +180,7 @@ enum ProgressAnimation {
             // 90 degrees
             let startAngle = -(CGFloat.pi / 2.0)
             let lineWidth = lineWidth * 2.0
-            let radius = (bounds.width - lineWidth) / 2.0
+            let radius = (min(bounds.width, bounds.height) - lineWidth) / 2.0
             let endAngle = (progress * 2.0 * CGFloat.pi) + startAngle
 
             // Draw progress
@@ -198,10 +198,8 @@ enum ProgressAnimation {
     }
 
     struct Pie: ProgressAnimationBuildable {
-        func draw(progress: Float, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
-            let progress = CGFloat(min(progress, 1.0))
+        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
-
             let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
             let radius = min(size.width, size.height) / 2.0 - lineWidth
 
