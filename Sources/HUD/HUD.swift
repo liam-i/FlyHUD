@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView {
+open class HUD: BaseView, ProgressViewDelegate {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
@@ -59,16 +59,16 @@ open class HUD: BaseView {
     }
     /// The Progress object feeding the progress information to the progress indicator.
     /// - Note: When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
+    /// - Note: It will auto set localizedDescription and localizedAdditionalDescription to the text of label and detaillabel properties. They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
     public var observedProgress: Progress? {
-        didSet {
-            observedProgress.notEqual(oldValue, do: setProgressDisplayLink(enabled: true))
-        }
+        get { (indicator as? ProgressViewable)?.observedProgress }
+        set { (indicator as? ProgressViewable)?.observedProgress = newValue }
     }
 
     /// The animation (type, duration, springDamping) that should be used when the HUD is shown and hidden.
     public var animation: Animation = .init()
-    /// A Boolean value indicating whether the `HUD` is currently showing.
-    public var isShowing: Bool { isHidden == false }
+    /// A boolean value indicating whether the HUD is visible.
+    public var isVisible: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
@@ -83,6 +83,9 @@ open class HUD: BaseView {
     public private(set) var count: Int = 0
     /// Enable `count`. `Defaults to false`.
     public var isCountEnabled: Bool = false
+
+    /// If set to true allow user interactions with background objects. If set to false don't allow user interactions with background objects while HUD is displayed. `Defaults to false`.
+    public var isHitTestEnabled: Bool = false
 
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
     public var isMotionEffectsEnabled: Bool = false {
@@ -105,14 +108,6 @@ open class HUD: BaseView {
     private var minShowWorkItem: DispatchWorkItem?
     private var hideDelayWorkItem: DispatchWorkItem?
     private var bezelMotionEffects: UIMotionEffectGroup?
-    private var observedProgressDisplayLink: CADisplayLink? {
-        didSet {
-            observedProgressDisplayLink.notEqual(oldValue, do: {
-                oldValue?.invalidate()
-                observedProgressDisplayLink?.add(to: .main, forMode: .default)
-            }())
-        }
-    }
 
     // MARK: - Lifecycle
 
@@ -271,8 +266,8 @@ open class HUD: BaseView {
 
         showStarted = Date()
         isHidden = false
+        indicator?.isHidden = false
 
-        setProgressDisplayLink(enabled: true) // Needed in case we hide and re-show with the same Progress object attached.
         updateBezelMotionEffects() // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
 
         perform(animation, showing: true, completion: nil)
@@ -327,7 +322,7 @@ open class HUD: BaseView {
         perform(animation, showing: false) {
             // Cancel any scheduled hide(animated:afterDelay:) calls
             self.cancelHideDelayWorkItem()
-            self.setProgressDisplayLink(enabled: false)
+            self.indicator?.isHidden = true
 
             if self.isFinished {
                 self.isHidden = true
@@ -510,8 +505,9 @@ open class HUD: BaseView {
             if let activityIndicator = indicator as? ActivityIndicatorViewable, activityIndicator.isAnimating == false {
                 activityIndicator.startAnimating()
             }
-            if let progressIndicator = indicator as? ProgressViewable {
-                progressIndicator.progress = progress
+            if let progressView = indicator as? ProgressViewable {
+                progressView.delegate = self
+                progressView.progress = progress
             }
         }
 
@@ -679,35 +675,7 @@ open class HUD: BaseView {
 
     // MARK: - Progress
 
-    private class WeakProxy {
-        private weak var target: HUD?
-
-        init(_ target: HUD) {
-            self.target = target
-        }
-
-        @objc func onScreenUpdate() {
-            target?.updateProgressFromProgressObject()
-        }
-    }
-
-    private func setProgressDisplayLink(enabled: Bool) {
-        // We're using CADisplayLink, because Progress can change very quickly and observing it may starve the main thread,
-        // so we're refreshing the progress only every frame draw
-        if enabled && observedProgress != nil {
-            if observedProgressDisplayLink == nil { // Only create if not already active.
-                observedProgressDisplayLink = CADisplayLink(target: WeakProxy(self), selector: #selector(WeakProxy.onScreenUpdate))
-            }
-        } else {
-            observedProgressDisplayLink?.invalidate()
-            observedProgressDisplayLink = nil
-        }
-    }
-
-    private func updateProgressFromProgressObject() {
-        guard let observedProgress = observedProgress else { return }
-        progress = Float(observedProgress.fractionCompleted)
-        // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
+    public func updateProgress(from observedProgress: Progress) {
         // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
         label.text = observedProgress.localizedDescription
         detailsLabel.text = observedProgress.localizedAdditionalDescription
@@ -745,5 +713,12 @@ open class HUD: BaseView {
     private func updateForCurrentOrientation(animated: Bool) {
         guard let superview = superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
+    }
+
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hitView = super.hitTest(point, with: event)
+        guard isHitTestEnabled else { return hitView }
+        let bezelRect = bezelView.convert(bezelView.bounds, to: self)
+        return bezelRect.contains(point) ? hitView : nil
     }
 }

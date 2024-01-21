@@ -40,7 +40,7 @@ extension ProgressView {
         /// - Parameter isRound: Display mode - false = square or true = round. Defaults to square.
         case bar(_ isRound: Bool = false)
         /// A progress view for showing definite progress by filling up a circle (pie chart)..
-        /// - Parameter isRound: Display mode - false = round or true = annular. Defaults to round.
+        /// - Parameter isAnnular: Display mode - false = round or true = annular. Defaults to round.
         case round(_ isAnnular: Bool = false)
         /// A pie progress view.
         case pie
@@ -73,14 +73,6 @@ public class ProgressView: UIView, ProgressViewable {
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
     public let style: ProgressViewStyleable
 
-    /// The current progress of the progress view.
-    /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
-    public var progress: Float = 0.0 {
-        didSet {
-            progress.notEqual(oldValue, do: setNeedsDisplay())
-        }
-    }
-
     /// The color shown for the portion of the progress bar that’s filled.
     public lazy var progressTintColor: UIColor? = style.defaultProgressTintColor {
         didSet {
@@ -102,8 +94,27 @@ public class ProgressView: UIView, ProgressViewable {
         }
     }
 
+    /// The current progress of the progress view.
+    /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
+    public var progress: Float = 0.0 {
+        didSet {
+            progress.notEqual(oldValue, do: setNeedsDisplay())
+        }
+    }
+
+    /// The Progress object feeding the progress information to the progress indicator.
+    /// - Note: When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
+    public var observedProgress: Progress? {
+        didSet {
+            observedProgress.notEqual(oldValue, do: updateProgressDisplayLink())
+        }
+    }
+
+    /// The object that acts as the delegate of the progress view. The delegate must adopt the ProgressViewDelegate protocol.
+    public weak var delegate: ProgressViewDelegate?
+
     private var animationBuilder: ProgressAnimationBuildable?
-    
+
     /// Creates a progress view with the specified style.
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ProgressView.Style for descriptions of the style constants.
@@ -160,5 +171,56 @@ public class ProgressView: UIView, ProgressViewable {
         }
 
         animationBuilder.draw(progress: progress, in: layer, color: progressTintColor, trackColor: trackTintColor, lineWidth: lineWidth)
+    }
+
+    private class WeakProxy {
+        private weak var target: ProgressView?
+
+        init(_ target: ProgressView) {
+            self.target = target
+        }
+
+        @objc func onScreenUpdate() {
+            target?.updateProgressFromObservedProgress()
+        }
+    }
+
+    public override var alpha: CGFloat {
+        didSet {
+            updateProgressDisplayLink()
+        }
+    }
+
+    public override var isHidden: Bool {
+        didSet {
+            updateProgressDisplayLink()
+        }
+    }
+
+    public override func didMoveToSuperview() {
+        updateProgressDisplayLink()
+    }
+
+    private var observedProgressDisplayLink: CADisplayLink?
+    private func updateProgressDisplayLink() {
+        // We're using CADisplayLink, because Progress can change very quickly and observing it
+        // may starve the main thread, so we're refreshing the progress only every frame draw
+        let enabled = isHidden == false && alpha > 0.0 && superview != nil
+        if enabled && observedProgress != nil {
+            if observedProgressDisplayLink == nil { // Only create if not already active.
+                let displayLink = CADisplayLink(target: WeakProxy(self), selector: #selector(WeakProxy.onScreenUpdate))
+                displayLink.add(to: .main, forMode: .default)
+                observedProgressDisplayLink = displayLink
+            }
+        } else {
+            observedProgressDisplayLink?.invalidate()
+            observedProgressDisplayLink = nil
+        }
+    }
+
+    private func updateProgressFromObservedProgress() {
+        guard let observedProgress = observedProgress else { return }
+        progress = Float(observedProgress.fractionCompleted)
+        delegate?.updateProgress(from: observedProgress)
     }
 }

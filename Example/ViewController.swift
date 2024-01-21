@@ -128,7 +128,7 @@ extension ViewController {
     }
 
     @objc func annularDeterminateExample() {
-        let hud = HUD.show(to: container, using: .slideDownUp, mode: .custom(ProgressView(style: .round(true))), label: "Loading...")
+        let hud = HUD.show(to: container, using: .slideDownUp, mode: .custom(ProgressView(style: .round())), label: "Loading...")
         Task.request {
             hud.progress = $0
         } completion: {
@@ -143,11 +143,23 @@ extension ViewController {
 //            $0.progressTintColor = .red
 //            $0.trackTintColor = .blue
 //        }
-        let hud = HUD.show(to: container, using: .slideUp, mode: .custom(prog), label: "Loading...")
+        let hud = HUD.show(to: container, using: .slideUp, mode: .custom(prog), label: "Loading...") {
+            $0.removeFromSuperViewOnHide = true
+        }
         Task.request {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
-            hud.hide(afterDelay: 0)
+            hud.hide()
+
+            Task.request {
+                hud.show()
+
+                Task.request {
+                    hud.progress = $0
+                } completion: {
+                    hud.hide()
+                }
+            }
         }
 
 //        Task.test(1) {
@@ -184,8 +196,10 @@ extension ViewController {
 
     @objc func customProgressViewExample() {
         class CustomProgressive: BaseView, ProgressViewable {
-            var progressTintColor: UIColor? = nil
-            var trackTintColor: UIColor? = nil
+            var delegate: ProgressViewDelegate?
+            var observedProgress: Progress?
+            var progressTintColor: UIColor?
+            var trackTintColor: UIColor?
 
             var progress: Float = 0.0 {
                 didSet {
@@ -233,17 +247,17 @@ extension ViewController {
             $0.button.setTitle("Cancel", for: .normal)
             $0.button.addTarget(self, action: #selector(self.cancelWork), for: .touchUpInside)
         }
-        Task.request(3) {
+        Task.request(10) {
             HUD.hud(for: self.container)?.progress = $0
         } completion: {
             hud.hide()
         }
-        Task.test(1) {
-            hud.label.font = .boldSystemFont(ofSize: 20)
-            hud.button.titleLabel?.font = .boldSystemFont(ofSize: 17)
-            hud.button.borderWidth = 2
-            hud.button.roundedCorners = .radius(4)
-        }
+//        Task.test(1) {
+//            hud.label.font = .boldSystemFont(ofSize: 20)
+//            hud.button.titleLabel?.font = .boldSystemFont(ofSize: 17)
+//            hud.button.borderWidth = 2
+//            hud.button.roundedCorners = .radius(4)
+//        }
     }
 
     @objc func modeSwitchingExample() {
@@ -321,6 +335,17 @@ extension ViewController {
 
         Task.resume(with: progress) {
             hud.hide()
+            progress.cancel()
+            Task.request {
+                self.container.addSubview(hud)
+                progress.resume()
+
+                hud.show()
+
+                Task.request {
+                    hud.hide()
+                }
+            }
         }
     }
 
