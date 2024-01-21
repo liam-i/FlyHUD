@@ -20,161 +20,12 @@
                         <sections>
                             <tableViewSection headerTitle="HUD ProgressView" id="BAY-cY-Nzv">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="180" id="2wP-vG-Oe8">
-                                        <rect key="frame" x="0.0" y="55.5" width="414" height="180"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="120" id="2wP-vG-Oe8" customClass="IndicatorCell" customModule="HUD_Example" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2wP-vG-Oe8" id="BV2-Ls-6F6">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="180"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Pbf-Cs-IMY">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="180"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="hd5-xw-SKH">
-                                                            <rect key="frame" x="0.0" y="0.0" width="414" height="59.5"/>
-                                                            <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kEV-kZ-XLO">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="230-k7-4UT">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstItem="230-k7-4UT" firstAttribute="leading" secondItem="kEV-kZ-XLO" secondAttribute="leading" id="ksQ-pZ-nP7"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="230-k7-4UT" secondAttribute="trailing" id="m2X-r8-Z4u"/>
-                                                                        <constraint firstItem="230-k7-4UT" firstAttribute="top" secondItem="kEV-kZ-XLO" secondAttribute="top" id="nlK-mb-w87"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="230-k7-4UT" secondAttribute="bottom" id="tqb-lS-ior"/>
-                                                                    </constraints>
-                                                                </view>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EGa-ue-Ne8">
-                                                                    <rect key="frame" x="207.5" y="0.0" width="206.5" height="59.5"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wYe-UD-GGs">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="wYe-UD-GGs" secondAttribute="trailing" id="EFV-KM-XX8"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="wYe-UD-GGs" secondAttribute="bottom" id="V25-v5-4OM"/>
-                                                                        <constraint firstItem="wYe-UD-GGs" firstAttribute="leading" secondItem="EGa-ue-Ne8" secondAttribute="leading" id="aeN-gA-COk"/>
-                                                                        <constraint firstItem="wYe-UD-GGs" firstAttribute="top" secondItem="EGa-ue-Ne8" secondAttribute="top" id="ory-qk-ECL"/>
-                                                                    </constraints>
-                                                                </view>
-                                                            </subviews>
-                                                        </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="gLy-1z-ZYi">
-                                                            <rect key="frame" x="0.0" y="60.5" width="414" height="59"/>
-                                                            <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wsa-Hd-cRo">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="206.5" height="59"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aMI-bq-0ve">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="aMI-bq-0ve" secondAttribute="trailing" id="Arq-kV-O2x"/>
-                                                                        <constraint firstItem="aMI-bq-0ve" firstAttribute="top" secondItem="Wsa-Hd-cRo" secondAttribute="top" id="P2D-Vw-xi1"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="aMI-bq-0ve" secondAttribute="bottom" id="W5S-U5-hAS"/>
-                                                                        <constraint firstItem="aMI-bq-0ve" firstAttribute="leading" secondItem="Wsa-Hd-cRo" secondAttribute="leading" id="bRP-Em-J4O"/>
-                                                                    </constraints>
-                                                                </view>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w5d-D7-T1A">
-                                                                    <rect key="frame" x="207.5" y="0.0" width="206.5" height="59"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJd-g6-8Mx">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="JJd-g6-8Mx" secondAttribute="trailing" id="0XY-en-5Uu"/>
-                                                                        <constraint firstItem="JJd-g6-8Mx" firstAttribute="top" secondItem="w5d-D7-T1A" secondAttribute="top" id="G0R-iO-6Hu"/>
-                                                                        <constraint firstItem="JJd-g6-8Mx" firstAttribute="leading" secondItem="w5d-D7-T1A" secondAttribute="leading" id="GHY-Bd-B2G"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="JJd-g6-8Mx" secondAttribute="bottom" id="gZq-6Y-EKz"/>
-                                                                    </constraints>
-                                                                </view>
-                                                            </subviews>
-                                                        </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="XRm-Nx-b4q">
-                                                            <rect key="frame" x="0.0" y="120.5" width="414" height="59.5"/>
-                                                            <subviews>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Aj-Aq-KK3">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdr-4U-qlO">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstItem="hdr-4U-qlO" firstAttribute="top" secondItem="6Aj-Aq-KK3" secondAttribute="top" id="3no-Q0-3B7"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="hdr-4U-qlO" secondAttribute="trailing" id="dqO-un-NPL"/>
-                                                                        <constraint firstItem="hdr-4U-qlO" firstAttribute="leading" secondItem="6Aj-Aq-KK3" secondAttribute="leading" id="hK0-VM-L6Y"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="hdr-4U-qlO" secondAttribute="bottom" id="khj-Nj-H8I"/>
-                                                                    </constraints>
-                                                                </view>
-                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XG0-Wk-SWl">
-                                                                    <rect key="frame" x="207.5" y="0.0" width="206.5" height="59.5"/>
-                                                                    <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wvi-nx-8XX">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="206.5" height="59.5"/>
-                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <state key="normal" title="Button"/>
-                                                                            <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                                <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            </buttonConfiguration>
-                                                                        </button>
-                                                                    </subviews>
-                                                                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                                    <constraints>
-                                                                        <constraint firstItem="wvi-nx-8XX" firstAttribute="top" secondItem="XG0-Wk-SWl" secondAttribute="top" id="HGv-a1-RR2"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="wvi-nx-8XX" secondAttribute="bottom" id="SKq-RV-LVH"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="wvi-nx-8XX" secondAttribute="trailing" id="Tbf-7m-RNi"/>
-                                                                        <constraint firstItem="wvi-nx-8XX" firstAttribute="leading" secondItem="XG0-Wk-SWl" secondAttribute="leading" id="V7C-sZ-kW2"/>
-                                                                    </constraints>
-                                                                </view>
-                                                            </subviews>
-                                                        </stackView>
-                                                    </subviews>
-                                                </stackView>
-                                            </subviews>
-                                            <color key="backgroundColor" systemColor="quaternaryLabelColor"/>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="Pbf-Cs-IMY" secondAttribute="trailing" id="8i9-id-oVl"/>
-                                                <constraint firstItem="Pbf-Cs-IMY" firstAttribute="top" secondItem="BV2-Ls-6F6" secondAttribute="top" id="iNx-Fk-rbm"/>
-                                                <constraint firstItem="Pbf-Cs-IMY" firstAttribute="leading" secondItem="BV2-Ls-6F6" secondAttribute="leading" id="ipx-qH-LNG"/>
-                                                <constraint firstAttribute="bottom" secondItem="Pbf-Cs-IMY" secondAttribute="bottom" id="o7E-1j-HtX"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
                                     </tableViewCell>
@@ -182,106 +33,12 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="HUD IndicatorView" id="zd6-I2-oOo">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="60" id="WMu-sH-vcd">
-                                        <rect key="frame" x="0.0" y="274.5" width="414" height="60"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="60" id="WMu-sH-vcd" customClass="IndicatorCell" customModule="HUD_Example" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="214.5" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WMu-sH-vcd" id="Bkl-RK-vku">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="G0L-Md-m8p">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
-                                                    <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lIH-ik-qgA">
-                                                            <rect key="frame" x="0.0" y="0.0" width="103" height="60"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4x2-lx-geC">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="103" height="60"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                        <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    </buttonConfiguration>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="4x2-lx-geC" secondAttribute="bottom" id="VN7-Kj-uw0"/>
-                                                                <constraint firstAttribute="trailing" secondItem="4x2-lx-geC" secondAttribute="trailing" id="bRS-Ga-0NJ"/>
-                                                                <constraint firstItem="4x2-lx-geC" firstAttribute="leading" secondItem="lIH-ik-qgA" secondAttribute="leading" id="pJW-O1-DHM"/>
-                                                                <constraint firstItem="4x2-lx-geC" firstAttribute="top" secondItem="lIH-ik-qgA" secondAttribute="top" id="uT5-Kr-A6s"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h1a-9O-U5f">
-                                                            <rect key="frame" x="104" y="0.0" width="102.5" height="60"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTn-pu-63C">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="102.5" height="60"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                        <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    </buttonConfiguration>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="yTn-pu-63C" secondAttribute="bottom" id="3tJ-w2-B9E"/>
-                                                                <constraint firstAttribute="trailing" secondItem="yTn-pu-63C" secondAttribute="trailing" id="5Og-Wg-qMf"/>
-                                                                <constraint firstItem="yTn-pu-63C" firstAttribute="top" secondItem="h1a-9O-U5f" secondAttribute="top" id="oN1-yv-18O"/>
-                                                                <constraint firstItem="yTn-pu-63C" firstAttribute="leading" secondItem="h1a-9O-U5f" secondAttribute="leading" id="oki-Jt-1CR"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EPO-2S-Rji">
-                                                            <rect key="frame" x="207.5" y="0.0" width="103" height="60"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="coF-Cv-1AV">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="103" height="60"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                        <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    </buttonConfiguration>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                            <constraints>
-                                                                <constraint firstItem="coF-Cv-1AV" firstAttribute="top" secondItem="EPO-2S-Rji" secondAttribute="top" id="Ykd-jc-60e"/>
-                                                                <constraint firstAttribute="bottom" secondItem="coF-Cv-1AV" secondAttribute="bottom" id="hKA-56-Xeb"/>
-                                                                <constraint firstAttribute="trailing" secondItem="coF-Cv-1AV" secondAttribute="trailing" id="hmI-xQ-XDU"/>
-                                                                <constraint firstItem="coF-Cv-1AV" firstAttribute="leading" secondItem="EPO-2S-Rji" secondAttribute="leading" id="yv3-I7-6NI"/>
-                                                            </constraints>
-                                                        </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s1h-GX-9Lc">
-                                                            <rect key="frame" x="311.5" y="0.0" width="102.5" height="60"/>
-                                                            <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kWe-8T-MXq">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="102.5" height="60"/>
-                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    <state key="normal" title="Button"/>
-                                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
-                                                                        <color key="baseForegroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                    </buttonConfiguration>
-                                                                </button>
-                                                            </subviews>
-                                                            <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="bottom" secondItem="kWe-8T-MXq" secondAttribute="bottom" id="9Vb-9w-x2d"/>
-                                                                <constraint firstItem="kWe-8T-MXq" firstAttribute="top" secondItem="s1h-GX-9Lc" secondAttribute="top" id="M7s-gz-7Du"/>
-                                                                <constraint firstAttribute="trailing" secondItem="kWe-8T-MXq" secondAttribute="trailing" id="Zdb-6i-Ci9"/>
-                                                                <constraint firstItem="kWe-8T-MXq" firstAttribute="leading" secondItem="s1h-GX-9Lc" secondAttribute="leading" id="btZ-pa-hDG"/>
-                                                            </constraints>
-                                                        </view>
-                                                    </subviews>
-                                                </stackView>
-                                            </subviews>
-                                            <color key="backgroundColor" systemColor="quaternaryLabelColor"/>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="G0L-Md-m8p" secondAttribute="bottom" id="4xd-dL-Vy4"/>
-                                                <constraint firstAttribute="trailing" secondItem="G0L-Md-m8p" secondAttribute="trailing" id="Cws-Bd-xYg"/>
-                                                <constraint firstItem="G0L-Md-m8p" firstAttribute="leading" secondItem="Bkl-RK-vku" secondAttribute="leading" id="dwk-9e-4XC"/>
-                                                <constraint firstItem="G0L-Md-m8p" firstAttribute="top" secondItem="Bkl-RK-vku" secondAttribute="top" id="non-qz-6ew"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
                                     </tableViewCell>
@@ -289,8 +46,8 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="HUD" id="QeU-JE-Mtt">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextCell" rowHeight="80" id="td2-Uy-E1z">
-                                        <rect key="frame" x="0.0" y="373.5" width="414" height="80"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TextCell" rowHeight="80" id="td2-Uy-E1z">
+                                        <rect key="frame" x="0.0" y="313.5" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="td2-Uy-E1z" id="cfr-Df-rZW">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
@@ -351,8 +108,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="HUD" id="WKF-Lu-LHU"/>
                     <connections>
-                        <outlet property="indicatorStackView" destination="G0L-Md-m8p" id="ogy-Be-Twc"/>
-                        <outlet property="progressStackView" destination="Pbf-Cs-IMY" id="qQD-H0-svk"/>
+                        <outlet property="indicatorCell" destination="WMu-sH-vcd" id="hbM-7A-etr"/>
+                        <outlet property="progressCell" destination="2wP-vG-Oe8" id="EAr-dg-SnI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gnj-RQ-7dc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -385,12 +142,6 @@
     <resources>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="quaternaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17647058823529413" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
