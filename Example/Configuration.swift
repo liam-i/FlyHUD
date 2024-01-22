@@ -23,61 +23,9 @@ struct Configuration {
 //    var progress: Float = 0.0
 //    var observedProgress: Progress?
     var animation: HUD.Animation = .init()
-    mutating func animationStyle(_ idx: Int) {
-        switch idx {
-        case 0: animation.style = .none
-        case 1: animation.style = .fade
-        case 2: animation.style = .zoomInOut
-        case 3: animation.style = .zoomOutIn
-        case 4: animation.style = .zoomIn
-        case 5: animation.style = .zoomOut
-        case 6: animation.style = .slideUpDown
-        case 7: animation.style = .slideDownUp
-        case 8: animation.style = .slideUp
-        case 9: animation.style = .slideDown
-        default:
-            print(idx)
-        }
-    }
-    var forceAnimation: HUD.Animation?
-    mutating func forceAnimationDuration(_ value: CGFloat) {
-        if forceAnimation == nil { forceAnimation = .init() }
-        forceAnimation?.duration = value
-    }
-    mutating func forceAnimationDamping(_ isOn: Bool) {
-        if forceAnimation == nil { forceAnimation = .init() }
-        forceAnimation?.damping = isOn ? .default : .disable
-    }
-    mutating func forceAnimationStyle(_ idx: Int) {
-        if forceAnimation == nil { forceAnimation = .init() }
-        switch idx {
-        case 0: forceAnimation = nil
-        case 1: forceAnimation?.style = .none
-        case 2: forceAnimation?.style = .fade
-        case 3: forceAnimation?.style = .zoomInOut
-        case 4: forceAnimation?.style = .zoomOutIn
-        case 5: forceAnimation?.style = .zoomIn
-        case 6: forceAnimation?.style = .zoomOut
-        case 7: forceAnimation?.style = .slideUpDown
-        case 8: forceAnimation?.style = .slideDownUp
-        case 9: forceAnimation?.style = .slideUp
-        case 10: forceAnimation?.style = .slideDown
-        default:
-            print(idx)
-        }
-    }
-    mutating func updateContentColor(_ idx: Int) {
-        switch idx {
-        case 0: contentColor = .systemRed
-        case 1: contentColor = .systemYellow
-        case 2: contentColor = .systemOrange
-        case 3: contentColor = .systemPurple
-        default:
-            contentColor = .contentOfHUD
-        }
-    }
-
-
+    var forceAnimation: HUD.Animation = .init()
+    var isForceAnimationEnabled: Bool = false
+    private var currAnimation: HUD.Animation { isForceAnimationEnabled ? forceAnimation : animation }
 //    var isVisible: Bool
     var graceTime: TimeInterval = 0.0
     var minShowTime: TimeInterval = 0.0
@@ -111,13 +59,13 @@ extension Configuration {
             if isDefaultModeStyle {
                 hud.hide() // Default
             } else {
-                hud.hide(using: forceAnimation ?? animation)
+                hud.hide(using: currAnimation)
             }
         }
     }
 
     func hide(for view: UIView) {
-        HUD.hide(for: view, using: forceAnimation ?? animation)
+        HUD.hide(for: view, using: currAnimation)
     }
 
     @discardableResult
@@ -127,7 +75,7 @@ extension Configuration {
             if isDefaultModeStyle {
                 $0.hide(afterDelay: hideAfterDelay)
             } else {
-                $0.hide(using: forceAnimation ?? animation, afterDelay: hideAfterDelay)
+                $0.hide(using: currAnimation, afterDelay: hideAfterDelay)
             }
         }
     }
@@ -153,7 +101,7 @@ extension Configuration {
     }
 
     private func custom(to view: UIView, mode: HUD.Mode, label: String?) -> HUD {
-        HUD.show(to: view, using: forceAnimation ?? animation, mode: mode) {
+        HUD.show(to: view, using: currAnimation, mode: mode) {
             $0.label.text = label ?? (isLabelEnabled ? mode.description : nil)
             $0.detailsLabel.text = isDetailsLabelEnabled ? "This is the detail label" : nil
             $0.button.setTitle(isButtonEnabled ? "Cancel" : nil, for: .normal)
