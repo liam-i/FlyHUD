@@ -25,7 +25,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Show HUD"/>
                                 <connections>
-                                    <action selector="buttonClicked:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="pQd-WW-Occ"/>
+                                    <action selector="indicatorButtonClicked:" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="pQd-WW-Occ"/>
                                 </connections>
                             </button>
                         </subviews>

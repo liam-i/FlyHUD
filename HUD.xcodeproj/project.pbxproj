@@ -22,7 +22,7 @@
 		BC88A9B32DF43E3E6A07F560 /* Pods_HUD_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CB1CE83EB314BCFAD73052F /* Pods_HUD_Tests.framework */; };
 		E8921D932B5D5DE10005BD10 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8921D922B5D5DE10005BD10 /* Task.swift */; };
 		E8AD997C275CFE1800910F91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8AD997B275CFDFC00910F91 /* Assets.xcassets */; };
-		E8AD9980275D06D700910F91 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AD997F275D06D700910F91 /* Model.swift */; };
+		E8AD9980275D06D700910F91 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AD997F275D06D700910F91 /* Configuration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,7 @@
 		D4BCC752D7BFFC6A6D56BBC3 /* Pods-HUD_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_Example.release.xcconfig"; path = "Target Support Files/Pods-HUD_Example/Pods-HUD_Example.release.xcconfig"; sourceTree = "<group>"; };
 		E8921D922B5D5DE10005BD10 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		E8AD997B275CFDFC00910F91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E8AD997F275D06D700910F91 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		E8AD997F275D06D700910F91 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		EEDC094872A14F0F9BBCAADD /* Pods-HUD_ExampleTV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_ExampleTV.debug.xcconfig"; path = "Target Support Files/Pods-HUD_ExampleTV/Pods-HUD_ExampleTV.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,7 +148,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				E8AD997F275D06D700910F91 /* Model.swift */,
+				E8AD997F275D06D700910F91 /* Configuration.swift */,
 				E8921D922B5D5DE10005BD10 /* Task.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				1828E0942643B700004E75A3 /* LaunchScreen.storyboard */,
@@ -409,7 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8921D932B5D5DE10005BD10 /* Task.swift in Sources */,
-				E8AD9980275D06D700910F91 /* Model.swift in Sources */,
+				E8AD9980275D06D700910F91 /* Configuration.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);

@@ -12,6 +12,11 @@ import HUD
 
 /// The styles permitted for the progress bar.
 public protocol ProgressViewStyleable {
+    /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
+    /// - Parameter object: The object to be compared to the receiver.
+    /// - Returns: true if the receiver and object are equal, otherwise false.
+    func isEqual(_ object: Any) -> Bool
+
     /// Creates an animation builder
     func makeAnimation() -> ProgressAnimationBuildable
 
@@ -35,7 +40,7 @@ extension ProgressViewStyleable {
 extension ProgressView {
     /// The styles permitted for the progress bar.
     /// - Note: You can retrieve the current style of progress view through the `ProgressView.style` property.
-    public enum Style: Equatable, CaseIterable, ProgressViewStyleable {
+    public enum Style: CaseIterable, ProgressViewStyleable {
         /// A flat bar progress view. Display mode butt.
         case buttBar
         /// A flat bar progress view. Display mode round.
@@ -47,7 +52,10 @@ extension ProgressView {
         /// A pie progress view.
         case pie
 
-        /// Creates an animation builder
+        public func isEqual(_ object: Any) -> Bool {
+            self == object as? ProgressView.Style
+        }
+
         public func makeAnimation() -> ProgressAnimationBuildable {
             switch self {
             case .buttBar, .roundBar:   return ProgressAnimation.Bar(isRound: self == .roundBar)
@@ -69,11 +77,16 @@ extension ProgressView {
 /// A view that depicts the progress of a task over time.
 /// - Note: The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
-public class ProgressView: UIView, ProgressViewable {
-    /// The current graphical style of the progress view.
-    /// - Note: The value of this property is a constant that specifies the style of the progress view.
+public class ProgressView: BaseView, ProgressViewable {
+    /// The current graphical style of the progress view. The value of this property is a constant that specifies the style of the progress view.
+    /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
-    public let style: ProgressViewStyleable
+    public var style: ProgressViewStyleable = Style.buttBar {
+        didSet {
+            guard style.isEqual(oldValue) == false else { return }
+            updateProperties()
+        }
+    }
 
     /// The color shown for the portion of the progress bar that’s filled.
     public lazy var progressTintColor: UIColor? = style.defaultProgressTintColor {
@@ -123,7 +136,7 @@ public class ProgressView: UIView, ProgressViewable {
     ///   - size: Specifying the size of the progress view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(style: Style = .buttBar, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(style: Style, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
         self.init(styleable: style, size: size, populator: populator)
     }
 
@@ -133,32 +146,21 @@ public class ProgressView: UIView, ProgressViewable {
     ///   - size: Specifying the size of the progress view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
     /// - Returns: An initialized ProgressView object.
-    public init(styleable: ProgressViewStyleable, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+        self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
-        super.init(frame: CGRect(origin: .zero, size: size))
         populator?(self)
-        backgroundColor = .clear
-        isOpaque = false
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    public override func commonInit() {
+        backgroundColor = .clear
+        isOpaque = false
     }
 
     deinit {
 #if DEBUG
         print("👍👍👍 ProgressView is released.")
 #endif
-    }
-
-    public override var bounds: CGRect {
-        didSet {
-            bounds.notEqual(oldValue, do: invalidateIntrinsicContentSize())
-        }
-    }
-
-    public override var intrinsicContentSize: CGSize {
-        bounds.isEmpty ? style.defaultSize : bounds.size
     }
 
     public override func draw(_ rect: CGRect) {
@@ -179,6 +181,35 @@ public class ProgressView: UIView, ProgressViewable {
             trackColor: trackTintColor,
             lineWidth: lineWidth)
     }
+
+    public override var bounds: CGRect {
+        didSet {
+            bounds.notEqual(oldValue, do: invalidateIntrinsicContentSize())
+        }
+    }
+
+    private var windowIsNil: Bool = false
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil else { return windowIsNil = true }
+        guard windowIsNil else { return }
+        windowIsNil = false
+        setNeedsDisplay()
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        bounds.isEmpty ? style.defaultSize : bounds.size
+    }
+
+    private func updateProperties() {
+        frame.size = style.defaultSize
+        progressTintColor = style.defaultProgressTintColor
+        trackTintColor = style.defaultTrackTintColor
+        lineWidth = style.defaultLineWidth
+        invalidateIntrinsicContentSize()
+    }
+
+    // MARK: Progress
 
     private class WeakProxy {
         private weak var target: ProgressView?

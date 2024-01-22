@@ -9,24 +9,18 @@
 import UIKit
 
 class Task: NSObject {
-    private static var canceled: Bool = false
+    static let shared = Task()
+    static private var canceled: Bool = false
 
     static func cancelTask() {
-        canceled = true
+        Task.canceled = true
     }
 
     static func test(_ sec: UInt32 = 3, completion: @escaping () -> Void) {
         request(sec, completion: completion)
     }
 
-    static func request(_ sec: UInt32 = 3, completion: @escaping () -> Void) {
-        DispatchQueue.global().async {
-            sleep(sec) // Simulate by just waiting.
-            DispatchQueue.main.async(execute: completion)
-        }
-    }
-
-    static func request(_ sec: UInt32 = 3, progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
+    static func request(_ sec: UInt32 = 3, progress: ((Float) -> Void)? = nil, completion: @escaping () -> Void) {
         let us = sec * 1000 * 1000 / 100
         DispatchQueue.global().async {
             canceled = false
@@ -40,10 +34,10 @@ class Task: NSObject {
 
                 /// 回到主线程刷新UI
                 DispatchQueue.main.async {
-                    progress(progressValue)
+                    progress?(progressValue)
                 }
 
-                usleep(us)
+                usleep(us) // Simulate by just waiting.
             }
 
             DispatchQueue.main.async(execute: completion)
@@ -103,7 +97,6 @@ class Task: NSObject {
         }
     }
 
-    private static let shared = Task()
     private var progress: ((Float) -> Void)?
     private var completion: (() -> Void)?
     static func download(_ progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {

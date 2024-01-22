@@ -65,7 +65,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         set { (indicator as? ProgressViewable)?.observedProgress = newValue }
     }
 
-    /// The animation (type, duration, springDamping) that should be used when the HUD is shown and hidden.
+    /// The animation (type, duration, damping) that should be used when the HUD is shown and hidden.
     public var animation: Animation = .init()
     /// A boolean value indicating whether the HUD is visible.
     public var isVisible: Bool { isHidden == false }
@@ -84,8 +84,13 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// Enable `count`. `Defaults to false`.
     public var isCountEnabled: Bool = false
 
-    /// If set to true allow user interactions with background objects. If set to false don't allow user interactions with background objects while HUD is displayed. `Defaults to false`.
-    public var isHitTestEnabled: Bool = false
+    /// A Boolean value that controls the delivery of user events. `Defaults to false`.
+    ///
+    /// If set to true user events (click, touch) will be delivered normally to the HUD's parent view.
+    ///
+    /// If set to false user events (click, touch) will be delivered normally to the HUD's subviews.
+    /// - Note: This property is affected by "isUserInteractionEnabled".
+    public var isEventDeliveryEnabled: Bool = false
 
     /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
     public var isMotionEffectsEnabled: Bool = false {
@@ -146,7 +151,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
-    ///   - animation: Use HUD.Animation.  `Default to .fade`.
+    ///   - animation: Use HUD.Animation.  `Default to (style:.fade,duration:0.3,damping:.disable)`.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
@@ -157,7 +162,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     public class func showStatus(
         to view: UIView,
         duration: TimeInterval = 2.0,
-        using animation: Animation.Style = .fade,
+        using animation: Animation = .init(),
         mode: Mode = .text,
         label: String? = nil,
         detailsLabel: String? = nil,
@@ -175,7 +180,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - animation: Use HUD.Animation.  `Default to .fade`.
+    ///   - animation: Use HUD.Animation.  `Default to (style:.fade,duration:0.3,damping:.disable)`.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
@@ -184,7 +189,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     @discardableResult
     public class func show(
         to view: UIView,
-        using animation: Animation.Style = .fade,
+        using animation: Animation = .init(),
         mode: Mode = .indicator(),
         label: String? = nil,
         detailsLabel: String? = nil,
@@ -195,43 +200,43 @@ open class HUD: BaseView, ProgressViewDelegate {
             return hud
         }
         return HUD(frame: view.bounds).with { // Creates a new HUD
-            $0.animation.style = animation
+            $0.animation = animation
             $0.mode = mode
             $0.label.text = label
             $0.detailsLabel.text = detailsLabel
             populator?($0)
             view.addSubview($0)
-            $0.show(using: animation)
+            $0.show(using: $0.animation)
         }
     }
 
     /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:...)`.
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
-    ///   - animation: Use HUD.Animation. Priority greater than the current animation.style. If set to `nil` the HUD uses the animation of its member property.
+    ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     @discardableResult
-    public class func hide(for view: UIView, using animation: Animation.Style? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    public class func hide(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
         guard let hud = hud(for: view) else { return false }
         hud.hide(using: animation, afterDelay: delay)
         return true
     }
 
     /// Displays the HUD.
-    /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation.style. If set to `nil` the HUD uses the animation of its member property.
+    /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
-    public func show(using animation: Animation.Style? = nil) {
+    public func show(using animation: Animation? = nil) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
-        show(self.animation.set(style: animation))
+        show(animation ?? self.animation)
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
     /// - Parameters:
-    ///   - animation: Use HUD.Animation. Priority greater than the current animation.style. If set to `nil` the HUD uses the animation of its member property.
+    ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    public func hide(using animation: Animation.Style? = nil, afterDelay delay: TimeInterval = 0.0) {
+    public func hide(using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
-        hide(self.animation.set(style: animation), afterDelay: delay)
+        hide(animation ?? self.animation, afterDelay: delay)
     }
 
     private func show(_ animation: Animation) {
@@ -365,7 +370,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             transform(to: style, isInvert: true)
         }
 
-        UIView.animate(withDuration: animation.duration, delay: 0.0, usingSpringWithDamping: animation.springDamping.value,
+        UIView.animate(withDuration: animation.duration, delay: 0.0, usingSpringWithDamping: animation.damping.value,
                        initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
             if showing {
                 self.transform(to: .fade)
@@ -717,7 +722,7 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
-        guard isHitTestEnabled else { return hitView }
+        guard isEventDeliveryEnabled else { return hitView }
         let bezelRect = bezelView.convert(bezelView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
     }

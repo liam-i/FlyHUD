@@ -12,6 +12,11 @@ import HUD
 
 /// The visual style of the activity indicator.
 public protocol ActivityIndicatorViewStyleable {
+    /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
+    /// - Parameter object: The object to be compared to the receiver.
+    /// - Returns: true if the receiver and object are equal, otherwise false.
+    func isEqual(_ object: Any) -> Bool
+
     /// Creates an animation builder
     func makeAnimation() -> ActivityIndicatorAnimationBuildable
 
@@ -41,7 +46,10 @@ extension ActivityIndicatorView {
         case circleStrokeSpin
         case circleArcDotSpin
 
-        /// Creates an animation builder
+        public func isEqual(_ object: Any) -> Bool {
+            self == object as? ActivityIndicatorView.Style
+        }
+
         public func makeAnimation() -> ActivityIndicatorAnimationBuildable {
             switch self {
             case .ringClipRotate:
@@ -59,9 +67,17 @@ extension ActivityIndicatorView {
 
 /// A view that shows that a task is in progress.
 /// - Note: You control when an activity indicator animates by calling the startAnimating() and stopAnimating() methods. To automatically hide the activity indicator when animation stops, set the hidesWhenStopped property to true. You can set the color of the activity indicator by using the color property.
-public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
-    /// The basic appearance of the activity indicator.
-    public let style: ActivityIndicatorViewStyleable
+public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
+    /// The basic appearance of the activity indicator view. The value of this property is a constant that specifies the style of the activity indicator view.
+    /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
+    /// - SeeAlso: For more on these constants, see ActivityIndicatorView.Style.
+    public var style: ActivityIndicatorViewStyleable = Style.ringClipRotate {
+        didSet {
+            guard style.isEqual(oldValue) == false else { return }
+            updateProperties()
+        }
+    }
+
     /// The color of the activity indicator.
     /// - Note: If you set a color for an activity indicator, it overrides the color provided by the style property.
     public lazy var color: UIColor! = style.defaultColor {
@@ -94,7 +110,7 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
     ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public convenience init(style: Style = .ringClipRotate, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
+    public convenience init(style: Style, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
         self.init(styleable: style, size: size, populator: populator)
     }
 
@@ -104,18 +120,17 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
     ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
+    public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
+        self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
-        super.init(frame: CGRect(origin: .zero, size: size))
         populator?(self)
+    }
+
+    public override func commonInit() {
         backgroundColor = .clear
         isOpaque = false
         isHidden = true
         registerForTraitChanges()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     deinit {
@@ -159,6 +174,23 @@ public class ActivityIndicatorView: UIView, ActivityIndicatorViewable {
             invalidateIntrinsicContentSize()
             makeAnimation() // setup the animation again for the new bounds
         }
+    }
+
+    private var windowIsNil: Bool = false
+    public override func didMoveToWindow() {
+        super.didMoveToWindow()
+        guard window != nil else { return windowIsNil = true }
+        guard windowIsNil else { return }
+        windowIsNil = false
+        makeAnimation()
+    }
+
+    private func updateProperties() {
+        frame.size = style.defaultSize
+        color = style.defaultColor
+        trackColor = style.defaultColor
+        lineWidth = style.defaultLineWidth
+        invalidateIntrinsicContentSize()
     }
 
     private func makeAnimation() {
