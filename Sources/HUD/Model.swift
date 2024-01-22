@@ -25,22 +25,38 @@ extension HUD {
 
     public struct Animation {
         /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
-        public var style: Animation.Style = .fade
-        /// The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
-        public var duration: TimeInterval = 0.3
+        public var style: Animation.Style
         /// The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
-        public var springDamping: Animation.SpringDamping = .disable
+        public var damping: Animation.Damping
+        /// The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
+        public var duration: TimeInterval
+
+        /// Creates a new Animation.
+        /// - Parameters:
+        ///   - style: The animation type that should be used when the HUD is shown and hidden.
+        ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
+        ///   - duration: The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
+        public static func animation(_ style: Animation.Style, damping: Animation.Damping = .disable, duration: TimeInterval = 0.3) -> Animation {
+            .init(style: style, damping: damping, duration: duration)
+        }
+
+        /// Creates a new Animation.
+        /// - Parameters:
+        ///   - style: The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
+        ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
+        ///   - duration: The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
+        public init(style: Animation.Style = .fade, damping: Animation.Damping = .disable, duration: TimeInterval = 0.3) {
+            self.style = style
+            self.duration = duration
+            self.damping = damping
+        }
 
         /// Executes the given block passing the `Animation` in as its sole `inout` argument.
         /// - Parameter populator: A block or function that populates the `Animation`, which is passed into the block as an `inout` argument.
         /// - Note: This method is recommended for assigning values to properties.
-        public mutating func with(_ populator: (inout Animation) -> Void) {
+        @discardableResult
+        public mutating func with(_ populator: (inout Animation) -> Void) -> Animation {
             populator(&self)
-        }
-
-        mutating func set(style: Animation.Style?) -> Animation {
-            guard let style = style else { return self }
-            self.style = style
             return self
         }
     }
@@ -54,31 +70,58 @@ extension CGPoint {
 }
 extension HUD {
     public struct Layout: Equatable {
-        /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction.
+        /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
         /// - Note: If set to `.HUDVMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
-        public var offset: CGPoint = .zero
+        public var offset: CGPoint
         /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
-        public var edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+        public var edgeInsets: UIEdgeInsets
 
         /// The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        public var hMargin: CGFloat = 20.0
+        public var hMargin: CGFloat
         /// The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        public var vMargin: CGFloat = 20.0
+        public var vMargin: CGFloat
 
         /// The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
-        public var spacing: CGFloat = 4.0
+        public var spacing: CGFloat
 
         /// The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
-        public var minSize: CGSize = .zero
+        public var minSize: CGSize
 
         /// Force the HUD dimensions to be equal if possible.
-        public var isSquare: Bool = false
+        public var isSquare: Bool
+
+        /// Creates a new Layout.
+        /// - Parameters:
+        ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
+        ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
+        ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
+        ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
+        ///   - spacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
+        ///   - minSize: The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
+        ///   - isSquare: Force the HUD dimensions to be equal if possible.
+        public init(offset: CGPoint = .zero, 
+             edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
+             hMargin: CGFloat = 20.0, 
+             vMargin: CGFloat = 20.0,
+             spacing: CGFloat = 4.0,
+             minSize: CGSize = .zero,
+             isSquare: Bool = false) {
+            self.offset = offset
+            self.edgeInsets = edgeInsets
+            self.hMargin = hMargin
+            self.vMargin = vMargin
+            self.spacing = spacing
+            self.minSize = minSize
+            self.isSquare = isSquare
+        }
 
         /// Executes the given block passing the `Layout` in as its sole `inout` argument.
         /// - Parameter populator: A block or function that populates the `Layout`, which is passed into the block as an `inout` argument.
         /// - Note: This method is recommended for assigning values to properties.
-        public mutating func with(_ populator: (inout Layout) -> Void) {
+        @discardableResult
+        public mutating func with(_ populator: (inout Layout) -> Void) -> Layout {
             populator(&self)
+            return self
         }
 
         var isOffsetMinY: Bool { offset.y == -.HUDMaxOffset }
@@ -110,18 +153,21 @@ extension HUD.Animation {
         case slideDown
     }
 
-    public enum SpringDamping {
+    public enum Damping: Equatable {
         /// To smoothly decelerate the animation without oscillation.
         case disable
         /// Employ a damping ratio closer to zero to increase oscillation. `Defaults to 0.65`.
+        case `default`
+        /// Employ a damping ratio closer to zero to increase oscillation.
         ///  - Note: If set to `1.0` the HUD will smoothly decelerate the animation without oscillation.
-        case dampingRatio(CGFloat = 0.65)
+        case ratio(CGFloat)
 
         /// The damping ratio for the spring animation as it approaches its quiescent state.
         public var value: CGFloat {
             switch self {
             case .disable: return 1.0
-            case .dampingRatio(let value): return value
+            case .default: return 0.65
+            case .ratio(let value): return value
             }
         }
     }
