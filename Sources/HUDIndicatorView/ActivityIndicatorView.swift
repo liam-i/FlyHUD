@@ -32,7 +32,7 @@ public protocol ActivityIndicatorViewStyleable {
 
 extension ActivityIndicatorViewStyleable {
     public var defaultSize: CGSize { CGSize(width: 37.0, height: 37.0) }
-    public var defaultColor: UIColor { .contentOfHUD }
+    public var defaultColor: UIColor { .HUDContent }
     public var defaultTrackColor: UIColor? { defaultColor.withAlphaComponent(0.1) }
     public var defaultLineWidth: CGFloat { 2.0 }
 }

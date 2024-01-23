@@ -32,7 +32,7 @@ public protocol ProgressViewStyleable {
 
 extension ProgressViewStyleable {
     public var defaultSize: CGSize { .zero }
-    public var defaultProgressTintColor: UIColor { .contentOfHUD }
+    public var defaultProgressTintColor: UIColor { .HUDContent }
     public var defaultTrackTintColor: UIColor? { defaultProgressTintColor.withAlphaComponent(0.1) }
     public var defaultLineWidth: CGFloat { 2.0 }
 }

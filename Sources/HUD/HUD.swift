@@ -26,9 +26,9 @@ open class HUD: BaseView, ProgressViewDelegate {
     public private(set) lazy var detailsLabel = UILabel(frame: .zero)
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public private(set) lazy var button = RoundedButton(frame: .zero)
-    /// The view containing the labels and indicator (or customView).
-    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
-    /// View covering the entire HUD area, placed behind bezelView.
+    /// The view containing the labels and indicator (or customView). The HUD object places the content in this view in front of any background views.
+    public private(set) lazy var contentView = BackgroundView(frame: .zero)
+    /// View covering the entire HUD area, placed behind contentView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
     /// HUD operation mode. `Default to .indicator(.large)`.
@@ -45,7 +45,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
 
     /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views. `Defaults to UIColor.label.withAlphaComponent(0.7)`.
-    public var contentColor: UIColor = .contentOfHUD {
+    public var contentColor: UIColor = .HUDContent {
         didSet {
             contentColor.notEqual(oldValue, do: updateViewsContentColor())
         }
@@ -266,7 +266,7 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     private func performShow(_ animation: Animation) {
         // Cancel any previous animations
-        bezelView.layer.removeAllAnimations()
+        contentView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
 
         showStarted = Date()
@@ -345,8 +345,8 @@ open class HUD: BaseView, ProgressViewDelegate {
     private func perform(_ animation: Animation, showing: Bool, completion: (() -> Void)?) {
         let alpha: CGFloat = showing ? 1.0 : 0.0
         let completionBlock: (Bool) -> Void = { _ in
-            self.bezelView.transform = .identity // Reset, after the animation is completed
-            self.bezelView.alpha = alpha
+            self.contentView.transform = .identity // Reset, after the animation is completed
+            self.contentView.alpha = alpha
             self.backgroundView.alpha = alpha
             completion?()
         }
@@ -366,7 +366,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         }
 
         // Set starting state
-        if showing && bezelView.alpha == 0.0 {
+        if showing && contentView.alpha == 0.0 {
             transform(to: style, isInvert: true)
         }
 
@@ -377,7 +377,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             } else {
                 self.transform(to: style, isInvert: false)
             }
-            self.bezelView.alpha = alpha
+            self.contentView.alpha = alpha
             self.backgroundView.alpha = alpha
         }, completion: completionBlock)
     }
@@ -393,30 +393,18 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
 
     private func transform(to style: Animation.Style) {
-        var y = UIScreen.main.bounds.height
         switch style {
         case .zoomIn:
-            bezelView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            contentView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         case .zoomOut:
-            bezelView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            contentView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         case .slideUp:
-            if layout.isOffsetMinY {
-                y = -50.0
-            } else if layout.isOffsetMaxY {
-                y = -y
-            } else {
-                y = y / 2.0
-            }
-            bezelView.transform = CGAffineTransform(translationX: 0.0, y: y)
+            layoutIfNeeded()
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - contentView.frame.midY)
         case .slideDown:
-            if layout.isOffsetMaxY {
-                y = 50.0
-            } else {
-                y = -y / 2.0
-            }
-            bezelView.transform = CGAffineTransform(translationX: 0.0, y: y)
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.midY)
         default:
-            bezelView.transform = .identity
+            contentView.transform = .identity
         }
     }
 
@@ -442,16 +430,17 @@ open class HUD: BaseView, ProgressViewDelegate {
     private func setupViews() {
         let defaultColor = contentColor
         addSubview(backgroundView.with {
-            $0.style = .solidColor
-            $0.color = .clear
             $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             $0.alpha = 0.0
         })
-        addSubview(bezelView.with {
+        addSubview(contentView.with {
+            $0.color = .HUDBackground
+            $0.roundedCorners = .radius(5.0)
+            $0.style = .blur()
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.alpha = 0.0
         })
-        bezelView.addSubview(label.with {
+        contentView.addSubview(label.with {
             $0.adjustsFontSizeToFitWidth = false
             $0.textAlignment = .center
             $0.textColor = defaultColor
@@ -459,7 +448,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             $0.isOpaque = false
             $0.backgroundColor = .clear
         })
-        bezelView.addSubview(detailsLabel.with {
+        contentView.addSubview(detailsLabel.with {
             $0.adjustsFontSizeToFitWidth = false
             $0.textAlignment = .center
             $0.textColor = defaultColor
@@ -468,7 +457,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             $0.isOpaque = false
             $0.backgroundColor = .clear
         })
-        bezelView.addSubview(button.with {
+        contentView.addSubview(button.with {
             $0.titleLabel?.textAlignment = .center
             $0.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
             $0.setTitleColor(defaultColor, for: .normal)
@@ -482,7 +471,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     private func updateIndicators() {
         func setIndicator(_ newValue: UIView?) {
             indicator?.removeFromSuperview()
-            if let newValue = newValue { bezelView.addSubview(newValue) }
+            if let newValue = newValue { contentView.addSubview(newValue) }
             indicator = newValue
         }
 
@@ -507,12 +496,16 @@ open class HUD: BaseView, ProgressViewDelegate {
 
         if let indicator = indicator {
             indicator.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
+
             if let activityIndicator = indicator as? ActivityIndicatorViewable, activityIndicator.isAnimating == false {
                 activityIndicator.startAnimating()
             }
             if let progressView = indicator as? ProgressViewable {
                 progressView.delegate = self
                 progressView.progress = progress
+            }
+            if let rotateView = indicator as? RotateViewable {
+                rotateView.startRotation()
             }
         }
 
@@ -553,11 +546,11 @@ open class HUD: BaseView, ProgressViewDelegate {
                         $0.minimumRelativeValue = -effectOffset
                     }
                 ]
-                bezelView.addMotionEffect($0)
+                contentView.addMotionEffect($0)
             }
         } else if let motionEffects = bezelMotionEffects {
             bezelMotionEffects = nil
-            bezelView.removeMotionEffect(motionEffects)
+            contentView.removeMotionEffect(motionEffects)
         }
     }
 
@@ -575,38 +568,38 @@ open class HUD: BaseView, ProgressViewDelegate {
         // Remove existing constraints
         removeConstraints(constraints)
         if let bezelConstraints = self.bezelConstraints {
-            bezelView.removeConstraints(bezelConstraints)
+            contentView.removeConstraints(bezelConstraints)
             self.bezelConstraints = nil
         }
 
         // Center bezel in container (self), applying the offset if set
         let centeringConstraints: [NSLayoutConstraint] = [
-            bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
-            bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
+            contentView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
+            contentView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
         ]
         addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
 
         // Ensure minimum side margin is kept
         let sideConstraints: [NSLayoutConstraint] = [
-            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: layout.edgeInsets.left),
-            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -layout.edgeInsets.right),
-            bezelView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: layout.edgeInsets.top),
-            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -layout.edgeInsets.bottom),
+            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor, constant: layout.edgeInsets.left),
+            contentView.trailingAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor, constant: -layout.edgeInsets.right),
+            contentView.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: layout.edgeInsets.top),
+            contentView.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor, constant: -layout.edgeInsets.bottom),
         ]
         addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
 
         // Minimum bezel size, if set
         if !layout.minSize.equalTo(.zero) {
             let minSizeConstraints: [NSLayoutConstraint] = [
-                bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
-                bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
+                contentView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
+                contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
             ]
             bezelConstraints.append(contentsOf: minSizeConstraints.apply(UILayoutPriority(997.0)))
         }
 
         // Square aspect ratio, if set
         if layout.isSquare {
-            let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
+            let square = contentView.heightAnchor.constraint(equalTo: contentView.widthAnchor)
             bezelConstraints.append(square.apply(UILayoutPriority(997.0)))
         }
 
@@ -616,19 +609,19 @@ open class HUD: BaseView, ProgressViewDelegate {
         for (idx, view) in subviews.enumerated() {
             bezelConstraints.append(contentsOf: [
                 // Center in bezel
-                view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor),
+                view.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
                 // Ensure the minimum edge margin is kept
-                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layout.hMargin),
-                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layout.hMargin)
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: layout.hMargin),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -layout.hMargin)
             ])
 
             // Element spacing
             if idx == 0 {
                 // First, ensure spacing to bezel edge
-                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: bezelView.topAnchor, constant: layout.vMargin))
+                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: layout.vMargin))
             } else if idx == lastSubviewIDX {
                 // Last, ensure spacing to bezel edge
-                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: bezelView.bottomAnchor, constant: -layout.vMargin))
+                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -layout.vMargin))
             }
 
             if idx > 0 {
@@ -639,7 +632,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             }
         }
 
-        bezelView.addConstraints(bezelConstraints)
+        contentView.addConstraints(bezelConstraints)
         self.bezelConstraints = bezelConstraints
         self.paddingConstraints = paddingConstraints
         self.updatePaddingConstraints()
@@ -723,7 +716,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
         guard isEventDeliveryEnabled else { return hitView }
-        let bezelRect = bezelView.convert(bezelView.bounds, to: self)
+        let bezelRect = contentView.convert(contentView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
     }
 }
