@@ -14,7 +14,7 @@ struct Configuration {
     var isEventDeliveryEnabled: Bool = false
 
     var isLabelEnabled: Bool = true
-    var isDetailsLabelEnabled: Bool = true
+    var isDetailsLabelEnabled: Bool = false
     var isButtonEnabled: Bool = false
 
 //    var mode: HUD.Mode = .indicator()
@@ -436,27 +436,5 @@ extension HUD.Mode: CustomStringConvertible {
         case .custom(let view): return view is ProgressViewable
         default:                return false
         }
-    }
-}
-
-extension HUD.Animation.Style {
-    init(_ rawValue: String) {
-        switch rawValue {
-        case "none": self = .none
-        case "fade": self = .fade
-        case "zoomInOut": self = .zoomInOut
-        case "zoomOutIn": self = .zoomOutIn
-        case "zoomIn": self = .zoomIn
-        case "zoomOut": self = .zoomOut
-        case "slideUpDown": self = .slideUpDown
-        case "slideDownUp": self = .slideDownUp
-        case "slideUp": self = .slideUp
-        case "slideDown": self = .slideDown
-        default: self = .fade
-        }
-    }
-
-    static var allCaseValues: [String] {
-        allCases.map { String(describing: $0) }
     }
 }

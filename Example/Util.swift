@@ -23,18 +23,10 @@ enum Color: String, CaseIterable {
         case .clear:        return .clear
         }
     }
-
-    static func make(_ rawValue: String) -> Color {
-        Color(rawValue: rawValue) ?? .default
-    }
-
-    static var allCaseValues: [String] {
-        allCases.map { String(describing: $0) }
-    }
 }
 
-extension ViewController {
-    func alertSwitch(_ title: String, selected: @escaping(_ isOn: Bool) -> Void, selected1: @escaping(Bool) -> Void) {
+enum Alert {
+    static func `switch`(_ title: String, selected: @escaping(_ isOn: Bool) -> Void, selected1: @escaping(Bool) -> Void) {
         UIAlertController(title: title, message: nil, preferredStyle: .alert).with {
             $0.addAction(UIAlertAction(title: "off", style: .destructive, handler: { _ in
                 selected(false); selected1(false)
@@ -42,10 +34,10 @@ extension ViewController {
             $0.addAction(UIAlertAction(title: "on", style: .default, handler: { _ in
                 selected(true); selected1(true)
             }))
-            present($0, animated: true)
+            UIApplication.getKeyWindow?.rootViewController?.present($0, animated: true)
         }
     }
-    func alertTextField(_ title: String, selected: @escaping(_ value: CGFloat) -> Void, selected1: @escaping(CGFloat) -> Void) {
+    static func textField(_ title: String, selected: @escaping(_ value: CGFloat) -> Void, selected1: @escaping(CGFloat) -> Void) {
         UIAlertController(title: title, message: nil, preferredStyle: .alert).with { alert in
             alert.addTextField { textField in
                 textField.keyboardType = .numberPad
@@ -55,18 +47,18 @@ extension ViewController {
                 let value = alert.textFields?.first?.floatOfText ?? 0.0
                 selected(value); selected1(value)
             }))
-            present(alert, animated: true)
+            UIApplication.getKeyWindow?.rootViewController?.present(alert, animated: true)
         }
     }
-    func alertListPicker(_ title: String, list: [String], selected: @escaping(_ value: String) -> Void, selected1: @escaping(String) -> Void) {
+    static func list<T>(_ title: String, list: [T], selected: @escaping(T) -> Void, selected1: @escaping(T) -> Void) {
         UIAlertController(title: title, message: nil, preferredStyle: .alert).with { alert in
-            list.forEach {
-                alert.addAction(UIAlertAction(title: $0, style: .default, handler: {
-                    selected($0.title!); selected1($0.title!)
+            list.forEach { value in
+                alert.addAction(UIAlertAction(title: String(describing: value), style: .default, handler: { _ in
+                    selected(value); selected1(value)
                 }))
             }
             alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            present(alert, animated: true)
+            UIApplication.getKeyWindow?.rootViewController?.present(alert, animated: true)
         }
     }
 }
@@ -92,5 +84,11 @@ extension UIApplication {
                 .first { $0.isKeyWindow }
         }
         return UIApplication.shared.keyWindow
+    }
+}
+
+extension Bool {
+    var isOn: String {
+        self ? "on" : "off"
     }
 }
