@@ -13,19 +13,25 @@ struct Configuration {
     var isDefaultModeStyle: Bool = true
     var isEventDeliveryEnabled: Bool = false
 
-    var isLabelEnabled: Bool = false
-    var isDetailsLabelEnabled: Bool = false
+    var isLabelEnabled: Bool = true
+    var isDetailsLabelEnabled: Bool = true
     var isButtonEnabled: Bool = false
 
 //    var mode: HUD.Mode = .indicator()
     var layout: HUD.Layout = .init()
-    var contentColor: UIColor = .contentOfHUD
+    var contentColor: Color = .default
+    var contentViewStyle: BackgroundView.Style = .blur()
+    var backgroundViewStyle: BackgroundView.Style = .solidColor
+    var contentViewColor: Color = .default
+    var backgroundViewColor: Color = .default
+
 //    var progress: Float = 0.0
 //    var observedProgress: Progress?
     var animation: HUD.Animation = .init()
     var forceAnimation: HUD.Animation = .init()
     var isForceAnimationEnabled: Bool = false
-    private var currAnimation: HUD.Animation { isForceAnimationEnabled ? forceAnimation : animation }
+    var currAnimation: HUD.Animation { isForceAnimationEnabled ? forceAnimation : animation }
+
 //    var isVisible: Bool
     var graceTime: TimeInterval = 0.0
     var minShowTime: TimeInterval = 0.0
@@ -33,92 +39,11 @@ struct Configuration {
     var isCountEnabled: Bool = false
 
     var isMotionEffectsEnabled: Bool = false
-    weak var delegate: (ViewController & HUDDelegate)?
-    var completionBlock: ((_ hud: HUD) -> Void)?
+//    weak var delegate: (ViewController & HUDDelegate)?
+//    var completionBlock: ((_ hud: HUD) -> Void)?
 
-    var hideAfterDelay: TimeInterval = 2.0
-
-    init(delegate: (ViewController & HUDDelegate)?, completionBlock: @escaping(_ hud: HUD) -> Void) {
-        self.delegate = delegate
-        self.completionBlock = completionBlock
-    }
-
-    var takesTime: UInt32 = 3
-    var imageView: UIImageView {
-        UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
-    }
-}
-
-extension Configuration {
-    func request(_ hud: HUD) {
-        Task.request(takesTime) { progress in
-            if hud.mode.isProgressView {
-                hud.progress = progress
-            }
-        } completion: {
-            if isDefaultModeStyle {
-                hud.hide() // Default
-            } else {
-                hud.hide(using: currAnimation)
-            }
-        }
-    }
-
-    func hide(for view: UIView) {
-        HUD.hide(for: view, using: currAnimation)
-    }
-
-    @discardableResult
-    func showStatusHUD(to view: UIView, onlyText: Bool) -> HUD {
-        let mode: HUD.Mode = onlyText ? .text : .custom(imageView)
-        return showHUD(to: view, mode: mode, label: mode.description).with {
-            if isDefaultModeStyle {
-                $0.hide(afterDelay: hideAfterDelay)
-            } else {
-                $0.hide(using: currAnimation, afterDelay: hideAfterDelay)
-            }
-        }
-    }
-
-    func showHUD(to view: UIView, mode: HUD.Mode) -> HUD {
-        showHUD(to: view, mode: mode, label: nil)
-    }
-
-    private func showHUD(to view: UIView, mode: HUD.Mode, label: String?) -> HUD {
-        let hud: HUD
-        if isDefaultModeStyle {
-            hud = HUD.show(to: view, mode: mode, label: label) // Default Mode Style
-        } else {
-            hud = custom(to: view, mode: mode, label: label) // Custom Mode Style
-        }
-        if isEventDeliveryEnabled {
-            hud.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
-            hud.detailsLabel.textColor = .systemRed
-        }
-        hud.delegate = delegate
-        hud.completionBlock = completionBlock
-        return hud
-    }
-
-    private func custom(to view: UIView, mode: HUD.Mode, label: String?) -> HUD {
-        HUD.show(to: view, using: currAnimation, mode: mode) {
-            $0.label.text = label ?? (isLabelEnabled ? mode.description : nil)
-            $0.detailsLabel.text = isDetailsLabelEnabled ? "This is the detail label" : nil
-            $0.button.setTitle(isButtonEnabled ? "Cancel" : nil, for: .normal)
-            if isButtonEnabled {
-                $0.button.addTarget(delegate, action: #selector(ViewController.cancelTask), for: .primaryActionTriggered)
-            }
-            $0.layout = layout
-            $0.contentColor = contentColor
-            $0.graceTime = graceTime
-            $0.minShowTime = minShowTime
-            $0.isCountEnabled = isCountEnabled
-            $0.isEventDeliveryEnabled = isEventDeliveryEnabled
-            $0.isMotionEffectsEnabled = isMotionEffectsEnabled
-            $0.delegate = delegate
-            $0.completionBlock = completionBlock
-        }
-    }
+    var hideAfterDelay: TimeInterval = 2.0 // status hud.
+    var takeTime: UInt32 = 3 // task time.
 }
 
 //extension Model {
@@ -498,8 +423,8 @@ extension HUD.Mode: CustomStringConvertible {
         case .progress:                             return "UIProgressView"
         case .custom(let view):
             switch view {
-            case let view as ProgressView:          return "ProgressView(\(view.style))"
-            case let view as ActivityIndicatorView: return "ActivityIndicatorView(\(view.style))"
+            case let view as ProgressView:          return "\(view.style)"
+            case let view as ActivityIndicatorView: return "\(view.style)"
             default:                                return "Done"
             }
         }
@@ -511,5 +436,27 @@ extension HUD.Mode: CustomStringConvertible {
         case .custom(let view): return view is ProgressViewable
         default:                return false
         }
+    }
+}
+
+extension HUD.Animation.Style {
+    init(_ rawValue: String) {
+        switch rawValue {
+        case "none": self = .none
+        case "fade": self = .fade
+        case "zoomInOut": self = .zoomInOut
+        case "zoomOutIn": self = .zoomOutIn
+        case "zoomIn": self = .zoomIn
+        case "zoomOut": self = .zoomOut
+        case "slideUpDown": self = .slideUpDown
+        case "slideDownUp": self = .slideDownUp
+        case "slideUp": self = .slideUp
+        case "slideDown": self = .slideDown
+        default: self = .fade
+        }
+    }
+
+    static var allCaseValues: [String] {
+        allCases.map { String(describing: $0) }
     }
 }

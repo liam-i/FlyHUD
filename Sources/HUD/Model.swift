@@ -123,14 +123,11 @@ extension HUD {
             populator(&self)
             return self
         }
-
-        var isOffsetMinY: Bool { offset.y == -.HUDMaxOffset }
-        var isOffsetMaxY: Bool { offset.y == .HUDMaxOffset }
     }
 }
 
 extension HUD.Animation {
-    public enum Style {
+    public enum Style: CaseIterable {
         /// Disable animation. The HUD will not use animations while appearing and disappearing
         case none
         /// Opacity animation

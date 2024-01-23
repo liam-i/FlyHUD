@@ -41,8 +41,8 @@ extension BackgroundView {
 }
 
 public class BackgroundView: BaseView {
-    /// The rounded corner mode of the button. `Default to .radius(5.0)`.
-    public var roundedCorners: RoundedCorners = .radius(5.0) {
+    /// The rounded corner mode of the button. `Default to .radius(0.0)`.
+    public var roundedCorners: RoundedCorners = .radius(0.0) {
         didSet {
             roundedCorners.notEqual(oldValue, do: setNeedsLayout())
         }
@@ -50,21 +50,15 @@ public class BackgroundView: BaseView {
 
     // MARK: - Properties
 
-    /// The background style. `Defaults to .blur`.
-    public var style: Style = .blur() {
+    /// The background style. `Defaults to .solidColor`.
+    public var style: Style = .solidColor {
         didSet {
             style.notEqual(oldValue, do: updateForBackgroundStyle())
         }
     }
 
-    /// The background color or the blur tint color. Defaults to nil on iOS 13 and later and. UIColor(white: 0.8, alpha: 0.6) on older systems.
-    public var color: UIColor? = {
-        if #available(iOS 13.0, *) {
-            return nil
-        } else {
-            return UIColor(white: 0.8, alpha: 0.6)
-        }
-    }() {
+    /// The background color or the blur tint color. `Defaults to .clear`.
+    public var color: UIColor? = .clear {
         didSet {
             color.notEqual(oldValue, do: backgroundColor = color)
         }

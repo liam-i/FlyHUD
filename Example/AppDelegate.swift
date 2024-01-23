@@ -9,7 +9,6 @@
 import UIKit
 
 #warning("keyboard")
-#warning("CircleArcDotSpin stop animating")
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
