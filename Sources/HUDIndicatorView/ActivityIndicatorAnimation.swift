@@ -16,7 +16,7 @@ public protocol ActivityIndicatorAnimationBuildable {
 }
 
 enum ActivityIndicatorAnimation {
-    static let key: String = "animation"
+    static let key: String = "com.indicator.animation.key"
 
     struct RingClipRotate: ActivityIndicatorAnimationBuildable {
         func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {

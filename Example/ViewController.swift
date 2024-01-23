@@ -9,25 +9,21 @@
 import UIKit
 import LPHUD
 
-class RotateImageView: UIImageView, RotateViewable {}
+class RotateImageView: UIImageView, RotateViewable {
+    static var loading: RotateImageView { .init(image: UIImage(named: "loading")) }
+}
 
 class ViewController: UITableViewController, HUDDelegate {
-    private var v: UIView { navigationController?.view ?? view }
+    private var v: UIView { /*navigationController?.view ??*/ view }
 
     @IBAction func indicatorButtonClicked(_ sender: UIButton) {
         switch sender.superview?.viewWithTag(1000) {
-        case let pv as ProgressView:
-            showHUD(to: v, mode: .progress(pv.style)).with(request(_:))
-        case let pa as ActivityIndicatorView:
-            showHUD(to: v, mode: .indicator(pa.style)).with(request(_:))
-        case is UIProgressView:
-            showHUD(to: v, mode: .progress()).with(request(_:))
-        case is UIActivityIndicatorView:
-            showHUD(to: v, mode: .indicator()).with(request(_:))
-        case is RotateImageView:
-            showHUD(to: v, mode: .custom(RotateImageView(image: UIImage(named: "loading")))).with(request(_:))
-        default:
-            print(String(describing: sender.superview))
+        case let pv as ProgressView:          showHUD(.progress(pv.style)).with(request(_:))
+        case let av as ActivityIndicatorView: showHUD(.indicator(av.style)).with(request(_:))
+        case is UIProgressView:               showHUD(.progress()).with(request(_:))
+        case is UIActivityIndicatorView:      showHUD(.indicator()).with(request(_:))
+        case is RotateImageView:              showHUD(.custom(RotateImageView.loading)).with(request(_:))
+        default: assertionFailure()
         }
     }
 
@@ -35,7 +31,7 @@ class ViewController: UITableViewController, HUDDelegate {
         let onlyText = sender.title(for: .normal) == "Toast"
         let iv = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
         let mode: HUD.Mode = onlyText ? .text : .custom(iv)
-        showHUD(to: v, mode: mode, label: mode.description).with {
+        showHUD(mode, label: mode.description).with {
             if config.isDefaultModeStyle {
                 $0.hide(afterDelay: config.hideAfterDelay)
             } else {
@@ -48,12 +44,12 @@ class ViewController: UITableViewController, HUDDelegate {
 
     }
 
-    private func showHUD(to view: UIView, mode: HUD.Mode, label: String? = nil) -> HUD {
+    private func showHUD(_ mode: HUD.Mode, label: String? = nil) -> HUD {
         let hud: HUD
         if config.isDefaultModeStyle {
-            hud = HUD.show(to: view, mode: mode, label: label) // Default Mode Style
+            hud = HUD.show(to: v, mode: mode, label: label) // Default Mode Style
         } else {
-            hud = custom(to: view, mode: mode, label: label) // Custom Mode Style
+            hud = customHUD(mode, label: label) // Custom Mode Style
         }
         if config.isEventDeliveryEnabled && config.isDefaultModeStyle == false {
             hud.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
@@ -64,8 +60,8 @@ class ViewController: UITableViewController, HUDDelegate {
         return hud
     }
 
-    private func custom(to view: UIView, mode: HUD.Mode, label: String?) -> HUD {
-        HUD.show(to: view, using: config.currAnimation, mode: mode) { [self] in
+    private func customHUD(_ mode: HUD.Mode, label: String?) -> HUD {
+        HUD.show(to: v, using: config.currAnimation, mode: mode) { [self] in
             $0.label.text = label ?? (config.isLabelEnabled ? mode.description : nil)
             $0.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
             $0.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
@@ -78,6 +74,7 @@ class ViewController: UITableViewController, HUDDelegate {
             $0.contentView.color = config.contentViewColor == .default ? .HUDBackground : config.contentViewColor.color
             $0.backgroundView.style = config.backgroundViewStyle
             $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
+            $0.animation = config.animation
             $0.graceTime = config.graceTime
             $0.minShowTime = config.minShowTime
             $0.isCountEnabled = config.isCountEnabled
@@ -173,7 +170,19 @@ class ViewController: UITableViewController, HUDDelegate {
     @IBOutlet weak var progressStackView: UIStackView!
     @IBOutlet weak var indicatorStackView: UIStackView!
     @IBOutlet weak var systemIndicatorStackView: UIStackView!
+    @IBOutlet weak var textField: UITextField!
 
+    @IBAction func showKeyboardButtonClicked(_ sender: UIButton) {
+        if sender.tag == 2000 {
+            sender.tag = 1000
+            textField.resignFirstResponder()
+        } else {
+            sender.tag = 2000
+            textField.becomeFirstResponder()
+        }
+    }
+
+    @IBOutlet weak var darkMode: UISegmentedControl!
     @IBAction func darkModeClicked(_ sender: UISegmentedControl) {
         guard #available(iOS 13.0, *) else {
             return print("'DarkMode' is only available in iOS 13.0 or newer")
@@ -194,44 +203,45 @@ class ViewController: UITableViewController, HUDDelegate {
             }
             var newValue = String(describing: value)
             if let isOn = value as? Bool {
-                newValue = isOn ? "on" : "off"
+                newValue = isOn.isOn
             }
             mas.append(NSAttributedString(string: "(\(newValue))", attributes: [.foregroundColor: UIColor.systemRed]))
             sender.setAttributedTitle(mas, for: .normal)
         }
         switch text {
-        case "UseDe": alertSwitch(title, selected: setTitle(_:)) { self.config.isDefaultModeStyle = $0; self.updateForIsDefaultStyleEnabled() }
-        case "Event": alertSwitch(title, selected: setTitle(_:)) { self.config.isEventDeliveryEnabled = $0 }
-        case "Label": alertSwitch(title, selected: setTitle(_:)) { self.config.isLabelEnabled = $0 }
-        case "Detai": alertSwitch(title, selected: setTitle(_:)) { self.config.isDetailsLabelEnabled = $0 }
-        case "Butto": alertSwitch(title, selected: setTitle(_:)) { self.config.isButtonEnabled = $0 }
-        case "tintC": alertListPicker(title, list: Color.allCaseValues, selected: setTitle(_:)) { self.config.contentColor = Color.make($0) }
-        case "taskT": alertTextField(title, selected: setTitle(_:)) { self.config.takeTime = UInt32($0) }
-        case "cBlur": alertSwitch(title, selected: setTitle(_:)) { self.config.contentViewStyle = $0 ? .blur() : .solidColor }
-        case "cColo": alertListPicker(title, list: Color.allCaseValues, selected: setTitle(_:)) { self.config.contentViewColor = Color.make($0) }
-        case "bgBlu": alertSwitch(title, selected: setTitle(_:)) { self.config.backgroundViewStyle = $0 ? .blur() : .solidColor }
-        case "bgCol": alertListPicker(title, list: Color.allCaseValues, selected: setTitle(_:)) { self.config.backgroundViewColor = Color.make($0) }
-        case "offse": alertTextField(title, selected: setTitle(_:)) { self.config.layout.offset.y = $0 }
-        case "hInse": alertTextField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.left = $0; self.config.layout.edgeInsets.right = $0 }
-        case "vInse": alertTextField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.top = $0; self.config.layout.edgeInsets.bottom = $0 }
-        case "hMarg": alertTextField(title, selected: setTitle(_:)) { self.config.layout.hMargin = $0 }
-        case "vMarg": alertTextField(title, selected: setTitle(_:)) { self.config.layout.vMargin = $0 }
-        case "spaci": alertTextField(title, selected: setTitle(_:)) { self.config.layout.spacing = $0 }
-        case "minWi": alertTextField(title, selected: setTitle(_:)) { self.config.layout.minSize.width = $0 }
-        case "minHe": alertTextField(title, selected: setTitle(_:)) { self.config.layout.minSize.height = $0 }
-        case "isSqu": alertSwitch(title, selected: setTitle(_:)) { self.config.layout.isSquare = $0 }
-        case "style": alertListPicker(title, list: HUD.Animation.Style.allCaseValues, selected: setTitle(_:)) { self.config.animation.style = .init($0) }
-        case "dampi": alertSwitch(title, selected: setTitle(_:)) { self.config.animation.damping = $0 ? .default : .disable }
-        case "durat": alertTextField(title, selected: setTitle(_:)) { self.config.animation.duration = $0 }
-        case "isFor": alertSwitch(title, selected: setTitle(_:)) { self.config.isForceAnimationEnabled =  $0; self.updateForIsForceAnimationEnabled() }
-        case "fStyl": alertListPicker(title, list: HUD.Animation.Style.allCaseValues, selected: setTitle(_:)) { self.config.forceAnimation.style = .init($0) }
-        case "fDamp": alertSwitch(title, selected: setTitle(_:)) { self.config.forceAnimation.damping = $0 ? .default : .disable }
-        case "fDura": alertTextField(title, selected: setTitle(_:)) { self.config.forceAnimation.duration = $0 }
-        case "grace": alertTextField(title, selected: setTitle(_:)) { self.config.graceTime = $0 }
-        case "minSh": alertTextField(title, selected: setTitle(_:)) { self.config.minShowTime = $0 }
-        case "Count": alertSwitch(title, selected: setTitle(_:)) { self.config.isCountEnabled = $0 }
-        case "Motio": alertSwitch(title, selected: setTitle(_:)) { self.config.isMotionEffectsEnabled = $0 }
-        case "hideA": alertTextField(title, selected: setTitle(_:)) { self.config.hideAfterDelay = $0 }
+        case "UseDe": Alert.switch(title, selected: setTitle(_:)) { self.config.isDefaultModeStyle = $0; self.updateForIsDefaultStyleEnabled() }
+        case "Event": Alert.switch(title, selected: setTitle(_:)) { self.config.isEventDeliveryEnabled = $0 }
+        case "Label": Alert.switch(title, selected: setTitle(_:)) { self.config.isLabelEnabled = $0 }
+        case "Detai": Alert.switch(title, selected: setTitle(_:)) { self.config.isDetailsLabelEnabled = $0 }
+        case "Butto": Alert.switch(title, selected: setTitle(_:)) { self.config.isButtonEnabled = $0 }
+        case "tintC": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentColor = $0 }
+        case "taskT": Alert.textField(title, selected: setTitle(_:)) { self.config.takeTime = UInt32($0) }
+        case "cBlur": Alert.switch(title, selected: setTitle(_:)) { self.config.contentViewStyle = $0 ? .blur() : .solidColor }
+        case "cColo": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentViewColor = $0 }
+        case "bgBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.backgroundViewStyle = $0 ? .blur() : .solidColor }
+        case "bgCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.backgroundViewColor = $0 }
+        case "offse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.offset.y = $0 }
+        case "hInse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.left = $0; self.config.layout.edgeInsets.right = $0 }
+        case "vInse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.top = $0; self.config.layout.edgeInsets.bottom = $0 }
+        case "hMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.hMargin = $0 }
+        case "vMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.vMargin = $0 }
+        case "spaci": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.spacing = $0 }
+        case "minWi": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.minSize.width = $0 }
+        case "minHe": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.minSize.height = $0 }
+        case "squar": Alert.switch(title, selected: setTitle(_:)) { self.config.layout.isSquare = $0 }
+        case "safeL": Alert.switch(title, selected: setTitle(_:)) { self.config.layout.isSafeAreaLayoutGuideEnabled = $0 }
+        case "style": Alert.list(title, list: HUD.Animation.Style.allCases, selected: setTitle(_:)) { self.config.animation.style = $0 }
+        case "dampi": Alert.switch(title, selected: setTitle(_:)) { self.config.animation.damping = $0 ? .default : .disable }
+        case "durat": Alert.textField(title, selected: setTitle(_:)) { self.config.animation.duration = $0 }
+        case "isFor": Alert.switch(title, selected: setTitle(_:)) { self.config.isForceAnimationEnabled =  $0; self.updateForIsForceAnimationEnabled() }
+        case "fStyl": Alert.list(title, list: HUD.Animation.Style.allCases, selected: setTitle(_:)) { self.config.forceAnimation.style = $0 }
+        case "fDamp": Alert.switch(title, selected: setTitle(_:)) { self.config.forceAnimation.damping = $0 ? .default : .disable }
+        case "fDura": Alert.textField(title, selected: setTitle(_:)) { self.config.forceAnimation.duration = $0 }
+        case "grace": Alert.textField(title, selected: setTitle(_:)) { self.config.graceTime = $0 }
+        case "minSh": Alert.textField(title, selected: setTitle(_:)) { self.config.minShowTime = $0 }
+        case "Count": Alert.switch(title, selected: setTitle(_:)) { self.config.isCountEnabled = $0 }
+        case "Motio": Alert.switch(title, selected: setTitle(_:)) { self.config.isMotionEffectsEnabled = $0 }
+        case "hideA": Alert.textField(title, selected: setTitle(_:)) { self.config.hideAfterDelay = $0 }
         default: print("‼️‼️‼️\(text)")
         }
     }
@@ -250,7 +260,7 @@ class ViewController: UITableViewController, HUDDelegate {
                 }
                 var newValue = String(describing: value)
                 if let isOn = value as? Bool {
-                    newValue = isOn ? "on" : "off"
+                    newValue = isOn.isOn
                 }
                 mas.append(NSAttributedString(string: "(\(newValue))", attributes: [.foregroundColor: UIColor.systemRed]))
                 sender.setAttributedTitle(mas, for: .normal)
@@ -275,7 +285,8 @@ class ViewController: UITableViewController, HUDDelegate {
             case "spaci": setTitle(config.layout.spacing)
             case "minWi": setTitle(config.layout.minSize.width)
             case "minHe": setTitle(config.layout.minSize.height)
-            case "isSqu": setTitle(config.layout.isSquare)
+            case "squar": setTitle(config.layout.isSquare)
+            case "safeL": setTitle(config.layout.isSafeAreaLayoutGuideEnabled)
             case "style": setTitle(config.animation.style)
             case "dampi": setTitle(config.animation.damping == .default)
             case "durat": setTitle(config.animation.duration)

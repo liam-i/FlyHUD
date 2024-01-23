@@ -400,9 +400,10 @@ open class HUD: BaseView, ProgressViewDelegate {
             contentView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         case .slideUp:
             layoutIfNeeded()
-            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - contentView.frame.midY)
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - contentView.frame.maxY)
         case .slideDown:
-            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.midY)
+            layoutIfNeeded()
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.minY)
         default:
             contentView.transform = .identity
         }
@@ -580,11 +581,18 @@ open class HUD: BaseView, ProgressViewDelegate {
         addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
 
         // Ensure minimum side margin is kept
+        let anchor: (leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor)
+        if layout.isSafeAreaLayoutGuideEnabled {
+            anchor = (safeAreaLayoutGuide.leadingAnchor, safeAreaLayoutGuide.trailingAnchor,
+                      safeAreaLayoutGuide.topAnchor, safeAreaLayoutGuide.bottomAnchor)
+        } else {
+            anchor = (leadingAnchor, trailingAnchor, topAnchor, bottomAnchor)
+        }
         let sideConstraints: [NSLayoutConstraint] = [
-            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor, constant: layout.edgeInsets.left),
-            contentView.trailingAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor, constant: -layout.edgeInsets.right),
-            contentView.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor, constant: layout.edgeInsets.top),
-            contentView.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor, constant: -layout.edgeInsets.bottom),
+            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: anchor.leading, constant: layout.edgeInsets.left),
+            contentView.trailingAnchor.constraint(lessThanOrEqualTo: anchor.trailing, constant: -layout.edgeInsets.right),
+            contentView.topAnchor.constraint(greaterThanOrEqualTo: anchor.top, constant: layout.edgeInsets.top),
+            contentView.bottomAnchor.constraint(lessThanOrEqualTo: anchor.bottom, constant: -layout.edgeInsets.bottom),
         ]
         addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
 
@@ -697,7 +705,6 @@ open class HUD: BaseView, ProgressViewDelegate {
 #if !os(tvOS)
     @objc
     private func statusBarOrientationDidChange(_ notification: Notification) {
-        guard superview != nil else { return }
         updateForCurrentOrientation(animated: true)
     }
 #endif

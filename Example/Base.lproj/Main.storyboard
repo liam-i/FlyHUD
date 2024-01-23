@@ -414,10 +414,10 @@
                                                                     <rect key="frame" x="131.33333333333331" y="0.0" width="130.33333333333331" height="59"/>
                                                                     <subviews>
                                                                         <progressView opaque="NO" tag="1000" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="odQ-87-9kL">
-                                                                            <rect key="frame" x="5.3333333333333144" y="27.666666666666668" width="120" height="4"/>
+                                                                            <rect key="frame" x="15.333333333333314" y="27.666666666666668" width="100" height="4"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="4" id="YLV-44-lgT"/>
-                                                                                <constraint firstAttribute="width" constant="120" id="aE7-Vi-Jmh"/>
+                                                                                <constraint firstAttribute="width" constant="100" id="aE7-Vi-Jmh"/>
                                                                             </constraints>
                                                                             <color key="progressTintColor" systemColor="secondaryLabelColor"/>
                                                                             <color key="trackTintColor" systemColor="systemFillColor"/>
@@ -447,10 +447,10 @@
                                                                     <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="59"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1000" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-Vs-J3p" customClass="RotateImageView" customModule="HUD_Example" customModuleProvider="target">
-                                                                            <rect key="frame" x="47.666666666666629" y="12" width="35" height="35"/>
+                                                                            <rect key="frame" x="46.666666666666629" y="11" width="37" height="37"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="35" id="3Aj-C7-V2i"/>
-                                                                                <constraint firstAttribute="width" constant="35" id="NVN-XB-E2q"/>
+                                                                                <constraint firstAttribute="height" constant="37" id="3Aj-C7-V2i"/>
+                                                                                <constraint firstAttribute="width" constant="37" id="NVN-XB-E2q"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X8h-7P-bi7">
@@ -791,7 +791,7 @@
                                                             <rect key="frame" x="0.0" y="174" width="393" height="26"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQ1-cQ-NCs">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="130.33333333333334" height="26"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="97.666666666666671" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -803,7 +803,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sgv-hH-YEt">
-                                                                    <rect key="frame" x="131.33333333333331" y="0.0" width="130.33333333333331" height="26"/>
+                                                                    <rect key="frame" x="98.666666666666686" y="0.0" width="97.333333333333314" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -815,15 +815,27 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y41-Z4-6Mm">
-                                                                    <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="26"/>
+                                                                    <rect key="frame" x="197" y="0.0" width="97.666666666666686" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                    <state key="normal" title="isSquare">
+                                                                    <state key="normal" title="square">
                                                                         <color key="titleColor" systemColor="labelColor"/>
                                                                     </state>
                                                                     <connections>
                                                                         <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="Uhe-by-fhI"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bjW-9q-ljW">
+                                                                    <rect key="frame" x="295.66666666666669" y="0.0" width="97.333333333333314" height="26"/>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" title="safeLayout">
+                                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="xSi-Ai-fPC"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -1033,6 +1045,45 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="HUD" id="fMb-uS-lXR">
+                        <barButtonItem key="leftBarButtonItem" style="done" id="beZ-1G-7No">
+                            <view key="customView" contentMode="scaleToFill" id="0mc-zf-SeN">
+                                <rect key="frame" x="16" y="5.6666666666666679" width="87" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lbF-s9-zTw">
+                                        <rect key="frame" x="10" y="10" width="10" height="10"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="10" id="4Bi-9x-TuI"/>
+                                            <constraint firstAttribute="width" constant="10" id="JhB-w8-fAd"/>
+                                        </constraints>
+                                        <color key="textColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" tag="1000" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obd-Up-Sin">
+                                        <rect key="frame" x="0.0" y="0.0" width="87" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Keyboard">
+                                            <color key="titleColor" systemColor="labelColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="showKeyboardButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="Les-m4-4I6"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Obd-Up-Sin" secondAttribute="bottom" id="7vO-tH-lcg"/>
+                                    <constraint firstItem="lbF-s9-zTw" firstAttribute="top" secondItem="0mc-zf-SeN" secondAttribute="top" constant="10" id="FOb-WJ-qkr"/>
+                                    <constraint firstAttribute="trailing" secondItem="Obd-Up-Sin" secondAttribute="trailing" id="ZUA-gQ-fv4"/>
+                                    <constraint firstItem="lbF-s9-zTw" firstAttribute="leading" secondItem="0mc-zf-SeN" secondAttribute="leading" constant="10" id="il8-t5-u29"/>
+                                    <constraint firstItem="Obd-Up-Sin" firstAttribute="leading" secondItem="0mc-zf-SeN" secondAttribute="leading" id="w1d-O7-Vmf"/>
+                                    <constraint firstItem="Obd-Up-Sin" firstAttribute="top" secondItem="0mc-zf-SeN" secondAttribute="top" id="wV5-Fx-GFB"/>
+                                </constraints>
+                            </view>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" id="tMH-aC-BME">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" id="2BM-uK-RJE">
                                 <rect key="frame" x="276" y="5.6666666666666679" width="101" height="33"/>
@@ -1048,9 +1099,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="darkMode" destination="2BM-uK-RJE" id="opt-SP-7rq"/>
                         <outlet property="indicatorStackView" destination="Hjj-zi-yGa" id="PJU-1n-Xqe"/>
                         <outlet property="progressStackView" destination="JnJ-P2-jhV" id="US8-Wk-MN9"/>
                         <outlet property="systemIndicatorStackView" destination="PPo-RQ-nIn" id="2JO-H5-est"/>
+                        <outlet property="textField" destination="lbF-s9-zTw" id="6yj-MU-tju"/>
                         <outletCollection property="propertiesButton" destination="7dj-lN-zTW" collectionClass="NSMutableArray" id="FCj-o3-Rv1"/>
                         <outletCollection property="propertiesButton" destination="Mr8-wU-AaU" collectionClass="NSMutableArray" id="A8v-SS-R5l"/>
                         <outletCollection property="propertiesButton" destination="dg2-Yj-b71" collectionClass="NSMutableArray" id="fme-ue-9xx"/>
@@ -1083,6 +1136,7 @@
                         <outletCollection property="propertiesButton" destination="SQa-pw-lhW" collectionClass="NSMutableArray" id="gQ2-6m-kFj"/>
                         <outletCollection property="propertiesButton" destination="gix-Mb-RRr" collectionClass="NSMutableArray" id="sFu-Zy-3hH"/>
                         <outletCollection property="propertiesButton" destination="DV9-zJ-Eht" collectionClass="NSMutableArray" id="waa-tY-E3G"/>
+                        <outletCollection property="propertiesButton" destination="bjW-9q-ljW" collectionClass="NSMutableArray" id="r51-ma-klH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gnj-RQ-7dc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1117,19 +1171,19 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemFillColor">
-            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

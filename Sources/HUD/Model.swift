@@ -90,6 +90,9 @@ extension HUD {
         /// Force the HUD dimensions to be equal if possible.
         public var isSquare: Bool
 
+        /// The layout guide representing the portion of your view that is unobscured by bars and other content.
+        public var isSafeAreaLayoutGuideEnabled: Bool
+
         /// Creates a new Layout.
         /// - Parameters:
         ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
@@ -99,13 +102,15 @@ extension HUD {
         ///   - spacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
         ///   - minSize: The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
         ///   - isSquare: Force the HUD dimensions to be equal if possible.
-        public init(offset: CGPoint = .zero, 
+        ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
+        public init(offset: CGPoint = .zero,
              edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
              hMargin: CGFloat = 20.0, 
              vMargin: CGFloat = 20.0,
              spacing: CGFloat = 4.0,
              minSize: CGSize = .zero,
-             isSquare: Bool = false) {
+             isSquare: Bool = false,
+             isSafeAreaLayoutGuideEnabled: Bool = false) {
             self.offset = offset
             self.edgeInsets = edgeInsets
             self.hMargin = hMargin
@@ -113,6 +118,7 @@ extension HUD {
             self.spacing = spacing
             self.minSize = minSize
             self.isSquare = isSquare
+            self.isSafeAreaLayoutGuideEnabled = isSafeAreaLayoutGuideEnabled
         }
 
         /// Executes the given block passing the `Layout` in as its sole `inout` argument.
