@@ -7,15 +7,59 @@
 //
 
 import UIKit
+import LPHUD
 
 #warning("keyboard")
+#warning("进入后台就不转了")
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    final class Test {
+        func put() {
+            print("put hashTable.allObjects.count")
+        }
+        deinit {
+            print("Deinited")
+        }
+    }
+    let hashTable: NSHashTable<Test> = .weakObjects()
+//    let hashTable: NSHashTable<Test> = .init(options: [.weakMemory, .objectPointerPersonality], capacity: 0)
+    var ars: [Test] = [Test(),Test(),Test(),Test(),Test(),Test(),Test()]
+
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        ars.forEach { s in
+            hashTable.add(s)
+        }
+
+        print("1 hashTable.allObjects.count=\(hashTable.allObjects.count), \(hashTable.count)")
+
+        ars.removeAll()
+
+        print("2 hashTable.allObjects.count1=\(hashTable.allObjects.count), \(hashTable.count)")
+        hashTable.allObjects.forEach {
+            $0.put()
+        }
+        let enu2 = hashTable.objectEnumerator()
+        while let value = enu2.nextObject() {
+            guard let observer = value as? Test else { continue }
+            observer.put()
+        }
+        print("2 hashTable.allObjects.count2=\(hashTable.allObjects.count), \(hashTable.count)")
+
+        DispatchQueue.main.async { [self] in
+            print("3 hashTable.allObjects.count=\(hashTable.allObjects.count), \(hashTable.count)")
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+            print("4 hashTable.allObjects.count=\(hashTable.allObjects.count), \(hashTable.count)")
+        }
+//
+
+
+        KeyboardObserver.shared
         return true
     }
 

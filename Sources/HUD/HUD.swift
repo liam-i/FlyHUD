@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView, ProgressViewDelegate {
+open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
@@ -84,6 +84,12 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// Enable `count`. `Defaults to false`.
     public var isCountEnabled: Bool = false
 
+    public var isKeyboardObservationEnabled: Bool = false {
+        didSet {
+            isKeyboardObservationEnabled.notEqual(oldValue, do: updateKeyboardObserver())
+        }
+    }
+
     /// A Boolean value that controls the delivery of user events. `Defaults to false`.
     ///
     /// If set to true user events (click, touch) will be delivered normally to the HUD's parent view.
@@ -129,6 +135,9 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
 
     deinit {
+        cancelHideDelayWorkItem()
+        cancelGraceWorkItem()
+        cancelMinShowWorkItem()
         unregisterFromNotifications()
         #if DEBUG
         print("👍👍👍 HUD is released.")
@@ -725,5 +734,27 @@ open class HUD: BaseView, ProgressViewDelegate {
         guard isEventDeliveryEnabled else { return hitView }
         let bezelRect = contentView.convert(contentView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
+    }
+
+    private func updateKeyboardObserver() {
+        guard isKeyboardObservationEnabled else {
+            return KeyboardObserver.shared.remove(self)
+        }
+        KeyboardObserver.shared.add(self)
+    }
+
+    public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboard: KeyboardInfo) {
+        let options = AnimationOptions.beginFromCurrentState.union(.init(rawValue: keyboard.animationCurve << 16))
+        UIView.animate(withDuration: keyboard.animationDuration, delay: 0.0, options: options) { [self] in
+            guard keyboard.frameEnd.minY < UIScreen.main.bounds.height else {
+                return transform = .identity
+            }
+            let minY = frame.minY + safeAreaInsets.top
+            var y = (keyboard.frameEnd.minY - safeAreaInsets.top) / 2.0 + safeAreaInsets.top
+            if (y - contentView.bounds.midY) < minY {
+                y = minY + contentView.bounds.midY
+            }
+            transform = CGAffineTransform(translationX: 0.0, y: -max(contentView.frame.midY - y, 0.0))
+        }
     }
 }
