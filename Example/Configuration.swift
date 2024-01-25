@@ -20,9 +20,9 @@ struct Configuration {
 //    var mode: HUD.Mode = .indicator()
     var layout: HUD.Layout = .init()
     var contentColor: Color = .default
-    var contentViewStyle: BackgroundView.Style = .blur()
+    var bezelViewStyle: BackgroundView.Style = .blur()
     var backgroundViewStyle: BackgroundView.Style = .solidColor
-    var contentViewColor: Color = .default
+    var bezelViewColor: Color = .default
     var backgroundViewColor: Color = .default
 
 //    var progress: Float = 0.0

@@ -27,8 +27,8 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
     public private(set) lazy var button = RoundedButton(frame: .zero)
     /// The view containing the labels and indicator (or customView). The HUD object places the content in this view in front of any background views.
-    public private(set) lazy var contentView = BackgroundView(frame: .zero)
-    /// View covering the entire HUD area, placed behind contentView.
+    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
+    /// View covering the entire HUD area, placed behind bezelView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
     /// HUD operation mode. `Default to .indicator(.large)`.
@@ -84,9 +84,19 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Enable `count`. `Defaults to false`.
     public var isCountEnabled: Bool = false
 
-    public var isKeyboardObservationEnabled: Bool = false {
+    /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
+    /// - Note: Global configuration. Priority less than member property keyboardGuide.
+    public static var keyboardGuide: KeyboardGuide = .disable {
         didSet {
-            isKeyboardObservationEnabled.notEqual(oldValue, do: updateKeyboardObserver())
+            keyboardGuide.notEqual(oldValue, do: updateKeyboardObserver())
+        }
+    }
+    /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to nil`.
+    /// - Note: Priority greater than static property keyboardGuide.
+    /// - Note: If set to nil, the static property keyboardGuide is used.
+    public var keyboardGuide: KeyboardGuide? {
+        didSet {
+            keyboardGuide.notEqual(oldValue, do: updateKeyboardObserver())
         }
     }
 
@@ -112,6 +122,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
 
     private var isFinished: Bool = false
     private var indicator: UIView?
+    private var contentView = UIView(frame: .zero)
     private var showStarted: Date?
     private var paddingConstraints: [NSLayoutConstraint]?
     private var bezelConstraints: [NSLayoutConstraint]?
@@ -131,6 +142,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         layer.allowsGroupOpacity = false
         setupViews()
         updateIndicators()
+        updateKeyboardObserver()
         registerForNotifications()
     }
 
@@ -149,11 +161,13 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Finds the top-most HUD subview that hasn't finished and returns it.
     /// - Parameter view: The view that is going to be searched.
     /// - Returns: A reference to the last HUD subview discovered.
-    public class func hud(for view: UIView) -> HUD? {
-        for case let hud as HUD in view.subviews.reversed() where hud.isFinished == false {
-            return hud
+    public class func huds(for view: UIView) -> [HUD] {
+        view.subviews.compactMap {
+            if let hud = $0 as? HUD, hud.isFinished == false {
+                return hud
+            }
+            return nil
         }
-        return nil
     }
 
     /// Creates a new HUD. adds it to provided view and shows it. And auto hides the HUD after a duration.
@@ -204,10 +218,6 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
-        if let hud = hud(for: view), hud.isCountEnabled {
-            hud.count += 1
-            return hud
-        }
         return HUD(frame: view.bounds).with { // Creates a new HUD
             $0.animation = animation
             $0.mode = mode
@@ -226,9 +236,10 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     @discardableResult
     public class func hide(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
-        guard let hud = hud(for: view) else { return false }
-        hud.hide(using: animation, afterDelay: delay)
-        return true
+        huds(for: view).allSatisfy {
+            $0.hide(using: animation, afterDelay: delay)
+            return true
+        }
     }
 
     /// Displays the HUD.
@@ -275,7 +286,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
 
     private func performShow(_ animation: Animation) {
         // Cancel any previous animations
-        contentView.layer.removeAllAnimations()
+        bezelView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
 
         showStarted = Date()
@@ -283,7 +294,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         indicator?.isHidden = false
 
         updateBezelMotionEffects() // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
-
+        updateKeyboardGuide()
         perform(animation, showing: true, completion: nil)
     }
 
@@ -354,8 +365,8 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     private func perform(_ animation: Animation, showing: Bool, completion: (() -> Void)?) {
         let alpha: CGFloat = showing ? 1.0 : 0.0
         let completionBlock: (Bool) -> Void = { _ in
-            self.contentView.transform = .identity // Reset, after the animation is completed
-            self.contentView.alpha = alpha
+            self.bezelView.transform = .identity // Reset, after the animation is completed
+            self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
             completion?()
         }
@@ -375,7 +386,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         }
 
         // Set starting state
-        if showing && contentView.alpha == 0.0 {
+        if showing && bezelView.alpha == 0.0 {
             transform(to: style, isInvert: true)
         }
 
@@ -386,7 +397,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             } else {
                 self.transform(to: style, isInvert: false)
             }
-            self.contentView.alpha = alpha
+            self.bezelView.alpha = alpha
             self.backgroundView.alpha = alpha
         }, completion: completionBlock)
     }
@@ -404,17 +415,17 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     private func transform(to style: Animation.Style) {
         switch style {
         case .zoomIn:
-            contentView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            bezelView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         case .zoomOut:
-            contentView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            bezelView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         case .slideUp:
             layoutIfNeeded()
-            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - contentView.frame.maxY)
+            bezelView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - bezelView.frame.maxY)
         case .slideDown:
             layoutIfNeeded()
-            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.minY)
+            bezelView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - bezelView.frame.minY)
         default:
-            contentView.transform = .identity
+            bezelView.transform = .identity
         }
     }
 
@@ -444,13 +455,17 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             $0.alpha = 0.0
         })
         addSubview(contentView.with {
+            $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            $0.backgroundColor = .clear
+        })
+        contentView.addSubview(bezelView.with {
             $0.color = .HUDBackground
             $0.roundedCorners = .radius(5.0)
             $0.style = .blur()
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.alpha = 0.0
         })
-        contentView.addSubview(label.with {
+        bezelView.addSubview(label.with {
             $0.adjustsFontSizeToFitWidth = false
             $0.textAlignment = .center
             $0.textColor = defaultColor
@@ -458,7 +473,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             $0.isOpaque = false
             $0.backgroundColor = .clear
         })
-        contentView.addSubview(detailsLabel.with {
+        bezelView.addSubview(detailsLabel.with {
             $0.adjustsFontSizeToFitWidth = false
             $0.textAlignment = .center
             $0.textColor = defaultColor
@@ -467,7 +482,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             $0.isOpaque = false
             $0.backgroundColor = .clear
         })
-        contentView.addSubview(button.with {
+        bezelView.addSubview(button.with {
             $0.titleLabel?.textAlignment = .center
             $0.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
             $0.setTitleColor(defaultColor, for: .normal)
@@ -481,7 +496,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     private func updateIndicators() {
         func setIndicator(_ newValue: UIView?) {
             indicator?.removeFromSuperview()
-            if let newValue = newValue { contentView.addSubview(newValue) }
+            if let newValue = newValue { bezelView.addSubview(newValue) }
             indicator = newValue
         }
 
@@ -556,11 +571,11 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
                         $0.minimumRelativeValue = -effectOffset
                     }
                 ]
-                contentView.addMotionEffect($0)
+                bezelView.addMotionEffect($0)
             }
         } else if let motionEffects = bezelMotionEffects {
             bezelMotionEffects = nil
-            contentView.removeMotionEffect(motionEffects)
+            bezelView.removeMotionEffect(motionEffects)
         }
     }
 
@@ -578,14 +593,14 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         // Remove existing constraints
         removeConstraints(constraints)
         if let bezelConstraints = self.bezelConstraints {
-            contentView.removeConstraints(bezelConstraints)
+            bezelView.removeConstraints(bezelConstraints)
             self.bezelConstraints = nil
         }
 
         // Center bezel in container (self), applying the offset if set
         let centeringConstraints: [NSLayoutConstraint] = [
-            contentView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
-            contentView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
+            bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
+            bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
         ]
         addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
 
@@ -598,25 +613,25 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             anchor = (leadingAnchor, trailingAnchor, topAnchor, bottomAnchor)
         }
         let sideConstraints: [NSLayoutConstraint] = [
-            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: anchor.leading, constant: layout.edgeInsets.left),
-            contentView.trailingAnchor.constraint(lessThanOrEqualTo: anchor.trailing, constant: -layout.edgeInsets.right),
-            contentView.topAnchor.constraint(greaterThanOrEqualTo: anchor.top, constant: layout.edgeInsets.top),
-            contentView.bottomAnchor.constraint(lessThanOrEqualTo: anchor.bottom, constant: -layout.edgeInsets.bottom),
+            bezelView.leadingAnchor.constraint(greaterThanOrEqualTo: anchor.leading, constant: layout.edgeInsets.left),
+            bezelView.trailingAnchor.constraint(lessThanOrEqualTo: anchor.trailing, constant: -layout.edgeInsets.right),
+            bezelView.topAnchor.constraint(greaterThanOrEqualTo: anchor.top, constant: layout.edgeInsets.top),
+            bezelView.bottomAnchor.constraint(lessThanOrEqualTo: anchor.bottom, constant: -layout.edgeInsets.bottom),
         ]
         addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
 
         // Minimum bezel size, if set
         if !layout.minSize.equalTo(.zero) {
             let minSizeConstraints: [NSLayoutConstraint] = [
-                contentView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
-                contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
+                bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
+                bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
             ]
             bezelConstraints.append(contentsOf: minSizeConstraints.apply(UILayoutPriority(997.0)))
         }
 
         // Square aspect ratio, if set
         if layout.isSquare {
-            let square = contentView.heightAnchor.constraint(equalTo: contentView.widthAnchor)
+            let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
             bezelConstraints.append(square.apply(UILayoutPriority(997.0)))
         }
 
@@ -626,19 +641,19 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         for (idx, view) in subviews.enumerated() {
             bezelConstraints.append(contentsOf: [
                 // Center in bezel
-                view.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                view.centerXAnchor.constraint(equalTo: bezelView.centerXAnchor),
                 // Ensure the minimum edge margin is kept
-                view.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: layout.hMargin),
-                view.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -layout.hMargin)
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: bezelView.leadingAnchor, constant: layout.hMargin),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: bezelView.trailingAnchor, constant: -layout.hMargin)
             ])
 
             // Element spacing
             if idx == 0 {
                 // First, ensure spacing to bezel edge
-                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: layout.vMargin))
+                bezelConstraints.append(view.topAnchor.constraint(greaterThanOrEqualTo: bezelView.topAnchor, constant: layout.vMargin))
             } else if idx == lastSubviewIDX {
                 // Last, ensure spacing to bezel edge
-                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -layout.vMargin))
+                bezelConstraints.append(view.bottomAnchor.constraint(lessThanOrEqualTo: bezelView.bottomAnchor, constant: -layout.vMargin))
             }
 
             if idx > 0 {
@@ -649,7 +664,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             }
         }
 
-        contentView.addConstraints(bezelConstraints)
+        bezelView.addConstraints(bezelConstraints)
         self.bezelConstraints = bezelConstraints
         self.paddingConstraints = paddingConstraints
         self.updatePaddingConstraints()
@@ -732,29 +747,67 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
         guard isEventDeliveryEnabled else { return hitView }
-        let bezelRect = contentView.convert(contentView.bounds, to: self)
+        let bezelRect = bezelView.convert(bezelView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
     }
 
+    private static func updateKeyboardObserver() {
+        guard keyboardGuide != .disable else { return }
+        _ = KeyboardObserver.shared // Enable keyboard observer
+    }
+
     private func updateKeyboardObserver() {
-        guard isKeyboardObservationEnabled else {
+        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
             return KeyboardObserver.shared.remove(self)
         }
         KeyboardObserver.shared.add(self)
     }
 
-    public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboard: KeyboardInfo) {
-        let options = AnimationOptions.beginFromCurrentState.union(.init(rawValue: keyboard.animationCurve << 16))
-        UIView.animate(withDuration: keyboard.animationDuration, delay: 0.0, options: options) { [self] in
-            guard keyboard.frameEnd.minY < UIScreen.main.bounds.height else {
-                return transform = .identity
-            }
-            let minY = frame.minY + safeAreaInsets.top
-            var y = (keyboard.frameEnd.minY - safeAreaInsets.top) / 2.0 + safeAreaInsets.top
-            if (y - contentView.bounds.midY) < minY {
-                y = minY + contentView.bounds.midY
-            }
-            transform = CGAffineTransform(translationX: 0.0, y: -max(contentView.frame.midY - y, 0.0))
+    public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo) {
+        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
+            return KeyboardObserver.shared.remove(self)
         }
+        updateKeyboardGuide(with: keyboardInfo, animated: true)
+    }
+
+    private func updateKeyboardGuide() {
+        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
+            return
+        }
+        guard let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
+        updateKeyboardGuide(with: keyboardInfo, animated: false)
+    }
+
+    private func updateKeyboardGuide(with keyboard: KeyboardInfo, animated: Bool) {
+        let animations: () -> Void = { [self] in
+            guard keyboard.frameEnd.minY < UIScreen.main.bounds.height else {
+                return contentView.transform = .identity
+            }
+
+            //var safeAreaInsets = safeAreaInsets
+            //if safeAreaInsets == .zero, bounds == UIScreen.main.bounds,
+            //    let appWindow = UIApplication.shared.delegate?.window, let windowValue = appWindow {
+            //    safeAreaInsets = windowValue.safeAreaInsets
+            //}
+            let keyboardGuide = keyboardGuide ?? HUD.keyboardGuide
+
+            if case let .center(offsetY) = keyboardGuide {
+                var y = (keyboard.frameEnd.minY - safeAreaInsets.top) / 2.0 + safeAreaInsets.top + offsetY
+                if (y - bezelView.bounds.midY) < 0.0 {
+                    y = bezelView.bounds.midY
+                }
+                contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.midY - y, 0.0))
+            } else if case let .bottom(spacing) = keyboardGuide {
+                let y = max(keyboard.frameEnd.minY - bezelView.bounds.height - spacing, 0.0)
+                contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.minY - y, 0.0))
+            }
+        }
+
+        layoutIfNeeded()
+        guard animated else {
+            return animations()
+        }
+        let options = AnimationOptions.beginFromCurrentState.union(.init(rawValue: keyboard.animationCurve << 16))
+        UIView.animate(withDuration: keyboard.animationDuration, delay: 0.0, options: options, animations: animations)
     }
 }

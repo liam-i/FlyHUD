@@ -9,32 +9,39 @@ import UIKit
 
 public struct KeyboardInfo {
     /// The duration of the keyboard animation in seconds.
-    public var animationDuration: TimeInterval = 0.0
+    public let animationDuration: TimeInterval
     /// The animation curve that the system uses to animate the keyboard onto or off the screen.
-    public var animationCurve: UInt = 0
+    public let animationCurve: UInt
     /// The keyboard’s frame at the beginning of its animation.
-    public var frameBegin: CGRect = .zero
+    public let frameBegin: CGRect
     /// The keyboard’s frame at the end of its animation.
-    public var frameEnd: CGRect = .zero
+    public let frameEnd: CGRect
 
     /// A boolean value indicating whether the keyboard is visible.
-    public var isVisible: Bool = false
+    public let isVisible: Bool
 }
 
 public protocol KeyboardObservable: AnyObject {
-    func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboard: KeyboardInfo)
+    func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo)
 }
 
+/// A keyboard observer that tracks the keyboard’s position in your app’s layout.
 public class KeyboardObserver {
+    /// The shared singleton keyboard observer object.
     public static let shared = { KeyboardObserver() }()
-    public private(set) var keyboardInfo = KeyboardInfo()
+    /// This property contains detailed information about the keyboard's animation, frame, and whether it is visible.
+    public private(set) var keyboardInfo: KeyboardInfo?
 
     private var observers: NSHashTable<AnyObject> = .weakObjects()
 
+    /// Adds a given object to the keyboard observer list.
+    /// - Parameter observer: The object to add to the keyboard observer list. This object must implement the KeyboardObservable protocol.
     public func add(_ observer: KeyboardObservable) {
         observers.add(observer)
     }
 
+    /// Removes a given object from the keyboard observer list.
+    /// - Parameter observer: The object to remove from the keyboard observer list. This object must implement the KeyboardObservable protocol.
     public func remove(_ observer: KeyboardObservable) {
         observers.remove(observer)
     }

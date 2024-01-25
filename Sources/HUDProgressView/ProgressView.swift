@@ -190,7 +190,6 @@ public class ProgressView: BaseView, ProgressViewable {
 
     private var windowIsNil: Bool = false
     public override func didMoveToWindow() {
-        super.didMoveToWindow()
         guard window != nil else { return windowIsNil = true }
         guard windowIsNil else { return }
         windowIsNil = false
