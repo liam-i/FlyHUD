@@ -163,7 +163,7 @@ class ViewController: UITableViewController, HUDDelegate {
         initControls()
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 30.0 }
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 28.0 }
 
     // MARK: -
 
