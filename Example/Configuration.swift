@@ -38,6 +38,8 @@ struct Configuration {
 //    var removeFromSuperViewOnHide: Bool = true
     var isCountEnabled: Bool = false
 
+    var keyboardGuide: HUD.KeyboardGuide?
+
     var isMotionEffectsEnabled: Bool = false
 //    weak var delegate: (ViewController & HUDDelegate)?
 //    var completionBlock: ((_ hud: HUD) -> Void)?
@@ -435,6 +437,19 @@ extension HUD.Mode: CustomStringConvertible {
         case .progress:         return true
         case .custom(let view): return view is ProgressViewable
         default:                return false
+        }
+    }
+}
+
+extension HUD.KeyboardGuide {
+    public static var allCases: [String] { ["disable", "center", "bottom", "default"] }
+
+    public init?(_ name: String) {
+        switch name {
+        case "disable": self = .disable
+        case "center": self = .center()
+        case "bottom": self = .bottom()
+        default: return nil
         }
     }
 }

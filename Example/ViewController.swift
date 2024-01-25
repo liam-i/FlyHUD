@@ -65,7 +65,7 @@ class ViewController: UITableViewController, HUDDelegate {
             $0.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
             $0.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
             if config.isButtonEnabled {
-                $0.button.addTarget(self, action: #selector(cancelTask), for: .primaryActionTriggered)
+                $0.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
             }
             $0.layout = config.layout
             $0.contentColor = config.contentColor.color
@@ -79,6 +79,7 @@ class ViewController: UITableViewController, HUDDelegate {
             $0.isCountEnabled = config.isCountEnabled
             $0.isEventDeliveryEnabled = config.isEventDeliveryEnabled
             $0.isMotionEffectsEnabled = config.isMotionEffectsEnabled
+            $0.keyboardGuide = config.keyboardGuide
         }
     }
 
@@ -241,6 +242,7 @@ class ViewController: UITableViewController, HUDDelegate {
         case "Count": Alert.switch(title, selected: setTitle(_:)) { self.config.isCountEnabled = $0 }
         case "Motio": Alert.switch(title, selected: setTitle(_:)) { self.config.isMotionEffectsEnabled = $0 }
         case "hideA": Alert.textField(title, selected: setTitle(_:)) { self.config.hideAfterDelay = $0 }
+        case "Keybo": Alert.list(title, list: HUD.KeyboardGuide.allCases, selected: setTitle(_:)) { self.config.keyboardGuide = HUD.KeyboardGuide($0) }
         default: print("‼️‼️‼️\(text)")
         }
     }
@@ -298,6 +300,7 @@ class ViewController: UITableViewController, HUDDelegate {
             case "Count": setTitle(config.isCountEnabled)
             case "Motio": setTitle(config.isMotionEffectsEnabled)
             case "hideA": setTitle(config.hideAfterDelay)
+            case "Keybo": setTitle(config.keyboardGuide)
             default: print("‼️‼️‼️\(text)")
             }
         }
