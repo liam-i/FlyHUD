@@ -793,24 +793,26 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         _ = KeyboardObserver.shared // Enable keyboard observer
     }
 
+    private var isKeyboardGuideEnabled: Bool {
+        (keyboardGuide == .disable || (keyboardGuide == nil && HUD.keyboardGuide == .disable)) == false
+    }
+
     private func updateKeyboardObserver() {
-        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
+        guard isKeyboardGuideEnabled else {
             return KeyboardObserver.shared.remove(self)
         }
         KeyboardObserver.shared.add(self)
     }
 
     public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo) {
-        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
+        guard isKeyboardGuideEnabled else {
             return KeyboardObserver.shared.remove(self)
         }
         updateKeyboardGuide(with: keyboardInfo, animated: true)
     }
 
     private func updateKeyboardGuide() {
-        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) { return }
-        guard let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
-
+        guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
         updateKeyboardGuide(with: keyboardInfo, animated: false)
     }
 

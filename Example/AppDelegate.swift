@@ -15,7 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        HUD.keyboardGuide = .center()
+
+        HUD.keyboardGuide = .center() // Enable keyboard guide
         return true
     }
 
