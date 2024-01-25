@@ -72,6 +72,8 @@ public class KeyboardObserver {
         )
         keyboardInfo = info
 
+        print("keyboardFrameWillChange=\(info.isVisible ? "显示" : "隐藏"), \(frameEnd.minY), \(UIScreen.main.bounds.height), \(UIScreen.main.bounds.maxY)")
+
         let enumerator = observers.objectEnumerator()
         while case let observer as KeyboardObservable = enumerator.nextObject() {
             observer.keyboardObserver(self, keyboardInfoWillChange: info)

@@ -536,15 +536,15 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="HUD property configuration" id="Cvq-pK-MTf">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="390" id="ewj-0B-CUE">
-                                        <rect key="frame" x="0.0" y="428.33333015441895" width="393" height="390"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="380" id="ewj-0B-CUE">
+                                        <rect key="frame" x="0.0" y="428.33333015441895" width="393" height="380"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ewj-0B-CUE" id="j7G-no-cTa">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="390"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="380"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="7Je-je-x9q">
-                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="344"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="371"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Lax-Qe-DJp">
                                                             <rect key="frame" x="0.0" y="0.0" width="393" height="26"/>
@@ -619,20 +619,8 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="gyf-xr-3wr">
                                                             <rect key="frame" x="0.0" y="54" width="393" height="26"/>
                                                             <subviews>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9It-PZ-un4">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="196" height="26"/>
-                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                    <state key="normal" title="tintColor">
-                                                                        <color key="titleColor" systemColor="labelColor"/>
-                                                                    </state>
-                                                                    <connections>
-                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="bh9-uU-D92"/>
-                                                                    </connections>
-                                                                </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DV9-zJ-Eht">
-                                                                    <rect key="frame" x="197" y="0.0" width="196" height="26"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="196" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -641,6 +629,18 @@
                                                                     </state>
                                                                     <connections>
                                                                         <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="s7k-GS-B9M"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9It-PZ-un4">
+                                                                    <rect key="frame" x="197" y="0.0" width="196" height="26"/>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" title="tintColor">
+                                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="bh9-uU-D92"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -1025,6 +1025,23 @@
                                                                 </button>
                                                             </subviews>
                                                         </stackView>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="gfJ-aV-rL8">
+                                                            <rect key="frame" x="0.0" y="345" width="393" height="26"/>
+                                                            <subviews>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8y-dJ-gWk">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="26"/>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" title="KeyboardGuide">
+                                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="MwD-yO-tfs"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                        </stackView>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
@@ -1175,6 +1192,7 @@
                         <outletCollection property="propertiesButton" destination="gix-Mb-RRr" collectionClass="NSMutableArray" id="sFu-Zy-3hH"/>
                         <outletCollection property="propertiesButton" destination="DV9-zJ-Eht" collectionClass="NSMutableArray" id="waa-tY-E3G"/>
                         <outletCollection property="propertiesButton" destination="bjW-9q-ljW" collectionClass="NSMutableArray" id="r51-ma-klH"/>
+                        <outletCollection property="propertiesButton" destination="b8y-dJ-gWk" collectionClass="NSMutableArray" id="Ed1-GT-U4C"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gnj-RQ-7dc" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -121,9 +121,9 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Called after the HUD is hidden.
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
+    private lazy var contentView = UIView(frame: bounds)
     private var isFinished: Bool = false
     private var indicator: UIView?
-    private var contentView = UIView(frame: .zero)
     private var showStarted: Date?
     private var paddingConstraints: [NSLayoutConstraint]?
     private var bezelConstraints: [NSLayoutConstraint]?
@@ -818,7 +818,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
 
     private func updateKeyboardGuide(with keyboard: KeyboardInfo, animated: Bool) {
         let animations: () -> Void = { [self] in
-            guard keyboard.frameEnd.minY < UIScreen.main.bounds.height else {
+            guard keyboard.isVisible else {
                 return contentView.transform = .identity
             }
 
