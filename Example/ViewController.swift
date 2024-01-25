@@ -41,7 +41,6 @@ class ViewController: UITableViewController, HUDDelegate {
     }
 
     @IBAction func multipleHUDsButtonClicked(_ sender: UIButton) {
-
     }
 
     private func showHUD(_ mode: HUD.Mode, label: String? = nil) -> HUD {

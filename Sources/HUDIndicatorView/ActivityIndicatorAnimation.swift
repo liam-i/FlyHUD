@@ -71,7 +71,7 @@ enum ActivityIndicatorAnimation {
                 $0.animations = [scaleAnimation, opacityAnimation]
                 $0.timingFunction = CAMediaTimingFunction(name: .linear)
                 $0.duration = duration
-                $0.repeatCount = .infinity
+                $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
             }
             beginTimes.enumerated().forEach { (i, element) in
@@ -114,7 +114,7 @@ enum ActivityIndicatorAnimation {
             let groupAnimation = CAAnimationGroup().with {
                 $0.animations = [rotationAnimation, strokeEndAnimation, strokeStartAnimation]
                 $0.duration = strokeStartDuration + beginTime
-                $0.repeatCount = .infinity
+                $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
@@ -147,7 +147,8 @@ enum ActivityIndicatorAnimation {
                 let animation = CAKeyframeAnimation(keyPath: "position").with {
                     $0.path = UIBezierPath(arcCenter: center, radius: radius, startAngle: angle, endAngle: angle + 2 * .pi, clockwise: true).cgPath
                     $0.duration = 4.0
-                    $0.repeatCount = .infinity
+                    $0.repeatCount = .greatestFiniteMagnitude
+                    $0.isRemovedOnCompletion = false
                     $0.calculationMode = .paced
                 }
                 circle.add(animation, forKey: "circleAnimation")
@@ -164,12 +165,12 @@ enum ActivityIndicatorAnimation {
                 $0.toValue = 1
                 $0.duration = 0.8
                 $0.autoreverses = true
-                $0.isRemovedOnCompletion = false
             }
             let animation = CAAnimationGroup().with {
                 $0.animations = [rotationAnimation, strokeEndAnimation]
                 $0.duration = 1.6
-                $0.repeatCount = .infinity
+                $0.repeatCount = .greatestFiniteMagnitude
+                $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
             ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).with {
