@@ -14,7 +14,7 @@ class RotateImageView: UIImageView, RotateViewable {
 }
 
 class ViewController: UITableViewController, HUDDelegate {
-    private var v: UIView { navigationController?.view ?? view }
+    private var v: UIView { /*navigationController?.view ??*/ view }
 
     @IBAction func indicatorButtonClicked(_ sender: UIButton) {
         switch sender.superview?.viewWithTag(1000) {
