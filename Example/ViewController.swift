@@ -14,7 +14,7 @@ class RotateImageView: UIImageView, RotateViewable {
 }
 
 class ViewController: UITableViewController, HUDDelegate {
-    private var v: UIView { /*navigationController?.view ??*/ view }
+    private var v: UIView { navigationController?.view ?? view }
 
     @IBAction func indicatorButtonClicked(_ sender: UIButton) {
         switch sender.superview?.viewWithTag(1000) {
@@ -70,8 +70,8 @@ class ViewController: UITableViewController, HUDDelegate {
             }
             $0.layout = config.layout
             $0.contentColor = config.contentColor.color
-            $0.contentView.style = config.contentViewStyle
-            $0.contentView.color = config.contentViewColor == .default ? .HUDBackground : config.contentViewColor.color
+            $0.bezelView.style = config.bezelViewStyle
+            $0.bezelView.color = config.bezelViewColor == .default ? .HUDBackground : config.bezelViewColor.color
             $0.backgroundView.style = config.backgroundViewStyle
             $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
             $0.animation = config.animation
@@ -216,8 +216,8 @@ class ViewController: UITableViewController, HUDDelegate {
         case "Butto": Alert.switch(title, selected: setTitle(_:)) { self.config.isButtonEnabled = $0 }
         case "tintC": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentColor = $0 }
         case "taskT": Alert.textField(title, selected: setTitle(_:)) { self.config.takeTime = UInt32($0) }
-        case "cBlur": Alert.switch(title, selected: setTitle(_:)) { self.config.contentViewStyle = $0 ? .blur() : .solidColor }
-        case "cColo": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentViewColor = $0 }
+        case "beBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.bezelViewStyle = $0 ? .blur() : .solidColor }
+        case "beCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.bezelViewColor = $0 }
         case "bgBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.backgroundViewStyle = $0 ? .blur() : .solidColor }
         case "bgCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.backgroundViewColor = $0 }
         case "offse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.offset.y = $0 }
@@ -273,8 +273,8 @@ class ViewController: UITableViewController, HUDDelegate {
             case "Butto": setTitle(config.isButtonEnabled)
             case "tintC": setTitle(config.contentColor.rawValue)
             case "taskT": setTitle(config.takeTime)
-            case "cBlur": setTitle(config.contentViewStyle == .blur())
-            case "cColo": setTitle(config.contentViewColor.rawValue)
+            case "beBlu": setTitle(config.bezelViewStyle == .blur())
+            case "beCol": setTitle(config.bezelViewColor.rawValue)
             case "bgBlu": setTitle(config.backgroundViewStyle == .blur())
             case "bgCol": setTitle(config.backgroundViewColor.rawValue)
             case "offse": setTitle(config.layout.offset.y)

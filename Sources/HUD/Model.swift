@@ -110,7 +110,7 @@ extension HUD {
              spacing: CGFloat = 4.0,
              minSize: CGSize = .zero,
              isSquare: Bool = false,
-             isSafeAreaLayoutGuideEnabled: Bool = false) {
+             isSafeAreaLayoutGuideEnabled: Bool = true) {
             self.offset = offset
             self.edgeInsets = edgeInsets
             self.hMargin = hMargin
@@ -129,6 +129,18 @@ extension HUD {
             populator(&self)
             return self
         }
+    }
+
+    /// A layout guide that tracks the keyboard’s position in your app’s layout.
+    public enum KeyboardGuide: Equatable {
+        /// Disable keyboard tracking.
+        case disable
+        /// Center alignment.
+        /// - Parameter offsetY: The vertical offset of the bezel view relative to the center of the empty area. `Default to 0`.
+        case center(_ offsetY: CGFloat = 0.0)
+        /// Bezel view bottom relative to keyboard top layout.
+        /// - Parameter spacing: The spacing between the bottom of the bezel view and the top of the keyboard. `Default to 8`.
+        case bottom(_ spacing: CGFloat = 8.0)
     }
 }
 
