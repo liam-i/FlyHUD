@@ -1046,8 +1046,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="HUD" id="fMb-uS-lXR">
                         <barButtonItem key="leftBarButtonItem" style="done" id="beZ-1G-7No">
-                            <view key="customView" contentMode="scaleToFill" id="0mc-zf-SeN">
-                                <rect key="frame" x="16" y="5.6666666666666679" width="87" height="33"/>
+                            <view key="customView" contentMode="scaleToFill" ambiguous="YES" id="0mc-zf-SeN">
+                                <rect key="frame" x="16" y="5.6666666666666679" width="125" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lbF-s9-zTw">
@@ -1061,15 +1061,50 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" tag="1000" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obd-Up-Sin">
-                                        <rect key="frame" x="0.0" y="0.0" width="87" height="33"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <button opaque="NO" clipsSubviews="YES" tag="1000" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obd-Up-Sin">
+                                        <rect key="frame" x="0.0" y="0.0" width="66" height="33"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="66" id="yIR-qt-rT2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Keyboard">
                                             <color key="titleColor" systemColor="labelColor"/>
                                         </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" systemColor="systemGray2Color"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="showKeyboardButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="Les-m4-4I6"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6FB-Le-C4R">
+                                        <rect key="frame" x="71" y="0.0" width="58" height="33"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="58" id="Xft-R9-4jN"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Present">
+                                            <color key="titleColor" systemColor="labelColor"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" systemColor="systemGray2Color"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="ewt-GE-0bB" kind="presentation" id="pEZ-z4-2W5"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1077,8 +1112,11 @@
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Obd-Up-Sin" secondAttribute="bottom" id="7vO-tH-lcg"/>
                                     <constraint firstItem="lbF-s9-zTw" firstAttribute="top" secondItem="0mc-zf-SeN" secondAttribute="top" constant="10" id="FOb-WJ-qkr"/>
-                                    <constraint firstAttribute="trailing" secondItem="Obd-Up-Sin" secondAttribute="trailing" id="ZUA-gQ-fv4"/>
+                                    <constraint firstAttribute="bottom" secondItem="6FB-Le-C4R" secondAttribute="bottom" id="RSn-IV-BhH"/>
+                                    <constraint firstAttribute="trailing" secondItem="6FB-Le-C4R" secondAttribute="trailing" id="Ry6-FB-l9h"/>
+                                    <constraint firstItem="6FB-Le-C4R" firstAttribute="leading" secondItem="Obd-Up-Sin" secondAttribute="trailing" constant="5" id="gyK-oe-WbU"/>
                                     <constraint firstItem="lbF-s9-zTw" firstAttribute="leading" secondItem="0mc-zf-SeN" secondAttribute="leading" constant="10" id="il8-t5-u29"/>
+                                    <constraint firstItem="6FB-Le-C4R" firstAttribute="top" secondItem="0mc-zf-SeN" secondAttribute="top" id="sRG-B3-oSr"/>
                                     <constraint firstItem="Obd-Up-Sin" firstAttribute="leading" secondItem="0mc-zf-SeN" secondAttribute="leading" id="w1d-O7-Vmf"/>
                                     <constraint firstItem="Obd-Up-Sin" firstAttribute="top" secondItem="0mc-zf-SeN" secondAttribute="top" id="wV5-Fx-GFB"/>
                                 </constraints>
@@ -1143,6 +1181,24 @@
             </objects>
             <point key="canvasLocation" x="1024.6376811594205" y="158.70535714285714"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="zs9-th-lKA">
+            <objects>
+                <viewController id="ewt-GE-0bB" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oMv-Ls-hFs"/>
+                        <viewControllerLayoutGuide type="bottom" id="UwV-Lm-xEK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="I7T-zT-QAM">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KKv-lL-axu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1749" y="158"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="4aI-5Y-E0z">
             <objects>
@@ -1166,12 +1222,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loading" width="40" height="40"/>
+        <image name="loading" width="42.666667938232422" height="42.666667938232422"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1181,6 +1240,9 @@
         </systemColor>
         <systemColor name="systemFillColor">
             <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

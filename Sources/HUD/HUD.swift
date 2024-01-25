@@ -71,7 +71,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     public var isVisible: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
-    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:animated:)`,
+    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. `Defaults to 0.0 (no minimum show time)`.
@@ -79,9 +79,10 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Removes the HUD from its parent view when hidden. `Defaults to true`.
     public var removeFromSuperViewOnHide: Bool = true
 
-    /// Handle show `HUD` multiple times in the same `View` page.
+    /// This is an activity count that records multiple shows and hides of the same HUD object.
     public private(set) var count: Int = 0
-    /// Enable `count`. `Defaults to false`.
+    /// A Boolean value indicating whether the HUD is in the enable activity count. `Defaults to false`.
+    /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     public var isCountEnabled: Bool = false
 
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
@@ -158,9 +159,9 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
 
     // MARK: - Show & hide
 
-    /// Finds the top-most HUD subview that hasn't finished and returns it.
+    /// Find all unfinished HUD subviews and return them.
     /// - Parameter view: The view that is going to be searched.
-    /// - Returns: A reference to the last HUD subview discovered.
+    /// - Returns: A reference to all discovered HUD subviews.
     public class func huds(for view: UIView) -> [HUD] {
         view.subviews.compactMap {
             if let hud = $0 as? HUD, hud.isFinished == false {
@@ -168,6 +169,16 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             }
             return nil
         }
+    }
+
+    /// Finds the `top-most` HUD subview that hasn't finished and returns it.
+    /// - Parameter view: The view that is going to be searched.
+    /// - Returns: A reference to the last HUD subview discovered.
+    public class func hud(for view: UIView) -> HUD? {
+        for case let hud as HUD in view.subviews.reversed() where hud.isFinished == false {
+            return hud
+        }
+        return nil
     }
 
     /// Creates a new HUD. adds it to provided view and shows it. And auto hides the HUD after a duration.
@@ -181,6 +192,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .HUDVMaxOffset`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
     public class func showStatus(
         to view: UIView,
@@ -196,11 +208,12 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             $0.layout.offset = offset
             populator?($0)
         }.with {
+            $0.removeFromSuperViewOnHide = true
             $0.hide(using: animation, afterDelay: duration)
         }
     }
 
-    /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:animated:)`.
+    /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:using:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - animation: Use HUD.Animation.  `Default to (style:.fade,duration:0.3,damping:.disable)`.
@@ -209,6 +222,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
     public class func show(
         to view: UIView,
@@ -218,33 +232,54 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
-        return HUD(frame: view.bounds).with { // Creates a new HUD
+        HUD(frame: view.bounds).with { // Creates a new HUD
             $0.animation = animation
             $0.mode = mode
             $0.label.text = label
             $0.detailsLabel.text = detailsLabel
             populator?($0)
             view.addSubview($0)
+            $0.removeFromSuperViewOnHide = true
             $0.show(using: $0.animation)
         }
     }
 
-    /// Finds the top-most HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:...)`.
+    /// Finds the `top-most` HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:...)`.
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Returns: true if a HUD was found and removed, false otherwise.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
     public class func hide(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
-        huds(for: view).allSatisfy {
+        guard let hud = hud(for: view) else { return false }
+        hud.removeFromSuperViewOnHide = true
+        hud.hide(using: animation, afterDelay: delay)
+        return true
+    }
+
+    /// Find all unfinished HUD subviews and hide them. The counterpart to this method is `show(to:using:...)`.
+    /// - Parameters:
+    ///   - view: The view that is going to be searched for a HUD subview.
+    ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Returns: true if one or more HUDs were found and removed, false otherwise.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
+    @discardableResult
+    public class func hideAll(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
+        let huds = huds(for: view)
+        huds.forEach {
+            $0.removeFromSuperViewOnHide = true
             $0.hide(using: animation, afterDelay: delay)
-            return true
         }
+        return huds.isEmpty == false
     }
 
     /// Displays the HUD.
     /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     public func show(using animation: Animation? = nil) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
         show(animation ?? self.animation)
@@ -254,12 +289,14 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Parameters:
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     public func hide(using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
         hide(animation ?? self.animation, afterDelay: delay)
     }
 
     private func show(_ animation: Animation) {
+        // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
         if isCountEnabled {
             count += 1
         }
@@ -267,7 +304,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         isFinished = false
         cancelMinShowWorkItem()
         cancelGraceWorkItem() // Modified grace time to 0 and show again
-        cancelHideDelayWorkItem() // Cancel any scheduled hide(animated:afterDelay:) calls
+        cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
 
         // If the grace time is set, postpone the HUD display
         if graceTime > 0.0 {
@@ -303,7 +340,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             return hide(animation)
         }
 
-        cancelHideDelayWorkItem() // Cancel any scheduled hide(animated:afterDelay:) calls
+        cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
         let workItem = DispatchWorkItem { [weak self] in
             self?.hide(animation)
         }
@@ -312,11 +349,11 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     }
 
     private func hide(_ animation: Animation) {
+        // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
+        // Hide HUD if count reaches 0. Returns if count has not reached 0.
         if isCountEnabled {
             count -= 1
-            if count > 0 {
-                return
-            }
+            if count > 0 { return }
         }
 
         cancelGraceWorkItem()
@@ -340,12 +377,12 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     }
 
     private func performHide(_ animation: Animation) {
-        // Cancel any scheduled hide(animated:afterDelay:) calls.
-        // This needs to happen here instead of in done, to avoid races if another hide(animated:afterDelay:)
+        // Cancel any scheduled hide(using:afterDelay:) calls.
+        // This needs to happen here instead of in done, to avoid races if another hide(using:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
         perform(animation, showing: false) {
-            // Cancel any scheduled hide(animated:afterDelay:) calls
+            // Cancel any scheduled hide(using:afterDelay:) calls
             self.cancelHideDelayWorkItem()
             self.indicator?.isHidden = true
 
@@ -771,10 +808,9 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     }
 
     private func updateKeyboardGuide() {
-        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) {
-            return
-        }
+        if (keyboardGuide == .disable) || (keyboardGuide == nil && HUD.keyboardGuide == .disable) { return }
         guard let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
+
         updateKeyboardGuide(with: keyboardInfo, animated: false)
     }
 

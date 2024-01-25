@@ -29,6 +29,7 @@ extension RotateViewable {
             $0.duration = duration
             $0.isCumulative = true
             $0.repeatCount = .greatestFiniteMagnitude
+            $0.isRemovedOnCompletion = false
             layer.add($0, forKey: HUD.viewRotationAnimationKey)
         }
     }
