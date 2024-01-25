@@ -1200,10 +1200,10 @@
             </objects>
             <point key="canvasLocation" x="1024.6376811594205" y="158.70535714285714"/>
         </scene>
-        <!--View Controller-->
+        <!--Present View Controller-->
         <scene sceneID="zs9-th-lKA">
             <objects>
-                <viewController id="ewt-GE-0bB" sceneMemberID="viewController">
+                <viewController id="ewt-GE-0bB" customClass="PresentViewController" customModule="HUD_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oMv-Ls-hFs"/>
                         <viewControllerLayoutGuide type="bottom" id="UwV-Lm-xEK"/>
@@ -1211,7 +1211,48 @@
                     <view key="view" contentMode="scaleToFill" id="I7T-zT-QAM">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGA-eU-2T3">
+                                <rect key="frame" x="16" y="210" width="123" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Hide All HUD"/>
+                                <connections>
+                                    <action selector="hideAllHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="KKi-nq-uNl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqe-eM-WlR">
+                                <rect key="frame" x="16" y="155" width="176" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Hide top-most HUD"/>
+                                <connections>
+                                    <action selector="hideTopHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="FrD-hY-AeN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XhQ-DG-OAO">
+                                <rect key="frame" x="16" y="100" width="107" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Show HUD"/>
+                                <connections>
+                                    <action selector="showHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="i8c-Xw-QmC"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Show Keyboard" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yQX-fl-mps">
+                                <rect key="frame" x="16" y="265" width="129" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="iqe-eM-WlR" firstAttribute="top" secondItem="XhQ-DG-OAO" secondAttribute="bottom" constant="20" id="4Wf-EZ-GqR"/>
+                            <constraint firstItem="XhQ-DG-OAO" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="6nq-tm-6U5"/>
+                            <constraint firstItem="iqe-eM-WlR" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="Gv8-Fu-9d2"/>
+                            <constraint firstItem="yQX-fl-mps" firstAttribute="top" secondItem="lGA-eU-2T3" secondAttribute="bottom" constant="20" id="QbK-4i-8NR"/>
+                            <constraint firstItem="lGA-eU-2T3" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="TNI-2M-mFW"/>
+                            <constraint firstItem="lGA-eU-2T3" firstAttribute="top" secondItem="iqe-eM-WlR" secondAttribute="bottom" constant="20" id="TZ2-Bb-h8i"/>
+                            <constraint firstItem="yQX-fl-mps" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="ZQT-oT-Udk"/>
+                            <constraint firstItem="XhQ-DG-OAO" firstAttribute="top" secondItem="oMv-Ls-hFs" secondAttribute="bottom" constant="100" id="fqU-N0-Bfp"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKv-lL-axu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1246,25 +1287,25 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemFillColor">
-            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
