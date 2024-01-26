@@ -12,7 +12,17 @@ import HUD
 
 /// Animation Builder
 public protocol ProgressAnimationBuildable {
-    func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
+    func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
+    func makeLabel(in layer: CALayer, progress: CGFloat, color: UIColor, font: UIFont)
+}
+
+extension ProgressAnimationBuildable {
+    public func makeLabel(in layer: CALayer, progress: CGFloat, color: UIColor, font: UIFont) {
+        let size = layer.bounds.size
+        let text = NSAttributedString(string: "\(Int(progress * 100))%", attributes: [.font: font, .foregroundColor: color])
+        let textSize = text.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
+        text.draw(in: CGRect(x: (size.width - textSize.width) / 2.0, y: (size.height - textSize.height) / 2.0, width: size.width, height: size.height))
+    }
 }
 
 enum ProgressAnimation {
@@ -20,8 +30,7 @@ enum ProgressAnimation {
     struct Bar: ProgressAnimationBuildable {
         let isRound: Bool
 
-        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
-            let color = color ?? .clear
+        func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.frame.size
 
             let lineWidthHalf = lineWidth / 2.0
@@ -35,7 +44,7 @@ enum ProgressAnimation {
             }
 
             guard isRound else {
-                return drawButtBar(progress, in: size, color: color, lineWidth: lineWidth)
+                return makeButtBar(in: size, progress: progress, color: color, lineWidth: lineWidth)
             }
 
             let spacing = (min(size.height, size.width) - lineWidth * 3) / 2
@@ -54,7 +63,7 @@ enum ProgressAnimation {
             }
         }
 
-        private func drawButtBar(_ progress: CGFloat, in size: CGSize, color: UIColor, lineWidth: CGFloat) {
+        private func makeButtBar(in size: CGSize, progress: CGFloat, color: UIColor, lineWidth: CGFloat) {
             guard let context = UIGraphicsGetCurrentContext() else { return }
 
             let spacing = (min(size.height, size.width) - lineWidth * 3) / 2
@@ -128,11 +137,11 @@ enum ProgressAnimation {
         /// Display mode - false = round or true = annular. Defaults to round.
         let isAnnular: Bool
 
-        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
-            let (color, trackColor, bounds) = (color ?? .clear, trackColor ?? .clear, layer.bounds)
+        func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
+            let (trackColor, bounds) = (trackColor ?? .clear, layer.bounds)
 
             guard isAnnular else {
-                return drawRound(progress, in: bounds, color: color, trackColor: trackColor, lineWidth: lineWidth)
+                return makeRound(in: bounds, progress: progress, color: color, trackColor: trackColor, lineWidth: lineWidth)
             }
 
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
@@ -161,7 +170,7 @@ enum ProgressAnimation {
             }
         }
 
-        private func drawRound(_ progress: CGFloat, in bounds: CGRect, color: UIColor, trackColor: UIColor, lineWidth: CGFloat) {
+        private func makeRound(in bounds: CGRect, progress: CGFloat, color: UIColor, trackColor: UIColor, lineWidth: CGFloat) {
             guard let context = UIGraphicsGetCurrentContext() else { return assertionFailure() }
 
             // Draw background
@@ -198,7 +207,7 @@ enum ProgressAnimation {
     }
 
     struct Pie: ProgressAnimationBuildable {
-        func draw(progress: CGFloat, in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
             let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
             let radius = min(size.width, size.height) / 2.0 - lineWidth
@@ -207,7 +216,7 @@ enum ProgressAnimation {
                 $0.lineWidth = lineWidth
                 trackColor?.setFill()
                 $0.fill()
-                color?.set()
+                color.set()
                 $0.stroke()
             }
 

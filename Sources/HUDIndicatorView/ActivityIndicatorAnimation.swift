@@ -12,14 +12,14 @@ import HUD
 
 /// Animation Builder
 public protocol ActivityIndicatorAnimationBuildable {
-    func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat)
+    func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
 }
 
 enum ActivityIndicatorAnimation {
     static let key: String = "com.indicator.animation.key"
 
     struct RingClipRotate: ActivityIndicatorAnimationBuildable {
-        func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
             let duration: CFTimeInterval = 0.75
 
@@ -45,7 +45,7 @@ enum ActivityIndicatorAnimation {
     }
 
     struct BallSpinFade: ActivityIndicatorAnimationBuildable {
-        func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let bounds = layer.bounds
             let minSize = min(bounds.width, bounds.height)
             let spacing: CGFloat = 3.0
@@ -88,7 +88,7 @@ enum ActivityIndicatorAnimation {
     }
 
     struct CircleStrokeSpin: ActivityIndicatorAnimationBuildable {
-        func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
             let beginTime: CFTimeInterval = 0.5
             let strokeStartDuration: CFTimeInterval = 1.2
@@ -126,7 +126,7 @@ enum ActivityIndicatorAnimation {
     }
 
     struct CircleArcDotSpin: ActivityIndicatorAnimationBuildable {
-        func make(in layer: CALayer, color: UIColor?, trackColor: UIColor?, lineWidth: CGFloat) {
+        func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let bounds = layer.bounds
             let minSize = min(bounds.width, bounds.height)
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
@@ -140,7 +140,7 @@ enum ActivityIndicatorAnimation {
                 let circle = CALayer().with {
                     $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
                                       y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
-                    $0.backgroundColor = color?.cgColor
+                    $0.backgroundColor = color.cgColor
                     $0.cornerRadius = dotSize / 2.0
                     layer.addSublayer($0)
                 }

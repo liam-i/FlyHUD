@@ -39,7 +39,7 @@ extension UIActivityIndicatorView: ActivityIndicatorViewable {
 
 extension UIActivityIndicatorView.Style {
     /// Defaults to UIActivityIndicatorView.Style.large
-    public static var largeOfHUD: UIActivityIndicatorView.Style {
+    public static var HUDLarge: UIActivityIndicatorView.Style {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return .large
         } else {

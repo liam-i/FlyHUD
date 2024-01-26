@@ -60,7 +60,10 @@ class ViewController: UITableViewController, HUDDelegate {
     }
 
     private func customHUD(_ mode: HUD.Mode, label: String?) -> HUD {
-        HUD.show(to: v, using: config.currAnimation, mode: mode) { [self] in
+        if case let .custom(view) = mode, let progressView = view as? ProgressView {
+            progressView.isLabelEnabled = progressView.style.isEqual(ProgressView.Style.round) || progressView.style.isEqual(ProgressView.Style.annularRound)
+        }
+        return HUD.show(to: v, using: config.currAnimation, mode: mode) { [self] in
             $0.label.text = label ?? (config.isLabelEnabled ? mode.description : nil)
             $0.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
             $0.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
@@ -119,7 +122,9 @@ class ViewController: UITableViewController, HUDDelegate {
         progressStackView.arrangedSubviews.forEach {
             ($0 as? UIStackView)?.arrangedSubviews.forEach {
                 ($0.viewWithTag(1000) as? ProgressView)?.with({
-                    $0.style = ProgressView.Style.allCases[idx]
+                    let style = ProgressView.Style.allCases[idx]
+                    $0.style = style
+                    $0.isLabelEnabled = style == .round || style == .annularRound
                     progressViews.append($0)
                     idx += 1
                 })
@@ -328,4 +333,9 @@ class ViewController: UITableViewController, HUDDelegate {
         guard text == "fStyl" || text == "fDamp" || text == "fDura" else { return }
         sender.isHidden = config.isForceAnimationEnabled == false
     }
+
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        print("view=\(view.safeAreaInsets), \(navigationController!.view.safeAreaInsets)")
+//    }
 }

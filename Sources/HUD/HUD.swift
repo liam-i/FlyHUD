@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
+open class HUD: BaseView, ProgressViewDelegate {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
@@ -85,6 +85,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     public var isCountEnabled: Bool = false
 
+#if !os(tvOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
     /// - Note: Global configuration. Priority less than member property keyboardGuide.
     public static var keyboardGuide: KeyboardGuide = .disable {
@@ -100,6 +101,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
             keyboardGuide.notEqual(oldValue, do: updateKeyboardObserver())
         }
     }
+#endif
 
     /// A Boolean value that controls the delivery of user events. `Defaults to false`.
     ///
@@ -143,18 +145,22 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         layer.allowsGroupOpacity = false
         setupViews()
         updateIndicators()
+#if !os(tvOS)
         updateKeyboardObserver()
         registerForNotifications()
+#endif
     }
 
     deinit {
         cancelHideDelayWorkItem()
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
+#if !os(tvOS)
         unregisterFromNotifications()
-        #if DEBUG
+#endif
+#if DEBUG
         print("👍👍👍 HUD is released.")
-        #endif
+#endif
     }
 
     // MARK: - Show & hide
@@ -185,7 +191,27 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
-    ///   - animation: Use HUD.Animation.  `Default to (style:.fade,duration:0.3,damping:.disable)`.
+    ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Default to true`.
+    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
+    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
+    ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .HUDVMaxOffset`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    /// - Returns: A reference to the created HUD.
+    /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
+    @discardableResult
+    public class func showStatus(to view: UIView, duration: TimeInterval = 2.0, animated: Bool = true, mode: Mode = .text,
+                                 label: String? = nil, detailsLabel: String? = nil, offset: CGPoint = .HUDVMaxOffset, populator: ((HUD) -> Void)? = nil) -> HUD {
+        showStatus(to: view, duration: duration, using: animated ? .init() : .init(style: .none), mode: mode, 
+                   label: label, detailsLabel: detailsLabel, offset: offset, populator: populator)
+    }
+
+    /// Creates a new HUD. adds it to provided view and shows it. And auto hides the HUD after a duration.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
+    ///   - animation: Use HUD.Animation.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
@@ -194,16 +220,8 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func showStatus(
-        to view: UIView,
-        duration: TimeInterval = 2.0,
-        using animation: Animation = .init(),
-        mode: Mode = .text,
-        label: String? = nil,
-        detailsLabel: String? = nil,
-        offset: CGPoint = .HUDVMaxOffset,
-        populator: ((HUD) -> Void)? = nil
-    ) -> HUD {
+    public class func showStatus(to view: UIView, duration: TimeInterval = 2.0, using animation: Animation, mode: Mode = .text,
+                                 label: String? = nil, detailsLabel: String? = nil, offset: CGPoint = .HUDVMaxOffset, populator: ((HUD) -> Void)? = nil) -> HUD {
         show(to: view, using: animation, mode: mode, label: label, detailsLabel: detailsLabel) {
             $0.layout.offset = offset
             populator?($0)
@@ -216,7 +234,24 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:using:)`.
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - animation: Use HUD.Animation.  `Default to (style:.fade,duration:0.3,damping:.disable)`.
+    ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Default to true`.
+    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
+    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    /// - Returns: A reference to the created HUD.
+    /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
+    @discardableResult
+    public class func show(to view: UIView, animated: Bool = true, mode: Mode = .indicator(),
+                           label: String? = nil, detailsLabel: String? = nil, populator: ((HUD) -> Void)? = nil) -> HUD {
+        show(to: view, using: animated ? .init() : .init(style: .none), mode: mode, label: label, detailsLabel: detailsLabel, populator: populator)
+    }
+
+    /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:using:)`.
+    /// - Parameters:
+    ///   - view: The view that the HUD will be added to
+    ///   - animation: Use HUD.Animation.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
@@ -224,14 +259,8 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func show(
-        to view: UIView,
-        using animation: Animation = .init(),
-        mode: Mode = .indicator(),
-        label: String? = nil,
-        detailsLabel: String? = nil,
-        populator: ((HUD) -> Void)? = nil
-    ) -> HUD {
+    public class func show(to view: UIView, using animation: Animation, mode: Mode = .indicator(),
+                           label: String? = nil, detailsLabel: String? = nil, populator: ((HUD) -> Void)? = nil) -> HUD {
         HUD(frame: view.bounds).with { // Creates a new HUD
             $0.animation = animation
             $0.mode = mode
@@ -247,16 +276,40 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// Finds the `top-most` HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:...)`.
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Returns: true if a HUD was found and removed, false otherwise.
+    /// - SeeAlso: HUD.Animation.
+    @discardableResult
+    public class func hide(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
+        hide(for: view, using: animated ? nil : .init(style: .none), afterDelay: delay)
+    }
+
+    /// Finds the `top-most` HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:...)`.
+    /// - Parameters:
+    ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
-    public class func hide(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    public class func hide(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
         guard let hud = hud(for: view) else { return false }
         hud.removeFromSuperViewOnHide = true
         hud.hide(using: animation, afterDelay: delay)
         return true
+    }
+
+    /// Find all unfinished HUD subviews and hide them. The counterpart to this method is `show(to:using:...)`.
+    /// - Parameters:
+    ///   - view: The view that is going to be searched for a HUD subview.
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Returns: true if one or more HUDs were found and removed, false otherwise.
+    /// - SeeAlso: HUD.Animation.
+    @discardableResult
+    public class func hideAll(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
+        hideAll(for: view, using: animated ? nil : .init(style: .none), afterDelay: delay)
     }
 
     /// Find all unfinished HUD subviews and hide them. The counterpart to this method is `show(to:using:...)`.
@@ -267,7 +320,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     /// - Returns: true if one or more HUDs were found and removed, false otherwise.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
-    public class func hideAll(for view: UIView, using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    public class func hideAll(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
         let huds = huds(for: view)
         huds.forEach {
             $0.removeFromSuperViewOnHide = true
@@ -277,12 +330,29 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     }
 
     /// Displays the HUD.
+    /// - Parameter animated: If set to true the HUD will appear using the current animation. If set to false the HUD will not use animations while appearing. `Default to true`.
+    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
+    /// - SeeAlso: HUD.Animation.
+    public func show(animated: Bool = true) {
+        show(using: animated ? nil : .init(style: .none))
+    }
+
+    /// Displays the HUD.
     /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
-    public func show(using animation: Animation? = nil) {
+    public func show(using animation: Animation?) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
         show(animation ?? self.animation)
+    }
+
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    /// - Parameters:
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - SeeAlso: HUD.Animation.
+    public func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
+        hide(using: animated ? nil : .init(style: .none), afterDelay: delay)
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
@@ -290,7 +360,7 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
-    public func hide(using animation: Animation? = nil, afterDelay delay: TimeInterval = 0.0) {
+    public func hide(using animation: Animation?, afterDelay delay: TimeInterval = 0.0) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
         hide(animation ?? self.animation, afterDelay: delay)
     }
@@ -331,7 +401,9 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         indicator?.isHidden = false
 
         updateBezelMotionEffects() // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
+#if !os(tvOS)
         updateKeyboardGuide()
+#endif
         perform(animation, showing: true, completion: nil)
     }
 
@@ -740,35 +812,13 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         }
     }
 
-    // MARK: - Progress
+    // MARK: - ProgressViewDelegate
 
     public func updateProgress(from observedProgress: Progress) {
         // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
         label.text = observedProgress.localizedDescription
         detailsLabel.text = observedProgress.localizedAdditionalDescription
     }
-
-    // MARK: - Notifications
-
-    private func registerForNotifications() {
-#if !os(tvOS)
-        NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationDidChange),
-                                               name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
-#endif
-    }
-
-    private func unregisterFromNotifications() {
-#if !os(tvOS)
-        NotificationCenter.default.removeObserver(self)
-#endif
-    }
-
-#if !os(tvOS)
-    @objc
-    private func statusBarOrientationDidChange(_ notification: Notification) {
-        updateForCurrentOrientation(animated: true)
-    }
-#endif
 
     // MARK: - View Hierarchy
 
@@ -787,10 +837,33 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         let bezelRect = bezelView.convert(bezelView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
     }
+}
 
+#if !os(tvOS)
+// MARK: - Notifications
+
+extension HUD {
+    private func registerForNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationDidChange),
+                                               name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
+    }
+
+    private func unregisterFromNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc
+    private func statusBarOrientationDidChange(_ notification: Notification) {
+        updateForCurrentOrientation(animated: true)
+    }
+}
+
+// MARK: - Keyboard Guide
+
+extension HUD: KeyboardObservable {
     private static func updateKeyboardObserver() {
         guard keyboardGuide != .disable else { return }
-        _ = KeyboardObserver.shared // Enable keyboard observer
+        KeyboardObserver.enable() // Enable keyboard observation
     }
 
     private var isKeyboardGuideEnabled: Bool {
@@ -822,21 +895,22 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
                 return contentView.transform = .identity
             }
 
-            //var safeAreaInsets = safeAreaInsets
-            //if safeAreaInsets == .zero, bounds == UIScreen.main.bounds,
-            //    let appWindow = UIApplication.shared.delegate?.window, let windowValue = appWindow {
-            //    safeAreaInsets = windowValue.safeAreaInsets
-            //}
             let keyboardGuide = keyboardGuide ?? HUD.keyboardGuide
 
+            let topSafeArea = safeAreaInsets.top
+            var frameToWindow = bounds
+            if let window = UIApplication.shared.delegate?.window {
+                frameToWindow = convert(frameToWindow, to: window)
+            }
+
             if case let .center(offsetY) = keyboardGuide {
-                var y = (keyboard.frameEnd.minY - safeAreaInsets.top) / 2.0 + safeAreaInsets.top + offsetY
+                var y = (keyboard.frameEnd.minY - topSafeArea - frameToWindow.minY) / 2.0 + topSafeArea + offsetY
                 if (y - bezelView.bounds.midY) < 0.0 {
                     y = bezelView.bounds.midY
                 }
                 contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.midY - y, 0.0))
             } else if case let .bottom(spacing) = keyboardGuide {
-                let y = max(keyboard.frameEnd.minY - bezelView.bounds.height - spacing, 0.0)
+                let y = max(keyboard.frameEnd.minY - bezelView.bounds.height - frameToWindow.minY - spacing, 0.0)
                 contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.minY - y, 0.0))
             }
         }
@@ -849,3 +923,4 @@ open class HUD: BaseView, ProgressViewDelegate, KeyboardObservable {
         UIView.animate(withDuration: keyboard.animationDuration, delay: 0.0, options: options, animations: animations)
     }
 }
+#endif
