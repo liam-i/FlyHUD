@@ -71,8 +71,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     public var isVisible: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all. This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
-    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
-    ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
+    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`, but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. `Defaults to 0.0 (no minimum show time)`.
     public var minShowTime: TimeInterval = 0.0
@@ -136,6 +135,12 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     // MARK: - Lifecycle
 
+    /// A convenience constructor that initializes the HUD with the `view's bounds`. Calls the designated constructor with `view.bounds` as the parameter.
+    /// - Parameter view: The view instance that will provide the `bounds` for the HUD. Should be the same instance as the HUD's superview (i.e., the view that the HUD will be added to).
+    public convenience init(with view: UIView) {
+        self.init(frame: view.bounds)
+    }
+
     /// Common initialization method, allowing overriding
     open override func commonInit() {
         isOpaque = false // Transparent background
@@ -180,7 +185,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// Finds the `top-most` HUD subview that hasn't finished and returns it.
     /// - Parameter view: The view that is going to be searched.
     /// - Returns: A reference to the last HUD subview discovered.
-    public class func hud(for view: UIView) -> HUD? {
+    public class func lastHUD(for view: UIView) -> HUD? {
         for case let hud as HUD in view.subviews.reversed() where hud.isFinished == false {
             return hud
         }
@@ -261,7 +266,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     @discardableResult
     public class func show(to view: UIView, using animation: Animation, mode: Mode = .indicator(),
                            label: String? = nil, detailsLabel: String? = nil, populator: ((HUD) -> Void)? = nil) -> HUD {
-        HUD(frame: view.bounds).with { // Creates a new HUD
+        HUD(with: view).with { // Creates a new HUD
             $0.animation = animation
             $0.mode = mode
             $0.label.text = label
@@ -294,7 +299,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
     public class func hide(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
-        guard let hud = hud(for: view) else { return false }
+        guard let hud = lastHUD(for: view) else { return false }
         hud.removeFromSuperViewOnHide = true
         hud.hide(using: animation, afterDelay: delay)
         return true
@@ -380,7 +385,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         if graceTime > 0.0 {
             let workItem = DispatchWorkItem { [weak self] in
                 // Show the HUD only if the task is still running
-                guard let `self` = self, !self.isFinished else { return }
+                guard let `self` = self, self.isFinished == false else { return }
                 self.performShow(animation)
             }
             graceWorkItem = workItem
@@ -598,7 +603,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         })
 
         for view in [label, detailsLabel, button] {
-            view.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
+            view.setContentCompressionResistancePriorityForAxis(998.0)
         }
     }
 
@@ -629,17 +634,17 @@ open class HUD: BaseView, ProgressViewDelegate {
         }
 
         if let indicator = indicator {
-            indicator.setContentCompressionResistancePriorityForAxis(UILayoutPriority(998.0))
+            indicator.setContentCompressionResistancePriorityForAxis(998.0)
 
-            if let activityIndicator = indicator as? ActivityIndicatorViewable, activityIndicator.isAnimating == false {
-                activityIndicator.startAnimating()
-            }
-            if let progressView = indicator as? ProgressViewable {
-                progressView.delegate = self
-                progressView.progress = progress
-            }
-            if let rotateView = indicator as? RotateViewable {
-                rotateView.startRotation()
+            switch indicator {
+            case let indicator as ActivityIndicatorViewable:
+                indicator.startAnimating()
+            case let indicator as ProgressViewable:
+                indicator.delegate = self
+                indicator.progress = progress
+            case let indicator as RotateViewable:
+                indicator.startRotating()
+            default: break
             }
         }
 
@@ -649,7 +654,6 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     private func updateViewsContentColor() {
         let contentColor = contentColor
-
         label.textColor = contentColor
         detailsLabel.textColor = contentColor
         button.setTitleColor(contentColor, for: .normal)
@@ -657,18 +661,15 @@ open class HUD: BaseView, ProgressViewDelegate {
         // UIAppearance settings are prioritized. If they are preset the set color is ignored.
         guard let indicator = indicator else { return }
         switch indicator {
-        case let indicator as ActivityIndicatorViewable:
-            indicator.color = contentColor
-        case let indicator as ProgressViewable:
-            indicator.progressTintColor = contentColor
-        default:
-            indicator.tintColor = contentColor
+        case let indicator as ActivityIndicatorViewable:    indicator.color = contentColor
+        case let indicator as ProgressViewable:             indicator.progressTintColor = contentColor
+        default:                                            indicator.tintColor = contentColor
         }
     }
 
     private func updateBezelMotionEffects() {
         if isMotionEffectsEnabled && bezelMotionEffects == nil {
-            let effectOffset = 10.0
+            let effectOffset: CGFloat = 10.0
             bezelMotionEffects = UIMotionEffectGroup().with {
                 $0.motionEffects = [
                     UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis).with {
@@ -711,7 +712,7 @@ open class HUD: BaseView, ProgressViewDelegate {
             bezelView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: layout.offset.x),
             bezelView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: layout.offset.y)
         ]
-        addConstraints(centeringConstraints.apply(UILayoutPriority(998.0)))
+        addConstraints(centeringConstraints.apply(priority: 998.0))
 
         // Ensure minimum side margin is kept
         let anchor: (leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor)
@@ -727,21 +728,21 @@ open class HUD: BaseView, ProgressViewDelegate {
             bezelView.topAnchor.constraint(greaterThanOrEqualTo: anchor.top, constant: layout.edgeInsets.top),
             bezelView.bottomAnchor.constraint(lessThanOrEqualTo: anchor.bottom, constant: -layout.edgeInsets.bottom),
         ]
-        addConstraints(sideConstraints.apply(UILayoutPriority(999.0)))
+        addConstraints(sideConstraints.apply(priority: 999.0))
 
         // Minimum bezel size, if set
-        if !layout.minSize.equalTo(.zero) {
+        if layout.minSize != .zero {
             let minSizeConstraints: [NSLayoutConstraint] = [
                 bezelView.widthAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.width),
                 bezelView.heightAnchor.constraint(greaterThanOrEqualToConstant: layout.minSize.height)
             ]
-            bezelConstraints.append(contentsOf: minSizeConstraints.apply(UILayoutPriority(997.0)))
+            bezelConstraints.append(contentsOf: minSizeConstraints.apply(priority: 997.0))
         }
 
         // Square aspect ratio, if set
         if layout.isSquare {
             let square = bezelView.heightAnchor.constraint(equalTo: bezelView.widthAnchor)
-            bezelConstraints.append(square.apply(UILayoutPriority(997.0)))
+            bezelConstraints.append(square.apply(priority: 997.0))
         }
 
         // Layout subviews in bezel
@@ -785,7 +786,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     open override func layoutSubviews() {
         // There is no need to update constraints if they are going to be recreated in super.layoutSubviews() due to needsUpdateConstraints
         // being set. This also avoids an issue on iOS 8, where updatePaddingConstraints would trigger a zombie object access.
-        if !needsUpdateConstraints() {
+        if needsUpdateConstraints() == false {
             updatePaddingConstraints()
         }
         super.layoutSubviews()
@@ -800,10 +801,10 @@ open class HUD: BaseView, ProgressViewDelegate {
             var firstVisible = false
             var secondVisible = false
             if let firstView = paddingConstraint.firstItem as? UIView {
-                firstVisible = !firstView.isHidden && !firstView.intrinsicContentSize.equalTo(.zero)
+                firstVisible = firstView.isHidden == false && firstView.intrinsicContentSize != .zero
             }
             if let secondView = paddingConstraint.secondItem as? UIView {
-                secondVisible = !secondView.isHidden && !secondView.intrinsicContentSize.equalTo(.zero)
+                secondVisible = secondView.isHidden == false && secondView.intrinsicContentSize != .zero
             }
 
             // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
