@@ -47,7 +47,7 @@ extension HUD {
         }
     }
 
-    public struct Animation {
+    public struct Animation: InoutWithType, Equatable {
         /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         public var style: Animation.Style
         /// The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
@@ -74,15 +74,6 @@ extension HUD {
             self.duration = duration
             self.damping = damping
         }
-
-        /// Executes the given block passing the `Animation` in as its sole `inout` argument.
-        /// - Parameter populator: A block or function that populates the `Animation`, which is passed into the block as an `inout` argument.
-        /// - Note: This method is recommended for assigning values to properties.
-        @discardableResult
-        public mutating func with(_ populator: (inout Animation) -> Void) -> Animation {
-            populator(&self)
-            return self
-        }
     }
 }
 
@@ -94,7 +85,7 @@ extension CGPoint {
     public static let HUDVMaxOffset: CGPoint = .init(x: 0.0, y: .HUDMaxOffset)
 }
 extension HUD {
-    public struct Layout: Equatable {
+    public struct Layout: InoutWithType, Equatable {
         /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
         /// - Note: If set to `.HUDVMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint
@@ -144,15 +135,6 @@ extension HUD {
             self.minSize = minSize
             self.isSquare = isSquare
             self.isSafeAreaLayoutGuideEnabled = isSafeAreaLayoutGuideEnabled
-        }
-
-        /// Executes the given block passing the `Layout` in as its sole `inout` argument.
-        /// - Parameter populator: A block or function that populates the `Layout`, which is passed into the block as an `inout` argument.
-        /// - Note: This method is recommended for assigning values to properties.
-        @discardableResult
-        public mutating func with(_ populator: (inout Layout) -> Void) -> Layout {
-            populator(&self)
-            return self
         }
     }
 

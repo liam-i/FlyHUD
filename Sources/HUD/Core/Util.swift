@@ -70,8 +70,23 @@ extension Equatable where Self: NSObjectProtocol {
     }
 }
 
+public protocol InoutWithType {}
+extension InoutWithType {
+    /// Executes the given block passing the `Self` in as its sole `inout` argument.
+    /// - Parameter populator: A block or function that populates the `Self`, which is passed into the block as an `inout` argument.
+    /// - Note: This method is recommended for assigning values to properties.
+    @discardableResult
+    public mutating func with(_ populator: (inout Self) -> Void) -> Self {
+        populator(&self)
+        return self
+    }
+}
+
 public protocol WithType: AnyObject {}
 extension WithType {
+    /// Executes the given block passing the `Self` in as its sole argument.
+    /// - Parameter populator: A block or function that populates the `Self`, which is passed into the block as an argument.
+    /// - Note: This method is recommended for assigning values to properties.
     @discardableResult
     public func with(_ populator: (Self) -> Void) -> Self {
         populator(self)

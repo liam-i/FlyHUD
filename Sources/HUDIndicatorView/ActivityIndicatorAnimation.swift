@@ -21,8 +21,6 @@ enum ActivityIndicatorAnimation {
     struct RingClipRotate: ActivityIndicatorAnimationBuildable {
         func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
-            let duration: CFTimeInterval = 0.75
-
             let rotateAnimation = CAKeyframeAnimation(keyPath: "transform.rotation.z").with {
                 $0.keyTimes = [0, 0.5, 1]
                 $0.values = [0, Double.pi, 2 * Double.pi]
@@ -30,17 +28,14 @@ enum ActivityIndicatorAnimation {
             let animation = CAAnimationGroup().with {
                 $0.animations = [rotateAnimation]
                 $0.timingFunction = CAMediaTimingFunction(name: .linear)
-                $0.duration = duration
+                $0.duration = 0.75
                 $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
             }
-            ShapeBuilder.ring.make(with: size, color: trackColor, lineWidth: lineWidth).with {
-                layer.addSublayer($0)
-            }
-            ShapeBuilder.ringOneThird.make(with: size, color: color, lineWidth: lineWidth).with {
+            layer.addSublayer(ShapeBuilder.ring.make(with: size, color: trackColor, lineWidth: lineWidth))
+            layer.addSublayer(ShapeBuilder.ringOneThird.make(with: size, color: color, lineWidth: lineWidth).with {
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
-                layer.addSublayer($0)
-            }
+            })
         }
     }
 
@@ -75,14 +70,13 @@ enum ActivityIndicatorAnimation {
                 $0.isRemovedOnCompletion = false
             }
             beginTimes.enumerated().forEach { (i, element) in
-                ShapeBuilder.circle.make(with: CGSize(width: dotSize, height: dotSize), color: color, lineWidth: 0).with {
+                layer.addSublayer(ShapeBuilder.circle.make(with: CGSize(width: dotSize, height: dotSize), color: color, lineWidth: 0).with {
                     let angle = .pi / 4 * CGFloat(i)
                     animation.beginTime = beginTime - element
                     $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
                                       y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
                     $0.add(animation, forKey: ActivityIndicatorAnimation.key)
-                    layer.addSublayer($0)
-                }
+                })
             }
         }
     }
@@ -111,17 +105,16 @@ enum ActivityIndicatorAnimation {
                 $0.toValue = 1
                 $0.beginTime = beginTime
             }
-            let groupAnimation = CAAnimationGroup().with {
+            let animation = CAAnimationGroup().with {
                 $0.animations = [rotationAnimation, strokeEndAnimation, strokeStartAnimation]
                 $0.duration = strokeStartDuration + beginTime
                 $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
-            ShapeBuilder.stroke.make(with: size, color: color, lineWidth: lineWidth).with {
-                $0.add(groupAnimation, forKey: ActivityIndicatorAnimation.key)
-                layer.addSublayer($0)
-            }
+            layer.addSublayer(ShapeBuilder.stroke.make(with: size, color: color, lineWidth: lineWidth).with {
+                $0.add(animation, forKey: ActivityIndicatorAnimation.key)
+            })
         }
     }
 
@@ -135,15 +128,8 @@ enum ActivityIndicatorAnimation {
             let count = 8
             let dotSize = radius / 3.0
 
-            for i in 0..<count {
+            (0..<count).forEach { i in
                 let angle = (CGFloat(i) / CGFloat(count)) * (2.0 * .pi)
-                let circle = CALayer().with {
-                    $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
-                                      y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
-                    $0.backgroundColor = color.cgColor
-                    $0.cornerRadius = dotSize / 2.0
-                    layer.addSublayer($0)
-                }
                 let animation = CAKeyframeAnimation(keyPath: "position").with {
                     $0.path = UIBezierPath(arcCenter: center, radius: radius, startAngle: angle, endAngle: angle + 2 * .pi, clockwise: true).cgPath
                     $0.duration = 4.0
@@ -151,7 +137,13 @@ enum ActivityIndicatorAnimation {
                     $0.isRemovedOnCompletion = false
                     $0.calculationMode = .paced
                 }
-                circle.add(animation, forKey: "circleAnimation")
+                layer.addSublayer(CALayer().with {
+                    $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
+                                      y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
+                    $0.backgroundColor = color.cgColor
+                    $0.cornerRadius = dotSize / 2.0
+                    $0.add(animation, forKey: "circleAnimation")
+                })
             }
 
             let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").with {
@@ -173,11 +165,10 @@ enum ActivityIndicatorAnimation {
                 $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
-            ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).with {
+            layer.addSublayer(ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).with {
                 $0.lineCap = .round
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
-                layer.addSublayer($0)
-            }
+            })
         }
     }
 }
