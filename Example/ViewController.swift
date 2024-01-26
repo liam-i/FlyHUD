@@ -145,7 +145,7 @@ class ViewController: UITableViewController, HUDDelegate {
             switch $0.viewWithTag(1000) {
             case let view as UIProgressView:          systemProgressView = view
             case let view as UIActivityIndicatorView: view.startAnimating()
-            case let view as RotateImageView:         view.startRotation()
+            case let view as RotateImageView:         view.startRotating()
             default: break
             }
         }

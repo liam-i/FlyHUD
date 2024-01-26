@@ -12,7 +12,8 @@
 import UIKit
 
 extension Array where Element == NSLayoutConstraint {
-    func apply(_ priority: UILayoutPriority) -> Self {
+    func apply(priority: Float) -> Self {
+        let priority = UILayoutPriority(priority)
         forEach {
             $0.priority = priority
         }
@@ -21,14 +22,15 @@ extension Array where Element == NSLayoutConstraint {
 }
 
 extension NSLayoutConstraint {
-    func apply(_ priority: UILayoutPriority) -> Self {
-        self.priority = priority
+    func apply(priority: Float) -> Self {
+        self.priority = UILayoutPriority(priority)
         return self
     }
 }
 
 extension UIView {
-    func setContentCompressionResistancePriorityForAxis(_ priority: UILayoutPriority) {
+    func setContentCompressionResistancePriorityForAxis(_ priority: Float) {
+        let priority = UILayoutPriority(priority)
         translatesAutoresizingMaskIntoConstraints = false
         setContentCompressionResistancePriority(priority, for: .horizontal)
         setContentCompressionResistancePriority(priority, for: .vertical)
