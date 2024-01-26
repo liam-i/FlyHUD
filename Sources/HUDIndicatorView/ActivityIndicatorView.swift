@@ -17,7 +17,7 @@ public protocol ActivityIndicatorViewStyleable {
     /// - Returns: true if the receiver and object are equal, otherwise false.
     func isEqual(_ object: Any) -> Bool
 
-    /// Creates an animation builder
+    /// Creates an animation builder.
     func makeAnimation() -> ActivityIndicatorAnimationBuildable
 
     /// Specifying the default size of the activity indicator view in its superview’s coordinates.

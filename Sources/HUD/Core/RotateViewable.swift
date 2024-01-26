@@ -5,7 +5,7 @@
 //  Created by liam on 2024/1/23.
 //
 
-import Foundation
+import UIKit
 
 public protocol RotateViewable: AnyObject where Self: UIView {
     /// Specifies the basic duration of the animation, in seconds.
