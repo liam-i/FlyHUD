@@ -18,9 +18,9 @@ class ViewController: UIViewController {
 
     @IBAction func buttonClicked(_ sender: UIButton) {
         sender.isEnabled = false
-        
+
         let hud = HUD.show(to: view) {
-            $0.mode = .custom(ProgressView(style: .bar(), size: CGSize(width: 320, height: 40), populator: {
+            $0.mode = .custom(ProgressView(style: .buttBar, size: CGSize(width: 320, height: 40), populator: {
                 $0.lineWidth = 10
             }))
             $0.label.text = NSLocalizedString("Loading...", comment: "HUD loading title")

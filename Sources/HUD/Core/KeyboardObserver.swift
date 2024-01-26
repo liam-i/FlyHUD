@@ -7,7 +7,17 @@
 
 import UIKit
 
+#if !os(tvOS)
 public struct KeyboardInfo {
+    public enum Name {
+        /// A event that posts immediately prior to a change in the keyboard’s frame.
+        case willChangeFrame
+        /// A event that posts immediately after a change in the keyboard’s frame.
+        case didChangeFrame
+    }
+
+    /// The event name of the keyboard frame change.
+    public let name: Name
     /// The duration of the keyboard animation in seconds.
     public let animationDuration: TimeInterval
     /// The animation curve that the system uses to animate the keyboard onto or off the screen.
@@ -21,18 +31,24 @@ public struct KeyboardInfo {
     public let isVisible: Bool
 }
 
+/// A keyboard observer that tracks the keyboard’s position in your app’s layout.
 public protocol KeyboardObservable: AnyObject {
+    /// Tells observers that the keyboard frame is about to change or has changed.
     func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo)
 }
 
 /// A keyboard observer that tracks the keyboard’s position in your app’s layout.
 public class KeyboardObserver {
-    /// The shared singleton keyboard observer object.
+    /// Enable keyboard observation. This method is equivalent to `KeyboardObserver.shared`.
+    public static func enable() {
+        _ = KeyboardObserver.shared
+    }
+
+    /// The shared singleton keyboard observer object. Execute once to automatically enable keyboard observation.
     public static let shared = { KeyboardObserver() }()
+
     /// This property contains detailed information about the keyboard's animation, frame, and whether it is visible.
     public private(set) var keyboardInfo: KeyboardInfo?
-
-    private var observers: NSHashTable<AnyObject> = .weakObjects()
 
     /// Adds a given object to the keyboard observer list.
     /// - Parameter observer: The object to add to the keyboard observer list. This object must implement the KeyboardObservable protocol.
@@ -46,9 +62,13 @@ public class KeyboardObserver {
         observers.remove(observer)
     }
 
+    private var observers: NSHashTable<AnyObject> = .weakObjects()
+
     private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameWillChange),
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChangeNotification),
                                                name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChangeNotification),
+                                               name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
     }
 
     deinit {
@@ -56,17 +76,15 @@ public class KeyboardObserver {
     }
 
     @objc
-    private func keyboardFrameWillChange(_ notification: Notification) {
+    private func keyboardFrameChangeNotification(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let frameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let frameBegin = userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect ?? .zero
-        let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.0
-        let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 0
 
         let info = KeyboardInfo(
-            animationDuration: animationDuration,
-            animationCurve: animationCurve,
-            frameBegin: frameBegin,
+            name: notification.name == UIResponder.keyboardWillChangeFrameNotification ? .willChangeFrame : .didChangeFrame,
+            animationDuration: userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.0,
+            animationCurve: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 0,
+            frameBegin: userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect ?? .zero,
             frameEnd: frameEnd,
             isVisible: frameEnd.minY < UIScreen.main.bounds.maxY
         )
@@ -78,3 +96,4 @@ public class KeyboardObserver {
         }
     }
 }
+#endif

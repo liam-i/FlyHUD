@@ -16,8 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        #warning("Enable keyboard guide")
-        HUD.keyboardGuide = .center() // Enable keyboard guide
+        #warning("KeyboardGuide")
+        HUD.keyboardGuide = .center() // Enable layout guide that tracks the keyboard’s position in your app’s layout.
+
+        #warning("KeyboardObserver")
+        //KeyboardObserver.enable() // Enable keyboard observation
+
         return true
     }
 

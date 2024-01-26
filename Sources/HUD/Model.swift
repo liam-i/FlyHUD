@@ -16,11 +16,35 @@ extension HUD {
         /// Shows only labels.
         case text
         /// UIActivityIndicatorView. Style `Defalut to .large`.
-        case indicator(UIActivityIndicatorView.Style = .largeOfHUD)
+        case indicator(UIActivityIndicatorView.Style = .HUDLarge)
         /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
         /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
+
+        /// Whether to show only labels.
+        public var isText: Bool {
+            self == .text
+        }
+
+        /// Whether UIActivityIndicatorView or ActivityIndicatorViewable.
+        public var isIndicator: Bool {
+            if case .indicator = self { return true }
+            if case let .custom(view) = self, view is ActivityIndicatorViewable { return true }
+            return false
+        }
+
+        /// Whether UIProgressView or ProgressViewable.
+        public var isProgress: Bool {
+            if case .progress = self { return true }
+            if case let .custom(view) = self, view is ProgressViewable { return true }
+            return false
+        }
+
+        /// Not text, indicator and progress.
+        public var isCustom: Bool {
+            isText == false && isIndicator == false && isProgress == false
+        }
     }
 
     public struct Animation {
@@ -66,6 +90,7 @@ extension CGFloat {
     public static let HUDMaxOffset: CGFloat = 1000000.0
 }
 extension CGPoint {
+    public static let HUDVMinOffset: CGPoint = .init(x: 0.0, y: -.HUDMaxOffset)
     public static let HUDVMaxOffset: CGPoint = .init(x: 0.0, y: .HUDMaxOffset)
 }
 extension HUD {
@@ -131,6 +156,7 @@ extension HUD {
         }
     }
 
+#if !os(tvOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout.
     public enum KeyboardGuide: Equatable {
         /// Disable keyboard tracking.
@@ -142,6 +168,7 @@ extension HUD {
         /// - Parameter spacing: The spacing between the bottom of the bezel view and the top of the keyboard. `Default to 8`.
         case bottom(_ spacing: CGFloat = 8.0)
     }
+#endif
 }
 
 extension HUD.Animation {

@@ -193,6 +193,7 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     private func makeAnimation() {
+        guard let color = color else { return }
         layer.sublayers = nil
         let animation = style.makeAnimation()
         animation.make(in: layer, color: color, trackColor: trackColor, lineWidth: lineWidth)
@@ -200,7 +201,7 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 17.0, *) {
+        if #available(iOS 17.0, tvOS 17.0, *) {
             // Use the trait change registration APIs
         } else {
             makeAnimationIfNeeded()
@@ -208,7 +209,7 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     private func registerForTraitChanges() {
-        if #available(iOS 17.0, *) {
+        if #available(iOS 17.0, tvOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
         }
     }

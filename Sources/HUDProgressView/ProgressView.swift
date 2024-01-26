@@ -28,6 +28,10 @@ public protocol ProgressViewStyleable {
     var defaultTrackTintColor: UIColor? { get }
     /// The default width shown for the portion of the progress bar that’s filled.
     var defaultLineWidth: CGFloat { get }
+    /// A default Boolean value indicating whether the progress label is in the enabled state.
+    var defaultIsLabelEnabled: Bool { get }
+    /// The default font of the label text.
+    var defaultLabelFont: UIFont { get }
 }
 
 extension ProgressViewStyleable {
@@ -35,6 +39,8 @@ extension ProgressViewStyleable {
     public var defaultProgressTintColor: UIColor { .HUDContent }
     public var defaultTrackTintColor: UIColor? { defaultProgressTintColor.withAlphaComponent(0.1) }
     public var defaultLineWidth: CGFloat { 2.0 }
+    public var defaultIsLabelEnabled: Bool { false }
+    public var defaultLabelFont: UIFont { .boldSystemFont(ofSize: 8.0) }
 }
 
 extension ProgressView {
@@ -109,6 +115,20 @@ public class ProgressView: BaseView, ProgressViewable {
         }
     }
 
+    /// A Boolean value indicating whether the progress label is in the enabled state.
+    public lazy var isLabelEnabled: Bool = style.defaultIsLabelEnabled {
+        didSet {
+            isLabelEnabled.notEqual(oldValue, do: setNeedsDisplay())
+        }
+    }
+
+    /// The font of the label text.
+    public lazy var labelFont: UIFont = style.defaultLabelFont {
+        didSet {
+            labelFont.notEqual(oldValue, do: setNeedsDisplay())
+        }
+    }
+
     /// The current progress of the progress view.
     /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
     public var progress: Float = 0.0 {
@@ -164,6 +184,9 @@ public class ProgressView: BaseView, ProgressViewable {
     }
 
     public override func draw(_ rect: CGRect) {
+        guard let progressTintColor = progressTintColor else { return }
+
+        let progress = CGFloat(min(progress, 1.0))
         var animationBuilder: ProgressAnimationBuildable {
             if let builder = self.animationBuilder {
                 return builder
@@ -173,13 +196,10 @@ public class ProgressView: BaseView, ProgressViewable {
             self.animationBuilder = builder
             return builder
         }
+        animationBuilder.makeShape(in: layer, progress: progress, color: progressTintColor, trackColor: trackTintColor, lineWidth: lineWidth)
 
-        animationBuilder.draw(
-            progress: CGFloat(min(progress, 1.0)),
-            in: layer,
-            color: progressTintColor,
-            trackColor: trackTintColor,
-            lineWidth: lineWidth)
+        guard isLabelEnabled else { return }
+        animationBuilder.makeLabel(in: layer, progress: progress, color: progressTintColor, font: labelFont)
     }
 
     public override var bounds: CGRect {
@@ -205,6 +225,8 @@ public class ProgressView: BaseView, ProgressViewable {
         progressTintColor = style.defaultProgressTintColor
         trackTintColor = style.defaultTrackTintColor
         lineWidth = style.defaultLineWidth
+        isLabelEnabled = style.defaultIsLabelEnabled
+        labelFont = style.defaultLabelFont
         invalidateIntrinsicContentSize()
     }
 
