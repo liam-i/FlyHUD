@@ -458,37 +458,35 @@ open class HUD: BaseView, ProgressViewDelegate {
         // This needs to happen here instead of in done, to avoid races if another hide(using:afterDelay:)
         // call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
-        perform(animation, showing: false) {
+        perform(animation, showing: false) { [self] in
             // Cancel any scheduled hide(using:afterDelay:) calls
-            self.cancelHideDelayWorkItem()
-            self.indicator?.isHidden = true
+            cancelHideDelayWorkItem()
+            indicator?.isHidden = true
 
-            if self.isFinished {
-                self.isHidden = true
-                if self.removeFromSuperViewOnHide {
-                    self.removeFromSuperview()
+            if isFinished {
+                isHidden = true
+                if removeFromSuperViewOnHide {
+                    removeFromSuperview()
                 }
             }
 
-            self.completionBlock?(self)
-            self.delegate?.hudWasHidden(self)
+            completionBlock?(self)
+            delegate?.hudWasHidden(self)
         }
         showStarted = nil
     }
 
     private func perform(_ animation: Animation, showing: Bool, completion: (() -> Void)?) {
         let alpha: CGFloat = showing ? 1.0 : 0.0
-        let completionBlock: (Bool) -> Void = { _ in
-            self.bezelView.transform = .identity // Reset, after the animation is completed
-            self.bezelView.alpha = alpha
-            self.backgroundView.alpha = alpha
+        let completionBlock: (Bool) -> Void = { [self] _ in
+            bezelView.transform = .identity // Reset, after the animation is completed
+            bezelView.alpha = alpha
+            backgroundView.alpha = alpha
             completion?()
         }
 
         var style = animation.style
-        guard style != .none, showStarted != nil else {
-            return completionBlock(true)
-        }
+        guard style != .none, showStarted != nil else { return completionBlock(true) }
 
         // Automatically determine the correct zoom animation type
         switch style {
@@ -505,14 +503,14 @@ open class HUD: BaseView, ProgressViewDelegate {
         }
 
         UIView.animate(withDuration: animation.duration, delay: 0.0, usingSpringWithDamping: animation.damping.value,
-                       initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: {
+                       initialSpringVelocity: 0.0, options: .beginFromCurrentState, animations: { [self] in
             if showing {
-                self.transform(to: .fade)
+                transform(to: .fade)
             } else {
-                self.transform(to: style, isInvert: false)
+                transform(to: style, isInvert: false)
             }
-            self.bezelView.alpha = alpha
-            self.backgroundView.alpha = alpha
+            bezelView.alpha = alpha
+            backgroundView.alpha = alpha
         }, completion: completionBlock)
     }
 
@@ -806,6 +804,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
         guard isEventDeliveryEnabled else { return hitView }
+
         let bezelRect = bezelView.convert(bezelView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
     }
