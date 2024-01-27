@@ -36,6 +36,7 @@ public protocol ProgressViewable: AnyObject {
 }
 
 extension UIProgressView: ProgressViewable {
+    // FIXME: How to implement delegation?
     public weak var delegate: ProgressViewDelegate? {
         get { nil }
         set { }

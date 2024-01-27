@@ -16,7 +16,7 @@ extension HUD {
         /// Shows only labels.
         case text
         /// UIActivityIndicatorView. Style `Defalut to .large`.
-        case indicator(UIActivityIndicatorView.Style = .HUDLarge)
+        case indicator(UIActivityIndicatorView.Style = .h.large)
         /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
         /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
