@@ -22,13 +22,13 @@ Pod::Spec.new do |s|
     ss.source_files = ['Sources/HUD/**/*']
   end
 
-  s.subspec 'HUDIndicatorView' do |ss|
-    ss.source_files = ['Sources/HUDIndicatorView/**/*']
+  s.subspec 'HUDIndicator' do |ss|
+    ss.source_files = ['Sources/HUDIndicator/**/*']
     ss.dependency 'LPHUD/HUD'
   end
 
-  s.subspec 'HUDProgressView' do |ss|
-    ss.source_files = ['Sources/HUDProgressView/**/*']
+  s.subspec 'HUDProgress' do |ss|
+    ss.source_files = ['Sources/HUDProgress/**/*']
     ss.dependency 'LPHUD/HUD'
   end
 end
