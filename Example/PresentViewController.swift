@@ -2,7 +2,7 @@
 //  PresentViewController.swift
 //  HUD_Example
 //
-//  Created by 李鹏 on 2024/1/25.
+//  Created by Liam on 2024/1/25.
 //  Copyright © 2024 CocoaPods. All rights reserved.
 //
 
@@ -14,7 +14,7 @@ class PresentViewController: UIViewController {
 
     @IBAction func showHUDClicked(_ sender: UIButton) {
         HUD.showStatus(to: view, duration: .greatestFiniteMagnitude, using: .animation(.slideDownUp, damping: .default), 
-                       mode: .text, label: "Wrong password", offset: .HUDVMinOffset) {
+                       mode: .text, label: "Wrong password", offset: .h.vMinOffset) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
@@ -29,17 +29,17 @@ class PresentViewController: UIViewController {
         }
 
         HUD.showStatus(to: containerView, duration: .greatestFiniteMagnitude, using: .animation(.slideDownUp, damping: .default),
-                       mode: .text, label: "Wrong password", offset: CGPoint(x: .HUDMaxOffset, y: -.HUDMaxOffset)) {
+                       mode: .text, label: "Wrong password", offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
         HUD.show(to: containerView, using: .animation(.zoomOutIn, damping: .default), label: "Loading") {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .center()
-            $0.layout.offset.x = .HUDMaxOffset
+            $0.layout.offset.x = .h.maxOffset
         }
         HUD.showStatus(to: containerView, duration: .greatestFiniteMagnitude, using: .animation(.slideUpDown, damping: .default),
-                       mode: .text, label: "Wrong password", offset: CGPoint(x: .HUDMaxOffset, y: .HUDMaxOffset)) {
+                       mode: .text, label: "Wrong password", offset: CGPoint(x: .h.maxOffset, y: .h.maxOffset)) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }

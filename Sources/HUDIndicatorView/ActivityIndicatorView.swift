@@ -32,7 +32,7 @@ public protocol ActivityIndicatorViewStyleable {
 
 extension ActivityIndicatorViewStyleable {
     public var defaultSize: CGSize { CGSize(width: 37.0, height: 37.0) }
-    public var defaultColor: UIColor { .HUDContent }
+    public var defaultColor: UIColor { .h.content }
     public var defaultTrackColor: UIColor? { defaultColor.withAlphaComponent(0.1) }
     public var defaultLineWidth: CGFloat { 2.0 }
 }
@@ -82,19 +82,19 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     /// - Note: If you set a color for an activity indicator, it overrides the color provided by the style property.
     public lazy var color: UIColor! = style.defaultColor {
         didSet {
-            color.notEqual(oldValue, do: makeAnimationIfNeeded())
+            color.h.notEqual(oldValue, do: makeAnimationIfNeeded())
         }
     }
     /// The track color of the activity indicator.
     public lazy var trackColor: UIColor? = style.defaultTrackColor {
         didSet {
-            trackColor.notEqual(oldValue, do: makeAnimationIfNeeded())
+            trackColor.h.notEqual(oldValue, do: makeAnimationIfNeeded())
         }
     }
     /// The line width of the activity indicator.
     public lazy var lineWidth: CGFloat = style.defaultLineWidth {
         didSet {
-            lineWidth.notEqual(oldValue, do: makeAnimationIfNeeded())
+            lineWidth.h.notEqual(oldValue, do: makeAnimationIfNeeded())
         }
     }
     /// A Boolean value that controls whether the activity indicator is hidden when the animation is stopped.

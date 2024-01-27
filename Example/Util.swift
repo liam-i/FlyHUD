@@ -13,7 +13,7 @@ enum Color: String, CaseIterable {
 
     var color: UIColor {
         switch self {
-        case .default:      return .HUDContent
+        case .default:      return .h.content
         case .red:          return .systemRed
         case .yellow:       return .systemYellow
         case .orange:       return .systemOrange
@@ -27,7 +27,7 @@ enum Color: String, CaseIterable {
 
 enum Alert {
     static func `switch`(_ title: String, selected: @escaping(_ isOn: Bool) -> Void, selected1: @escaping(Bool) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).with {
+        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then {
             $0.addAction(UIAlertAction(title: "off", style: .destructive, handler: { _ in
                 selected(false); selected1(false)
             }))
@@ -38,7 +38,7 @@ enum Alert {
         }
     }
     static func textField(_ title: String, selected: @escaping(_ value: CGFloat) -> Void, selected1: @escaping(CGFloat) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).with { alert in
+        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then { alert in
             alert.addTextField { textField in
                 textField.keyboardType = .numberPad
             }
@@ -51,7 +51,7 @@ enum Alert {
         }
     }
     static func list<T>(_ title: String, list: [T], selected: @escaping(T) -> Void, selected1: @escaping(T) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).with { alert in
+        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then { alert in
             list.forEach { value in
                 alert.addAction(UIAlertAction(title: String(describing: value), style: .default, handler: { _ in
                     selected(value); selected1(value)

@@ -37,7 +37,7 @@ enum ProgressAnimation {
             let borderRect = CGRect(x: lineWidthHalf, y: lineWidthHalf, width: size.width - lineWidth, height: size.height - lineWidth)
 
             // bar border
-            UIBezierPath(roundedRect: borderRect, cornerRadius: (size.height - lineWidth) / 2.0).with {
+            UIBezierPath(roundedRect: borderRect, cornerRadius: (size.height - lineWidth) / 2.0).h.then {
                 $0.lineWidth = lineWidth
                 color.set()
                 $0.stroke()
@@ -53,7 +53,7 @@ enum ProgressAnimation {
             let end = (size.width - minX * 2) * progress + minX
 
             // bar progress
-            UIBezierPath().with {
+            UIBezierPath().h.then {
                 $0.lineWidth = lineWidth
                 $0.lineCapStyle = .round
                 $0.move(to: CGPoint(x: minX, y: centerY))
@@ -151,7 +151,7 @@ enum ProgressAnimation {
             let lineCapStyle: CGLineCap = trackColor == .clear ? .round : .square
 
             // Draw background
-            UIBezierPath().with {
+            UIBezierPath().h.then {
                 $0.lineWidth = lineWidth
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
                 trackColor.set()
@@ -161,7 +161,7 @@ enum ProgressAnimation {
             endAngle = (progress * 2 * CGFloat.pi) + startAngle
 
             // Draw progress
-            UIBezierPath().with {
+            UIBezierPath().h.then {
                 $0.lineWidth = lineWidth
                 $0.lineCapStyle = lineCapStyle
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
@@ -193,7 +193,7 @@ enum ProgressAnimation {
             let endAngle = (progress * 2.0 * CGFloat.pi) + startAngle
 
             // Draw progress
-            UIBezierPath().with {
+            UIBezierPath().h.then {
                 $0.lineWidth = lineWidth
                 $0.lineCapStyle = .butt
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
@@ -212,7 +212,7 @@ enum ProgressAnimation {
             let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
             let radius = min(size.width, size.height) / 2.0 - lineWidth
 
-            UIBezierPath(arcCenter: center, radius: radius, startAngle: 0.0, endAngle: .pi * 2.0, clockwise: false).with {
+            UIBezierPath(arcCenter: center, radius: radius, startAngle: 0.0, endAngle: .pi * 2.0, clockwise: false).h.then {
                 $0.lineWidth = lineWidth
                 trackColor?.setFill()
                 $0.fill()
@@ -222,7 +222,7 @@ enum ProgressAnimation {
 
             let startAngle = -(CGFloat.pi / 2.0)
             let endAngle = startAngle + CGFloat.pi * 2.0 * progress
-            UIBezierPath(arcCenter: center, radius: radius / 2.0, startAngle: startAngle, endAngle: endAngle, clockwise: true).with {
+            UIBezierPath(arcCenter: center, radius: radius / 2.0, startAngle: startAngle, endAngle: endAngle, clockwise: true).h.then {
                 $0.lineWidth = radius
                 $0.stroke()
             }

@@ -39,12 +39,14 @@ extension BackgroundView {
         case fully
     }
 }
+extension BackgroundView.Style: HUDExtended {}
+extension BackgroundView.RoundedCorners: HUDExtended {}
 
 public class BackgroundView: BaseView {
     /// The rounded corner mode of the button. `Default to .radius(0.0)`.
     public var roundedCorners: RoundedCorners = .radius(0.0) {
         didSet {
-            roundedCorners.notEqual(oldValue, do: setNeedsLayout())
+            roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }
     }
 
@@ -53,14 +55,14 @@ public class BackgroundView: BaseView {
     /// The background style. `Defaults to .solidColor`.
     public var style: Style = .solidColor {
         didSet {
-            style.notEqual(oldValue, do: updateForBackgroundStyle())
+            style.h.notEqual(oldValue, do: updateForBackgroundStyle())
         }
     }
 
     /// The background color or the blur tint color. `Defaults to .clear`.
     public var color: UIColor? = .clear {
         didSet {
-            color.notEqual(oldValue, do: backgroundColor = color)
+            color.h.notEqual(oldValue, do: backgroundColor = color)
         }
     }
 
@@ -99,7 +101,7 @@ public class BackgroundView: BaseView {
         case .solidColor:
             backgroundColor = color
         case .blur(let effectStyle):
-            effectView = UIVisualEffectView(effect: UIBlurEffect(style: effectStyle)).with {
+            effectView = UIVisualEffectView(effect: UIBlurEffect(style: effectStyle)).h.then {
                 $0.frame = bounds
                 $0.autoresizingMask = [.flexibleHeight, .flexibleWidth]
                 insertSubview($0, at: 0)
