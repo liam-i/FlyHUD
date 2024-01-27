@@ -18,11 +18,11 @@ class ViewController: UITableViewController, HUDDelegate {
 
     @IBAction func indicatorButtonClicked(_ sender: UIButton) {
         switch sender.superview?.viewWithTag(1000) {
-        case let pv as ProgressView:          showHUD(.progress(pv.style)).with(request(_:))
-        case let av as ActivityIndicatorView: showHUD(.indicator(av.style)).with(request(_:))
-        case is UIProgressView:               showHUD(.progress()).with(request(_:))
-        case is UIActivityIndicatorView:      showHUD(.indicator()).with(request(_:))
-        case is RotateImageView:              showHUD(.custom(RotateImageView.loading)).with(request(_:))
+        case let pv as ProgressView:          showHUD(.progress(pv.style)).h.then(request(_:))
+        case let av as ActivityIndicatorView: showHUD(.indicator(av.style)).h.then(request(_:))
+        case is UIProgressView:               showHUD(.progress()).h.then(request(_:))
+        case is UIActivityIndicatorView:      showHUD(.indicator()).h.then(request(_:))
+        case is RotateImageView:              showHUD(.custom(RotateImageView.loading)).h.then(request(_:))
         default: assertionFailure()
         }
     }
@@ -31,7 +31,7 @@ class ViewController: UITableViewController, HUDDelegate {
         let onlyText = sender.title(for: .normal) == "Toast"
         let iv = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
         let mode: HUD.Mode = onlyText ? .text : .custom(iv)
-        showHUD(mode, label: mode.description).with {
+        showHUD(mode, label: mode.description).h.then {
             if config.isDefaultModeStyle {
                 $0.hide(afterDelay: config.hideAfterDelay)
             } else {
@@ -73,7 +73,7 @@ class ViewController: UITableViewController, HUDDelegate {
             $0.layout = config.layout
             $0.contentColor = config.contentColor.color
             $0.bezelView.style = config.bezelViewStyle
-            $0.bezelView.color = config.bezelViewColor == .default ? .HUDBackground : config.bezelViewColor.color
+            $0.bezelView.color = config.bezelViewColor == .default ? .h.background : config.bezelViewColor.color
             $0.backgroundView.style = config.backgroundViewStyle
             $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
             $0.animation = config.animation
@@ -121,7 +121,7 @@ class ViewController: UITableViewController, HUDDelegate {
         var (progressViews, idx) = ([ProgressView](), 0)
         progressStackView.arrangedSubviews.forEach {
             ($0 as? UIStackView)?.arrangedSubviews.forEach {
-                ($0.viewWithTag(1000) as? ProgressView)?.with({
+                ($0.viewWithTag(1000) as? ProgressView)?.h.then({
                     let style = ProgressView.Style.allCases[idx]
                     $0.style = style
                     $0.isLabelEnabled = style == .round || style == .annularRound
@@ -133,7 +133,7 @@ class ViewController: UITableViewController, HUDDelegate {
         idx = 0
         indicatorStackView.arrangedSubviews.forEach {
             ($0 as? UIStackView)?.arrangedSubviews.forEach {
-                ($0.viewWithTag(1000) as? ActivityIndicatorView)?.with({
+                ($0.viewWithTag(1000) as? ActivityIndicatorView)?.h.then({
                     $0.style = ActivityIndicatorView.Style.allCases[idx]
                     $0.startAnimating()
                     idx += 1

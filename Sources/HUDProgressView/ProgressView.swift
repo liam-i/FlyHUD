@@ -36,7 +36,7 @@ public protocol ProgressViewStyleable {
 
 extension ProgressViewStyleable {
     public var defaultSize: CGSize { .zero }
-    public var defaultProgressTintColor: UIColor { .HUDContent }
+    public var defaultProgressTintColor: UIColor { .h.content }
     public var defaultTrackTintColor: UIColor? { defaultProgressTintColor.withAlphaComponent(0.1) }
     public var defaultLineWidth: CGFloat { 2.0 }
     public var defaultIsLabelEnabled: Bool { false }
@@ -97,35 +97,35 @@ public class ProgressView: BaseView, ProgressViewable {
     /// The color shown for the portion of the progress bar that’s filled.
     public lazy var progressTintColor: UIColor? = style.defaultProgressTintColor {
         didSet {
-            progressTintColor.notEqual(oldValue, do: setNeedsDisplay())
+            progressTintColor.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The color shown for the portion of the progress bar that isn’t filled.
     public lazy var trackTintColor: UIColor? = style.defaultTrackTintColor {
         didSet {
-            trackTintColor.notEqual(oldValue, do: setNeedsDisplay())
+            trackTintColor.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The width shown for the portion of the progress bar that’s filled.
     public lazy var lineWidth: CGFloat = style.defaultLineWidth {
         didSet {
-            lineWidth.notEqual(oldValue, do: setNeedsDisplay())
+            lineWidth.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// A Boolean value indicating whether the progress label is in the enabled state.
     public lazy var isLabelEnabled: Bool = style.defaultIsLabelEnabled {
         didSet {
-            isLabelEnabled.notEqual(oldValue, do: setNeedsDisplay())
+            isLabelEnabled.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The font of the label text.
     public lazy var labelFont: UIFont = style.defaultLabelFont {
         didSet {
-            labelFont.notEqual(oldValue, do: setNeedsDisplay())
+            labelFont.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
@@ -133,7 +133,7 @@ public class ProgressView: BaseView, ProgressViewable {
     /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
     public var progress: Float = 0.0 {
         didSet {
-            progress.notEqual(oldValue, do: setNeedsDisplay())
+            progress.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
@@ -141,7 +141,7 @@ public class ProgressView: BaseView, ProgressViewable {
     /// - Note: When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
     public var observedProgress: Progress? {
         didSet {
-            observedProgress.notEqual(oldValue, do: updateProgressDisplayLink())
+            observedProgress.h.notEqual(oldValue, do: updateProgressDisplayLink())
         }
     }
 
@@ -204,7 +204,7 @@ public class ProgressView: BaseView, ProgressViewable {
 
     public override var bounds: CGRect {
         didSet {
-            bounds.notEqual(oldValue, do: invalidateIntrinsicContentSize())
+            bounds.h.notEqual(oldValue, do: invalidateIntrinsicContentSize())
         }
     }
 

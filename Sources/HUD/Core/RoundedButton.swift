@@ -15,13 +15,13 @@ public class RoundedButton: UIButton {
     /// The rounded corner mode of the button. `Default to .fully`.
     public var roundedCorners: BackgroundView.RoundedCorners = .fully {
         didSet {
-            roundedCorners.notEqual(oldValue, do: setNeedsLayout())
+            roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }
     }
     /// Button border width. `Default to 1`.
     public var borderWidth: CGFloat = 1.0 {
         didSet {
-            borderWidth.notEqual(oldValue, do: layer.borderWidth = borderWidth)
+            borderWidth.h.notEqual(oldValue, do: layer.borderWidth = borderWidth)
         }
     }
 

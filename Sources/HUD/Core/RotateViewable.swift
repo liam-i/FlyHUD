@@ -23,7 +23,7 @@ extension RotateViewable {
     public var duration: CFTimeInterval { 0.25 }
 
     public func startRotating() {
-        layer.add(CABasicAnimation(keyPath: "transform").with {
+        layer.add(CABasicAnimation(keyPath: "transform").h.then {
             $0.fromValue = NSValue(caTransform3D: CATransform3DIdentity)
             $0.toValue = NSValue(caTransform3D: CATransform3DMakeRotation(.pi / 2.0, 0.0, 0.0, 1.0))
             $0.duration = duration

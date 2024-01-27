@@ -21,11 +21,11 @@ enum ActivityIndicatorAnimation {
     struct RingClipRotate: ActivityIndicatorAnimationBuildable {
         func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
-            let rotateAnimation = CAKeyframeAnimation(keyPath: "transform.rotation.z").with {
+            let rotateAnimation = CAKeyframeAnimation(keyPath: "transform.rotation.z").h.then {
                 $0.keyTimes = [0, 0.5, 1]
                 $0.values = [0, Double.pi, 2 * Double.pi]
             }
-            let animation = CAAnimationGroup().with {
+            let animation = CAAnimationGroup().h.then {
                 $0.animations = [rotateAnimation]
                 $0.timingFunction = CAMediaTimingFunction(name: .linear)
                 $0.duration = 0.75
@@ -33,7 +33,7 @@ enum ActivityIndicatorAnimation {
                 $0.isRemovedOnCompletion = false
             }
             layer.addSublayer(ShapeBuilder.ring.make(with: size, color: trackColor, lineWidth: lineWidth))
-            layer.addSublayer(ShapeBuilder.ringOneThird.make(with: size, color: color, lineWidth: lineWidth).with {
+            layer.addSublayer(ShapeBuilder.ringOneThird.make(with: size, color: color, lineWidth: lineWidth).h.then {
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
             })
         }
@@ -52,17 +52,17 @@ enum ActivityIndicatorAnimation {
             let beginTime = CACurrentMediaTime()
             let beginTimes: [CFTimeInterval] = [0.84, 0.72, 0.6, 0.48, 0.36, 0.24, 0.12, 0]
 
-            let scaleAnimation = CAKeyframeAnimation(keyPath: "transform.scale").with { 
+            let scaleAnimation = CAKeyframeAnimation(keyPath: "transform.scale").h.then {
                 $0.keyTimes = [0, 0.5, 1]
                 $0.values = [1, 0.4, 1]
                 $0.duration = duration
             }
-            let opacityAnimation = CAKeyframeAnimation(keyPath: "opacity").with {
+            let opacityAnimation = CAKeyframeAnimation(keyPath: "opacity").h.then {
                 $0.keyTimes = [0, 0.5, 1]
                 $0.values = [1, 0.3, 1]
                 $0.duration = duration
             }
-            let animation = CAAnimationGroup().with {
+            let animation = CAAnimationGroup().h.then {
                 $0.animations = [scaleAnimation, opacityAnimation]
                 $0.timingFunction = CAMediaTimingFunction(name: .linear)
                 $0.duration = duration
@@ -70,7 +70,7 @@ enum ActivityIndicatorAnimation {
                 $0.isRemovedOnCompletion = false
             }
             beginTimes.enumerated().forEach { (i, element) in
-                layer.addSublayer(ShapeBuilder.circle.make(with: CGSize(width: dotSize, height: dotSize), color: color, lineWidth: 0).with {
+                layer.addSublayer(ShapeBuilder.circle.make(with: CGSize(width: dotSize, height: dotSize), color: color, lineWidth: 0).h.then {
                     let angle = .pi / 4 * CGFloat(i)
                     animation.beginTime = beginTime - element
                     $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
@@ -88,31 +88,31 @@ enum ActivityIndicatorAnimation {
             let strokeStartDuration: CFTimeInterval = 1.2
             let strokeEndDuration: CFTimeInterval = 0.7
 
-            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").with {
+            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").h.then {
                 $0.byValue = Float.pi * 2
                 $0.timingFunction = CAMediaTimingFunction(name: .linear)
             }
-            let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd").with {
+            let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd").h.then {
                 $0.duration = strokeEndDuration
                 $0.timingFunction = CAMediaTimingFunction(controlPoints: 0.4, 0.0, 0.2, 1.0)
                 $0.fromValue = 0
                 $0.toValue = 1
             }
-            let strokeStartAnimation = CABasicAnimation(keyPath: "strokeStart").with {
+            let strokeStartAnimation = CABasicAnimation(keyPath: "strokeStart").h.then {
                 $0.duration = strokeStartDuration
                 $0.timingFunction = CAMediaTimingFunction(controlPoints: 0.4, 0.0, 0.2, 1.0)
                 $0.fromValue = 0
                 $0.toValue = 1
                 $0.beginTime = beginTime
             }
-            let animation = CAAnimationGroup().with {
+            let animation = CAAnimationGroup().h.then {
                 $0.animations = [rotationAnimation, strokeEndAnimation, strokeStartAnimation]
                 $0.duration = strokeStartDuration + beginTime
                 $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
-            layer.addSublayer(ShapeBuilder.stroke.make(with: size, color: color, lineWidth: lineWidth).with {
+            layer.addSublayer(ShapeBuilder.stroke.make(with: size, color: color, lineWidth: lineWidth).h.then {
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
             })
         }
@@ -130,14 +130,14 @@ enum ActivityIndicatorAnimation {
 
             (0..<count).forEach { i in
                 let angle = (CGFloat(i) / CGFloat(count)) * (2.0 * .pi)
-                let animation = CAKeyframeAnimation(keyPath: "position").with {
+                let animation = CAKeyframeAnimation(keyPath: "position").h.then {
                     $0.path = UIBezierPath(arcCenter: center, radius: radius, startAngle: angle, endAngle: angle + 2 * .pi, clockwise: true).cgPath
                     $0.duration = 4.0
                     $0.repeatCount = .greatestFiniteMagnitude
                     $0.isRemovedOnCompletion = false
                     $0.calculationMode = .paced
                 }
-                layer.addSublayer(CALayer().with {
+                layer.addSublayer(CALayer().h.then {
                     $0.frame = CGRect(x: center.x + radius * cos(angle) - dotSize / 2.0,
                                       y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
                     $0.backgroundColor = color.cgColor
@@ -146,26 +146,26 @@ enum ActivityIndicatorAnimation {
                 })
             }
 
-            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").with {
+            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation").h.then {
                 $0.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 $0.byValue = 4 * Float.pi
                 $0.duration = 1.6
             }
-            let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd").with {
+            let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd").h.then {
                 $0.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 $0.fromValue = 0.5
                 $0.toValue = 1
                 $0.duration = 0.8
                 $0.autoreverses = true
             }
-            let animation = CAAnimationGroup().with {
+            let animation = CAAnimationGroup().h.then {
                 $0.animations = [rotationAnimation, strokeEndAnimation]
                 $0.duration = 1.6
                 $0.repeatCount = .greatestFiniteMagnitude
                 $0.isRemovedOnCompletion = false
                 $0.fillMode = .forwards
             }
-            layer.addSublayer(ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).with {
+            layer.addSublayer(ShapeBuilder.ringOneFour.make(with: bounds.size, color: color, lineWidth: lineWidth).h.then {
                 $0.lineCap = .round
                 $0.add(animation, forKey: ActivityIndicatorAnimation.key)
             })

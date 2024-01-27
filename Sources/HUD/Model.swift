@@ -47,7 +47,7 @@ extension HUD {
         }
     }
 
-    public struct Animation: InoutWithType, Equatable {
+    public struct Animation: Equatable {
         /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         public var style: Animation.Style
         /// The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
@@ -77,17 +77,17 @@ extension HUD {
     }
 }
 
-extension CGFloat {
-    public static let HUDMaxOffset: CGFloat = 1000000.0
+extension HUDExtension where ExtendedType == CGFloat {
+    public static let maxOffset: CGFloat = 1000000.0
 }
-extension CGPoint {
-    public static let HUDVMinOffset: CGPoint = .init(x: 0.0, y: -.HUDMaxOffset)
-    public static let HUDVMaxOffset: CGPoint = .init(x: 0.0, y: .HUDMaxOffset)
+extension HUDExtension where ExtendedType == CGPoint {
+    public static let vMinOffset: CGPoint = .init(x: 0.0, y: -.h.maxOffset)
+    public static let vMaxOffset: CGPoint = .init(x: 0.0, y: .h.maxOffset)
 }
 extension HUD {
-    public struct Layout: InoutWithType, Equatable {
-        /// The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
-        /// - Note: If set to `.HUDVMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
+    public struct Layout: Equatable {
+        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
+        /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint
         /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         public var edgeInsets: UIEdgeInsets
@@ -111,7 +111,7 @@ extension HUD {
 
         /// Creates a new Layout.
         /// - Parameters:
-        ///   - offset: The bezel offset relative to the center of the view. You can use `.HUDMaxOffset` and `-.HUDMaxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
+        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
         ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
         ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
@@ -196,3 +196,8 @@ extension HUD.Animation {
         }
     }
 }
+
+extension HUD.Mode: HUDExtended {}
+extension HUD.Animation: HUDExtended {}
+extension HUD.Layout: HUDExtended {}
+extension HUD.KeyboardGuide: HUDExtended {}
