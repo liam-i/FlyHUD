@@ -12,12 +12,12 @@ let package = Package(
             targets: ["HUD"]
         ),
         .library(
-            name: "HUDIndicatorView",
-            targets: ["HUDIndicatorView"]
+            name: "HUDIndicator",
+            targets: ["HUDIndicator"]
         ),
         .library(
-            name: "HUDProgressView",
-            targets: ["HUDProgressView"]
+            name: "HUDProgress",
+            targets: ["HUDProgress"]
         ),
     ],
     targets: [
@@ -25,11 +25,11 @@ let package = Package(
             name: "HUD"
         ),
         .target(
-            name: "HUDIndicatorView",
+            name: "HUDIndicator",
             dependencies: ["HUD"]
         ),
         .target(
-            name: "HUDProgressView",
+            name: "HUDProgress",
             dependencies: ["HUD"]
         ),
     ]

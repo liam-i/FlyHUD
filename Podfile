@@ -10,7 +10,7 @@ use_frameworks! :linkage => :static
 target 'HUD_Example' do
   platform :ios, '11.0'
 
-  pod 'LPHUD', :path => './'#, :subspecs => ['HUDIndicatorView']
+  pod 'LPHUD', :path => './'#, :subspecs => ['HUDIndicator']
 
   target 'HUD_Tests' do
     inherit! :search_paths
@@ -20,5 +20,5 @@ end
 target 'HUD_ExampleTV' do
   platform :tvos, '11.0'
 
-  pod 'LPHUD', :path => './'#, :subspecs => ['HUDIndicatorView']
+  pod 'LPHUD', :path => './'#, :subspecs => ['HUDIndicator']
 end
