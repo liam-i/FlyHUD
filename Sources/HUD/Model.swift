@@ -19,7 +19,7 @@ extension HUD {
         case indicator(UIActivityIndicatorView.Style = .h.large)
         /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
-        /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize 
+        /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize
         /// for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
 
@@ -61,7 +61,7 @@ extension HUD {
         ///   - style: The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
         ///   - duration: The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
-        public init(style: Animation.Style = .fade, 
+        public init(style: Animation.Style = .fade,
                     damping: Animation.Damping = .disable,
                     duration: TimeInterval = 0.3) {
             self.style = style
@@ -93,7 +93,7 @@ extension HUDExtension where ExtendedType == CGPoint {
 }
 extension HUD {
     public struct Layout: Equatable {
-        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move 
+        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move
         /// the HUD all the way to the screen edge in each direction. `Default to .zero`
         ///
         /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
@@ -120,7 +120,7 @@ extension HUD {
 
         /// Creates a new Layout.
         /// - Parameters:
-        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move 
+        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
         ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
         ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view.
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).

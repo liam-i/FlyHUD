@@ -60,10 +60,10 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
     /// The Progress object feeding the progress information to the progress indicator.
     ///
-    /// When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. 
+    /// When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object.
     /// Set the property to nil when you want to update the progress manually. `Defaults to nil`.
     ///
-    /// - Note: It will auto set localizedDescription and localizedAdditionalDescription to the text of label and detaillabel properties. 
+    /// - Note: It will auto set localizedDescription and localizedAdditionalDescription to the text of label and detaillabel properties.
     ///         They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
     public var observedProgress: Progress? {
         get { (indicator as? ProgressViewable)?.observedProgress }
@@ -76,13 +76,13 @@ open class HUD: BaseView, ProgressViewDelegate {
     public var isVisible: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     ///
-    /// If the task finishes before the grace time runs out, the HUD will not be shown at all. 
+    /// If the task finishes before the grace time runs out, the HUD will not be shown at all.
     /// This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
     ///
-    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`, 
+    /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
-    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden. 
+    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
     /// `Defaults to 0.0 (no minimum show time)`.
     public var minShowTime: TimeInterval = 0.0
     /// Removes the HUD from its parent view when hidden. `Defaults to true`.
@@ -91,7 +91,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// This is an activity count that records multiple shows and hides of the same HUD object.
     public private(set) var count: Int = 0
     /// A Boolean value indicating whether the HUD is in the enable activity count. `Defaults to false`.
-    /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD. 
+    /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     public var isCountEnabled: Bool = false
 
@@ -146,7 +146,7 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     // MARK: - Lifecycle
 
-    /// A convenience constructor that initializes the HUD with the `view's bounds`. 
+    /// A convenience constructor that initializes the HUD with the `view's bounds`.
     /// Calls the designated constructor with `view.bounds` as the parameter.
     ///
     /// - Parameter view: The view instance that will provide the `bounds` for the HUD.
@@ -213,12 +213,11 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
-    ///   - animated: If set to true the HUD will appear using the default animation. 
+    ///   - animated: If set to true the HUD will appear using the default animation.
     ///               If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
-    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
+    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
     ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` to move the HUD
     ///             all the way to the screen edge in each direction. `Default to .vMaxOffset`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
@@ -231,8 +230,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         duration: TimeInterval = 2.0,
         animated: Bool = true,
         mode: Mode = .text,
-        label: String? = nil,
-        detailsLabel: String? = nil, 
+        label: String?,
         offset: CGPoint = .h.vMaxOffset,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
@@ -242,7 +240,6 @@ open class HUD: BaseView, ProgressViewDelegate {
             using: animated ? .init() : .init(style: .none),
             mode: mode,
             label: label,
-            detailsLabel: detailsLabel, 
             offset: offset,
             populator: populator)
     }
@@ -254,10 +251,9 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
     ///   - animation: Use HUD.Animation.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. 
-    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
-    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
-    ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` to move the HUD all the way to 
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
+    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
+    ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` to move the HUD all the way to
     ///             the screen edge in each direction. `Default to .vMaxOffset`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
@@ -266,14 +262,13 @@ open class HUD: BaseView, ProgressViewDelegate {
     public class func showStatus(
         to view: UIView,
         duration: TimeInterval = 2.0,
-        using animation: Animation, 
+        using animation: Animation,
         mode: Mode = .text,
-        label: String? = nil,
-        detailsLabel: String? = nil,
-        offset: CGPoint = .h.vMaxOffset, 
+        label: String?,
+        offset: CGPoint = .h.vMaxOffset,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
-        show(to: view, using: animation, mode: mode, label: label, detailsLabel: detailsLabel) {
+        show(to: view, using: animation, mode: mode, label: label) {
             $0.layout.offset = offset
             populator?($0)
         }.h.then {
@@ -287,7 +282,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///   - view: The view that the HUD will be added to
     ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Default to true`.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. 
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
@@ -296,11 +291,11 @@ open class HUD: BaseView, ProgressViewDelegate {
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
     public class func show(
-        to view: UIView, 
+        to view: UIView,
         animated: Bool = true,
         mode: Mode = .indicator(),
         label: String? = nil,
-        detailsLabel: String? = nil, 
+        detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
         show(to: view,
@@ -316,7 +311,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///   - view: The view that the HUD will be added to
     ///   - animation: Use HUD.Animation.
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text. 
+    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
     ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
@@ -361,7 +356,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
-    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. 
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
     public class func hide(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
@@ -389,7 +384,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
     /// - Returns: true if one or more HUDs were found and removed, false otherwise.
-    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. 
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
     public class func hideAll(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
@@ -403,7 +398,7 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     /// Displays the HUD.
     /// - Parameter animated: If set to true the HUD will appear using the current animation. If set to false the HUD will not use animations while appearing. `Default to true`.
-    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. 
+    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - SeeAlso: HUD.Animation.
     public func show(animated: Bool = true) {
@@ -412,7 +407,7 @@ open class HUD: BaseView, ProgressViewDelegate {
 
     /// Displays the HUD.
     /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
-    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated. 
+    /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     public func show(using animation: Animation?) {
@@ -441,7 +436,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
 
     private func show(_ animation: Animation) {
-        // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. 
+        // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
         // The activity count is decremented by 1 when hiding the HUD.
         if isCountEnabled {
             count += 1
@@ -832,7 +827,7 @@ open class HUD: BaseView, ProgressViewDelegate {
     }
 
     open override func layoutSubviews() {
-        // There is no need to update constraints if they are going to be recreated in super.layoutSubviews() 
+        // There is no need to update constraints if they are going to be recreated in super.layoutSubviews()
         // due to needsUpdateConstraints being set. This also avoids an issue on iOS 8,
         // where updatePaddingConstraints would trigger a zombie object access.
         if needsUpdateConstraints() == false {
@@ -896,9 +891,9 @@ open class HUD: BaseView, ProgressViewDelegate {
 extension HUD {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(
-            self, 
+            self,
             selector: #selector(statusBarOrientationDidChange),
-            name: UIApplication.didChangeStatusBarOrientationNotification, 
+            name: UIApplication.didChangeStatusBarOrientationNotification,
             object: nil)
     }
 
