@@ -19,7 +19,8 @@ extension HUD {
         case indicator(UIActivityIndicatorView.Style = .h.large)
         /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
-        /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize for proper sizing. For best results use approximately 37 by 37 pixels.
+        /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize 
+        /// for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
 
         /// Whether to show only labels.
@@ -57,22 +58,28 @@ extension HUD {
 
         /// Creates a new Animation.
         /// - Parameters:
-        ///   - style: The animation type that should be used when the HUD is shown and hidden.
+        ///   - style: The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
         ///   - duration: The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
-        public static func animation(_ style: Animation.Style, damping: Animation.Damping = .disable, duration: TimeInterval = 0.3) -> Animation {
-            .init(style: style, damping: damping, duration: duration)
+        public init(style: Animation.Style = .fade, 
+                    damping: Animation.Damping = .disable,
+                    duration: TimeInterval = 0.3) {
+            self.style = style
+            self.duration = duration
+            self.damping = damping
         }
 
         /// Creates a new Animation.
         /// - Parameters:
-        ///   - style: The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
+        ///   - style: The animation type that should be used when the HUD is shown and hidden.
         ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
         ///   - duration: The animation duration that should be used when the HUD is shown and hidden. `Defaults to 0.3`.
-        public init(style: Animation.Style = .fade, damping: Animation.Damping = .disable, duration: TimeInterval = 0.3) {
-            self.style = style
-            self.duration = duration
-            self.damping = damping
+        public static func animation(
+            _ style: Animation.Style,
+            damping: Animation.Damping = .disable,
+            duration: TimeInterval = 0.3
+        ) -> Animation {
+            .init(style: style, damping: damping, duration: duration)
         }
     }
 }
@@ -86,7 +93,9 @@ extension HUDExtension where ExtendedType == CGPoint {
 }
 extension HUD {
     public struct Layout: Equatable {
-        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
+        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move 
+        /// the HUD all the way to the screen edge in each direction. `Default to .zero`
+        ///
         /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint
         /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
@@ -111,8 +120,10 @@ extension HUD {
 
         /// Creates a new Layout.
         /// - Parameters:
-        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move the HUD all the way to the screen edge in each direction. `Default to .zero`
-        ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
+        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move 
+        ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
+        ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view.
+        ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
         ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
         ///   - spacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
@@ -120,13 +131,13 @@ extension HUD {
         ///   - isSquare: Force the HUD dimensions to be equal if possible.
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
         public init(offset: CGPoint = .zero,
-             edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
-             hMargin: CGFloat = 20.0, 
-             vMargin: CGFloat = 20.0,
-             spacing: CGFloat = 4.0,
-             minSize: CGSize = .zero,
-             isSquare: Bool = false,
-             isSafeAreaLayoutGuideEnabled: Bool = true) {
+                    edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
+                    hMargin: CGFloat = 20.0,
+                    vMargin: CGFloat = 20.0,
+                    spacing: CGFloat = 4.0,
+                    minSize: CGSize = .zero,
+                    isSquare: Bool = false,
+                    isSafeAreaLayoutGuideEnabled: Bool = true) {
             self.offset = offset
             self.edgeInsets = edgeInsets
             self.hMargin = hMargin
