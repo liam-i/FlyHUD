@@ -29,22 +29,16 @@ extension UIView {
         setContentCompressionResistancePriority(priority, for: .vertical)
     }
 
-    func constraintsForCenter(equalTo view: UIView, offset: CGPoint, priority: Float, safeGuideEnabled: Bool) -> [NSLayoutConstraint] {
-        let anchor: (x: NSLayoutXAxisAnchor, y: NSLayoutYAxisAnchor)
-        if safeGuideEnabled {
-            anchor = (view.safeAreaLayoutGuide.centerXAnchor, view.safeAreaLayoutGuide.centerYAnchor)
-        } else {
-            anchor = (view.centerXAnchor, view.centerYAnchor)
-        }
-        return [
-            centerXAnchor.constraint(equalTo: anchor.x, constant: offset.x),
-            centerYAnchor.constraint(equalTo: anchor.y, constant: offset.y)
+    func constraintsForCenter(equalTo view: UIView, offset: CGPoint, priority: Float) -> [NSLayoutConstraint] {
+        [
+            centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: offset.x),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: offset.y)
         ].apply(priority: priority)
     }
 
-    func constraintsForEdge(greaterOrEqualTo view: UIView, edge: UIEdgeInsets, priority: Float, safeGuideEnabled: Bool) -> [NSLayoutConstraint] {
+    func constraintsForEdge(greaterOrEqualTo view: UIView, edge: UIEdgeInsets, priority: Float, useSafeGuide: Bool) -> [NSLayoutConstraint] {
         let anchor: (leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor)
-        if safeGuideEnabled {
+        if useSafeGuide {
             anchor = (view.safeAreaLayoutGuide.leadingAnchor, view.safeAreaLayoutGuide.trailingAnchor,
                       view.safeAreaLayoutGuide.topAnchor, view.safeAreaLayoutGuide.bottomAnchor)
         } else {

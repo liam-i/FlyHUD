@@ -65,10 +65,16 @@ public class KeyboardObserver {
     private var observers: NSHashTable<AnyObject> = .weakObjects()
 
     private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChangeNotification),
-                                               name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardFrameChangeNotification),
-                                               name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self, 
+            selector: #selector(keyboardFrameChangeNotification),
+            name: UIResponder.keyboardWillChangeFrameNotification, 
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self, 
+            selector: #selector(keyboardFrameChangeNotification),
+            name: UIResponder.keyboardDidChangeFrameNotification, 
+            object: nil)
     }
 
     deinit {
