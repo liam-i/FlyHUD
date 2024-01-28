@@ -14,7 +14,13 @@ class RotateImageView: UIImageView, RotateViewable {
 }
 
 class ViewController: UITableViewController, HUDDelegate {
-    private var v: UIView { /*navigationController?.view ??*/ view }
+    private var v: UIView {
+        switch config.showTo {
+        case .view:     return view
+        case .navView:  return navigationController!.view
+        case .window:   return view.window!
+        }
+    }
 
     @IBAction func indicatorButtonClicked(_ sender: UIButton) {
         switch sender.superview?.viewWithTag(1000) {
@@ -29,8 +35,7 @@ class ViewController: UITableViewController, HUDDelegate {
 
     @IBAction func statusButtonClicked(_ sender: UIButton) {
         let onlyText = sender.title(for: .normal) == "Toast"
-        let iv = UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))
-        let mode: HUD.Mode = onlyText ? .text : .custom(iv)
+        let mode: HUD.Mode = onlyText ? .text : .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
         showHUD(mode, label: mode.description).h.then {
             if config.isDefaultModeStyle {
                 $0.hide(afterDelay: config.hideAfterDelay)
@@ -41,6 +46,89 @@ class ViewController: UITableViewController, HUDDelegate {
     }
 
     @IBAction func multipleHUDsButtonClicked(_ sender: UIButton) {
+        var (request, response) = (0, 0)
+        let hud = HUD(with: v).h.then {
+            $0.isCountEnabled = true
+            v.addSubview($0)
+        }
+
+        func startRequest() {
+            request += 1
+
+            hud.show()
+            hud.label.text = "Count: \(hud.count)"
+            hud.detailsLabel.text = "Request: \(request), Response: \(response)"
+
+            Task.request(.random(in: 1...5)) {
+                response += 1
+
+                hud.hide(afterDelay: 1)
+                hud.label.text = "Count: \(hud.count)"
+                hud.detailsLabel.text = "Request: \(request), Response: \(response)"
+            }
+        }
+
+        startRequest()
+        startRequest()
+        startRequest()
+    }
+
+    @IBAction func hudButtonClicked(_ sender: UIButton) {
+        switch sender.tag {
+        case 1000: // Mode Switching
+            let hud = HUD.show(to: v, label: "Preparing...") {
+                $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
+            }
+            Task.requestMultiTask {
+                hud.progress = $0
+            } completion: {
+                switch $0 {
+                case 3:
+                    hud.mode = .progress(.round)
+                    hud.label.text = "Loading..."
+                case 2:
+                    hud.mode = .indicator()
+                    hud.label.text = "Cleaning up..."
+                case 1:
+                    hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.label.text = "Completed"
+                case 0:
+                    hud.hide()
+                default:
+                    assertionFailure()
+                }
+            }
+        case 1001: // URLSession
+            HUD.show(to: v, label: "Preparing...") {
+                $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
+            }.h.then { hud in
+                Task.download {
+                    hud.mode = .progress(.annularRound)
+                    hud.progress = $0
+                } completion: {
+                    hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.label.text = "Completed"
+                    hud.hide(afterDelay: 3.0)
+                }
+            }
+        default: // Determinate with Progress
+            HUD.show(to: v, mode: .progress(.round), label: "Loading...").h.then { hud in
+                let progress = Progress(totalUnitCount: 100)
+                hud.observedProgress = progress
+                hud.button.setTitle("Cancel", for: .normal)
+                hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
+
+                // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
+                // label.text and detailLabel.text takes their info from the progressObject.
+                // They can be customized or use the default text.
+                // To suppress one (or both) of the labels, set the descriptions to empty strings.
+                // progress.localizedDescription = "Download Progress"
+
+                Task.resume(with: progress) {
+                    hud.hide()
+                }
+            }
+        }
     }
 
     private func showHUD(_ mode: HUD.Mode, label: String? = nil) -> HUD {
@@ -169,6 +257,7 @@ class ViewController: UITableViewController, HUDDelegate {
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 28.0 }
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { 0.10 }
 
     // MARK: -
 
@@ -214,6 +303,7 @@ class ViewController: UITableViewController, HUDDelegate {
             sender.setAttributedTitle(mas, for: .normal)
         }
         switch text {
+        case "ShowT": Alert.list(title, list: ShowTo.allCases, selected: setTitle(_:)) { self.config.showTo = $0 }
         case "UseDe": Alert.switch(title, selected: setTitle(_:)) { self.config.isDefaultModeStyle = $0; self.updateForIsDefaultStyleEnabled() }
         case "Event": Alert.switch(title, selected: setTitle(_:)) { self.config.isEventDeliveryEnabled = $0 }
         case "Label": Alert.switch(title, selected: setTitle(_:)) { self.config.isLabelEnabled = $0 }
@@ -272,6 +362,7 @@ class ViewController: UITableViewController, HUDDelegate {
                 sender.setAttributedTitle(mas, for: .normal)
             }
             switch text {
+            case "ShowT": setTitle(config.showTo)
             case "UseDe": setTitle(config.isDefaultModeStyle); updateForIsDefaultStyleEnabled()
             case "Event": setTitle(config.isEventDeliveryEnabled)
             case "Label": setTitle(config.isLabelEnabled)
@@ -315,7 +406,7 @@ class ViewController: UITableViewController, HUDDelegate {
         propertiesButton.forEach { sender in
             guard let title = sender.title(for: .normal) else { return assertionFailure() }
             let text = String(title[title.startIndex...title.index(title.startIndex, offsetBy: 4)])
-            guard text != "UseDe" else { return }
+            guard text != "UseDe" && text != "ShowT" else { return }
             sender.isHidden = config.isDefaultModeStyle
             updateForIsForceAnimationEnabled(text, sender: sender)
         }

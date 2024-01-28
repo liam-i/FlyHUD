@@ -64,36 +64,24 @@ class Task: NSObject {
         DispatchQueue.global().async {
             // activityIndicator mode
             sleep(2)
-
             // Switch to determinate mode
-            DispatchQueue.main.async {
-                completion(3)
-            }
+            DispatchQueue.main.async { completion(3) }
 
             var progressValue: Float = 0.0
             while progressValue < 1.0 {
                 progressValue += 0.01
-                DispatchQueue.main.async {
-                    progress(progressValue)
-                }
+                DispatchQueue.main.async { progress(progressValue) }
                 usleep(50000)
             }
 
             // Back to activityIndicator mode
-            DispatchQueue.main.async {
-                completion(2)
-            }
+            DispatchQueue.main.async { completion(2) }
 
             sleep(2)
+            DispatchQueue.main.async { completion(1) }
 
-            DispatchQueue.main.async {
-                completion(1)
-            }
             sleep(2)
-
-            DispatchQueue.main.async {
-                completion(0)
-            }
+            DispatchQueue.main.async { completion(0) }
         }
     }
 
