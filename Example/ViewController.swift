@@ -122,7 +122,8 @@ class ViewController: UITableViewController, HUDDelegate {
                     // label.text and detailLabel.text takes their info from the progressObject.
                     // They can be customized or use the default text.
                     // To suppress one (or both) of the labels, set the descriptions to empty strings.
-                    // progress.localizedDescription = "Download Progress"
+                    //progress.localizedDescription = ""
+                    //progress.localizedAdditionalDescription = ""
                 } completion: {
                     hud.hide()
                 }
