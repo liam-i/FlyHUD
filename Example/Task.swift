@@ -44,18 +44,26 @@ class Task: NSObject {
         }
     }
 
-    static func resume(with progress: Progress, sec: UInt32 = 3, completion: @escaping () -> Void) {
+    static func resume(_ progress: (Progress) -> Void, sec: UInt32 = 3, completion: @escaping () -> Void) {
+        let parent = Progress(totalUnitCount: 100)
+//        let sub1 = Progress(totalUnitCount: 100, parent: parent, pendingUnitCount: 50)
+//        let sub2 = Progress(totalUnitCount: 100, parent: parent, pendingUnitCount: 50)
+        progress(parent)
+
         let us = sec * 1000 * 1000 / 100
         DispatchQueue.global().async {
-            while progress.fractionCompleted < 1.0 {
-                if progress.isCancelled { break }
+            while parent.fractionCompleted < 1.0 { // sub1.fractionCompleted < 1.0 && sub2.fractionCompleted < 1.0
+                if parent.isCancelled { break }
 
-                progress.becomeCurrent(withPendingUnitCount: 1)
-                progress.resignCurrent()
+//                progress.becomeCurrent(withPendingUnitCount: 1)
+//                progress.resignCurrent()
+                parent.completedUnitCount += 1
+
+//                sub1.completedUnitCount += 1
+//                sub2.completedUnitCount += 1
 
                 usleep(us)
             }
-
             DispatchQueue.main.async(execute: completion)
         }
     }

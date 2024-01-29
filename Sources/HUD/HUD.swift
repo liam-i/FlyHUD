@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView, ProgressViewDelegate {
+open class HUD: BaseView {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
@@ -67,7 +67,10 @@ open class HUD: BaseView, ProgressViewDelegate {
     ///         They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
     public var observedProgress: Progress? {
         get { (indicator as? ProgressViewable)?.observedProgress }
-        set { (indicator as? ProgressViewable)?.observedProgress = newValue }
+        set { 
+            (indicator as? ProgressViewable)?.observedProgress = newValue
+            setObservedProgressDisplayLink(enabled: newValue != nil)
+        }
     }
 
     /// The animation (type, duration, damping) that should be used when the HUD is shown and hidden.
@@ -174,6 +177,7 @@ open class HUD: BaseView, ProgressViewDelegate {
         cancelHideDelayWorkItem()
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
+        observedProgress = nil
 #if !os(tvOS)
         unregisterFromNotifications()
 #endif
@@ -454,8 +458,8 @@ open class HUD: BaseView, ProgressViewDelegate {
 
         let workItem = DispatchWorkItem { [weak self] in
             // Show the HUD only if the task is still running
-            guard let `self` = self, self.isFinished == false else { return }
-            self.performShow(animation)
+            guard let `self` = self, isFinished == false else { return }
+            performShow(animation)
         }
         graceWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + graceTime, execute: workItem)
@@ -468,7 +472,8 @@ open class HUD: BaseView, ProgressViewDelegate {
 
         showStarted = Date()
         isHidden = false
-        indicator?.isHidden = false
+        indicator?.isHidden = false // setObservedProgressDisplayLink
+        setObservedProgressDisplayLink(enabled: true)
 
         // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
         updateBezelMotionEffects()
@@ -528,7 +533,8 @@ open class HUD: BaseView, ProgressViewDelegate {
         perform(animation, showing: false) { [self] in
             // Cancel any scheduled hide(using:afterDelay:) calls
             cancelHideDelayWorkItem()
-            indicator?.isHidden = true
+            setObservedProgressDisplayLink(enabled: false)
+            indicator?.isHidden = true // setObservedProgressDisplayLink
 
             if isFinished {
                 isHidden = true
@@ -705,13 +711,9 @@ open class HUD: BaseView, ProgressViewDelegate {
             indicator.setContentCompressionResistancePriorityForAxis(998.0)
 
             switch indicator {
-            case let indicator as ActivityIndicatorViewable:
-                indicator.startAnimating()
-            case let indicator as ProgressViewable:
-                indicator.delegate = self
-                indicator.progress = progress
-            case let indicator as RotateViewable:
-                indicator.startRotating()
+            case let indicator as ActivityIndicatorViewable:    indicator.startAnimating()
+            case let indicator as ProgressViewable:             indicator.progress = progress
+            case let indicator as RotateViewable:               indicator.startRotating()
             default: break
             }
         }
@@ -729,12 +731,9 @@ open class HUD: BaseView, ProgressViewDelegate {
 
         guard let indicator = indicator else { return }
         switch indicator {
-        case let indicator as ActivityIndicatorViewable:
-            indicator.color = contentColor
-        case let indicator as ProgressViewable:
-            indicator.progressTintColor = contentColor
-        default:
-            indicator.tintColor = contentColor // Sets the tintColor for custom views.
+        case let indicator as ActivityIndicatorViewable:    indicator.color = contentColor
+        case let indicator as ProgressViewable:             indicator.progressTintColor = contentColor
+        default:                                            indicator.tintColor = contentColor // Sets the tintColor for custom views.
         }
     }
 
@@ -855,14 +854,6 @@ open class HUD: BaseView, ProgressViewDelegate {
         }
     }
 
-    // MARK: - ProgressViewDelegate
-
-    public func updateProgress(from observedProgress: Progress) {
-        // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
-        label.text = observedProgress.localizedDescription
-        detailsLabel.text = observedProgress.localizedAdditionalDescription
-    }
-
     // MARK: - View Hierarchy
 
     open override func didMoveToSuperview() {
@@ -880,6 +871,19 @@ open class HUD: BaseView, ProgressViewDelegate {
 
         let bezelRect = bezelView.convert(bezelView.bounds, to: self)
         return bezelRect.contains(point) ? hitView : nil
+    }
+
+    private func setObservedProgressDisplayLink(enabled: Bool) {
+        guard enabled && observedProgress != nil else {
+            return DisplayLink.shared.remove(at: hashValue)
+        }
+        DisplayLink.shared.add(for: hashValue) { [weak self] in
+            guard let `self` = self, let observedProgress = observedProgress,
+                    observedProgress.fractionCompleted <= 1.0 else { return }
+            // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
+            label.text = observedProgress.localizedDescription
+            detailsLabel.text = observedProgress.localizedAdditionalDescription
+        }
     }
 }
 

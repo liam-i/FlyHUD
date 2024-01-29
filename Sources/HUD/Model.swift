@@ -148,20 +148,6 @@ extension HUD {
             self.isSafeAreaLayoutGuideEnabled = isSafeAreaLayoutGuideEnabled
         }
     }
-
-#if !os(tvOS)
-    /// A layout guide that tracks the keyboard’s position in your app’s layout.
-    public enum KeyboardGuide: Equatable {
-        /// Disable keyboard tracking.
-        case disable
-        /// Center alignment.
-        /// - Parameter offsetY: The vertical offset of the bezel view relative to the center of the empty area. `Default to 0`.
-        case center(_ offsetY: CGFloat = 0.0)
-        /// Bezel view bottom relative to keyboard top layout.
-        /// - Parameter spacing: The spacing between the bottom of the bezel view and the top of the keyboard. `Default to 8`.
-        case bottom(_ spacing: CGFloat = 8.0)
-    }
-#endif
 }
 
 extension HUD.Animation {
@@ -211,4 +197,20 @@ extension HUD.Animation {
 extension HUD.Mode: HUDExtended {}
 extension HUD.Animation: HUDExtended {}
 extension HUD.Layout: HUDExtended {}
+
+#if !os(tvOS)
+extension HUD {
+    /// A layout guide that tracks the keyboard’s position in your app’s layout.
+    public enum KeyboardGuide: Equatable {
+        /// Disable keyboard tracking.
+        case disable
+        /// Center alignment.
+        /// - Parameter offsetY: The vertical offset of the bezel view relative to the center of the empty area. `Default to 0`.
+        case center(_ offsetY: CGFloat = 0.0)
+        /// Bezel view bottom relative to keyboard top layout.
+        /// - Parameter spacing: The spacing between the bottom of the bezel view and the top of the keyboard. `Default to 8`.
+        case bottom(_ spacing: CGFloat = 8.0)
+    }
+}
 extension HUD.KeyboardGuide: HUDExtended {}
+#endif

@@ -145,9 +145,6 @@ public class ProgressView: BaseView, ProgressViewable {
         }
     }
 
-    /// The object that acts as the delegate of the progress view. The delegate must adopt the ProgressViewDelegate protocol.
-    public weak var delegate: ProgressViewDelegate?
-
     private var animationBuilder: ProgressAnimationBuildable?
 
     /// Creates a progress view with the specified style.
@@ -178,6 +175,7 @@ public class ProgressView: BaseView, ProgressViewable {
     }
 
     deinit {
+        DisplayLink.shared.remove(at: hashValue)
 #if DEBUG
         print("👍👍👍 ProgressView is released.")
 #endif
@@ -232,18 +230,6 @@ public class ProgressView: BaseView, ProgressViewable {
 
     // MARK: Progress
 
-    private class WeakProxy {
-        private weak var target: ProgressView?
-
-        init(_ target: ProgressView) {
-            self.target = target
-        }
-
-        @objc func onScreenUpdate() {
-            target?.updateProgressFromObservedProgress()
-        }
-    }
-
     public override var alpha: CGFloat {
         didSet {
             updateProgressDisplayLink()
@@ -260,26 +246,16 @@ public class ProgressView: BaseView, ProgressViewable {
         updateProgressDisplayLink()
     }
 
-    private var observedProgressDisplayLink: CADisplayLink?
     private func updateProgressDisplayLink() {
         // We're using CADisplayLink, because Progress can change very quickly and observing it
         // may starve the main thread, so we're refreshing the progress only every frame draw
         let enabled = isHidden == false && alpha > 0.0 && superview != nil
-        if enabled && observedProgress != nil {
-            if observedProgressDisplayLink == nil { // Only create if not already active.
-                let displayLink = CADisplayLink(target: WeakProxy(self), selector: #selector(WeakProxy.onScreenUpdate))
-                displayLink.add(to: .main, forMode: .default)
-                observedProgressDisplayLink = displayLink
-            }
-        } else {
-            observedProgressDisplayLink?.invalidate()
-            observedProgressDisplayLink = nil
+        guard enabled && observedProgress != nil else {
+            return DisplayLink.shared.remove(at: hashValue)
         }
-    }
-
-    private func updateProgressFromObservedProgress() {
-        guard let observedProgress = observedProgress else { return }
-        progress = Float(observedProgress.fractionCompleted)
-        delegate?.updateProgress(from: observedProgress)
+        DisplayLink.shared.add(for: hashValue) { [weak self] in
+            guard let `self` = self, let observedProgress = observedProgress else { return }
+            progress = Float(observedProgress.fractionCompleted)
+        }
     }
 }
