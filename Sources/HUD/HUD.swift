@@ -727,8 +727,6 @@ open class HUD: BaseView, ProgressViewDelegate {
         detailsLabel.textColor = contentColor
         button.setTitleColor(contentColor, for: .normal)
 
-        // TODO: UIAppearance settings are prioritized. If they are preset the set color is ignored.
-
         guard let indicator = indicator else { return }
         switch indicator {
         case let indicator as ActivityIndicatorViewable:

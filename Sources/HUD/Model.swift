@@ -28,10 +28,10 @@ extension HUD {
             self == .text
         }
 
-        /// Whether UIActivityIndicatorView or ActivityIndicatorViewable.
+        /// Whether it is UIActivityIndicatorView, ActivityIndicatorViewable or RotateViewable.
         public var isIndicator: Bool {
             if case .indicator = self { return true }
-            if case let .custom(view) = self, view is ActivityIndicatorViewable { return true }
+            if case let .custom(view) = self, (view is ActivityIndicatorViewable || view is RotateViewable) { return true }
             return false
         }
 
