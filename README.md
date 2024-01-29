@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
 [![Platform](https://img.shields.io/cocoapods/p/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
 
-A Swift version of [MBProgressHUD](https://github.com/jdg/MBProgressHUD).
+This is a lightweight and easy-to-use HUD designed to display the progress and status of ongoing tasks on iOS and tvOS.
 
 ## ScreenShots
 
@@ -33,7 +33,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.3.6"
+- Select "Up to Next Minor" with "1.4.0"
 
 #### CocoaPods
 
@@ -45,11 +45,11 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
-  pod 'LPHUD', '~> 1.3.6'
+  pod 'LPHUD', '~> 1.4.0'
   # or
-  pod 'LPHUD', '~> 1.3.6', :subspecs => ['HUDIndicator']
+  pod 'LPHUD', '~> 1.4.0', :subspecs => ['HUDIndicator']
   # or
-  pod 'LPHUD', '~> 1.3.6', :subspecs => ['HUDProgress']
+  pod 'LPHUD', '~> 1.4.0', :subspecs => ['HUDProgress']
 end
 ```
 
