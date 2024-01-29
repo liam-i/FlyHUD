@@ -10,10 +10,13 @@ import UIKit
 public protocol RotateViewable: AnyObject where Self: UIView {
     /// Specifies the basic duration of the animation, in seconds.
     var duration: CFTimeInterval { get }
+
     /// Starts the animation of the rotate view.
+    ///
     /// - Note: When the rotate view is animated, the view is animated until stopRotation() is called.
     func startRotating()
     /// Stops the animation of the rotate view.
+    ///
     /// - Note: Call this method to stop the animation of the rotate view started with a call to startRotation().
     func stopRotating()
 }

@@ -49,7 +49,8 @@ extension CGFloat: HUDExtended {}
 extension NSObject: HUDExtended {}
 
 extension HUDExtension where ExtendedType == UIColor {
-    /// Defaults to `UIColor.label.withAlphaComponent(0.7)` on iOS 13 and later and. `UIColor(white: 0.0, alpha: 0.7)` on older systems.
+    /// Defaults to `UIColor.label.withAlphaComponent(0.7)` on iOS 13
+    /// and later and. `UIColor(white: 0.0, alpha: 0.7)` on older systems.
     public static let content: UIColor = {
         if #available(iOS 13.0, tvOS 13.0, *) {
             return UIColor.label.withAlphaComponent(0.7)
@@ -58,7 +59,8 @@ extension HUDExtension where ExtendedType == UIColor {
         }
     }()
 
-    /// The background color or the blur tint color. Defaults to `nil` on iOS 13 and later and. `UIColor(white: 0.8, alpha: 0.6)` on older systems.
+    /// The background color or the blur tint color. Defaults to `nil` on iOS 13
+    /// and later and. `UIColor(white: 0.8, alpha: 0.6)` on older systems.
     public static let background: UIColor? = {
         if #available(iOS 13.0, *) {
             return nil
@@ -83,6 +85,7 @@ extension HUDExtension where ExtendedType: Equatable, ExtendedType: NSObjectProt
 
 extension HUDExtension where ExtendedType: AnyObject {
     /// Executes the given block passing the `Self` in as its sole argument.
+    ///
     /// - Parameter populator: A block or function that populates the `Self`, which is passed into the block as an argument.
     /// - Note: This method is recommended for assigning values to properties.
     @discardableResult
@@ -94,6 +97,7 @@ extension HUDExtension where ExtendedType: AnyObject {
 
 extension HUDExtension where ExtendedType: Any {
     /// Executes the given block passing the `Self` in as its sole `inout` argument.
+    ///
     /// - Parameter populator: A block or function that populates the `Self`, which is passed into the block as an `inout` argument.
     /// - Note: This method is recommended for assigning values to properties.
     @discardableResult

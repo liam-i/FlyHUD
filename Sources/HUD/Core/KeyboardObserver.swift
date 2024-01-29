@@ -51,13 +51,16 @@ public class KeyboardObserver {
     public private(set) var keyboardInfo: KeyboardInfo?
 
     /// Adds a given object to the keyboard observer list.
-    /// - Parameter observer: The object to add to the keyboard observer list. This object must implement the KeyboardObservable protocol.
+    ///
+    /// - Parameter observer: The object to add to the keyboard observer list.
+    ///                       This object must implement the KeyboardObservable protocol.
     public func add(_ observer: KeyboardObservable) {
         observers.add(observer)
     }
 
     /// Removes a given object from the keyboard observer list.
-    /// - Parameter observer: The object to remove from the keyboard observer list. This object must implement the KeyboardObservable protocol.
+    /// - Parameter observer: The object to remove from the keyboard observer list.
+    ///                       This object must implement the KeyboardObservable protocol.
     public func remove(_ observer: KeyboardObservable) {
         observers.remove(observer)
     }
@@ -66,14 +69,14 @@ public class KeyboardObserver {
 
     private init() {
         NotificationCenter.default.addObserver(
-            self, 
+            self,
             selector: #selector(keyboardFrameChangeNotification),
-            name: UIResponder.keyboardWillChangeFrameNotification, 
+            name: UIResponder.keyboardWillChangeFrameNotification,
             object: nil)
         NotificationCenter.default.addObserver(
-            self, 
+            self,
             selector: #selector(keyboardFrameChangeNotification),
-            name: UIResponder.keyboardDidChangeFrameNotification, 
+            name: UIResponder.keyboardDidChangeFrameNotification,
             object: nil)
     }
 

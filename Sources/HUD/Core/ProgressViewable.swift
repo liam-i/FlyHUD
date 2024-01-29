@@ -14,10 +14,13 @@ import UIKit
 //}
 
 /// A view that depicts the progress of a task over time.
-/// - Note: The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
+///
+/// The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
+///
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
 public protocol ProgressViewable: AnyObject {
     /// The current progress of the progress view.
+    ///
     /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
     var progress: Float { get set }
 
@@ -28,7 +31,10 @@ public protocol ProgressViewable: AnyObject {
     var trackTintColor: UIColor? { get set }
 
     /// The Progress object feeding the progress information to the progress indicator.
-    /// - Note: When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
+    ///
+    /// - Note: When this property is set, the progress view updates its progress value automatically using information it
+    ///         receives from the [Progress](https://developer.apple.com/documentation/foundation/progress)
+    ///         object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
     var observedProgress: Progress? { get set }
 }
 

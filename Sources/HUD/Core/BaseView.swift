@@ -23,7 +23,7 @@ open class BaseView: UIView {
         commonInit()
     }
 
-    /// The default implementation of this method does nothing. Subclasses can override it to perform additional actions after superview initialization.
-    open func commonInit() {
-    }
+    /// The default implementation of this method does nothing.
+    /// Subclasses can override it to perform additional actions after superview initialization.
+    open func commonInit() {}
 }
