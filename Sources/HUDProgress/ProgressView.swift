@@ -257,7 +257,7 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     }
 
     /// Refreshing the progress only every frame draw.
-    public func onScreenUpdate() {
+    public func updateScreenInDisplayLink() {
         guard let observedProgress = observedProgress else { return }
         progress = Float(observedProgress.fractionCompleted)
     }

@@ -882,7 +882,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
     }
 
     /// Refreshing the progress only every frame draw.
-    public func onScreenUpdate() {
+    public func updateScreenInDisplayLink() {
         guard let progress = observedProgress, progress.fractionCompleted <= 1.0 else { return }
         // They can be customized or use the default text. To suppress one
         // (or both) of the labels, set the descriptions to empty strings.
