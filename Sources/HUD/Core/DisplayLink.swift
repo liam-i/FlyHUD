@@ -26,7 +26,7 @@ public class DisplayLink {
         delegates.add(delegate)
 
         guard displayLink == nil else { return }
-        
+
         let displayLink = CADisplayLink(target: self, selector: #selector(onScreenUpdate))
         displayLink.add(to: .main, forMode: .default)
         self.displayLink = displayLink

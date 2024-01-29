@@ -13,6 +13,7 @@ import HUD
 /// The styles permitted for the progress bar.
 public protocol ProgressViewStyleable {
     /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
+    ///
     /// - Parameter object: The object to be compared to the receiver.
     /// - Returns: true if the receiver and object are equal, otherwise false.
     func isEqual(_ object: Any) -> Bool
@@ -45,6 +46,7 @@ extension ProgressViewStyleable {
 
 extension ProgressView {
     /// The styles permitted for the progress bar.
+    ///
     /// - Note: You can retrieve the current style of progress view through the `ProgressView.style` property.
     public enum Style: CaseIterable, ProgressViewStyleable {
         /// A flat bar progress view. Display mode butt.
@@ -81,10 +83,14 @@ extension ProgressView {
 }
 
 /// A view that depicts the progress of a task over time.
-/// - Note: The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
+///
+/// The ProgressView class provides properties for managing the style of the progress
+/// bar and for getting and setting values that are pinned to the progress of a task.
+///
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
 public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// The current graphical style of the progress view. The value of this property is a constant that specifies the style of the progress view.
+    ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
     public var style: ProgressViewStyleable = Style.buttBar {
@@ -138,7 +144,10 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     }
 
     /// The Progress object feeding the progress information to the progress indicator.
-    /// - Note: When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
+    ///
+    /// - Note: When this property is set, the progress view updates its progress value automatically using information it
+    ///         receives from the [Progress](https://developer.apple.com/documentation/foundation/progress)
+    ///         object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
     public var observedProgress: Progress? {
         didSet {
             observedProgress.h.notEqual(oldValue, do: updateProgressDisplayLink())
@@ -148,22 +157,26 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     private var animationBuilder: ProgressAnimationBuildable?
 
     /// Creates a progress view with the specified style.
+    ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ProgressView.Style for descriptions of the style constants.
     ///   - size: Specifying the size of the progress view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(style: Style, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(style: Style, size: CGSize = .zero,
+                            populator: ((ProgressView) -> Void)? = nil) {
         self.init(styleable: style, size: size, populator: populator)
     }
 
     /// Creates a progress view with the specified style.
+    ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created.
     ///   - size: Specifying the size of the progress view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero, populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero,
+                            populator: ((ProgressView) -> Void)? = nil) {
         self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
         populator?(self)

@@ -13,6 +13,7 @@ import HUD
 /// The visual style of the activity indicator.
 public protocol ActivityIndicatorViewStyleable {
     /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
+    ///
     /// - Parameter object: The object to be compared to the receiver.
     /// - Returns: true if the receiver and object are equal, otherwise false.
     func isEqual(_ object: Any) -> Bool
@@ -39,6 +40,7 @@ extension ActivityIndicatorViewStyleable {
 
 extension ActivityIndicatorView {
     /// The visual style of the activity indicator.
+    ///
     /// - Note: You set the value of the style property with these constants.
     public enum Style: Equatable, CaseIterable, ActivityIndicatorViewStyleable {
         case ringClipRotate
@@ -66,9 +68,13 @@ extension ActivityIndicatorView {
 }
 
 /// A view that shows that a task is in progress.
-/// - Note: You control when an activity indicator animates by calling the startAnimating() and stopAnimating() methods. To automatically hide the activity indicator when animation stops, set the hidesWhenStopped property to true. You can set the color of the activity indicator by using the color property.
+///
+/// - Note: You control when an activity indicator animates by calling the startAnimating() and stopAnimating()
+///         methods. To automatically hide the activity indicator when animation stops, set the hidesWhenStopped
+///         property to true. You can set the color of the activity indicator by using the color property.
 public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     /// The basic appearance of the activity indicator view. The value of this property is a constant that specifies the style of the activity indicator view.
+    ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ActivityIndicatorView.Style.
     public var style: ActivityIndicatorViewStyleable = Style.ringClipRotate {
@@ -79,6 +85,7 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     /// The color of the activity indicator.
+    ///
     /// - Note: If you set a color for an activity indicator, it overrides the color provided by the style property.
     public lazy var color: UIColor! = style.defaultColor {
         didSet {
@@ -98,29 +105,36 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         }
     }
     /// A Boolean value that controls whether the activity indicator is hidden when the animation is stopped.
-    /// - Note: If the value of this property is true (the default), the receiver sets its isHidden property (UIView) to true when receiver is not animating. If the hidesWhenStopped property is false, the receiver is not hidden when animation stops. You stop an animating activity indicator with the stopAnimating() method.
+    ///
+    /// - Note: If the value of this property is true (the default), the receiver sets its isHidden property (UIView)
+    ///         to true when receiver is not animating. If the hidesWhenStopped property is false, the receiver is not
+    ///         hidden when animation stops. You stop an animating activity indicator with the stopAnimating() method.
     public lazy var hidesWhenStopped: Bool = true
 
     /// A Boolean value indicating whether the activity indicator is currently running its animation.
     public private(set) var isAnimating: Bool = false
 
     /// Creates an activity indicator view with the specified style.
+    ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ActivityIndicatorView.Style for descriptions of the style constants.
     ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public convenience init(style: Style, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
+    public convenience init(style: Style, size: CGSize = .zero,
+                            populator: ((ActivityIndicatorView) -> Void)? = nil) {
         self.init(styleable: style, size: size, populator: populator)
     }
 
     /// Creates an activity indicator view with the specified style.
+    ///
     /// - Parameters:
     ///   - styleable: A constant that specifies the style of the object to be created.
     ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
     ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero, populator: ((ActivityIndicatorView) -> Void)? = nil) {
+    public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero,
+                            populator: ((ActivityIndicatorView) -> Void)? = nil) {
         self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
         populator?(self)
@@ -140,7 +154,9 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     /// Starts the animation of the activity indicator.
-    /// - Note: When the activity indicator is animated, the gear spins to indicate indeterminate progress. The indicator is animated until stopAnimating() is called.
+    ///
+    /// - Note: When the activity indicator is animated, the gear spins to indicate
+    ///         indeterminate progress. The indicator is animated until stopAnimating() is called.
     public func startAnimating() {
         guard isAnimating == false else { return }
         isHidden = false
@@ -150,7 +166,9 @@ public class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     /// Stops the animation of the activity indicator.
-    /// - Note: Call this method to stop the animation of the activity indicator started with a call to startAnimating(). When animating is stopped, the indicator is hidden, unless hidesWhenStopped is false.
+    ///
+    /// - Note: Call this method to stop the animation of the activity indicator started with a call to startAnimating().
+    ///         When animating is stopped, the indicator is hidden, unless hidesWhenStopped is false.
     public func stopAnimating() {
         guard isAnimating else { return }
         isAnimating = false
