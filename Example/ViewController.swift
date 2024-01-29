@@ -113,18 +113,17 @@ class ViewController: UITableViewController, HUDDelegate {
             }
         default: // Determinate with Progress
             HUD.show(to: v, mode: .progress(.round), label: "Loading...").h.then { hud in
-                let progress = Progress(totalUnitCount: 100)
-                hud.observedProgress = progress
-                hud.button.setTitle("Cancel", for: .normal)
-                hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
+                Task.resume { progress in
+                    hud.observedProgress = progress
+                    hud.button.setTitle("Cancel", for: .normal)
+                    hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
 
-                // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
-                // label.text and detailLabel.text takes their info from the progressObject.
-                // They can be customized or use the default text.
-                // To suppress one (or both) of the labels, set the descriptions to empty strings.
-                // progress.localizedDescription = "Download Progress"
-
-                Task.resume(with: progress) {
+                    // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
+                    // label.text and detailLabel.text takes their info from the progressObject.
+                    // They can be customized or use the default text.
+                    // To suppress one (or both) of the labels, set the descriptions to empty strings.
+                    // progress.localizedDescription = "Download Progress"
+                } completion: {
                     hud.hide()
                 }
             }
