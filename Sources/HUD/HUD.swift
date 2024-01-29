@@ -19,7 +19,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView {
+open class HUD: BaseView, DisplayLinkDelegate {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label = UILabel(frame: .zero)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
@@ -178,6 +178,7 @@ open class HUD: BaseView {
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
         observedProgress = nil
+        KeyboardObserver.shared.remove(self)
 #if !os(tvOS)
         unregisterFromNotifications()
 #endif
@@ -875,15 +876,18 @@ open class HUD: BaseView {
 
     private func setObservedProgressDisplayLink(enabled: Bool) {
         guard enabled && observedProgress != nil else {
-            return DisplayLink.shared.remove(at: hashValue)
+            return DisplayLink.shared.remove(self)
         }
-        DisplayLink.shared.add(for: hashValue) { [weak self] in
-            guard let `self` = self, let observedProgress = observedProgress,
-                    observedProgress.fractionCompleted <= 1.0 else { return }
-            // They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
-            label.text = observedProgress.localizedDescription
-            detailsLabel.text = observedProgress.localizedAdditionalDescription
-        }
+        DisplayLink.shared.add(self)
+    }
+
+    /// Refreshing the progress only every frame draw.
+    public func onScreenUpdate() {
+        guard let progress = observedProgress, progress.fractionCompleted <= 1.0 else { return }
+        // They can be customized or use the default text. To suppress one
+        // (or both) of the labels, set the descriptions to empty strings.
+        label.text = progress.localizedDescription
+        detailsLabel.text = progress.localizedAdditionalDescription
     }
 }
 

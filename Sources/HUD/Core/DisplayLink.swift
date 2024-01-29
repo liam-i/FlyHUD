@@ -8,26 +8,10 @@
 import Foundation
 import QuartzCore
 
-extension DisplayLink {
-    public typealias TargetID = Int
-
-    public struct Block: Hashable, Equatable {
-        public let id: TargetID
-        public let block: () -> Void
-
-        public init(id: TargetID, block: @escaping () -> Void) {
-            self.id = id
-            self.block = block
-        }
-
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
-        }
-
-        public static func == (lhs: DisplayLink.Block, rhs: DisplayLink.Block) -> Bool {
-            lhs.id == rhs.id
-        }
-    }
+/// The methods adopted by the object that allows your app to synchronize its drawing to the refresh rate of the display.
+public protocol DisplayLinkDelegate: AnyObject {
+    /// Tells the delegate that the refreshing the screen only every frame draw.
+    func onScreenUpdate()
 }
 
 /// A timer object that allows your app to synchronize its drawing to the refresh rate of the display.
@@ -36,44 +20,38 @@ public class DisplayLink {
     /// The shared singleton keyboard observer object.
     public static let shared = DisplayLink()
 
-    private init() {}
-
-    private var displayLink: CADisplayLink?
-    private var blocks: Set<Block> = []
-
     /// If necessary create a display link with the id and block you specify.
-    /// - Parameters:
-    ///   - id: An target id the system notifies to update the screen.
-    ///   - block: The block to call on the target.
-    public func add(for id: TargetID, block: @escaping () -> Void) {
-        DispatchQueue.main.safeAsync { [self] in
-            blocks.insert(.init(id: id, block: block))
+    /// - Parameter delegate: An delegate the system notifies to update the screen.
+    public func add(_ delegate: DisplayLinkDelegate) {
+        delegates.add(delegate)
 
-            guard displayLink == nil else { return }
+        guard displayLink == nil else { return }
 
-            let displayLink = CADisplayLink(target: self, selector: #selector(onScreenUpdate))
-            displayLink.add(to: .main, forMode: .default)
-            self.displayLink = displayLink
-        }
+        let displayLink = CADisplayLink(target: self, selector: #selector(onScreenUpdate))
+        displayLink.add(to: .main, forMode: .default)
+        self.displayLink = displayLink
     }
 
     /// Removes the display link from all run loop modes if necessary..
-    /// - Parameter id: An target id.
-    public func remove(at id: TargetID) {
-        DispatchQueue.main.safeAsync { [self] in
-            if let index = blocks.firstIndex(where: { $0.id == id }) {
-                blocks.remove(at: index)
-            }
+    /// - Parameter delegate: An delegate.
+    public func remove(_ delegate: DisplayLinkDelegate) {
+        delegates.remove(delegate)
+        guard delegates.count == 0 || delegates.allObjects.isEmpty else { return }
 
-            if blocks.isEmpty {
-                displayLink?.invalidate()
-                displayLink = nil
-            }
-        }
+        displayLink?.invalidate()
+        displayLink = nil
     }
 
     @objc
     private func onScreenUpdate() {
-        blocks.forEach { $0.block() }
+        let enumerator = delegates.objectEnumerator()
+        while case let delegate as DisplayLinkDelegate = enumerator.nextObject() {
+            delegate.onScreenUpdate()
+        }
     }
+
+    private init() {}
+
+    private var displayLink: CADisplayLink?
+    private var delegates: NSHashTable<AnyObject> = .weakObjects()
 }
