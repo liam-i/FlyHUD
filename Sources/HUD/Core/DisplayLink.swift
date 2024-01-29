@@ -11,7 +11,7 @@ import QuartzCore
 /// The methods adopted by the object that allows your app to synchronize its drawing to the refresh rate of the display.
 public protocol DisplayLinkDelegate: AnyObject {
     /// Tells the delegate that the refreshing the screen only every frame draw.
-    func onScreenUpdate()
+    func updateScreenInDisplayLink()
 }
 
 /// A timer object that allows your app to synchronize its drawing to the refresh rate of the display.
@@ -26,7 +26,7 @@ public class DisplayLink {
         delegates.add(delegate)
 
         guard displayLink == nil else { return }
-
+        
         let displayLink = CADisplayLink(target: self, selector: #selector(onScreenUpdate))
         displayLink.add(to: .main, forMode: .default)
         self.displayLink = displayLink
@@ -36,6 +36,7 @@ public class DisplayLink {
     /// - Parameter delegate: An delegate.
     public func remove(_ delegate: DisplayLinkDelegate) {
         delegates.remove(delegate)
+
         guard delegates.count == 0 || delegates.allObjects.isEmpty else { return }
 
         displayLink?.invalidate()
@@ -46,7 +47,7 @@ public class DisplayLink {
     private func onScreenUpdate() {
         let enumerator = delegates.objectEnumerator()
         while case let delegate as DisplayLinkDelegate = enumerator.nextObject() {
-            delegate.onScreenUpdate()
+            delegate.updateScreenInDisplayLink()
         }
     }
 
