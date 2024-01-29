@@ -83,7 +83,7 @@ extension ProgressView {
 /// A view that depicts the progress of a task over time.
 /// - Note: The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
-public class ProgressView: BaseView, ProgressViewable {
+public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// The current graphical style of the progress view. The value of this property is a constant that specifies the style of the progress view.
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
@@ -175,7 +175,7 @@ public class ProgressView: BaseView, ProgressViewable {
     }
 
     deinit {
-        DisplayLink.shared.remove(at: hashValue)
+        DisplayLink.shared.remove(self)
 #if DEBUG
         print("👍👍👍 ProgressView is released.")
 #endif
@@ -251,11 +251,14 @@ public class ProgressView: BaseView, ProgressViewable {
         // may starve the main thread, so we're refreshing the progress only every frame draw
         let enabled = isHidden == false && alpha > 0.0 && superview != nil
         guard enabled && observedProgress != nil else {
-            return DisplayLink.shared.remove(at: hashValue)
+            return DisplayLink.shared.remove(self)
         }
-        DisplayLink.shared.add(for: hashValue) { [weak self] in
-            guard let `self` = self, let observedProgress = observedProgress else { return }
-            progress = Float(observedProgress.fractionCompleted)
-        }
+        DisplayLink.shared.add(self)
+    }
+
+    /// Refreshing the progress only every frame draw.
+    public func onScreenUpdate() {
+        guard let observedProgress = observedProgress else { return }
+        progress = Float(observedProgress.fractionCompleted)
     }
 }
