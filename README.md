@@ -1,6 +1,7 @@
 # HUD
 
 <!-- [![CI Status](https://img.shields.io/travis/Liam/HUD.svg?style=flat)](https://travis-ci.org/Liam/HUD) -->
+
 [![Version](https://img.shields.io/cocoapods/v/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
 [![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
 [![Platform](https://img.shields.io/cocoapods/p/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
@@ -53,14 +54,30 @@ target 'MyApp' do
 end
 ```
 
-## ## Documentation
+## Documentation
 
-[Complete API Documentation](https://liam-i.github.io/HUD/documentation/lphud)
+The documentation for releases and `main` are available here:
 
-## Author
+* [main](https://liam-i.github.io/HUD/main/documentation/lphud)
+* [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
 
-Liam, liam_i@163.com
+<details>
+  <summary>
+  Other versions
+  </summary>
+
+* [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
+* [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
+* [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
+  
+  </details>
+
+## Credits and thanks
+
+* Thanks a lot to [Jonathan George](https://github.com/jdg) for building [MBProgressHUD](https://github.com/jdg/MBProgressHUD) - all ideas in here and many implementation details were provided by his library.
+* Thanks a lot to [Vinh Nguyen](https://github.com/ninjaprox) for building [NVActivityIndicatorView](https://github.com/ninjaprox/NVActivityIndicatorView) - many implementation details of the loading animations here are provided by his library.
+* Thanks a lot to [Related Code](https://github.com/relatedcode) for building [ProgressHUD](https://github.com/relatedcode/ProgressHUD) - many implementation details of the loading animations here are provided by his library.
 
 ## License
 
-HUD is available under the MIT license. See the LICENSE file for more info.
+HUD is available under the MIT license. See the [LICENSE](./LICENSE) file for more info.
