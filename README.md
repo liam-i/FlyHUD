@@ -94,7 +94,7 @@ HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "Checkm
 
 For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled demo project. Extensive API documentation is available [here](https://liam-i.github.io/HUD/main/documentation/lphud).
 
-To run the example project, clone the repo, and run `pod install` from the root directory first.
+To run the example project, first clone the repo, then `cd` to the root directory and run `pod install`. Then open HUD.xcworkspace in Xcode.
 
 ## Documentation
 
