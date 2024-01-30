@@ -50,9 +50,51 @@ target 'MyApp' do
 end
 ```
 
-## Example
+## Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+Using `HUD` in your application is very simple.
+
+* Shows the status of indeterminate tasks.
+
+```swift
+let hud = HUD.show(to: view)
+DispatchQueue.global().async {
+    // Do something...
+    DispatchQueue.main.async {
+        hud.hide()
+    }
+}
+```
+
+* Shows the progress of the task.
+
+```swift
+let hud = HUD.show(to: view, mode: .progress())
+DispatchQueue.global().async {
+    // Do something...
+    DispatchQueue.main.async {
+        hud.hide()
+    }
+}
+```
+
+* Show text-only status.
+
+```swift
+HUD.showStatus(to: view, label: "Wrong password")
+```
+
+* Shows the status of a custom view. e.g. a UIImageView.
+
+```swift
+HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))), label: "Completed")
+```
+
+> **Warning**
+> The main guideline you need to follow when dealing with HUD while running long-running tasks is keeping the main thread work-free, so the UI can be updated promptly. The recommended way of using HUD is therefore to set it up on the main thread and then spinning the task, that you want to perform, off onto a new thread.
+
+For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled demo project. Extensive API documentation is available [here](https://liam-i.github.io/HUD/main/documentation/lphud).
+To run the example project, clone the repo, and run `pod install` from the root directory first.
 
 ## Documentation
 
@@ -67,7 +109,9 @@ The documentation for releases and `main` are available here:
   </summary>
 
 * [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
+
 * [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
+
 * [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
   
   </details>

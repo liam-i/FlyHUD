@@ -19,7 +19,7 @@ extension HUD {
         case indicator(UIActivityIndicatorView.Style = .h.large)
         /// UIProgressView.  Style `Defalut to .default`.
         case progress(UIProgressView.Style = .default)
-        /// Shows a custom view. e.g., a UIImageView. The view should implement intrinsicContentSize
+        /// Shows a custom view. e.g. a UIImageView. The view should implement intrinsicContentSize
         /// for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
 
