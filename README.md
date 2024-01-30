@@ -90,7 +90,7 @@ HUD.showStatus(to: view, label: "Wrong password")
 HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))), label: "Completed")
 ```
 
-> **Warning**
+> [!WARNING]  
 > The main guideline you need to follow when dealing with HUD while running long-running tasks is keeping the main thread work-free, so the UI can be updated promptly. The recommended way of using HUD is therefore to set it up on the main thread and then spinning the task, that you want to perform, off onto a new thread.
 
 For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled demo project. Extensive API documentation is available [here](https://liam-i.github.io/HUD/main/documentation/lphud).
