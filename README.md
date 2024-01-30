@@ -18,10 +18,6 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## Requirements
 
 * iOS 11.0+ 
@@ -53,6 +49,10 @@ target 'MyApp' do
   pod 'LPHUD', '~> 1.4.0', :subspecs => ['HUDProgress']
 end
 ```
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Documentation
 
