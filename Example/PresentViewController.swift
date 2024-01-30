@@ -14,7 +14,7 @@ class PresentViewController: UIViewController {
 
     @IBAction func showHUDClicked(_ sender: UIButton) {
         HUD.showStatus(to: view, duration: .greatestFiniteMagnitude, using: .animation(.slideDownUp, damping: .default), 
-                       mode: .text, label: "Wrong password", offset: .h.vMinOffset) {
+                       mode: .text, label: "You have a message.", offset: .h.vMinOffset) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
@@ -23,7 +23,7 @@ class PresentViewController: UIViewController {
             $0.keyboardGuide = .center()
         }
         HUD.showStatus(to: view, duration: .greatestFiniteMagnitude, using: .animation(.slideUpDown, damping: .default), 
-                       mode: .text, label: "Wrong password") {
+                       mode: .text, label: "Wrong password", offset: .h.vMaxOffset) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }

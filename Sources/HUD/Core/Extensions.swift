@@ -29,26 +29,33 @@ extension UIView {
         setContentCompressionResistancePriority(priority, for: .vertical)
     }
 
-    func constraintsForCenter(equalTo view: UIView, offset: CGPoint, priority: Float) -> [NSLayoutConstraint] {
-        [
-            centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: offset.x),
-            centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: offset.y)
+    func constraintsForCenter(equalTo view: UIView, offset: CGPoint, priority: Float, useSafeGuide: Bool) -> [NSLayoutConstraint] {
+        let safeArea = view.safeAreaInsets
+        let constant: (x: CGFloat, y: CGFloat)
+        if useSafeGuide {
+            constant = (offset.x + safeArea.left - safeArea.right, offset.y + safeArea.top - safeArea.bottom)
+        } else {
+            constant = (offset.x, offset.y)
+        }
+        return [
+            centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: constant.x),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: constant.y)
         ].apply(priority: priority)
     }
 
     func constraintsForEdge(greaterOrEqualTo view: UIView, edge: UIEdgeInsets, priority: Float, useSafeGuide: Bool) -> [NSLayoutConstraint] {
-        let anchor: (leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor)
+        let safeArea = view.safeAreaInsets
+        let constant: (left: CGFloat, right: CGFloat, top: CGFloat, bottom: CGFloat)
         if useSafeGuide {
-            anchor = (view.safeAreaLayoutGuide.leadingAnchor, view.safeAreaLayoutGuide.trailingAnchor,
-                      view.safeAreaLayoutGuide.topAnchor, view.safeAreaLayoutGuide.bottomAnchor)
+            constant = (edge.left + safeArea.left, edge.right + safeArea.right, edge.top + safeArea.top, edge.bottom + safeArea.bottom)
         } else {
-            anchor = (view.leadingAnchor, view.trailingAnchor, view.topAnchor, view.bottomAnchor)
+            constant = (edge.left, edge.right, edge.top, edge.bottom)
         }
         return [
-            leadingAnchor.constraint(greaterThanOrEqualTo: anchor.leading, constant: edge.left),
-            trailingAnchor.constraint(lessThanOrEqualTo: anchor.trailing, constant: -edge.right),
-            topAnchor.constraint(greaterThanOrEqualTo: anchor.top, constant: edge.top),
-            bottomAnchor.constraint(lessThanOrEqualTo: anchor.bottom, constant: -edge.bottom),
+            leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: constant.left),
+            trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -constant.right),
+            topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: constant.top),
+            bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -constant.bottom),
         ].apply(priority: priority)
     }
 

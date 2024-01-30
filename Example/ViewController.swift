@@ -76,20 +76,23 @@ class ViewController: UITableViewController, HUDDelegate {
     @IBAction func hudButtonClicked(_ sender: UIButton) {
         switch sender.tag {
         case 1000: // Mode Switching
-            let hud = HUD.show(to: v, label: "Preparing...") {
-                $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
-            }
+            let hud = showHUD(.indicator(), label: "Preparing...")
+            hud.layout.minSize = CGSize(width: 150.0, height: 100.0)
+
             Task.requestMultiTask {
                 hud.progress = $0
             } completion: {
                 switch $0 {
                 case 3:
+                    hud.layout.offset = .h.vMinOffset
                     hud.mode = .progress(.round)
                     hud.label.text = "Loading..."
                 case 2:
+                    hud.layout.offset = .h.vMaxOffset
                     hud.mode = .indicator()
                     hud.label.text = "Cleaning up..."
                 case 1:
+                    hud.layout.offset = CGPoint(x: .h.maxOffset, y: .h.maxOffset)
                     hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
                     hud.label.text = "Completed"
                 case 0:
@@ -99,12 +102,12 @@ class ViewController: UITableViewController, HUDDelegate {
                 }
             }
         case 1001: // URLSession
-            HUD.show(to: v, label: "Preparing...") {
-                $0.layout.minSize = CGSize(width: 150.0, height: 100.0)
-            }.h.then { hud in
-                Task.download {
-                    hud.mode = .progress(.annularRound)
-                    hud.progress = $0
+            showHUD(.indicator(), label: "Preparing...").h.then { hud in
+                hud.layout.minSize = CGSize(width: 150.0, height: 100.0)
+                hud.mode = .progress(.annularRound)
+
+                Task.download { progress in
+                    hud.progress = progress
                 } completion: {
                     hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
                     hud.label.text = "Completed"
@@ -112,7 +115,7 @@ class ViewController: UITableViewController, HUDDelegate {
                 }
             }
         default: // Determinate with Progress
-            HUD.show(to: v, mode: .progress(.round), label: "Loading...").h.then { hud in
+            showHUD(.progress(.round)).h.then { hud in
                 Task.resume { progress in
                     hud.observedProgress = progress
                     hud.button.setTitle("Cancel", for: .normal)

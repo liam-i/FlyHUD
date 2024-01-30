@@ -40,7 +40,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
     /// HUD layout configuration. eg: offset, margin, padding, etc.
     public var layout: Layout = .init() {
         didSet {
-            layout.h.notEqual(oldValue, do: setNeedsUpdateConstraints())
+            layout.h.notEqual(oldValue, do: updateKeyboardGuideAnd(setConstraints: true))
         }
     }
 
@@ -178,8 +178,8 @@ open class HUD: BaseView, DisplayLinkDelegate {
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
         observedProgress = nil
-        KeyboardObserver.shared.remove(self)
 #if !os(tvOS)
+        KeyboardObserver.shared.remove(self)
         unregisterFromNotifications()
 #endif
 #if DEBUG
@@ -223,8 +223,8 @@ open class HUD: BaseView, DisplayLinkDelegate {
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
-    ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` to move the HUD
-    ///             all the way to the screen edge in each direction. `Default to .vMaxOffset`.
+    ///   - offset: The bezel offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD
+    ///             all the way to the screen edge in each direction. `Default to .zero`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
     /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
@@ -236,7 +236,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
         animated: Bool = true,
         mode: Mode = .text,
         label: String?,
-        offset: CGPoint = .h.vMaxOffset,
+        offset: CGPoint = .zero,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
         showStatus(
@@ -478,9 +478,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
 
         // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
         updateBezelMotionEffects()
-#if !os(tvOS)
-        updateKeyboardGuide()
-#endif
+        updateKeyboardGuideAnd(setConstraints: false)
         perform(animation, showing: true, completion: nil)
     }
 
@@ -720,7 +718,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
         }
 
         updateViewsContentColor()
-        setNeedsUpdateConstraints()
+        updateKeyboardGuideAnd(setConstraints: true)
     }
 
     private func updateViewsContentColor() {
@@ -778,7 +776,8 @@ open class HUD: BaseView, DisplayLinkDelegate {
         }
 
         // Center bezel in container (self), applying the offset if set
-        addConstraints(bezelView.constraintsForCenter(equalTo: self, offset: layout.offset, priority: 998.0))
+        addConstraints(bezelView.constraintsForCenter(
+            equalTo: self, offset: layout.offset, priority: 998.0, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled))
         // Ensure minimum side margin is kept
         addConstraints(bezelView.constraintsForEdge(
             greaterOrEqualTo: self, edge: layout.edgeInsets, priority: 999.0, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled))
@@ -855,13 +854,23 @@ open class HUD: BaseView, DisplayLinkDelegate {
         }
     }
 
+    private func updateKeyboardGuideAnd(setConstraints needed: Bool) {
+        if needed {
+            setNeedsUpdateConstraints()
+        }
+#if !os(tvOS)
+        guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
+        updateKeyboardGuide(with: keyboardInfo, animated: false)
+#endif
+    }
+
     // MARK: - View Hierarchy
 
     open override func didMoveToSuperview() {
-        updateForCurrentOrientation(animated: false)
+        updateForCurrentOrientation()
     }
 
-    private func updateForCurrentOrientation(animated: Bool) {
+    private func updateForCurrentOrientation() {
         guard let superview = superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
     }
@@ -898,7 +907,7 @@ extension HUD {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(statusBarOrientationDidChange),
+            selector: #selector(statusBarOrientationDidChange(_:)),
             name: UIApplication.didChangeStatusBarOrientationNotification,
             object: nil)
     }
@@ -909,7 +918,8 @@ extension HUD {
 
     @objc
     private func statusBarOrientationDidChange(_ notification: Notification) {
-        updateForCurrentOrientation(animated: true)
+        updateForCurrentOrientation()
+        updateKeyboardGuideAnd(setConstraints: true)
     }
 }
 
@@ -939,12 +949,9 @@ extension HUD: KeyboardObservable {
         updateKeyboardGuide(with: keyboardInfo, animated: true)
     }
 
-    private func updateKeyboardGuide() {
-        guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
-        updateKeyboardGuide(with: keyboardInfo, animated: false)
-    }
-
     private func updateKeyboardGuide(with keyboard: KeyboardInfo, animated: Bool) {
+        guard isVisible else { return }
+
         let animations: () -> Void = { [self] in
             guard keyboard.isVisible else {
                 return contentView.transform = .identity
