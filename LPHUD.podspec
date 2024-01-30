@@ -1,12 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = 'LPHUD'
   s.version          = '1.4.0'
-  s.summary          = 'An iOS activity indicator view.'
+  s.summary          = 'A lightweight and easy-to-use HUD for iOS and tvOS apps.'
   s.description      = <<-DESC
-                    LPHUD is an iOS drop-in class that displays a translucent HUD
-                    with an indicator and/or labels while work is being done in a background thread.
-                    The HUD is meant as a replacement for the undocumented, private UIKit UIProgressHUD
-                    with some additional features.
+                        LPHUD is a lightweight and easy-to-use HUD designed to display 
+                        the progress and status of ongoing tasks on iOS and tvOS.
                        DESC
 
   s.homepage         = 'https://github.com/liam-i/HUD'
