@@ -737,25 +737,29 @@ open class HUD: BaseView, DisplayLinkDelegate {
     }
 
     private func updateBezelMotionEffects() {
-        if isMotionEffectsEnabled && bezelMotionEffects == nil {
-            let effectOffset: CGFloat = 10.0
-            bezelMotionEffects = UIMotionEffectGroup().h.then {
-                $0.motionEffects = [
-                    UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis).h.then {
-                        $0.maximumRelativeValue = effectOffset
-                        $0.minimumRelativeValue = -effectOffset
-                    },
-                    UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis).h.then {
-                        $0.maximumRelativeValue = effectOffset
-                        $0.minimumRelativeValue = -effectOffset
-                    }
-                ]
-                bezelView.addMotionEffect($0)
+        guard isMotionEffectsEnabled else {
+            if let motionEffects = bezelMotionEffects {
+                bezelMotionEffects = nil
+                bezelView.removeMotionEffect(motionEffects)
             }
-        } else if let motionEffects = bezelMotionEffects {
-            bezelMotionEffects = nil
-            bezelView.removeMotionEffect(motionEffects)
+            return
         }
+        guard bezelMotionEffects == nil else { return }
+
+        let effectOffset = 10.0
+        bezelView.addMotionEffect(UIMotionEffectGroup().h.then {
+            $0.motionEffects = [
+                UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis).h.then {
+                    $0.maximumRelativeValue = effectOffset
+                    $0.minimumRelativeValue = -effectOffset
+                },
+                UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis).h.then {
+                    $0.maximumRelativeValue = effectOffset
+                    $0.minimumRelativeValue = -effectOffset
+                }
+            ]
+            bezelMotionEffects = $0
+        })
     }
 
     // MARK: - Layout
