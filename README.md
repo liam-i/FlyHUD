@@ -10,13 +10,13 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 ## ScreenShots
 
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/2.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/3.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/5-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/5.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/6.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/7.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-5-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-5.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
 
 ## Example
 

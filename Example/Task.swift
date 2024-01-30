@@ -110,6 +110,8 @@ extension Task: URLSessionDelegate, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         DispatchQueue.main.async {
             Task.shared.completion?()
+            Task.shared.progress = nil
+            Task.shared.completion = nil
         }
     }
 
