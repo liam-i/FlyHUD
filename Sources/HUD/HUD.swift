@@ -17,7 +17,7 @@ public protocol HUDDelegate: AnyObject {
 }
 
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
-/// - Note: To still allow touches to pass through the HUD, you can set hud.userInteractionEnabled = NO.
+/// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
 open class HUD: BaseView, DisplayLinkDelegate {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
