@@ -11,9 +11,17 @@
 
 import UIKit
 
+public enum RoundedCorners: Equatable {
+    /// corner Radius
+    case radius(CGFloat)
+    /// Fully rounded corners
+    case fully
+}
+extension RoundedCorners: HUDExtended {}
+
 public class RoundedButton: UIButton {
     /// The rounded corner mode of the button. `Default to .fully`.
-    public var roundedCorners: BackgroundView.RoundedCorners = .fully {
+    public var roundedCorners: RoundedCorners = .fully {
         didSet {
             roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }

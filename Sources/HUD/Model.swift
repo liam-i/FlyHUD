@@ -13,7 +13,7 @@ import UIKit
 
 extension HUD {
     public enum Mode: Equatable {
-        /// Shows only labels.
+        /// Shows only labels and button.
         case text
         /// UIActivityIndicatorView. Style `Defalut to .large`.
         case indicator(UIActivityIndicatorView.Style = .h.large)
@@ -23,7 +23,7 @@ extension HUD {
         /// for proper sizing. For best results use approximately 37 by 37 pixels.
         case custom(UIView)
 
-        /// Whether to show only labels.
+        /// Whether to show only labels and button.
         public var isText: Bool {
             self == .text
         }

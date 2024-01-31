@@ -31,16 +31,8 @@ extension BackgroundView {
             }
         }())
     }
-
-    public enum RoundedCorners: Equatable {
-        /// corner Radius
-        case radius(CGFloat)
-        /// Fully rounded corners
-        case fully
-    }
 }
 extension BackgroundView.Style: HUDExtended {}
-extension BackgroundView.RoundedCorners: HUDExtended {}
 
 public class BackgroundView: BaseView {
     /// The rounded corner mode of the button. `Default to .radius(0.0)`.
