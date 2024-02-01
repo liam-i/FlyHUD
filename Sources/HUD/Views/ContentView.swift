@@ -9,6 +9,13 @@ import UIKit
 
 extension ContentView {
     public enum Mode: Equatable {
+        public enum Position: Equatable, CaseIterable {
+            case top
+            case bottom
+            case left
+            case right
+        }
+
         /// Shows only labels and button.
         case text
         /// UIActivityIndicatorView. Style `Defalut to .large`.
@@ -50,8 +57,10 @@ extension ContentView {
         /// The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
         public var vMargin: CGFloat
 
+        public var hSpacing: CGFloat
+
         /// The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
-        public var spacing: CGFloat
+        public var vSpacing: CGFloat
 
         /// The minimum size of the HUD contentView. Defaults to CGSize.zero (no minimum size).
         public var minSize: CGSize
@@ -67,24 +76,28 @@ extension ContentView {
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
         ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        ///   - spacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
+        ///   - hSpacing:
+        ///   - vSpacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
         ///   - minSize: The minimum size of the HUD contentView. Defaults to CGSize.zero (no minimum size).
         ///   - isSquare: Force the HUD dimensions to be equal if possible.
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
         public init(hMargin: CGFloat = 20.0,
                     vMargin: CGFloat = 20.0,
-                    spacing: CGFloat = 4.0,
+                    hSpacing: CGFloat = 4.0,
+                    vSpacing: CGFloat = 4.0,
                     minSize: CGSize = .zero,
                     isSquare: Bool = false) {
             self.hMargin = hMargin
             self.vMargin = vMargin
-            self.spacing = spacing
+            self.hSpacing = hSpacing
+            self.vSpacing = vSpacing
             self.minSize = minSize
             self.isSquare = isSquare
         }
     }
 }
 extension ContentView.Mode: HUDExtended {}
+extension ContentView.Mode.Position: HUDExtended {}
 extension ContentView.Layout: HUDExtended {}
 
 public class ContentView: BackgroundView, DisplayLinkDelegate {
@@ -96,9 +109,15 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     public private(set) lazy var button = RoundedButton(fontSize: 12.0, textColor: contentColor)
 
     /// HUD operation mode. `Default to .indicator(.large)`.
-    public lazy var mode: Mode = .indicator() {
+    public var mode: Mode = .indicator() {
         didSet {
-            mode.h.notEqual(oldValue, do: updateIndicators())
+            mode.h.notEqual(oldValue, do: updateIndicators(false))
+        }
+    }
+    #warning("TODO: ...")
+    public var position: Mode.Position = .top {
+        didSet {
+            position.h.notEqual(oldValue, do: updatePosition())
         }
     }
 
@@ -113,7 +132,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     /// HUD layout configuration. eg: offset, margin, padding, etc.
     public var layout: Layout = .init() {
         didSet {
-            layout.h.notEqual(oldValue, do: updateConstraintsWithLayout())
+            layout.h.notEqual(oldValue, do: updateLayoutConstraints(false))
         }
     }
 
@@ -146,8 +165,9 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     }
 
     weak var delegate: ContentViewDelegate?
+    private lazy var hStackView = UIStackView(arrangedSubviews: [vStackView])
     private lazy var vStackView = UIStackView(arrangedSubviews: [label, detailsLabel, button])
-    private lazy var constraint = Constraint(vStackView, to: self)
+    private lazy var constraint = Constraint(hStackView, to: self)
     private var indicator: UIView?
 
     public override func commonInit() {
@@ -158,7 +178,8 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         style = .blur()
 
         setupViews()
-        updateIndicators()
+        updateIndicators(true)
+        updateLayoutConstraints(true)
     }
 
     deinit {
@@ -169,30 +190,27 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     }
 
     private func setupViews() {
-        addSubview(vStackView.h.then {
+#warning("TODO: ...")
+        label.setContentCompressionResistancePriorityForAxis(998.0)
+        detailsLabel.setContentCompressionResistancePriorityForAxis(997.0)
+        button.setContentCompressionResistancePriorityForAxis(998.0)
+        vStackView.h.then {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.axis = .vertical
             $0.distribution = .fill
             $0.alignment = .center
-            $0.spacing = layout.spacing
-            $0.arrangedSubviews.forEach {
-                $0.setContentCompressionResistancePriorityForAxis(998.0)
-            }
+            $0.spacing = layout.vSpacing
+        }
+        addSubview(hStackView.h.then {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.axis = .horizontal
+            $0.distribution = .fill
+            $0.alignment = .center
+            $0.spacing = layout.hSpacing
         })
     }
 
-    private func updateIndicators() {
-        func setupIndicator(_ newValue: UIView?) {
-            if let indicator = indicator {
-                vStackView.removeArrangedSubview(indicator)
-                indicator.removeFromSuperview()
-            }
-            if let newValue = newValue {
-                vStackView.insertArrangedSubview(newValue, at: 0)
-            }
-            indicator = newValue
-        }
-
+    private func updateIndicators(_ isInitialized: Bool) {
         switch mode {
         case .text:
             setupIndicator(nil)
@@ -213,7 +231,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         }
 
         if let indicator = indicator {
-            indicator.setContentCompressionResistancePriorityForAxis(998.0)
+            indicator.setContentCompressionResistancePriorityForAxis(999.0)
             switch indicator {
             case let indicator as ActivityIndicatorViewable: indicator.startAnimating()
             case let indicator as ProgressViewable:          indicator.progress = progress
@@ -223,7 +241,38 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         }
 
         updateViewsContentColor()
-        updateConstraintsWithLayout()
+
+        guard isInitialized == false else { return }
+        delegate?.layoutConstraintsDidChange(from: self)
+    }
+
+    private func updatePosition() {
+        guard let indicator = indicator else {
+            return updateIndicators(false)
+        }
+        setupIndicator(indicator)
+        delegate?.layoutConstraintsDidChange(from: self)
+    }
+
+    private func setupIndicator(_ newValue: UIView?) {
+        if let indicator = indicator {
+            hStackView.removeArrangedSubview(indicator)
+            vStackView.removeArrangedSubview(indicator)
+            indicator.removeFromSuperview()
+        }
+        if let newValue = newValue {
+            switch position {
+            case .top:
+                vStackView.insertArrangedSubview(newValue, at: 0)
+            case .bottom:
+                vStackView.addArrangedSubview(newValue)
+            case .left:
+                hStackView.insertArrangedSubview(newValue, at: 0)
+            case .right:
+                hStackView.addArrangedSubview(newValue)
+            }
+        }
+        indicator = newValue
     }
 
     private func updateViewsContentColor() {
@@ -302,9 +351,12 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 
     // MARK: - Layout constraint
 
-    private func updateConstraintsWithLayout() {
-        vStackView.spacing = layout.spacing
+    private func updateLayoutConstraints(_ isInitialized: Bool) {
+        hStackView.spacing = layout.hSpacing
+        vStackView.spacing = layout.vSpacing
         constraint.update(with: layout)
+
+        guard isInitialized == false else { return }
         delegate?.layoutConstraintsDidChange(from: self)
     }
 
@@ -313,7 +365,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         let top, left, bottom, right, x, y: NSLayoutConstraint
 
         init(_ stackView: UIView, to: UIView) {
-            let work: (NSLayoutConstraint) -> Void = { $0.priority = .init(997.0) }
+            let work: (NSLayoutConstraint) -> Void = { $0.priority = .init(996.0) }
             (width, height, square, top, bottom, left, right, x, y) = (
                 to.widthAnchor.constraint(greaterThanOrEqualToConstant: 0.0).h.then(work),
                 to.heightAnchor.constraint(greaterThanOrEqualToConstant: 0.0).h.then(work),
@@ -343,6 +395,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 // MARK: - Internal extension
 
 extension RoundedButton {
+    #warning("TODO: ...")
     fileprivate convenience init(fontSize: CGFloat, textColor: UIColor?) {
         self.init(type: .custom)
         self.titleLabel?.textAlignment = .center

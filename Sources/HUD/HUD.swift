@@ -702,7 +702,7 @@ extension HUD: ContentViewDelegate {
         let x, y, top, left, bottom, right: NSLayoutConstraint
 
         init(_ contentView: UIView, to: UIView, layout: Layout) {
-            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(998.0) }
+            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(997.0) }
             let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(999.0) }
 
             let xAnchor, leftAnchor, rightAnchor: NSLayoutXAxisAnchor, yAnchor, topAnchor, bottomAnchor: NSLayoutYAxisAnchor

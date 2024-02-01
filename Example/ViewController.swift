@@ -163,12 +163,14 @@ class ViewController: UITableViewController, HUDDelegate {
             if config.isButtonEnabled {
                 $0.contentView.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
             }
-            $0.layout = config.layout
             $0.contentView.contentColor = config.contentColor.color
             $0.contentView.style = config.contentViewStyle
             $0.contentView.color = config.contentViewColor == .default ? .h.background : config.contentViewColor.color
+            $0.contentView.layout = config.contentLayout
+            $0.contentView.position = config.position
             $0.backgroundView.style = config.backgroundViewStyle
             $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
+            $0.layout = config.layout
             $0.animation = config.animation
             $0.graceTime = config.graceTime
             $0.minShowTime = config.minShowTime
@@ -310,6 +312,7 @@ class ViewController: UITableViewController, HUDDelegate {
         switch text {
         case "ShowT": Alert.list(title, list: ShowTo.allCases, selected: setTitle(_:)) { self.config.showTo = $0 }
         case "UseDe": Alert.switch(title, selected: setTitle(_:)) { self.config.isDefaultModeStyle = $0; self.updateForIsDefaultStyleEnabled() }
+        case "Posit": Alert.list(title, list: ContentView.Mode.Position.allCases, selected: setTitle(_:)) { self.config.position = $0 }
         case "Event": Alert.switch(title, selected: setTitle(_:)) { self.config.isEventDeliveryEnabled = $0 }
         case "Label": Alert.switch(title, selected: setTitle(_:)) { self.config.isLabelEnabled = $0 }
         case "Detai": Alert.switch(title, selected: setTitle(_:)) { self.config.isDetailsLabelEnabled = $0 }
@@ -325,7 +328,8 @@ class ViewController: UITableViewController, HUDDelegate {
         case "vInse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.top = $0; self.config.layout.edgeInsets.bottom = $0 }
         case "hMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.hMargin = $0 }
         case "vMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.vMargin = $0 }
-        case "spaci": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.spacing = $0 }
+        case "hSpac": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.hSpacing = $0 }
+        case "vSpac": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.vSpacing = $0 }
         case "minWi": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.minSize.width = $0 }
         case "minHe": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.minSize.height = $0 }
         case "squar": Alert.switch(title, selected: setTitle(_:)) { self.config.contentLayout.isSquare = $0 }
@@ -369,6 +373,7 @@ class ViewController: UITableViewController, HUDDelegate {
             switch text {
             case "ShowT": setTitle(config.showTo)
             case "UseDe": setTitle(config.isDefaultModeStyle); updateForIsDefaultStyleEnabled()
+            case "Posit": setTitle(config.position)
             case "Event": setTitle(config.isEventDeliveryEnabled)
             case "Label": setTitle(config.isLabelEnabled)
             case "Detai": setTitle(config.isDetailsLabelEnabled)
@@ -384,7 +389,8 @@ class ViewController: UITableViewController, HUDDelegate {
             case "vInse": setTitle(config.layout.edgeInsets.top)
             case "hMarg": setTitle(config.contentLayout.hMargin)
             case "vMarg": setTitle(config.contentLayout.vMargin)
-            case "spaci": setTitle(config.contentLayout.spacing)
+            case "hSpac": setTitle(config.contentLayout.hSpacing)
+            case "vSpac": setTitle(config.contentLayout.vSpacing)
             case "minWi": setTitle(config.contentLayout.minSize.width)
             case "minHe": setTitle(config.contentLayout.minSize.height)
             case "squar": setTitle(config.contentLayout.isSquare)
