@@ -10,21 +10,21 @@ import UIKit
 import HUD
 #endif
 
-extension HUD.Mode {
+extension ContentView.Mode {
     /// Creates a progress view with the specified style.
     ///
     /// - Parameter style: A constant that specifies the style of the object to be created.
     ///                    See ProgressView.Style for descriptions of the style constants.
-    /// - Returns: An initialized HUD.Mode constant.
-    public static func progress(_ style: ProgressView.Style) -> HUD.Mode {
+    /// - Returns: An initialized ContentView.Mode constant.
+    public static func progress(_ style: ProgressView.Style) -> ContentView.Mode {
         .custom(ProgressView(styleable: style))
     }
 
     /// Creates a progress view with the specified style.
     ///
     /// - Parameter style: A constant that specifies the style of the object to be created.
-    /// - Returns: An initialized HUD.Mode constant.
-    public static func progress(_ style: ProgressViewStyleable) -> HUD.Mode {
+    /// - Returns: An initialized ContentView.Mode constant.
+    public static func progress(_ style: ProgressViewStyleable) -> ContentView.Mode {
         .custom(ProgressView(styleable: style))
     }
 }

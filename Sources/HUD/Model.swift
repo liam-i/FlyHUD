@@ -12,42 +12,6 @@
 import UIKit
 
 extension HUD {
-    public enum Mode: Equatable {
-        /// Shows only labels and button.
-        case text
-        /// UIActivityIndicatorView. Style `Defalut to .large`.
-        case indicator(UIActivityIndicatorView.Style = .h.large)
-        /// UIProgressView.  Style `Defalut to .default`.
-        case progress(UIProgressView.Style = .default)
-        /// Shows a custom view. e.g. a UIImageView. The view should implement intrinsicContentSize
-        /// for proper sizing. For best results use approximately 37 by 37 pixels.
-        case custom(UIView)
-
-        /// Whether to show only labels and button.
-        public var isText: Bool {
-            self == .text
-        }
-
-        /// Whether it is UIActivityIndicatorView, ActivityIndicatorViewable or RotateViewable.
-        public var isIndicator: Bool {
-            if case .indicator = self { return true }
-            if case let .custom(view) = self, (view is ActivityIndicatorViewable || view is RotateViewable) { return true }
-            return false
-        }
-
-        /// Whether UIProgressView or ProgressViewable.
-        public var isProgress: Bool {
-            if case .progress = self { return true }
-            if case let .custom(view) = self, view is ProgressViewable { return true }
-            return false
-        }
-
-        /// Not text, indicator and progress.
-        public var isCustom: Bool {
-            isText == false && isIndicator == false && isProgress == false
-        }
-    }
-
     public struct Animation: Equatable {
         /// The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         public var style: Animation.Style
@@ -93,58 +57,29 @@ extension HUDExtension where ExtendedType == CGPoint {
 }
 extension HUD {
     public struct Layout: Equatable {
-        /// The bezel offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move
+        /// The contentView offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move
         /// the HUD all the way to the screen edge in each direction. `Default to .zero`
         ///
         /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint
-        /// This also represents the minimum bezel distance to the edge of the HUD view. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
+        /// This also represents the minimum contentView distance to the edge of the HUD. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         public var edgeInsets: UIEdgeInsets
-
-        /// The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        public var hMargin: CGFloat
-        /// The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        public var vMargin: CGFloat
-
-        /// The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
-        public var spacing: CGFloat
-
-        /// The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
-        public var minSize: CGSize
-
-        /// Force the HUD dimensions to be equal if possible.
-        public var isSquare: Bool
 
         /// The layout guide representing the portion of your view that is unobscured by bars and other content.
         public var isSafeAreaLayoutGuideEnabled: Bool
 
         /// Creates a new Layout.
         /// - Parameters:
-        ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
+        ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
         ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
-        ///   - edgeInsets: This also represents the minimum bezel distance to the edge of the HUD view.
+        ///   - edgeInsets: This also represents the minimum contentView distance to the edge of the HUD.
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
-        ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). Defaults to 20.0.
-        ///   - spacing: The space between HUD elements (labels, indicators or custom views). Defaults to 4.0.
-        ///   - minSize: The minimum size of the HUD bezel. Defaults to CGSize.zero (no minimum size).
-        ///   - isSquare: Force the HUD dimensions to be equal if possible.
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
         public init(offset: CGPoint = .zero,
                     edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
-                    hMargin: CGFloat = 20.0,
-                    vMargin: CGFloat = 20.0,
-                    spacing: CGFloat = 4.0,
-                    minSize: CGSize = .zero,
-                    isSquare: Bool = false,
                     isSafeAreaLayoutGuideEnabled: Bool = true) {
             self.offset = offset
             self.edgeInsets = edgeInsets
-            self.hMargin = hMargin
-            self.vMargin = vMargin
-            self.spacing = spacing
-            self.minSize = minSize
-            self.isSquare = isSquare
             self.isSafeAreaLayoutGuideEnabled = isSafeAreaLayoutGuideEnabled
         }
     }
@@ -172,6 +107,27 @@ extension HUD.Animation {
         case slideUp
         /// Opacity + slide animation (slide down style)
         case slideDown
+
+        // Automatically determine the correct animation style
+        func corrected(_ showing: Bool) -> Style {
+            switch self {
+            case .zoomInOut:    return showing ? .zoomIn : .zoomOut
+            case .zoomOutIn:    return showing ? .zoomOut : .zoomIn
+            case .slideUpDown:  return showing ? .slideUp : .slideDown
+            case .slideDownUp:  return showing ? .slideDown : .slideUp
+            default:            return self
+            }
+        }
+
+        var reversed: Style? {
+            switch self {
+            case .zoomIn:       return .zoomOut
+            case .zoomOut:      return .zoomIn
+            case .slideUp:      return .slideDown
+            case .slideDown:    return .slideUp
+            default:            return nil
+            }
+        }
     }
 
     public enum Damping: Equatable {
@@ -194,7 +150,6 @@ extension HUD.Animation {
     }
 }
 
-extension HUD.Mode: HUDExtended {}
 extension HUD.Animation: HUDExtended {}
 extension HUD.Layout: HUDExtended {}
 
@@ -205,10 +160,10 @@ extension HUD {
         /// Disable keyboard tracking.
         case disable
         /// Center alignment.
-        /// - Parameter offsetY: The vertical offset of the bezel view relative to the center of the empty area. `Default to 0`.
+        /// - Parameter offsetY: The vertical offset of the contentView view relative to the center of the empty area. `Default to 0`.
         case center(_ offsetY: CGFloat = 0.0)
         /// Bezel view bottom relative to keyboard top layout.
-        /// - Parameter spacing: The spacing between the bottom of the bezel view and the top of the keyboard. `Default to 8`.
+        /// - Parameter spacing: The spacing between the bottom of the contentView view and the top of the keyboard. `Default to 8`.
         case bottom(_ spacing: CGFloat = 8.0)
     }
 }

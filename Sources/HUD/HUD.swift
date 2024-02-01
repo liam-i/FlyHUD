@@ -19,64 +19,21 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView, DisplayLinkDelegate {
-    /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    public private(set) lazy var label = UILabel(frame: .zero)
-    /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
-    public private(set) lazy var detailsLabel = UILabel(frame: .zero)
-    /// A button that is placed below the labels. Visible only if a target / action is added and a title is assigned.
-    public private(set) lazy var button = RoundedButton(frame: .zero)
+open class HUD: BaseView {
     /// The view containing the labels and indicator (or customView). The HUD object places the content in this view in front of any background views.
-    public private(set) lazy var bezelView = BackgroundView(frame: .zero)
-    /// View covering the entire HUD area, placed behind bezelView.
+    public private(set) lazy var contentView = ContentView(frame: .zero)
+    /// View covering the entire HUD area, placed behind contentView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
-    /// HUD operation mode. `Default to .indicator(.large)`.
-    public var mode: Mode = .indicator() {
-        didSet {
-            mode.h.notEqual(oldValue, do: updateIndicators())
-        }
-    }
     /// HUD layout configuration. eg: offset, margin, padding, etc.
     public var layout: Layout = .init() {
         didSet {
-            layout.h.notEqual(oldValue, do: updateKeyboardGuideAnd(setConstraints: true))
-        }
-    }
-
-    /// A color that gets forwarded to all labels and supported indicators. Also sets the tintColor for custom views.
-    /// Set to nil to manage color individually. `Defaults to semi-translucent white`
-    public var contentColor: UIColor? = .h.content {
-        didSet {
-            contentColor.h.notEqual(oldValue, do: updateViewsContentColor())
-        }
-    }
-
-    /// The progress of the progress indicator, from 0.0 to 1.0. `Defaults to 0.0`.
-    public var progress: Float = 0.0 {
-        didSet {
-            progress.h.notEqual(oldValue, do: (indicator as? ProgressViewable)?.progress = progress)
-        }
-    }
-    /// The Progress object feeding the progress information to the progress indicator.
-    ///
-    /// When this property is set, the progress view updates its progress value automatically using information it receives from the [Progress](https://developer.apple.com/documentation/foundation/progress) object.
-    /// Set the property to nil when you want to update the progress manually. `Defaults to nil`.
-    ///
-    /// - Note: It will auto set localizedDescription and localizedAdditionalDescription to the text of label and detaillabel properties.
-    ///         They can be customized or use the default text. To suppress one (or both) of the labels, set the descriptions to empty strings.
-    public var observedProgress: Progress? {
-        get { (indicator as? ProgressViewable)?.observedProgress }
-        set { 
-            (indicator as? ProgressViewable)?.observedProgress = newValue
-            setObservedProgressDisplayLink(enabled: newValue != nil)
+            layout.h.notEqual(oldValue, do: update(constraints: true, keyboardGuide: true))
         }
     }
 
     /// The animation (type, duration, damping) that should be used when the HUD is shown and hidden.
     public var animation: Animation = .init()
-    /// A boolean value indicating whether the HUD is visible.
-    public var isVisible: Bool { isHidden == false }
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     ///
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all.
@@ -124,28 +81,15 @@ open class HUD: BaseView, DisplayLinkDelegate {
     /// - Note: This property is affected by "isUserInteractionEnabled".
     public var isEventDeliveryEnabled: Bool = false
 
-    /// When enabled, the bezel center gets slightly affected by the device accelerometer data. `Defaults to false`.
-    public var isMotionEffectsEnabled: Bool = false {
-        didSet {
-            isMotionEffectsEnabled.h.notEqual(oldValue, do: updateBezelMotionEffects())
-        }
-    }
-
     /// The HUD delegate object. Receives HUD state notifications.
     public weak var delegate: HUDDelegate?
     /// Called after the HUD is hidden.
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
-    private lazy var contentView = UIView(frame: bounds)
+    private lazy var constraint = Constraint(contentView, to: self, layout: layout)
+    private lazy var keyboardGuideView = UIView(frame: bounds)
     private var isFinished: Bool = false
-    private var indicator: UIView?
     private var showStarted: Date?
-    private var paddingConstraints: [NSLayoutConstraint]?
-    private var bezelConstraints: [NSLayoutConstraint]?
-    private var graceWorkItem: DispatchWorkItem?
-    private var minShowWorkItem: DispatchWorkItem?
-    private var hideDelayWorkItem: DispatchWorkItem?
-    private var bezelMotionEffects: UIMotionEffectGroup?
 
     // MARK: - Lifecycle
 
@@ -166,18 +110,17 @@ open class HUD: BaseView, DisplayLinkDelegate {
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
         setupViews()
-        updateIndicators()
 #if !os(tvOS)
         updateKeyboardObserver()
         registerForNotifications()
 #endif
+        update(constraints: true, keyboardGuide: false)
     }
 
     deinit {
         cancelHideDelayWorkItem()
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
-        observedProgress = nil
 #if !os(tvOS)
         KeyboardObserver.shared.remove(self)
         unregisterFromNotifications()
@@ -188,6 +131,13 @@ open class HUD: BaseView, DisplayLinkDelegate {
     }
 
     // MARK: - Show & hide
+
+    /// A Boolean value that determines whether the view is hidden.
+    open override var isHidden: Bool {
+        didSet {
+            contentView.isHidden = isHidden
+        }
+    }
 
     /// Find all unfinished HUD subviews and return them.
     ///
@@ -223,7 +173,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
-    ///   - offset: The bezel offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD
+    ///   - offset: The contentView offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD
     ///             all the way to the screen edge in each direction. `Default to .zero`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
@@ -234,7 +184,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
         to view: UIView,
         duration: TimeInterval = 2.0,
         animated: Bool = true,
-        mode: Mode = .text,
+        mode: ContentView.Mode = .text,
         label: String?,
         offset: CGPoint = .zero,
         populator: ((HUD) -> Void)? = nil
@@ -258,7 +208,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
     ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
-    ///   - offset: The bezel offset relative to the center of the view. You can use `.maxOffset` to move the HUD all the way to
+    ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` to move the HUD all the way to
     ///             the screen edge in each direction. `Default to .vMaxOffset`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
@@ -268,7 +218,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
         to view: UIView,
         duration: TimeInterval = 2.0,
         using animation: Animation,
-        mode: Mode = .text,
+        mode: ContentView.Mode = .text,
         label: String?,
         offset: CGPoint = .h.vMaxOffset,
         populator: ((HUD) -> Void)? = nil
@@ -298,7 +248,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
     public class func show(
         to view: UIView,
         animated: Bool = true,
-        mode: Mode = .indicator(),
+        mode: ContentView.Mode = .indicator(),
         label: String? = nil,
         detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
@@ -326,16 +276,16 @@ open class HUD: BaseView, DisplayLinkDelegate {
     public class func show(
         to view: UIView,
         using animation: Animation,
-        mode: Mode = .indicator(),
+        mode: ContentView.Mode = .indicator(),
         label: String? = nil,
         detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
         HUD(with: view).h.then { // Creates a new HUD
             $0.animation = animation
-            $0.mode = mode
-            $0.label.text = label
-            $0.detailsLabel.text = detailsLabel
+            $0.contentView.mode = mode
+            $0.contentView.label.text = label
+            $0.contentView.detailsLabel.text = detailsLabel
             populator?($0)
             view.addSubview($0)
             $0.removeFromSuperViewOnHide = true
@@ -468,17 +418,13 @@ open class HUD: BaseView, DisplayLinkDelegate {
 
     private func performShow(_ animation: Animation) {
         // Cancel any previous animations
-        bezelView.layer.removeAllAnimations()
+        contentView.layer.removeAllAnimations()
         backgroundView.layer.removeAllAnimations()
 
         showStarted = Date()
         isHidden = false
-        indicator?.isHidden = false // setObservedProgressDisplayLink
-        setObservedProgressDisplayLink(enabled: true)
 
-        // Set up motion effects only at this point to avoid needlessly creating the effect if it was disabled after initialization.
-        updateBezelMotionEffects()
-        updateKeyboardGuideAnd(setConstraints: false)
+        update(constraints: false, keyboardGuide: true)
         perform(animation, showing: true, completion: nil)
     }
 
@@ -530,16 +476,15 @@ open class HUD: BaseView, DisplayLinkDelegate {
         // hide(using:afterDelay:) call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
         perform(animation, showing: false) { [self] in
-            // Cancel any scheduled hide(using:afterDelay:) calls
-            cancelHideDelayWorkItem()
-            setObservedProgressDisplayLink(enabled: false)
-            indicator?.isHidden = true // setObservedProgressDisplayLink
+            cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
 
             if isFinished {
                 isHidden = true
                 if removeFromSuperViewOnHide {
                     removeFromSuperview()
                 }
+            } else {
+                assertionFailure("why?")
             }
 
             completionBlock?(self)
@@ -551,27 +496,19 @@ open class HUD: BaseView, DisplayLinkDelegate {
     private func perform(_ animation: Animation, showing: Bool, completion: (() -> Void)?) {
         let alpha: CGFloat = showing ? 1.0 : 0.0
         let completionBlock: (Bool) -> Void = { [self] _ in
-            bezelView.transform = .identity // Reset, after the animation is completed
-            bezelView.alpha = alpha
+            contentView.alpha = alpha
             backgroundView.alpha = alpha
+            contentView.transform = .identity // Reset after the animation is completed
             completion?()
         }
 
-        var style = animation.style
-        guard style != .none, showStarted != nil else { return completionBlock(true) }
+        guard animation.style != .none, showStarted != nil else { return completionBlock(true) }
 
-        // Automatically determine the correct zoom animation type
-        switch style {
-        case .zoomInOut:    style = showing ? .zoomIn : .zoomOut
-        case .zoomOutIn:    style = showing ? .zoomOut : .zoomIn
-        case .slideUpDown:  style = showing ? .slideUp : .slideDown
-        case .slideDownUp:  style = showing ? .slideDown : .slideUp
-        default: break
-        }
+        let style = animation.style.corrected(showing) // Automatically determine the correct animation style
 
         // Set starting state
-        if showing && bezelView.alpha == 0.0 {
-            transform(to: style, isInvert: true)
+        if showing && contentView.alpha == 0.0 {
+            transform(to: style.reversed ?? style)
         }
 
         UIView.animate(withDuration: animation.duration, delay: 0.0,
@@ -579,45 +516,32 @@ open class HUD: BaseView, DisplayLinkDelegate {
                        initialSpringVelocity: 0.0,
                        options: .beginFromCurrentState,
                        animations: { [self] in
-            if showing {
-                transform(to: .fade)
-            } else {
-                transform(to: style, isInvert: false)
-            }
-            bezelView.alpha = alpha
+            transform(to: showing ? .fade : style)
+            contentView.alpha = alpha
             backgroundView.alpha = alpha
         }, completion: completionBlock)
-    }
-
-    private func transform(to style: Animation.Style, isInvert: Bool) {
-        switch style {
-        case .zoomIn:       transform(to: isInvert ? .zoomOut : .zoomIn)
-        case .zoomOut:      transform(to: isInvert ? .zoomIn : .zoomOut)
-        case .slideUp:      transform(to: isInvert ? .slideDown : .slideUp)
-        case .slideDown:    transform(to: isInvert ? .slideUp : .slideDown)
-        default:            transform(to: .fade)
-        }
     }
 
     private func transform(to style: Animation.Style) {
         switch style {
         case .zoomIn:
-            bezelView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            contentView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         case .zoomOut:
-            bezelView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            contentView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         case .slideUp:
             layoutIfNeeded()
-            bezelView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - bezelView.frame.maxY)
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.minY - contentView.frame.maxY)
         case .slideDown:
             layoutIfNeeded()
-            bezelView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - bezelView.frame.minY)
+            contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.minY)
         default:
-            bezelView.transform = .identity
+            contentView.transform = .identity
         }
     }
 
     // MARK: - Cancel Dispatch Work Item
 
+    private var graceWorkItem, minShowWorkItem, hideDelayWorkItem: DispatchWorkItem?
     private func cancelHideDelayWorkItem() {
         hideDelayWorkItem?.cancel()
         hideDelayWorkItem = nil
@@ -636,236 +560,19 @@ open class HUD: BaseView, DisplayLinkDelegate {
     // MARK: - UI
 
     private func setupViews() {
-        let defaultColor = contentColor
         addSubview(backgroundView.h.then {
             $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             $0.alpha = 0.0
         })
-        addSubview(contentView.h.then {
+        addSubview(keyboardGuideView.h.then {
             $0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             $0.backgroundColor = .clear
         })
-        contentView.addSubview(bezelView.h.then {
-            $0.color = .h.background
-            $0.roundedCorners = .radius(5.0)
-            $0.style = .blur()
+        keyboardGuideView.addSubview(contentView.h.then {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.alpha = 0.0
+            $0.delegate = self
         })
-        bezelView.addSubview(label.h.then {
-            $0.adjustsFontSizeToFitWidth = false
-            $0.textAlignment = .center
-            $0.textColor = defaultColor
-            $0.font = .boldSystemFont(ofSize: 16.0) // Default to 16.0
-            $0.isOpaque = false
-            $0.backgroundColor = .clear
-        })
-        bezelView.addSubview(detailsLabel.h.then {
-            $0.adjustsFontSizeToFitWidth = false
-            $0.textAlignment = .center
-            $0.textColor = defaultColor
-            $0.numberOfLines = 0
-            $0.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
-            $0.isOpaque = false
-            $0.backgroundColor = .clear
-        })
-        bezelView.addSubview(button.h.then {
-            $0.titleLabel?.textAlignment = .center
-            $0.titleLabel?.font = .boldSystemFont(ofSize: 12.0) // Default to 12.0.0
-            $0.setTitleColor(defaultColor, for: .normal)
-        })
-
-        for view in [label, detailsLabel, button] {
-            view.setContentCompressionResistancePriorityForAxis(998.0)
-        }
-    }
-
-    private func updateIndicators() {
-        func setIndicator(_ newValue: UIView?) {
-            indicator?.removeFromSuperview()
-            if let newValue = newValue { bezelView.addSubview(newValue) }
-            indicator = newValue
-        }
-
-        switch mode {
-        case .text:
-            setIndicator(nil)
-        case let .indicator(style): // Update to UIActivityIndicatorView
-            if let indicator = indicator as? UIActivityIndicatorView {
-                indicator.style = style
-            } else {
-                setIndicator(UIActivityIndicatorView(style: style))
-            }
-        case let .progress(style): // Update to UIProgressView
-            if let indicator = indicator as? iOSUIProgressView {
-                indicator.progressViewStyle = style
-            } else {
-                setIndicator(iOSUIProgressView(progressViewStyle: style))
-            }
-        case let .custom(view): // Update custom view indicator
-            view.h.notEqual(indicator, do: setIndicator(view))
-        }
-
-        if let indicator = indicator {
-            indicator.setContentCompressionResistancePriorityForAxis(998.0)
-
-            switch indicator {
-            case let indicator as ActivityIndicatorViewable:    indicator.startAnimating()
-            case let indicator as ProgressViewable:             indicator.progress = progress
-            case let indicator as RotateViewable:               indicator.startRotating()
-            default: break
-            }
-        }
-
-        updateViewsContentColor()
-        updateKeyboardGuideAnd(setConstraints: true)
-    }
-
-    private func updateViewsContentColor() {
-        guard let contentColor = contentColor else { return } // If set to nil to manage color individually.
-
-        label.textColor = contentColor
-        detailsLabel.textColor = contentColor
-        button.setTitleColor(contentColor, for: .normal)
-
-        guard let indicator = indicator else { return }
-        switch indicator {
-        case let indicator as ActivityIndicatorViewable:    indicator.color = contentColor
-        case let indicator as ProgressViewable:             indicator.progressTintColor = contentColor
-        default:                                            indicator.tintColor = contentColor // Sets the tintColor for custom views.
-        }
-    }
-
-    private func updateBezelMotionEffects() {
-        guard isMotionEffectsEnabled else {
-            if let motionEffects = bezelMotionEffects {
-                bezelMotionEffects = nil
-                bezelView.removeMotionEffect(motionEffects)
-            }
-            return
-        }
-        guard bezelMotionEffects == nil else { return }
-
-        let effectOffset = 10.0
-        bezelView.addMotionEffect(UIMotionEffectGroup().h.then {
-            $0.motionEffects = [
-                UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis).h.then {
-                    $0.maximumRelativeValue = effectOffset
-                    $0.minimumRelativeValue = -effectOffset
-                },
-                UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis).h.then {
-                    $0.maximumRelativeValue = effectOffset
-                    $0.minimumRelativeValue = -effectOffset
-                }
-            ]
-            bezelMotionEffects = $0
-        })
-    }
-
-    // MARK: - Layout
-
-    open override func updateConstraints() {
-        var bezelConstraints: [NSLayoutConstraint] = []
-        var subviews = [label, detailsLabel, button]
-
-        if let indicator = indicator {
-            subviews.insert(indicator, at: 0)
-        }
-
-        // Remove existing constraints
-        removeConstraints(constraints)
-        if let bezelConstraints = self.bezelConstraints {
-            bezelView.removeConstraints(bezelConstraints)
-            self.bezelConstraints = nil
-        }
-
-        // Center bezel in container (self), applying the offset if set
-        addConstraints(bezelView.constraintsForCenter(
-            equalTo: self, offset: layout.offset, priority: 998.0, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled))
-        // Ensure minimum side margin is kept
-        addConstraints(bezelView.constraintsForEdge(
-            greaterOrEqualTo: self, edge: layout.edgeInsets, priority: 999.0, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled))
-
-        // Minimum bezel size, if set
-        if layout.minSize != .zero {
-            bezelConstraints.append(contentsOf: bezelView.constraintsForSize(greaterOrEqualTo: layout.minSize, priority: 997.0))
-        }
-
-        // Square aspect ratio, if set
-        if layout.isSquare {
-            bezelConstraints.append(bezelView.constraintForSquare(priority: 997.0))
-        }
-
-        // Layout subviews in bezel
-        var paddingConstraints: [NSLayoutConstraint] = []
-        let lastSubviewIDX = subviews.count - 1
-        for (idx, view) in subviews.enumerated() {
-            bezelConstraints.append(contentsOf: view.constraintsForH(equalTo: bezelView, margin: layout.hMargin))
-
-            // Element spacing
-            if idx == 0 {
-                // First, ensure spacing to bezel edge
-                bezelConstraints.append(view.constraintForTop(greaterOrEqualTo: bezelView, margin: layout.vMargin))
-            } else if idx == lastSubviewIDX {
-                // Last, ensure spacing to bezel edge
-                bezelConstraints.append(view.constraintForBottom(greaterOrEqualTo: bezelView, margin: layout.vMargin))
-            }
-
-            if idx > 0 {
-                // Has previous
-                let padding = view.constraintForTopToBottom(equalTo: subviews[idx - 1])
-                bezelConstraints.append(padding)
-                paddingConstraints.append(padding)
-            }
-        }
-
-        bezelView.addConstraints(bezelConstraints)
-        self.bezelConstraints = bezelConstraints
-        self.paddingConstraints = paddingConstraints
-        self.updatePaddingConstraints()
-
-        super.updateConstraints()
-    }
-
-    open override func layoutSubviews() {
-        // There is no need to update constraints if they are going to be recreated in super.layoutSubviews()
-        // due to needsUpdateConstraints being set. This also avoids an issue on iOS 8,
-        // where updatePaddingConstraints would trigger a zombie object access.
-        if needsUpdateConstraints() == false {
-            updatePaddingConstraints()
-        }
-        super.layoutSubviews()
-    }
-
-    private func updatePaddingConstraints() {
-        // Set padding dynamically, depending on whether the view is visible or not
-        guard let paddingConstraints = paddingConstraints else { return }
-
-        var hasVisibleAncestors = false
-        for paddingConstraint in paddingConstraints {
-            var firstVisible = false
-            var secondVisible = false
-            if let firstView = paddingConstraint.firstItem as? UIView {
-                firstVisible = firstView.isHidden == false && firstView.intrinsicContentSize != .zero
-            }
-            if let secondView = paddingConstraint.secondItem as? UIView {
-                secondVisible = secondView.isHidden == false && secondView.intrinsicContentSize != .zero
-            }
-
-            // Set if both views are visible or if there's a visible view on top that doesn't have padding added relative to the current view yet
-            paddingConstraint.constant = (firstVisible && (secondVisible || hasVisibleAncestors)) ? layout.spacing : 0.0
-            hasVisibleAncestors = hasVisibleAncestors || secondVisible
-        }
-    }
-
-    private func updateKeyboardGuideAnd(setConstraints needed: Bool) {
-        if needed {
-            setNeedsUpdateConstraints()
-        }
-#if !os(tvOS)
-        guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
-        updateKeyboardGuide(with: keyboardInfo, animated: false)
-#endif
     }
 
     // MARK: - View Hierarchy
@@ -874,6 +581,7 @@ open class HUD: BaseView, DisplayLinkDelegate {
         updateForCurrentOrientation()
     }
 
+    @objc
     private func updateForCurrentOrientation() {
         guard let superview = superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
@@ -883,24 +591,8 @@ open class HUD: BaseView, DisplayLinkDelegate {
         let hitView = super.hitTest(point, with: event)
         guard isEventDeliveryEnabled else { return hitView }
 
-        let bezelRect = bezelView.convert(bezelView.bounds, to: self)
-        return bezelRect.contains(point) ? hitView : nil
-    }
-
-    private func setObservedProgressDisplayLink(enabled: Bool) {
-        guard enabled && observedProgress != nil else {
-            return DisplayLink.shared.remove(self)
-        }
-        DisplayLink.shared.add(self)
-    }
-
-    /// Refreshing the progress only every frame draw.
-    public func updateScreenInDisplayLink() {
-        guard let progress = observedProgress, progress.fractionCompleted <= 1.0 else { return }
-        // They can be customized or use the default text. To suppress one
-        // (or both) of the labels, set the descriptions to empty strings.
-        label.text = progress.localizedDescription
-        detailsLabel.text = progress.localizedAdditionalDescription
+        let contentViewRect = contentView.convert(contentView.bounds, to: self)
+        return contentViewRect.contains(point) ? hitView : nil
     }
 }
 
@@ -911,19 +603,13 @@ extension HUD {
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(statusBarOrientationDidChange(_:)),
+            selector: #selector(updateForCurrentOrientation),
             name: UIApplication.didChangeStatusBarOrientationNotification,
             object: nil)
     }
 
     private func unregisterFromNotifications() {
         NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc
-    private func statusBarOrientationDidChange(_ notification: Notification) {
-        updateForCurrentOrientation()
-        updateKeyboardGuideAnd(setConstraints: true)
     }
 }
 
@@ -954,14 +640,16 @@ extension HUD: KeyboardObservable {
     }
 
     private func updateKeyboardGuide(with keyboard: KeyboardInfo, animated: Bool) {
-        guard isVisible else { return }
+        guard isHidden == false else { return }
 
         let animations: () -> Void = { [self] in
-            guard keyboard.isVisible else {
-                return contentView.transform = .identity
+            let keyboardGuide = keyboardGuide ?? HUD.keyboardGuide
+
+            guard keyboard.isVisible && keyboardGuide != .disable else {
+                return keyboardGuideView.transform = .identity
             }
 
-            let keyboardGuide = keyboardGuide ?? HUD.keyboardGuide
+            layoutIfNeeded()
 
             let topSafeArea = safeAreaInsets.top
             var frameToWindow = bounds
@@ -971,17 +659,16 @@ extension HUD: KeyboardObservable {
 
             if case let .center(offsetY) = keyboardGuide {
                 var y = (keyboard.frameEnd.minY - topSafeArea - frameToWindow.minY) / 2.0 + topSafeArea + offsetY
-                if (y - bezelView.bounds.midY) < 0.0 {
-                    y = bezelView.bounds.midY
+                if (y - contentView.bounds.midY) < 0.0 {
+                    y = contentView.bounds.midY
                 }
-                contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.midY - y, 0.0))
+                keyboardGuideView.transform = CGAffineTransform(translationX: 0.0, y: -max(contentView.frame.midY - y, 0.0))
             } else if case let .bottom(spacing) = keyboardGuide {
-                let y = max(keyboard.frameEnd.minY - bezelView.bounds.height - frameToWindow.minY - spacing, 0.0)
-                contentView.transform = CGAffineTransform(translationX: 0.0, y: -max(bezelView.frame.minY - y, 0.0))
+                let y = max(keyboard.frameEnd.minY - contentView.bounds.height - frameToWindow.minY - spacing, 0.0)
+                keyboardGuideView.transform = CGAffineTransform(translationX: 0.0, y: -max(contentView.frame.minY - y, 0.0))
             }
         }
 
-        layoutIfNeeded()
         guard animated else {
             return animations()
         }
@@ -990,3 +677,62 @@ extension HUD: KeyboardObservable {
     }
 }
 #endif
+
+// MARK: - Layout constraint
+
+extension HUD: ContentViewDelegate {
+    func layoutConstraintsDidChange(from contentView: ContentView) {
+        update(constraints: false, keyboardGuide: true)
+    }
+
+    private func update(constraints: Bool, keyboardGuide: Bool) {
+        if constraints {
+            constraint.update(with: layout)
+        }
+
+#if !os(tvOS)
+        if keyboardGuide {
+            guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
+            updateKeyboardGuide(with: keyboardInfo, animated: false)
+        }
+#endif
+    }
+
+    private class Constraint {
+        let x, y, top, left, bottom, right: NSLayoutConstraint
+
+        init(_ contentView: UIView, to: UIView, layout: Layout) {
+            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(998.0) }
+            let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(999.0) }
+
+            let xAnchor, leftAnchor, rightAnchor: NSLayoutXAxisAnchor, yAnchor, topAnchor, bottomAnchor: NSLayoutYAxisAnchor
+            if layout.isSafeAreaLayoutGuideEnabled {
+                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
+                    to.safeAreaLayoutGuide.centerXAnchor, to.safeAreaLayoutGuide.centerYAnchor,
+                    to.safeAreaLayoutGuide.leadingAnchor, to.safeAreaLayoutGuide.trailingAnchor,
+                    to.safeAreaLayoutGuide.topAnchor, to.safeAreaLayoutGuide.bottomAnchor)
+            } else {
+                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
+                    to.centerXAnchor, to.centerYAnchor,
+                    to.leadingAnchor, to.trailingAnchor, to.topAnchor, to.bottomAnchor)
+            }
+
+            (x, y, left, right, top, bottom) = (
+                // Center contentView in container (self), applying the offset if set
+                contentView.centerXAnchor.constraint(equalTo: xAnchor).h.then(centerWork),
+                contentView.centerYAnchor.constraint(equalTo: yAnchor).h.then(centerWork),
+                // Ensure minimum side margin is kept
+                contentView.leadingAnchor.constraint(greaterThanOrEqualTo: leftAnchor).h.then(edgeWork),
+                contentView.trailingAnchor.constraint(lessThanOrEqualTo: rightAnchor).h.then(edgeWork),
+                contentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor).h.then(edgeWork),
+                contentView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor).h.then(edgeWork))
+            NSLayoutConstraint.activate([x, y, top, left, bottom, right])
+        }
+
+        func update(with layout: Layout) {
+            let (offset, edge) = (layout.offset, layout.edgeInsets)
+            (x.constant, y.constant, left.constant, right.constant, top.constant, bottom.constant) = (
+                offset.x, offset.y, edge.left, -edge.right, edge.top, -edge.bottom)
+        }
+    }
+}

@@ -272,10 +272,12 @@
 					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 9RH4FTGH32;
 						LastSwiftMigration = 1250;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 9RH4FTGH32;
 						LastSwiftMigration = 1250;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -664,7 +666,7 @@
 			baseConfigurationReference = D45F90F5C8308FF9FCF2567E /* Pods-HUD_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -683,7 +685,7 @@
 			baseConfigurationReference = D4BCC752D7BFFC6A6D56BBC3 /* Pods-HUD_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -701,6 +703,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4E7FC5A9D07F1CE1E2EC1C82 /* Pods-HUD_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
@@ -725,6 +728,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8455F49E9B0D4A06B5C7D512 /* Pods-HUD_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",

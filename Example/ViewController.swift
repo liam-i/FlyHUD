@@ -35,7 +35,7 @@ class ViewController: UITableViewController, HUDDelegate {
 
     @IBAction func statusButtonClicked(_ sender: UIButton) {
         let onlyText = sender.title(for: .normal) == "Toast"
-        let mode: HUD.Mode = onlyText ? .text : .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+        let mode: ContentView.Mode = onlyText ? .text : .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
         showHUD(mode, label: mode.description).h.then {
             if config.isDefaultModeStyle {
                 $0.hide(afterDelay: config.hideAfterDelay)
@@ -56,15 +56,15 @@ class ViewController: UITableViewController, HUDDelegate {
             request += 1
 
             hud.show()
-            hud.label.text = "Count: \(hud.count)"
-            hud.detailsLabel.text = "Request: \(request), Response: \(response)"
+            hud.contentView.label.text = "Count: \(hud.count)"
+            hud.contentView.detailsLabel.text = "Request: \(request), Response: \(response)"
 
             Task.request(.random(in: 1...5)) {
                 response += 1
 
                 hud.hide(afterDelay: 1)
-                hud.label.text = "Count: \(hud.count)"
-                hud.detailsLabel.text = "Request: \(request), Response: \(response)"
+                hud.contentView.label.text = "Count: \(hud.count)"
+                hud.contentView.detailsLabel.text = "Request: \(request), Response: \(response)"
             }
         }
 
@@ -77,24 +77,26 @@ class ViewController: UITableViewController, HUDDelegate {
         switch sender.tag {
         case 1000: // Mode Switching
             let hud = showHUD(.indicator(), label: "Preparing...")
-            hud.layout.minSize = CGSize(width: 150.0, height: 100.0)
 
             Task.requestMultiTask {
-                hud.progress = $0
+                hud.contentView.progress = $0
             } completion: {
                 switch $0 {
                 case 3:
+                    hud.contentView.layout.minSize = CGSize(width: 200.0, height: 100.0)
                     hud.layout.offset = .h.vMinOffset
-                    hud.mode = .progress(.round)
-                    hud.label.text = "Loading..."
+                    hud.contentView.mode = .progress(.round)
+                    hud.contentView.label.text = "Loading..."
                 case 2:
+                    hud.contentView.layout.minSize = CGSize(width: 150.0, height: 300.0)
                     hud.layout.offset = .h.vMaxOffset
-                    hud.mode = .indicator()
-                    hud.label.text = "Cleaning up..."
+                    hud.contentView.mode = .indicator()
+                    hud.contentView.label.text = "Cleaning up..."
                 case 1:
+                    hud.contentView.layout.minSize = CGSize(width: 180.0, height: 200.0)
                     hud.layout.offset = CGPoint(x: .h.maxOffset, y: .h.maxOffset)
-                    hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
-                    hud.label.text = "Completed"
+                    hud.contentView.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.label.text = "Completed"
                 case 0:
                     hud.hide()
                 default:
@@ -103,23 +105,23 @@ class ViewController: UITableViewController, HUDDelegate {
             }
         case 1001: // URLSession
             showHUD(.indicator(), label: "Preparing...").h.then { hud in
-                hud.layout.minSize = CGSize(width: 150.0, height: 100.0)
-                hud.mode = .progress(.annularRound)
+                hud.contentView.layout.minSize = CGSize(width: 150.0, height: 100.0)
+                hud.contentView.mode = .progress(.annularRound)
 
                 Task.download { progress in
-                    hud.progress = progress
+                    hud.contentView.progress = progress
                 } completion: {
-                    hud.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
-                    hud.label.text = "Completed"
+                    hud.contentView.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.label.text = "Completed"
                     hud.hide(afterDelay: 3.0)
                 }
             }
         default: // Determinate with Progress
             showHUD(.progress(.round)).h.then { hud in
                 Task.resume { progress in
-                    hud.observedProgress = progress
-                    hud.button.setTitle("Cancel", for: .normal)
-                    hud.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
+                    hud.contentView.observedProgress = progress
+                    hud.contentView.button.setTitle("Cancel", for: .normal)
+                    hud.contentView.button.addTarget(progress, action: #selector(Progress.cancel), for: .touchUpInside)
 
                     // feat #639: https://github.com/jdg/MBProgressHUD/issues/639
                     // label.text and detailLabel.text takes their info from the progressObject.
@@ -134,7 +136,7 @@ class ViewController: UITableViewController, HUDDelegate {
         }
     }
 
-    private func showHUD(_ mode: HUD.Mode, label: String? = nil) -> HUD {
+    private func showHUD(_ mode: ContentView.Mode, label: String? = nil) -> HUD {
         let hud: HUD
         if config.isDefaultModeStyle {
             hud = HUD.show(to: v, mode: mode, label: label) // Default Mode Style
@@ -142,29 +144,29 @@ class ViewController: UITableViewController, HUDDelegate {
             hud = customHUD(mode, label: label) // Custom Mode Style
         }
         if config.isEventDeliveryEnabled && config.isDefaultModeStyle == false {
-            hud.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
-            hud.detailsLabel.textColor = .systemRed
+            hud.contentView.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
+            hud.contentView.detailsLabel.textColor = .systemRed
         }
         hud.delegate = self
         hud.completionBlock = completionBlock
         return hud
     }
 
-    private func customHUD(_ mode: HUD.Mode, label: String?) -> HUD {
+    private func customHUD(_ mode: ContentView.Mode, label: String?) -> HUD {
         if case let .custom(view) = mode, let progressView = view as? ProgressView {
             progressView.isLabelEnabled = progressView.style.isEqual(ProgressView.Style.round) || progressView.style.isEqual(ProgressView.Style.annularRound)
         }
         return HUD.show(to: v, using: config.currAnimation, mode: mode) { [self] in
-            $0.label.text = label ?? (config.isLabelEnabled ? mode.description : nil)
-            $0.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
-            $0.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
+            $0.contentView.label.text = label ?? (config.isLabelEnabled ? mode.description : nil)
+            $0.contentView.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
+            $0.contentView.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
             if config.isButtonEnabled {
-                $0.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
+                $0.contentView.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
             }
             $0.layout = config.layout
-            $0.contentColor = config.contentColor.color
-            $0.bezelView.style = config.bezelViewStyle
-            $0.bezelView.color = config.bezelViewColor == .default ? .h.background : config.bezelViewColor.color
+            $0.contentView.contentColor = config.contentColor.color
+            $0.contentView.style = config.contentViewStyle
+            $0.contentView.color = config.contentViewColor == .default ? .h.background : config.contentViewColor.color
             $0.backgroundView.style = config.backgroundViewStyle
             $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
             $0.animation = config.animation
@@ -172,15 +174,15 @@ class ViewController: UITableViewController, HUDDelegate {
             $0.minShowTime = config.minShowTime
             $0.isCountEnabled = config.isCountEnabled
             $0.isEventDeliveryEnabled = config.isEventDeliveryEnabled
-            $0.isMotionEffectsEnabled = config.isMotionEffectsEnabled
+            $0.contentView.isMotionEffectsEnabled = config.isMotionEffectsEnabled
             $0.keyboardGuide = config.keyboardGuide
         }
     }
 
     func request(_ hud: HUD) {
         Task.request(config.takeTime) { progress in
-            if hud.mode.isProgressView {
-                hud.progress = progress
+            if hud.contentView.mode.isProgressView {
+                hud.contentView.progress = progress
             }
         } completion: { [self] in
             if config.isDefaultModeStyle {
@@ -314,19 +316,19 @@ class ViewController: UITableViewController, HUDDelegate {
         case "Butto": Alert.switch(title, selected: setTitle(_:)) { self.config.isButtonEnabled = $0 }
         case "tintC": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentColor = $0 }
         case "taskT": Alert.textField(title, selected: setTitle(_:)) { self.config.takeTime = UInt32($0) }
-        case "beBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.bezelViewStyle = $0 ? .blur() : .solidColor }
-        case "beCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.bezelViewColor = $0 }
+        case "beBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.contentViewStyle = $0 ? .blur() : .solidColor }
+        case "beCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.contentViewColor = $0 }
         case "bgBlu": Alert.switch(title, selected: setTitle(_:)) { self.config.backgroundViewStyle = $0 ? .blur() : .solidColor }
         case "bgCol": Alert.list(title, list: Color.allCases, selected: setTitle(_:)) { self.config.backgroundViewColor = $0 }
         case "offse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.offset.y = $0 }
         case "hInse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.left = $0; self.config.layout.edgeInsets.right = $0 }
         case "vInse": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.edgeInsets.top = $0; self.config.layout.edgeInsets.bottom = $0 }
-        case "hMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.hMargin = $0 }
-        case "vMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.vMargin = $0 }
-        case "spaci": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.spacing = $0 }
-        case "minWi": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.minSize.width = $0 }
-        case "minHe": Alert.textField(title, selected: setTitle(_:)) { self.config.layout.minSize.height = $0 }
-        case "squar": Alert.switch(title, selected: setTitle(_:)) { self.config.layout.isSquare = $0 }
+        case "hMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.hMargin = $0 }
+        case "vMarg": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.vMargin = $0 }
+        case "spaci": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.spacing = $0 }
+        case "minWi": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.minSize.width = $0 }
+        case "minHe": Alert.textField(title, selected: setTitle(_:)) { self.config.contentLayout.minSize.height = $0 }
+        case "squar": Alert.switch(title, selected: setTitle(_:)) { self.config.contentLayout.isSquare = $0 }
         case "safeL": Alert.switch(title, selected: setTitle(_:)) { self.config.layout.isSafeAreaLayoutGuideEnabled = $0 }
         case "style": Alert.list(title, list: HUD.Animation.Style.allCases, selected: setTitle(_:)) { self.config.animation.style = $0 }
         case "dampi": Alert.switch(title, selected: setTitle(_:)) { self.config.animation.damping = $0 ? .default : .disable }
@@ -373,19 +375,19 @@ class ViewController: UITableViewController, HUDDelegate {
             case "Butto": setTitle(config.isButtonEnabled)
             case "tintC": setTitle(config.contentColor.rawValue)
             case "taskT": setTitle(config.takeTime)
-            case "beBlu": setTitle(config.bezelViewStyle == .blur())
-            case "beCol": setTitle(config.bezelViewColor.rawValue)
+            case "beBlu": setTitle(config.contentViewStyle == .blur())
+            case "beCol": setTitle(config.contentViewColor.rawValue)
             case "bgBlu": setTitle(config.backgroundViewStyle == .blur())
             case "bgCol": setTitle(config.backgroundViewColor.rawValue)
             case "offse": setTitle(config.layout.offset.y)
             case "hInse": setTitle(config.layout.edgeInsets.left)
             case "vInse": setTitle(config.layout.edgeInsets.top)
-            case "hMarg": setTitle(config.layout.hMargin)
-            case "vMarg": setTitle(config.layout.vMargin)
-            case "spaci": setTitle(config.layout.spacing)
-            case "minWi": setTitle(config.layout.minSize.width)
-            case "minHe": setTitle(config.layout.minSize.height)
-            case "squar": setTitle(config.layout.isSquare)
+            case "hMarg": setTitle(config.contentLayout.hMargin)
+            case "vMarg": setTitle(config.contentLayout.vMargin)
+            case "spaci": setTitle(config.contentLayout.spacing)
+            case "minWi": setTitle(config.contentLayout.minSize.width)
+            case "minHe": setTitle(config.contentLayout.minSize.height)
+            case "squar": setTitle(config.contentLayout.isSquare)
             case "safeL": setTitle(config.layout.isSafeAreaLayoutGuideEnabled)
             case "style": setTitle(config.animation.style)
             case "dampi": setTitle(config.animation.damping == .default)

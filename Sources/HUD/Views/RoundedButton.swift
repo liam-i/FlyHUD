@@ -58,29 +58,40 @@ public class RoundedButton: UIButton {
     }
 
     public override var intrinsicContentSize: CGSize {
-        // Only show if we have associated control events and a title
-        if let title = title(for: .normal), !title.isEmpty, allControlEvents.rawValue > 0 {
-            var size = super.intrinsicContentSize
-            size.width += 20.0 // Add some side padding
-            return size
+        if isEmptyOfText && allControlEvents.rawValue <= 0 {
+            return .zero // Only show if we have associated control events and a title
         }
-        return .zero
+        var size = super.intrinsicContentSize
+        size.width += 20.0 // Add some side padding
+        return size
     }
 
-    // MARK: - Color
+    public override var bounds: CGRect {
+        didSet {
+            isHiddenInStackView = isEmptyOfText
+        }
+    }
+
+    public override func setTitle(_ title: String?, for state: UIControl.State) {
+        super.setTitle(title, for: state)
+        isHiddenInStackView = isEmptyOfText
+    }
 
     public override func setTitleColor(_ color: UIColor?, for state: UIControl.State) {
         super.setTitleColor(color, for: state)
         // Update related colors
-        let highlighted = isHighlighted
-        isHighlighted = highlighted
+        isHighlighted = isHighlighted
         layer.borderColor = color?.cgColor
     }
 
     public override var isHighlighted: Bool {
         didSet {
-            let baseColor = titleColor(for: .selected)
-            backgroundColor = isHighlighted ? baseColor?.withAlphaComponent(0.1) : .clear
+            backgroundColor = isHighlighted ? titleColor(for: .selected)?.withAlphaComponent(0.1) : .clear
         }
+    }
+
+    var isEmptyOfText: Bool {
+        guard let text = title(for: .normal), text.isEmpty == false else { return true }
+        return false
     }
 }

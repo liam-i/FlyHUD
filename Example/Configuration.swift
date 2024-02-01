@@ -24,12 +24,13 @@ struct Configuration {
     var isDetailsLabelEnabled: Bool = false
     var isButtonEnabled: Bool = false
 
-//    var mode: HUD.Mode = .indicator()
+//    var mode: ContentView.Mode = .indicator()
     var layout: HUD.Layout = .init()
+    var contentLayout: ContentView.Layout = .init()
     var contentColor: Color = .default
-    var bezelViewStyle: BackgroundView.Style = .blur()
+    var contentViewStyle: BackgroundView.Style = .blur()
     var backgroundViewStyle: BackgroundView.Style = .solidColor
-    var bezelViewColor: Color = .default
+    var contentViewColor: Color = .default
     var backgroundViewColor: Color = .default
 
 //    var progress: Float = 0.0
@@ -39,7 +40,6 @@ struct Configuration {
     var isForceAnimationEnabled: Bool = false
     var currAnimation: HUD.Animation { isForceAnimationEnabled ? forceAnimation : animation }
 
-//    var isVisible: Bool
     var graceTime: TimeInterval = 0.0
     var minShowTime: TimeInterval = 0.0
 //    var removeFromSuperViewOnHide: Bool = true
@@ -55,7 +55,7 @@ struct Configuration {
     var takeTime: UInt32 = 3 // task time.
 }
 
-extension HUD.Mode: CustomStringConvertible {
+extension ContentView.Mode: CustomStringConvertible {
     public var description: String {
         switch self {
         case .text:                                 return "Wrong password"
