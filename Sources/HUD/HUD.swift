@@ -22,7 +22,7 @@ public protocol HUDDelegate: AnyObject {
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
-open class HUD: BaseView {
+open class HUD: BaseView, ContentViewDelegate {
     /// The view containing the labels and indicator (or customView). The HUD object places the content in this view in front of any background views.
     public private(set) lazy var contentView = ContentView(frame: .zero)
     /// View covering the entire HUD area, placed behind contentView.
@@ -90,8 +90,7 @@ open class HUD: BaseView {
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
     private lazy var keyboardGuideView = UIView(frame: bounds)
-    private lazy var constraint = EdgeConstraint(contentView, to: self, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled,
-                                                 center: .init(995.0), edge: .init(1000.0))
+    private var constraint: EdgeConstraint?
     private var isFinished: Bool = false
     private var showStarted: Date?
 
@@ -118,7 +117,6 @@ open class HUD: BaseView {
         updateKeyboardObserver()
         registerForNotifications()
 #endif
-        update(constraints: true, keyboardGuide: false)
     }
 
     deinit {
@@ -586,10 +584,37 @@ open class HUD: BaseView {
         })
     }
 
+    // MARK: Layout constraint
+
+    func layoutConstraintsDidChange(from contentView: ContentView) {
+        update(constraints: false, keyboardGuide: true)
+    }
+
+    private func update(constraints: Bool, keyboardGuide: Bool) {
+        guard let constraint = constraint else { return }
+
+        if constraints {
+            constraint.update(offset: layout.offset, edge: layout.edgeInsets)
+        }
+#if !os(tvOS)
+        if keyboardGuide {
+            guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
+            updateKeyboardGuide(with: keyboardInfo, animated: false)
+        }
+#endif
+    }
+
     // MARK: View Hierarchy
 
     open override func didMoveToSuperview() {
+        guard superview != nil else { return }
         updateForCurrentOrientation()
+
+        guard constraint == nil else { return }
+        constraint = EdgeConstraint(contentView, to: self,
+                                    useSafeGuide: layout.isSafeAreaLayoutGuideEnabled,
+                                    center: .init(995.0), edge: .init(1000.0))
+        update(constraints: true, keyboardGuide: false)
     }
 
     @objc
@@ -608,9 +633,8 @@ open class HUD: BaseView {
 }
 
 #if !os(tvOS)
-// MARK: - Notifications
-
-extension HUD {
+extension HUD: KeyboardObservable {
+    // MARK: - Notifications
     private func registerForNotifications() {
         NotificationCenter.default.addObserver(
             self,
@@ -622,11 +646,9 @@ extension HUD {
     private func unregisterFromNotifications() {
         NotificationCenter.default.removeObserver(self)
     }
-}
 
-// MARK: - Keyboard Guide
+    // MARK: - Keyboard Guide
 
-extension HUD: KeyboardObservable {
     private static func updateKeyboardObserver() {
         guard keyboardGuide != .disable else { return }
         KeyboardObserver.enable() // Enable keyboard observation
@@ -688,24 +710,3 @@ extension HUD: KeyboardObservable {
     }
 }
 #endif
-
-// MARK: - Layout constraint
-
-extension HUD: ContentViewDelegate {
-    func layoutConstraintsDidChange(from contentView: ContentView) {
-        update(constraints: false, keyboardGuide: true)
-    }
-
-    private func update(constraints: Bool, keyboardGuide: Bool) {
-        if constraints {
-            constraint.update(offset: layout.offset, edge: layout.edgeInsets)
-        }
-
-#if !os(tvOS)
-        if keyboardGuide {
-            guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
-            updateKeyboardGuide(with: keyboardInfo, animated: false)
-        }
-#endif
-    }
-}

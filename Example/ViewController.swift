@@ -10,7 +10,7 @@ import UIKit
 import LPHUD
 
 class RotateImageView: UIImageView, RotateViewable {
-    static var loading: RotateImageView { .init(image: UIImage(named: "loading")) }
+    static var loading: RotateImageView { .init(named: "loading") }
 }
 
 class ViewController: UITableViewController, HUDDelegate {
@@ -35,7 +35,7 @@ class ViewController: UITableViewController, HUDDelegate {
 
     @IBAction func statusButtonClicked(_ sender: UIButton) {
         let onlyText = sender.title(for: .normal) == "Toast"
-        let mode: ContentView.Mode = onlyText ? .text : .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+        let mode: ContentView.Mode = onlyText ? .text : .custom(UIImageView(named: "Checkmark"))
         showHUD(mode, label: mode.description).h.then {
             if config.isDefaultModeStyle {
                 $0.hide(afterDelay: config.hideAfterDelay)
@@ -95,7 +95,7 @@ class ViewController: UITableViewController, HUDDelegate {
                 case 1:
                     hud.contentView.layout.minSize = CGSize(width: 180.0, height: 200.0)
                     hud.layout.offset = CGPoint(x: .h.maxOffset, y: .h.maxOffset)
-                    hud.contentView.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.mode = .custom(UIImageView(named: "Checkmark"))
                     hud.contentView.label.text = "Completed"
                 case 0:
                     hud.hide()
@@ -111,7 +111,7 @@ class ViewController: UITableViewController, HUDDelegate {
                 Task.download { progress in
                     hud.contentView.progress = progress
                 } completion: {
-                    hud.contentView.mode = .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.mode = .custom(UIImageView(named: "Checkmark"))
                     hud.contentView.label.text = "Completed"
                     hud.hide(afterDelay: 3.0)
                 }
@@ -247,7 +247,9 @@ class ViewController: UITableViewController, HUDDelegate {
             switch $0.viewWithTag(1000) {
             case let view as UIProgressView:          systemProgressView = view
             case let view as UIActivityIndicatorView: view.startAnimating()
-            case let view as RotateImageView:         view.startRotating()
+            case let view as RotateImageView:
+                view.image = view.image?.withRenderingMode(.alwaysTemplate)
+                view.startRotating()
             default: break
             }
         }

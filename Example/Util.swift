@@ -25,6 +25,12 @@ enum Color: String, CaseIterable {
     }
 }
 
+extension UIImageView {
+    convenience init(named: String) {
+        self.init(image: UIImage(named: named)?.withRenderingMode(.alwaysTemplate))
+    }
+}
+
 enum Alert {
     static func `switch`(_ title: String, selected: @escaping(_ isOn: Bool) -> Void, selected1: @escaping(Bool) -> Void) {
         UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then {
