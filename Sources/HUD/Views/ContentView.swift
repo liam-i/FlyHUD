@@ -69,7 +69,7 @@ extension ContentView {
         /// A layout for vertical stacks where the stack view aligns the trailing edge of its arranged views along its trailing edge.
         case right
 
-        fileprivate var valueStackView: UIStackView.Alignment {
+        fileprivate var valueOfStackView: UIStackView.Alignment {
             switch self {
             case .center:   return .center
             case .left:     return .leading
@@ -374,7 +374,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     private func updateLayoutConstraints(_ isInitialized: Bool) {
         hStackView.spacing = layout.hSpacing
         vStackView.spacing = layout.vSpacing
-        vStackView.alignment = layout.alignment.valueStackView
+        vStackView.alignment = layout.alignment.valueOfStackView
         label.textAlignment = layout.alignment.valueOfText
         detailsLabel.textAlignment = label.textAlignment
         button.titleLabel?.textAlignment = label.textAlignment
