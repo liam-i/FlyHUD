@@ -21,8 +21,9 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 ## Requirements
 
 * iOS 11.0+ 
-* Xcode 14.0+
-* Swift 5.0+
+* tvOS 11.0+ 
+* Xcode 14.1+
+* Swift 5.7.1+
 
 ## Installation
 
