@@ -14,8 +14,8 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
 
 ## Requirements
