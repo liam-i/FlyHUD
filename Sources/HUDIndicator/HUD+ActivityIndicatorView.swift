@@ -1,8 +1,12 @@
 //
 //  Model+ActivityIndicatorView.swift
-//  HUD
+//  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by liam on 2024/1/19.
+//  Copyright (c) 2021 Liam. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit

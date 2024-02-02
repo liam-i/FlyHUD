@@ -1,8 +1,12 @@
 //
 //  ContentView.swift
-//  LPHUD
+//  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by liam on 2024/1/31.
+//  Copyright (c) 2021 Liam. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit
@@ -102,6 +106,7 @@ extension ContentView {
         public var isSquare: Bool
 
         /// Creates a new Layout.
+        /// 
         /// - Parameters:
         ///   - hMargin: The horizontal amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). `Defaults to 20.0`.
         ///   - vMargin: The vertical amount of space between the HUD edge and the HUD elements (labels, indicators or custom views). `Defaults to 20.0`.
@@ -215,7 +220,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     }
 
     deinit {
-        observedProgress = nil // 1. observedProgress = nil; 2. DisplayLink.shared.remove(self)
+        observedProgress = nil // 1.observedProgress = nil; 2.DisplayLink.shared.remove(self)
 #if DEBUG
         print("👍👍👍 ContentView is released.")
 #endif

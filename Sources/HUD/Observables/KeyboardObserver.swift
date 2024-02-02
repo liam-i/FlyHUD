@@ -1,8 +1,12 @@
 //
 //  KeyboardObserver.swift
-//  LPHUD
+//  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by liam on 2024/1/24.
+//  Copyright (c) 2021 Liam. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit
@@ -59,6 +63,7 @@ public class KeyboardObserver {
     }
 
     /// Removes a given object from the keyboard observer list.
+    ///
     /// - Parameter observer: The object to remove from the keyboard observer list.
     ///                       This object must implement the KeyboardObservable protocol.
     public func remove(_ observer: KeyboardObservable) {

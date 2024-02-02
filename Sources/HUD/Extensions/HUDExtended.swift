@@ -1,8 +1,12 @@
 //
-//  HUDWrapper.swift
-//  LPHUD
+//  HUDExtended.swift
+//  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by Liam on 2024/1/27.
+//  Copyright (c) 2021 Liam. All rights reserved.
+//
+//  This source code is licensed under the MIT-style license found in the
+//  LICENSE file in the root directory of this source tree.
 //
 
 import UIKit

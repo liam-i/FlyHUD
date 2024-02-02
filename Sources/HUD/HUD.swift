@@ -20,6 +20,7 @@ public protocol HUDDelegate: AnyObject {
 // MARK: - HUD
 
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
+///
 /// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
 open class HUD: BaseView, ContentViewDelegate {
@@ -46,6 +47,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
     public var graceTime: TimeInterval = 0.0
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
+    ///
     /// `Defaults to 0.0 (no minimum show time)`.
     public var minShowTime: TimeInterval = 0.0
     /// Removes the HUD from its parent view when hidden. `Defaults to true`.
@@ -54,12 +56,14 @@ open class HUD: BaseView, ContentViewDelegate {
     /// This is an activity count that records multiple shows and hides of the same HUD object.
     public private(set) var count: Int = 0
     /// A Boolean value indicating whether the HUD is in the enable activity count. `Defaults to false`.
+    ///
     /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     public var isCountEnabled: Bool = false
 
 #if !os(tvOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
+    ///
     /// - Note: Global configuration. Priority less than member property keyboardGuide.
     public static var keyboardGuide: KeyboardGuide = .disable {
         didSet {
@@ -67,6 +71,7 @@ open class HUD: BaseView, ContentViewDelegate {
         }
     }
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to nil`.
+    ///
     /// - Note: Priority greater than static property keyboardGuide.
     /// - Note: If set to nil, the static property keyboardGuide is used.
     public var keyboardGuide: KeyboardGuide? {
@@ -235,6 +240,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:using:)`.
+    ///
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Default to true`.
@@ -264,6 +270,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Creates a new HUD. adds it to provided view and shows it. The counterpart to this method is `hide(for:using:)`.
+    ///
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - animation: Use HUD.Animation.
@@ -296,6 +303,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Finds the `top-most` HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:...)`.
+    ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
@@ -308,6 +316,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Finds the `top-most` HUD subview that hasn't finished and hides it. The counterpart to this method is `show(to:using:...)`.
+    ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
@@ -324,6 +333,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Find all unfinished HUD subviews and hide them. The counterpart to this method is `show(to:using:...)`.
+    ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
@@ -336,6 +346,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Find all unfinished HUD subviews and hide them. The counterpart to this method is `show(to:using:...)`.
+    ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
@@ -354,6 +365,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Displays the HUD.
+    ///
     /// - Parameter animated: If set to true the HUD will appear using the current animation. If set to false the HUD will not use animations while appearing. `Default to true`.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
@@ -363,6 +375,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Displays the HUD.
+    ///
     /// - Parameter animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
@@ -373,6 +386,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    ///
     /// - Parameters:
     ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
@@ -382,6 +396,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    ///
     /// - Parameters:
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
     ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.

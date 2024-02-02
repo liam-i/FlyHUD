@@ -32,6 +32,7 @@ extension HUD {
         public var isSafeAreaLayoutGuideEnabled: Bool
 
         /// Creates a new Layout.
+        ///
         /// - Parameters:
         ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
         ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
@@ -131,6 +132,7 @@ extension HUD {
         public var duration: TimeInterval
 
         /// Creates a new Animation.
+        ///
         /// - Parameters:
         ///   - style: The animation type that should be used when the HUD is shown and hidden. `Defaults to .fade`.
         ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
@@ -144,6 +146,7 @@ extension HUD {
         }
 
         /// Creates a new Animation.
+        ///
         /// - Parameters:
         ///   - style: The animation type that should be used when the HUD is shown and hidden.
         ///   - damping: The damping ratio for the spring animation as it approaches its quiescent state. `Defaults to .disable`.
