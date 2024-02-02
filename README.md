@@ -43,10 +43,13 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
+  # HUD + HUDIndicator + HUDProgress
   pod 'LPHUD', '~> 1.5.0'
-  # or
+  # or, only HUD
+  pod 'LPHUD', '~> 1.5.0', :subspecs => ['HUD']
+  # or, HUD + HUDIndicator
   pod 'LPHUD', '~> 1.5.0', :subspecs => ['HUDIndicator']
-  # or
+  # or, HUD + HUDProgress
   pod 'LPHUD', '~> 1.5.0', :subspecs => ['HUDProgress']
 end
 ```
