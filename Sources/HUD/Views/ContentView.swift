@@ -381,31 +381,21 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 
     private class Constraint {
         let width, height, square: NSLayoutConstraint
-        let top, left, bottom, right, x, y: NSLayoutConstraint
+        let edge: EdgeConstraint
 
         init(_ stackView: UIView, to: UIView) {
             let toWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(992.0) }
-            let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(999.0) }
-            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(994.0) }
-            (width, height, square, top, bottom, left, right, x, y) = (
+            (width, height, square) = (
                 to.widthAnchor.constraint(greaterThanOrEqualToConstant: 0.0).h.then(toWork),
                 to.heightAnchor.constraint(greaterThanOrEqualToConstant: 0.0).h.then(toWork),
-                to.heightAnchor.constraint(equalTo: to.widthAnchor).h.then(toWork),
-
-                stackView.topAnchor.constraint(greaterThanOrEqualTo: to.topAnchor).h.then(edgeWork),
-                stackView.bottomAnchor.constraint(lessThanOrEqualTo: to.bottomAnchor).h.then(edgeWork),
-                stackView.leadingAnchor.constraint(greaterThanOrEqualTo: to.leadingAnchor).h.then(edgeWork),
-                stackView.trailingAnchor.constraint(lessThanOrEqualTo: to.trailingAnchor).h.then(edgeWork),
-                stackView.centerXAnchor.constraint(equalTo: to.centerXAnchor).h.then(centerWork),
-                stackView.centerYAnchor.constraint(equalTo: to.centerYAnchor).h.then(centerWork))
-            NSLayoutConstraint.activate([top, bottom, left, right, x, y])
+                to.heightAnchor.constraint(equalTo: to.widthAnchor).h.then(toWork))
+            edge = .init(stackView, to: to, useSafeGuide: false, center: .init(994.0), edge: .init(999.0))
         }
 
         func update(with layout: Layout) {
-            (width.constant, height.constant, 
-             top.constant, bottom.constant, left.constant, right.constant) = (
-                layout.minSize.width, layout.minSize.height,
-                layout.vMargin, -layout.vMargin, layout.hMargin, -layout.hMargin)
+            (width.constant, height.constant) = (layout.minSize.width, layout.minSize.height)
+
+            edge.update(hMargin: layout.hMargin, vMargin: layout.vMargin)
 
             width.isActive = layout.minSize != .zero
             height.isActive = width.isActive

@@ -27,4 +27,45 @@ extension UIView {
         setContentCompressionResistancePriority(priority, for: .horizontal)
         setContentCompressionResistancePriority(priority, for: .vertical)
     }
+
+    class EdgeConstraint {
+        let x, y, top, bottom, left, right: NSLayoutConstraint
+
+        init(_ from: UIView, to: UIView, useSafeGuide: Bool, center: UILayoutPriority, edge: UILayoutPriority) {
+            let centerPriority: (NSLayoutConstraint) -> Void = { $0.priority = center }
+            let edgePriority: (NSLayoutConstraint) -> Void = { $0.priority = edge }
+
+            let xAnchor, leftAnchor, rightAnchor: NSLayoutXAxisAnchor, yAnchor, topAnchor, bottomAnchor: NSLayoutYAxisAnchor
+            if useSafeGuide {
+                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
+                    to.safeAreaLayoutGuide.centerXAnchor, to.safeAreaLayoutGuide.centerYAnchor,
+                    to.safeAreaLayoutGuide.leadingAnchor, to.safeAreaLayoutGuide.trailingAnchor,
+                    to.safeAreaLayoutGuide.topAnchor, to.safeAreaLayoutGuide.bottomAnchor)
+            } else {
+                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
+                    to.centerXAnchor, to.centerYAnchor,
+                    to.leadingAnchor, to.trailingAnchor, to.topAnchor, to.bottomAnchor)
+            }
+
+            (x, y, left, right, top, bottom) = (
+                from.centerXAnchor.constraint(equalTo: xAnchor).h.then(centerPriority),
+                from.centerYAnchor.constraint(equalTo: yAnchor).h.then(centerPriority),
+
+                from.leadingAnchor.constraint(greaterThanOrEqualTo: leftAnchor).h.then(edgePriority),
+                from.trailingAnchor.constraint(lessThanOrEqualTo: rightAnchor).h.then(edgePriority),
+                from.topAnchor.constraint(greaterThanOrEqualTo: topAnchor).h.then(edgePriority),
+                from.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor).h.then(edgePriority))
+            NSLayoutConstraint.activate([x, y, top, left, bottom, right])
+        }
+
+        func update(offset: CGPoint, edge: UIEdgeInsets) {
+            (x.constant, y.constant, left.constant, right.constant, top.constant, bottom.constant) = (
+                offset.x, offset.y, edge.left, -edge.right, edge.top, -edge.bottom)
+        }
+
+        func update(hMargin: CGFloat, vMargin: CGFloat) {
+            (left.constant, right.constant, top.constant, bottom.constant) = (
+                hMargin, -hMargin, vMargin, -vMargin)
+        }
+    }
 }

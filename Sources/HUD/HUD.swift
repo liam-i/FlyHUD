@@ -90,7 +90,8 @@ open class HUD: BaseView {
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
     private lazy var keyboardGuideView = UIView(frame: bounds)
-    private lazy var constraint = Constraint(contentView, to: self, layout: layout)
+    private lazy var constraint = EdgeConstraint(contentView, to: self, useSafeGuide: layout.isSafeAreaLayoutGuideEnabled,
+                                                 center: .init(995.0), edge: .init(1000.0))
     private var isFinished: Bool = false
     private var showStarted: Date?
 
@@ -697,7 +698,7 @@ extension HUD: ContentViewDelegate {
 
     private func update(constraints: Bool, keyboardGuide: Bool) {
         if constraints {
-            constraint.update(with: layout)
+            constraint.update(offset: layout.offset, edge: layout.edgeInsets)
         }
 
 #if !os(tvOS)
@@ -706,43 +707,5 @@ extension HUD: ContentViewDelegate {
             updateKeyboardGuide(with: keyboardInfo, animated: false)
         }
 #endif
-    }
-
-    private class Constraint {
-        let x, y, top, left, bottom, right: NSLayoutConstraint
-
-        init(_ contentView: UIView, to: UIView, layout: Layout) {
-            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(995.0) }
-            let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(1000.0) }
-
-            let xAnchor, leftAnchor, rightAnchor: NSLayoutXAxisAnchor, yAnchor, topAnchor, bottomAnchor: NSLayoutYAxisAnchor
-            if layout.isSafeAreaLayoutGuideEnabled {
-                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
-                    to.safeAreaLayoutGuide.centerXAnchor, to.safeAreaLayoutGuide.centerYAnchor,
-                    to.safeAreaLayoutGuide.leadingAnchor, to.safeAreaLayoutGuide.trailingAnchor,
-                    to.safeAreaLayoutGuide.topAnchor, to.safeAreaLayoutGuide.bottomAnchor)
-            } else {
-                (xAnchor, yAnchor, leftAnchor, rightAnchor, topAnchor, bottomAnchor) = (
-                    to.centerXAnchor, to.centerYAnchor,
-                    to.leadingAnchor, to.trailingAnchor, to.topAnchor, to.bottomAnchor)
-            }
-
-            (x, y, left, right, top, bottom) = (
-                // Center contentView in container (self), applying the offset if set
-                contentView.centerXAnchor.constraint(equalTo: xAnchor).h.then(centerWork),
-                contentView.centerYAnchor.constraint(equalTo: yAnchor).h.then(centerWork),
-                // Ensure minimum side margin is kept
-                contentView.leadingAnchor.constraint(greaterThanOrEqualTo: leftAnchor).h.then(edgeWork),
-                contentView.trailingAnchor.constraint(lessThanOrEqualTo: rightAnchor).h.then(edgeWork),
-                contentView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor).h.then(edgeWork),
-                contentView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor).h.then(edgeWork))
-            NSLayoutConstraint.activate([x, y, top, left, bottom, right])
-        }
-
-        func update(with layout: Layout) {
-            let (offset, edge) = (layout.offset, layout.edgeInsets)
-            (x.constant, y.constant, left.constant, right.constant, top.constant, bottom.constant) = (
-                offset.x, offset.y, edge.left, -edge.right, edge.top, -edge.bottom)
-        }
     }
 }
