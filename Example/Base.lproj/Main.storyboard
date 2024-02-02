@@ -597,7 +597,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="393" height="26"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K46-bb-z8G">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="196" height="26"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130.33333333333334" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -609,7 +609,7 @@
                                                                     </connections>
                                                                 </button>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7dj-lN-zTW">
-                                                                    <rect key="frame" x="197" y="0.0" width="196" height="26"/>
+                                                                    <rect key="frame" x="131.33333333333331" y="0.0" width="130.33333333333331" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -618,6 +618,18 @@
                                                                     </state>
                                                                     <connections>
                                                                         <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="dSg-Jh-eCa"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mr8-wU-AaU">
+                                                                    <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="26"/>
+                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal" title="EventDeliveryEnabled">
+                                                                        <color key="titleColor" systemColor="labelColor"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="o4Y-5k-p7P"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -649,16 +661,16 @@
                                                                         <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="kVd-cl-3GL"/>
                                                                     </connections>
                                                                 </button>
-                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mr8-wU-AaU">
+                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9JD-Du-xnW">
                                                                     <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="26"/>
                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                                    <state key="normal" title="EventDeliveryEnabled">
+                                                                    <state key="normal" title="Alignment">
                                                                         <color key="titleColor" systemColor="labelColor"/>
                                                                     </state>
                                                                     <connections>
-                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="o4Y-5k-p7P"/>
+                                                                        <action selector="propertiesButtonClicked:" destination="jRh-Me-Knz" eventType="touchUpInside" id="odk-hY-Q88"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -1147,7 +1159,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="HUD" id="fMb-uS-lXR">
                         <barButtonItem key="leftBarButtonItem" style="done" id="beZ-1G-7No">
-                            <view key="customView" contentMode="scaleToFill" id="0mc-zf-SeN">
+                            <view key="customView" contentMode="scaleToFill" ambiguous="YES" id="0mc-zf-SeN">
                                 <rect key="frame" x="16" y="5.6666666666666679" width="125" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -1243,7 +1255,6 @@
                         <outlet property="progressStackView" destination="JnJ-P2-jhV" id="US8-Wk-MN9"/>
                         <outlet property="systemIndicatorStackView" destination="PPo-RQ-nIn" id="2JO-H5-est"/>
                         <outlet property="textField" destination="lbF-s9-zTw" id="6yj-MU-tju"/>
-                        <outletCollection property="propertiesButton" destination="Mr8-wU-AaU" collectionClass="NSMutableArray" id="A8v-SS-R5l"/>
                         <outletCollection property="propertiesButton" destination="dg2-Yj-b71" collectionClass="NSMutableArray" id="fme-ue-9xx"/>
                         <outletCollection property="propertiesButton" destination="qeD-qc-zw9" collectionClass="NSMutableArray" id="rOi-wk-pNe"/>
                         <outletCollection property="propertiesButton" destination="gta-bu-ekb" collectionClass="NSMutableArray" id="kPT-Ht-wfI"/>
@@ -1280,6 +1291,8 @@
                         <outletCollection property="propertiesButton" destination="b8y-dJ-gWk" collectionClass="NSMutableArray" id="Ed1-GT-U4C"/>
                         <outletCollection property="propertiesButton" destination="1QZ-bf-Zwq" collectionClass="NSMutableArray" id="Thd-oM-YQh"/>
                         <outletCollection property="propertiesButton" destination="HE5-Gj-j1Q" collectionClass="NSMutableArray" id="fSc-PY-d5x"/>
+                        <outletCollection property="propertiesButton" destination="Mr8-wU-AaU" collectionClass="NSMutableArray" id="A8v-SS-R5l"/>
+                        <outletCollection property="propertiesButton" destination="9JD-Du-xnW" collectionClass="NSMutableArray" id="S32-O4-q92"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gnj-RQ-7dc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1394,28 +1407,28 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemFillColor">
-            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray3Color">
-            <color red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -139,46 +139,49 @@ class ViewController: UITableViewController, HUDDelegate {
     private func showHUD(_ mode: ContentView.Mode, label: String? = nil) -> HUD {
         let hud: HUD
         if config.isDefaultModeStyle {
-            hud = HUD.show(to: v, mode: mode, label: label) // Default Mode Style
+            // Default Mode Style
+            hud = HUD.show(to: v, mode: mode, label: label)
         } else {
-            hud = customHUD(mode, label: label) // Custom Mode Style
-        }
-        if config.isEventDeliveryEnabled && config.isDefaultModeStyle == false {
-            hud.contentView.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
-            hud.contentView.detailsLabel.textColor = .systemRed
+            // Custom Mode Style
+            if case let .custom(view) = mode, let view = view as? ProgressView {
+                view.isLabelEnabled = view.style.isEqual(ProgressView.Style.round) || view.style.isEqual(ProgressView.Style.annularRound)
+            }
+            hud = HUD.show(to: v, using: config.currAnimation, mode: mode) { self.update($0, label: label) }
         }
         hud.delegate = self
         hud.completionBlock = completionBlock
         return hud
     }
 
-    private func customHUD(_ mode: ContentView.Mode, label: String?) -> HUD {
-        if case let .custom(view) = mode, let progressView = view as? ProgressView {
-            progressView.isLabelEnabled = progressView.style.isEqual(ProgressView.Style.round) || progressView.style.isEqual(ProgressView.Style.annularRound)
+    private func update(_ hud: HUD, label: String?) {
+        hud.contentView.label.text = label ?? (config.isLabelEnabled ? hud.contentView.mode.description : nil)
+        if config.isEventDeliveryEnabled {
+            hud.contentView.detailsLabel.text = "Events are delivered normally to the HUD's parent view"
+            hud.contentView.detailsLabel.textColor = .systemRed
+        } else {
+            hud.contentView.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
         }
-        return HUD.show(to: v, using: config.currAnimation, mode: mode) { [self] in
-            $0.contentView.label.text = label ?? (config.isLabelEnabled ? mode.description : nil)
-            $0.contentView.detailsLabel.text = config.isDetailsLabelEnabled ? "This is the detail label" : nil
-            $0.contentView.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
-            if config.isButtonEnabled {
-                $0.contentView.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
-            }
-            $0.contentView.contentColor = config.contentColor.color
-            $0.contentView.style = config.contentViewStyle
-            $0.contentView.color = config.contentViewColor == .default ? .h.background : config.contentViewColor.color
-            $0.contentView.layout = config.contentLayout
-            $0.contentView.position = config.position
-            $0.backgroundView.style = config.backgroundViewStyle
-            $0.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
-            $0.layout = config.layout
-            $0.animation = config.animation
-            $0.graceTime = config.graceTime
-            $0.minShowTime = config.minShowTime
-            $0.isCountEnabled = config.isCountEnabled
-            $0.isEventDeliveryEnabled = config.isEventDeliveryEnabled
-            $0.contentView.isMotionEffectsEnabled = config.isMotionEffectsEnabled
-            $0.keyboardGuide = config.keyboardGuide
+        hud.contentView.button.setTitle(config.isButtonEnabled ? "Cancel" : nil, for: .normal)
+        if config.isButtonEnabled {
+            hud.contentView.button.addTarget(self, action: #selector(cancelTask), for: .touchUpInside)
+        } else {
+            hud.contentView.button.removeTarget(self, action: #selector(cancelTask), for: .touchUpInside)
         }
+        hud.contentView.contentColor = config.contentColor.color
+        hud.contentView.style = config.contentViewStyle
+        hud.contentView.color = config.contentViewColor == .default ? .h.background : config.contentViewColor.color
+        hud.contentView.layout = config.contentLayout
+        hud.contentView.indicatorPosition = config.position
+        hud.backgroundView.style = config.backgroundViewStyle
+        hud.backgroundView.color = config.backgroundViewColor == .default ? .clear : config.backgroundViewColor.color
+        hud.layout = config.layout
+        hud.animation = config.animation
+        hud.graceTime = config.graceTime
+        hud.minShowTime = config.minShowTime
+        hud.isCountEnabled = config.isCountEnabled
+        hud.isEventDeliveryEnabled = config.isEventDeliveryEnabled
+        hud.contentView.isMotionEffectsEnabled = config.isMotionEffectsEnabled
+        hud.keyboardGuide = config.keyboardGuide
     }
 
     func request(_ hud: HUD) {
@@ -210,7 +213,11 @@ class ViewController: UITableViewController, HUDDelegate {
         print("completionBlock -> HUD was hidden.")
     }
 
-    var config: Configuration = .init()
+    var config: Configuration = .init() {
+        didSet {
+            HUD.huds(for: v).forEach { update($0, label: nil) }
+        }
+    }
 
     private func initIndicators() {
         var (progressViews, idx) = ([ProgressView](), 0)
@@ -312,7 +319,8 @@ class ViewController: UITableViewController, HUDDelegate {
         switch text {
         case "ShowT": Alert.list(title, list: ShowTo.allCases, selected: setTitle(_:)) { self.config.showTo = $0 }
         case "UseDe": Alert.switch(title, selected: setTitle(_:)) { self.config.isDefaultModeStyle = $0; self.updateForIsDefaultStyleEnabled() }
-        case "Posit": Alert.list(title, list: ContentView.Mode.Position.allCases, selected: setTitle(_:)) { self.config.position = $0 }
+        case "Posit": Alert.list(title, list: ContentView.IndicatorPosition.allCases, selected: setTitle(_:)) { self.config.position = $0 }
+        case "Align": Alert.list(title, list: ContentView.Alignment.allCases, selected: setTitle(_:)) { self.config.contentLayout.alignment = $0 }
         case "Event": Alert.switch(title, selected: setTitle(_:)) { self.config.isEventDeliveryEnabled = $0 }
         case "Label": Alert.switch(title, selected: setTitle(_:)) { self.config.isLabelEnabled = $0 }
         case "Detai": Alert.switch(title, selected: setTitle(_:)) { self.config.isDetailsLabelEnabled = $0 }
@@ -374,6 +382,7 @@ class ViewController: UITableViewController, HUDDelegate {
             case "ShowT": setTitle(config.showTo)
             case "UseDe": setTitle(config.isDefaultModeStyle); updateForIsDefaultStyleEnabled()
             case "Posit": setTitle(config.position)
+            case "Align": setTitle(config.contentLayout.alignment)
             case "Event": setTitle(config.isEventDeliveryEnabled)
             case "Label": setTitle(config.isLabelEnabled)
             case "Detai": setTitle(config.isDetailsLabelEnabled)

@@ -1,5 +1,5 @@
 //
-//  RoundedButton.swift
+//  Button.swift
 //  HUD <https://github.com/liam-i/HUD>
 //
 //  Created by Liam on 2017/6/1.
@@ -11,17 +11,16 @@
 
 import UIKit
 
-public enum RoundedCorners: Equatable {
+public enum RoundedCorners: Equatable, HUDExtended {
     /// corner Radius
     case radius(CGFloat)
     /// Fully rounded corners
-    case fully
+    case full
 }
-extension RoundedCorners: HUDExtended {}
 
-public class RoundedButton: UIButton {
-    /// The rounded corner mode of the button. `Default to .fully`.
-    public var roundedCorners: RoundedCorners = .fully {
+public class Button: UIButton {
+    /// The rounded corner mode of the button. `Default to .full`.
+    public var roundedCorners: RoundedCorners = .full {
         didSet {
             roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }
@@ -35,14 +34,21 @@ public class RoundedButton: UIButton {
 
     // MARK: - Lifecycle
 
+    convenience init(fontSize: CGFloat, textColor: UIColor?) {
+        self.init(type: .custom)
+        self.titleLabel?.textAlignment = .center
+        self.titleLabel?.font = .boldSystemFont(ofSize: fontSize)
+        self.setTitleColor(textColor, for: .normal)
+    }
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.borderWidth = borderWidth
+        self.layer.borderWidth = borderWidth
     }
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        layer.borderWidth = borderWidth
+        self.layer.borderWidth = borderWidth
     }
 
     // MARK: - Layout
@@ -52,8 +58,8 @@ public class RoundedButton: UIButton {
         switch roundedCorners {
         case .radius(let value):
             layer.cornerRadius = ceil(value)
-        case .fully:
-            layer.cornerRadius = ceil(bounds.height / 2.0) // Fully rounded corners
+        case .full:
+            layer.cornerRadius = ceil(bounds.midY) // Fully rounded corners
         }
     }
 

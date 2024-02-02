@@ -25,7 +25,7 @@ struct Configuration {
     var isButtonEnabled: Bool = false
 
 //    var mode: ContentView.Mode = .indicator()
-    var position: ContentView.Mode.Position = .top
+    var position: ContentView.IndicatorPosition = .top
     var layout: HUD.Layout = .init()
     var contentLayout: ContentView.Layout = .init()
     var contentColor: Color = .default

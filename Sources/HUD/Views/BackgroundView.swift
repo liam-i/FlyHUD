@@ -15,7 +15,7 @@
 import UIKit
 
 extension BackgroundView {
-    public enum Style: Equatable {
+    public enum Style: Equatable, HUDExtended {
         /// Solid color background
         case solidColor
         /// UIVisualEffectView background view. `Defaults to .light`.
@@ -32,7 +32,6 @@ extension BackgroundView {
         }())
     }
 }
-extension BackgroundView.Style: HUDExtended {}
 
 public class BackgroundView: BaseView {
     /// The rounded corner mode of the button. `Default to .radius(0.0)`.
@@ -74,8 +73,8 @@ public class BackgroundView: BaseView {
         switch roundedCorners {
         case .radius(let value):
             layer.cornerRadius = ceil(value)
-        case .fully:
-            layer.cornerRadius = ceil(bounds.height / 2.0) // Fully rounded corners
+        case .full:
+            layer.cornerRadius = ceil(bounds.midY) // Fully rounded corners
         }
     }
 

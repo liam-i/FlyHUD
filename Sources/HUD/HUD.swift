@@ -11,10 +11,13 @@
 
 import UIKit
 
+/// A HUD observer that tracks the state of the HUD in your application.
 public protocol HUDDelegate: AnyObject {
     /// Called after the HUD was fully hidden from the screen.
     func hudWasHidden(_ hud: HUD)
 }
+
+// MARK: - HUD
 
 /// Displays a simple HUD window containing a progress indicator and two optional labels for short messages.
 /// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
@@ -83,11 +86,11 @@ open class HUD: BaseView {
 
     /// The HUD delegate object. Receives HUD state notifications.
     public weak var delegate: HUDDelegate?
-    /// Called after the HUD is hidden.
+    /// Called after the HUD was fully hidden from the screen.
     public var completionBlock: ((_ hud: HUD) -> Void)?
 
-    private lazy var constraint = Constraint(contentView, to: self, layout: layout)
     private lazy var keyboardGuideView = UIView(frame: bounds)
+    private lazy var constraint = Constraint(contentView, to: self, layout: layout)
     private var isFinished: Bool = false
     private var showStarted: Date?
 
@@ -106,10 +109,10 @@ open class HUD: BaseView {
     open override func commonInit() {
         isOpaque = false // Transparent background
         backgroundColor = .clear
-        isHidden = true // Make it invisible for now
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
         setupViews()
+        isHidden = true // Make it invisible for now
 #if !os(tvOS)
         updateKeyboardObserver()
         registerForNotifications()
@@ -508,7 +511,7 @@ open class HUD: BaseView {
 
         // Set starting state
         if showing && contentView.alpha == 0.0 {
-            transform(to: style.reversed ?? style)
+            setTransform(to: style.reversed ?? style)
         }
 
         UIView.animate(withDuration: animation.duration, delay: 0.0,
@@ -516,13 +519,13 @@ open class HUD: BaseView {
                        initialSpringVelocity: 0.0,
                        options: .beginFromCurrentState,
                        animations: { [self] in
-            transform(to: showing ? .fade : style)
+            setTransform(to: showing ? .fade : style)
             contentView.alpha = alpha
             backgroundView.alpha = alpha
         }, completion: completionBlock)
     }
 
-    private func transform(to style: Animation.Style) {
+    private func setTransform(to style: Animation.Style) {
         switch style {
         case .zoomIn:
             contentView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
@@ -534,12 +537,18 @@ open class HUD: BaseView {
         case .slideDown:
             layoutIfNeeded()
             contentView.transform = CGAffineTransform(translationX: 0.0, y: bounds.maxY - contentView.frame.minY)
+        case .slideRight:
+            layoutIfNeeded()
+            contentView.transform = CGAffineTransform(translationX: bounds.maxX - contentView.frame.minX, y: 0.0)
+        case .slideLeft:
+            layoutIfNeeded()
+            contentView.transform = CGAffineTransform(translationX: bounds.minX - contentView.frame.maxX, y: 0.0)
         default:
             contentView.transform = .identity
         }
     }
 
-    // MARK: - Cancel Dispatch Work Item
+    // MARK: Cancel Dispatch Work Item
 
     private var graceWorkItem, minShowWorkItem, hideDelayWorkItem: DispatchWorkItem?
     private func cancelHideDelayWorkItem() {
@@ -557,7 +566,7 @@ open class HUD: BaseView {
         minShowWorkItem = nil
     }
 
-    // MARK: - UI
+    // MARK: UI
 
     private func setupViews() {
         addSubview(backgroundView.h.then {
@@ -570,12 +579,13 @@ open class HUD: BaseView {
         })
         keyboardGuideView.addSubview(contentView.h.then {
             $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.isHidden = true
             $0.alpha = 0.0
             $0.delegate = self
         })
     }
 
-    // MARK: - View Hierarchy
+    // MARK: View Hierarchy
 
     open override func didMoveToSuperview() {
         updateForCurrentOrientation()
@@ -621,15 +631,15 @@ extension HUD: KeyboardObservable {
         KeyboardObserver.enable() // Enable keyboard observation
     }
 
-    private var isKeyboardGuideEnabled: Bool {
-        (keyboardGuide == .disable || (keyboardGuide == nil && HUD.keyboardGuide == .disable)) == false
-    }
-
     private func updateKeyboardObserver() {
         guard isKeyboardGuideEnabled else {
             return KeyboardObserver.shared.remove(self)
         }
         KeyboardObserver.shared.add(self)
+    }
+
+    private var isKeyboardGuideEnabled: Bool {
+        (keyboardGuide == .disable || (keyboardGuide == nil && HUD.keyboardGuide == .disable)) == false
     }
 
     public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo) {
@@ -702,8 +712,8 @@ extension HUD: ContentViewDelegate {
         let x, y, top, left, bottom, right: NSLayoutConstraint
 
         init(_ contentView: UIView, to: UIView, layout: Layout) {
-            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(997.0) }
-            let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(999.0) }
+            let centerWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(995.0) }
+            let edgeWork: (NSLayoutConstraint) -> Void = { $0.priority = .init(1000.0) }
 
             let xAnchor, leftAnchor, rightAnchor: NSLayoutXAxisAnchor, yAnchor, topAnchor, bottomAnchor: NSLayoutYAxisAnchor
             if layout.isSafeAreaLayoutGuideEnabled {

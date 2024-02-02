@@ -13,33 +13,55 @@ class PresentViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
 
     @IBAction func showHUDClicked(_ sender: UIButton) {
-        HUD.showStatus(to: view, duration: .greatestFiniteMagnitude, using: .animation(.slideDownUp, damping: .default), 
-                       mode: .text, label: "You have a message.", offset: .h.vMinOffset) {
+        HUD.showStatus(to: view, 
+                       duration: .greatestFiniteMagnitude,
+                       using: .animation(.slideDownUp, damping: .default),
+                       mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
+                       label: "You have an unfinished task.", 
+                       offset: .h.vMinOffset) {
+            $0.contentView.indicatorPosition = .left
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
-        HUD.show(to: view, using: .animation(.zoomInOut, damping: .default), label: "Loading") {
+        HUD.show(to: view, 
+                 using: .animation(.zoomInOut, damping: .default),
+                 label: "Loading") {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .center()
         }
-        HUD.showStatus(to: view, duration: .greatestFiniteMagnitude, using: .animation(.slideUpDown, damping: .default), 
-                       mode: .text, label: "Wrong password", offset: .h.vMaxOffset) {
+        HUD.showStatus(to: view, 
+                       duration: .greatestFiniteMagnitude,
+                       using: .animation(.slideUpDown, damping: .default),
+                       mode: .text, 
+                       label: "Wrong password",
+                       offset: .h.vMaxOffset) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
 
-        HUD.showStatus(to: containerView, duration: .greatestFiniteMagnitude, using: .animation(.slideDownUp, damping: .default),
-                       mode: .text, label: "Wrong password", offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
+        HUD.showStatus(to: containerView, 
+                       duration: .greatestFiniteMagnitude,
+                       using: .animation(.slideDownUp, damping: .default),
+                       mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
+                       label: "You have a message.",
+                       offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
+            $0.contentView.indicatorPosition = .right
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
-        HUD.show(to: containerView, using: .animation(.zoomOutIn, damping: .default), label: "Loading") {
+        HUD.show(to: containerView,
+                 using: .animation(.zoomOutIn, damping: .default),
+                 label: "Loading") {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .center()
             $0.layout.offset.x = .h.maxOffset
         }
-        HUD.showStatus(to: containerView, duration: .greatestFiniteMagnitude, using: .animation(.slideUpDown, damping: .default),
-                       mode: .text, label: "Wrong password", offset: CGPoint(x: .h.maxOffset, y: .h.maxOffset)) {
+        HUD.showStatus(to: containerView, 
+                       duration: .greatestFiniteMagnitude,
+                       using: .animation(.slideUpDown, damping: .default),
+                       mode: .text,
+                       label: "Wrong password",
+                       offset: CGPoint(x: .h.maxOffset, y: .h.maxOffset)) {
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }

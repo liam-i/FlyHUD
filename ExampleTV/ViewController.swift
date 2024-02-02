@@ -10,7 +10,6 @@ import UIKit
 import LPHUD
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -20,15 +19,15 @@ class ViewController: UIViewController {
         sender.isEnabled = false
 
         let hud = HUD.show(to: view) {
-            $0.mode = .custom(ProgressView(style: .buttBar, size: CGSize(width: 320, height: 40), populator: {
+            $0.contentView.mode = .custom(ProgressView(style: .buttBar, size: CGSize(width: 320, height: 40), populator: {
                 $0.lineWidth = 10
             }))
-            $0.label.text = NSLocalizedString("Loading...", comment: "HUD loading title")
-            $0.label.font = .boldSystemFont(ofSize: 36)
+            $0.contentView.label.text = NSLocalizedString("Loading...", comment: "HUD loading title")
+            $0.contentView.label.font = .boldSystemFont(ofSize: 36)
         }
 
         Self.request { progress in
-            hud.progress = progress
+            hud.contentView.progress = progress
         } completion: {
             hud.hide()
 
