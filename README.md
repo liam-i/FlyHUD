@@ -31,7 +31,7 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.4.0"
+- Select "Up to Next Minor" with "1.5.0"
 
 #### CocoaPods
 
@@ -43,11 +43,11 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
-  pod 'LPHUD', '~> 1.4.0'
+  pod 'LPHUD', '~> 1.5.0'
   # or
-  pod 'LPHUD', '~> 1.4.0', :subspecs => ['HUDIndicator']
+  pod 'LPHUD', '~> 1.5.0', :subspecs => ['HUDIndicator']
   # or
-  pod 'LPHUD', '~> 1.4.0', :subspecs => ['HUDProgress']
+  pod 'LPHUD', '~> 1.5.0', :subspecs => ['HUDProgress']
 end
 ```
 
@@ -102,19 +102,16 @@ To run the example project, first clone the repo, then `cd` to the root director
 The documentation for releases and `main` are available here:
 
 * [main](https://liam-i.github.io/HUD/main/documentation/lphud)
-* [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
+* [1.5.0](https://liam-i.github.io/HUD/1.5.0/documentation/lphud)
 
 <details>
   <summary>
   Other versions
   </summary>
-
-* [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
-
-* [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
-
-* [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
-  
+    * [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
+    * [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
+    * [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
+    * [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
   </details>
 
 ## Credits and thanks

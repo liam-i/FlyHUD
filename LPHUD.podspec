@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LPHUD'
-  s.version          = '1.4.0'
+  s.version          = '1.5.0'
   s.summary          = 'A lightweight and easy-to-use HUD for iOS and tvOS apps.'
   s.description      = <<-DESC
                         LPHUD is a lightweight and easy-to-use HUD designed to display 
