@@ -24,20 +24,20 @@ public protocol HUDDelegate: AnyObject {
 /// - Note: To still allow touches to pass through the HUD, you can set hud.isEventDeliveryEnabled = true.
 /// - Attention: HUD is a UI class and should therefore only be accessed on the main thread.
 open class HUD: BaseView, ContentViewDelegate {
-    /// The view containing the labels and indicator (or customView). The HUD object places the content in this view in front of any background views.
+    /// The view containing the labels, button and indicator (or customView). The HUD object places the content in this view in front of any background views.
     public private(set) lazy var contentView = ContentView(frame: .zero)
     /// View covering the entire HUD area, placed behind contentView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
     /// HUD layout configuration. eg: offset, margin, padding, etc.
-    public var layout: Layout = .init() {
+    open var layout: Layout = .init() {
         didSet {
             layout.h.notEqual(oldValue, do: update(constraints: true, keyboardGuide: true))
         }
     }
 
     /// The animation (style, duration, damping) that should be used when the HUD is shown and hidden.
-    public var animation: Animation = .init()
+    open var animation: Animation = .init()
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     ///
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all.
@@ -45,21 +45,21 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
     ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
-    public var graceTime: TimeInterval = 0.0
+    open var graceTime: TimeInterval = 0.0
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
     ///
     /// `Defaults to 0.0 (no minimum show time)`.
-    public var minShowTime: TimeInterval = 0.0
+    open var minShowTime: TimeInterval = 0.0
     /// Removes the HUD from its parent view when hidden. `Defaults to true`.
-    public var removeFromSuperViewOnHide: Bool = true
+    open var removeFromSuperViewOnHide: Bool = true
 
     /// This is an activity count that records multiple shows and hides of the same HUD object.
-    public private(set) var count: Int = 0
+    open private(set) var count: Int = 0
     /// A Boolean value indicating whether the HUD is in the enable activity count. `Defaults to false`.
     ///
     /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
-    public var isCountEnabled: Bool = false
+    open var isCountEnabled: Bool = false
 
 #if !os(tvOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
@@ -74,7 +74,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Note: Priority greater than static property keyboardGuide.
     /// - Note: If set to nil, the static property keyboardGuide is used.
-    public var keyboardGuide: KeyboardGuide? {
+    open var keyboardGuide: KeyboardGuide? {
         didSet {
             keyboardGuide.h.notEqual(oldValue, do: updateKeyboardObserver())
         }
@@ -87,12 +87,12 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// If set to false user events (click, touch) will be delivered normally to the HUD's subviews.
     /// - Note: This property is affected by "isUserInteractionEnabled".
-    public var isEventDeliveryEnabled: Bool = false
+    open var isEventDeliveryEnabled: Bool = false
 
     /// The HUD delegate object. Receives HUD state notifications.
-    public weak var delegate: HUDDelegate?
+    open weak var delegate: HUDDelegate?
     /// Called after the HUD was fully hidden from the screen.
-    public var completionBlock: ((_ hud: HUD) -> Void)?
+    open var completionBlock: ((_ hud: HUD) -> Void)?
 
     private lazy var keyboardGuideView = UIView(frame: bounds)
     private var constraint: EdgeConstraint?
@@ -110,7 +110,7 @@ open class HUD: BaseView, ContentViewDelegate {
         self.init(frame: view.bounds)
     }
 
-    /// Common initialization method, allowing overriding
+    /// Common initialization method.
     open override func commonInit() {
         isOpaque = false // Transparent background
         backgroundColor = .clear
@@ -150,7 +150,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameter view: The view that is going to be searched.
     /// - Returns: A reference to all discovered HUD subviews.
-    public class func huds(for view: UIView) -> [HUD] {
+    open class func huds(for view: UIView) -> [HUD] {
         view.subviews.compactMap {
             if let hud = $0 as? HUD, hud.isFinished == false {
                 return hud
@@ -163,7 +163,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameter view: The view that is going to be searched.
     /// - Returns: A reference to the last HUD subview discovered.
-    public class func lastHUD(for view: UIView) -> HUD? {
+    open class func lastHUD(for view: UIView) -> HUD? {
         for case let hud as HUD in view.subviews.reversed() where hud.isFinished == false {
             return hud
         }
@@ -187,7 +187,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func showStatus(
+    open class func showStatus(
         to view: UIView,
         duration: TimeInterval = 2.0,
         animated: Bool = true,
@@ -221,7 +221,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func showStatus(
+    open class func showStatus(
         to view: UIView,
         duration: TimeInterval = 2.0,
         using animation: Animation,
@@ -253,7 +253,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func show(
+    open class func show(
         to view: UIView,
         animated: Bool = true,
         mode: ContentView.Mode = .indicator(),
@@ -282,7 +282,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
-    public class func show(
+    open class func show(
         to view: UIView,
         using animation: Animation,
         mode: ContentView.Mode = .indicator(),
@@ -311,7 +311,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Returns: true if a HUD was found and removed, false otherwise.
     /// - SeeAlso: HUD.Animation.
     @discardableResult
-    public class func hide(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    open class func hide(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
         hide(for: view, using: animated ? nil : .init(style: .none), afterDelay: delay)
     }
 
@@ -325,7 +325,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
-    public class func hide(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    open class func hide(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
         guard let hud = lastHUD(for: view) else { return false }
         hud.removeFromSuperViewOnHide = true
         hud.hide(using: animation, afterDelay: delay)
@@ -341,7 +341,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Returns: true if one or more HUDs were found and removed, false otherwise.
     /// - SeeAlso: HUD.Animation.
     @discardableResult
-    public class func hideAll(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    open class func hideAll(for view: UIView, animated: Bool = true, afterDelay delay: TimeInterval = 0.0) -> Bool {
         hideAll(for: view, using: animated ? nil : .init(style: .none), afterDelay: delay)
     }
 
@@ -355,7 +355,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     @discardableResult
-    public class func hideAll(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
+    open class func hideAll(for view: UIView, using animation: Animation?, afterDelay delay: TimeInterval = 0.0) -> Bool {
         let huds = huds(for: view)
         huds.forEach {
             $0.removeFromSuperViewOnHide = true
@@ -370,7 +370,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - SeeAlso: HUD.Animation.
-    public func show(animated: Bool = true) {
+    open func show(animated: Bool = true) {
         show(using: animated ? nil : .init(style: .none))
     }
 
@@ -380,34 +380,8 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
-    public func show(using animation: Animation?) {
+    open func show(using animation: Animation?) {
         assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
-        show(animation ?? self.animation)
-    }
-
-    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
-    ///
-    /// - Parameters:
-    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    /// - SeeAlso: HUD.Animation.
-    public func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
-        hide(using: animated ? nil : .init(style: .none), afterDelay: delay)
-    }
-
-    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
-    ///
-    /// - Parameters:
-    ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
-    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
-    ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
-    public func hide(using animation: Animation?, afterDelay delay: TimeInterval = 0.0) {
-        assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
-        hide(animation ?? self.animation, afterDelay: delay)
-    }
-
-    private func show(_ animation: Animation) {
         // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
         // The activity count is decremented by 1 when hiding the HUD.
         if isCountEnabled {
@@ -419,6 +393,7 @@ open class HUD: BaseView, ContentViewDelegate {
         cancelGraceWorkItem() // Modified grace time to 0 and show again
         cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
 
+        let animation = animation ?? self.animation
         // If the grace time is set, postpone the HUD display
         guard graceTime > 0.0 else {
             return performShow(animation) // ... otherwise show the HUD immediately
@@ -433,19 +408,25 @@ open class HUD: BaseView, ContentViewDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + graceTime, execute: workItem)
     }
 
-    private func performShow(_ animation: Animation) {
-        // Cancel any previous animations
-        contentView.layer.removeAllAnimations()
-        backgroundView.layer.removeAllAnimations()
-
-        showStarted = Date()
-        isHidden = false
-
-        update(constraints: false, keyboardGuide: true)
-        perform(animation, showing: true, completion: nil)
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    ///
+    /// - Parameters:
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - SeeAlso: HUD.Animation.
+    open func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
+        hide(using: animated ? nil : .init(style: .none), afterDelay: delay)
     }
 
-    private func hide(_ animation: Animation, afterDelay delay: TimeInterval) {
+    /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
+    ///
+    /// - Parameters:
+    ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
+    ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
+    open func hide(using animation: Animation?, afterDelay delay: TimeInterval = 0.0) {
+        assert(Thread.isMainThread, "HUD needs to be accessed on the main thread.")
         // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.  The activity
         // count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
         if isCountEnabled {
@@ -453,6 +434,7 @@ open class HUD: BaseView, ContentViewDelegate {
             if count > 0 { return }
         }
 
+        let animation = animation ?? self.animation
         // Hides the HUD after a delay. Delay in seconds until the HUD is hidden.
         guard delay > 0.0 else {
             return hide(animation)
@@ -464,6 +446,18 @@ open class HUD: BaseView, ContentViewDelegate {
         }
         hideDelayWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: workItem)
+    }
+
+    private func performShow(_ animation: Animation) {
+        // Cancel any previous animations
+        contentView.layer.removeAllAnimations()
+        backgroundView.layer.removeAllAnimations()
+
+        showStarted = Date()
+        isHidden = false
+
+        update(constraints: false, keyboardGuide: true)
+        perform(animation, showing: true, completion: nil)
     }
 
     private func hide(_ animation: Animation) {
@@ -483,7 +477,6 @@ open class HUD: BaseView, ContentViewDelegate {
                 return
             }
         }
-
         performHide(animation) // ... otherwise hide the HUD immediately
     }
 
@@ -621,6 +614,7 @@ open class HUD: BaseView, ContentViewDelegate {
 
     // MARK: View Hierarchy
 
+    /// Tells the view that its superview changed.
     open override func didMoveToSuperview() {
         guard superview != nil else { return }
         updateForCurrentOrientation()
@@ -638,6 +632,13 @@ open class HUD: BaseView, ContentViewDelegate {
         frame = superview.bounds // Stay in sync with the superview in any case
     }
 
+    /// Returns the farthest descendant in the view hierarchy of the current view, including itself, that contains the specified point.
+    /// - Parameters:
+    ///   - point: A point in the view’s local coordinate system.
+    ///   - event: The event that warrants a call to this method. If you’re calling this method from outside your event-handling code, you can specify nil.
+    /// - Returns: The view object that’s the farthest descendent of the current view and contains point.
+    ///            Returns nil if the `isEventDeliveryEnabled` property value is `false` and the point lies completely outside the view hierarchy of the current view.
+    ///            Returns nil if the `isEventDeliveryEnabled` property value is `true` and the point lies completely outside the view hierarchy of the `contentView`.
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
         guard isEventDeliveryEnabled else { return hitView }
@@ -680,6 +681,7 @@ extension HUD: KeyboardObservable {
         (keyboardGuide == .disable || (keyboardGuide == nil && HUD.keyboardGuide == .disable)) == false
     }
 
+    /// The keyboard frame is about to change or has changed to track the keyboard's position in the application layout.
     public func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo) {
         guard isKeyboardGuideEnabled else {
             return KeyboardObserver.shared.remove(self)

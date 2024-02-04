@@ -92,12 +92,12 @@ extension ProgressView {
 /// bar and for getting and setting values that are pinned to the progress of a task.
 ///
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
-public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
+open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// The current graphical style of the progress view. The value of this property is a constant that specifies the style of the progress view.
     ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
-    public var style: ProgressViewStyleable = Style.buttBar {
+    open var style: ProgressViewStyleable = Style.buttBar {
         didSet {
             guard style.isEqual(oldValue) == false else { return }
             updateProperties()
@@ -105,35 +105,35 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     }
 
     /// The color shown for the portion of the progress bar that’s filled.
-    public lazy var progressTintColor: UIColor? = style.defaultProgressTintColor {
+    open lazy var progressTintColor: UIColor? = style.defaultProgressTintColor {
         didSet {
             progressTintColor.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The color shown for the portion of the progress bar that isn’t filled.
-    public lazy var trackTintColor: UIColor? = style.defaultTrackTintColor {
+    open lazy var trackTintColor: UIColor? = style.defaultTrackTintColor {
         didSet {
             trackTintColor.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The width shown for the portion of the progress bar that’s filled.
-    public lazy var lineWidth: CGFloat = style.defaultLineWidth {
+    open lazy var lineWidth: CGFloat = style.defaultLineWidth {
         didSet {
             lineWidth.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// A Boolean value indicating whether the progress label is in the enabled state.
-    public lazy var isLabelEnabled: Bool = style.defaultIsLabelEnabled {
+    open lazy var isLabelEnabled: Bool = style.defaultIsLabelEnabled {
         didSet {
             isLabelEnabled.h.notEqual(oldValue, do: setNeedsDisplay())
         }
     }
 
     /// The font of the label text.
-    public lazy var labelFont: UIFont = style.defaultLabelFont {
+    open lazy var labelFont: UIFont = style.defaultLabelFont {
         didSet {
             labelFont.h.notEqual(oldValue, do: setNeedsDisplay())
         }
@@ -141,7 +141,7 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
 
     /// The current progress of the progress view.
     /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.
-    public var progress: Float = 0.0 {
+    open var progress: Float = 0.0 {
         didSet {
             progress.h.notEqual(oldValue, do: setNeedsDisplay())
         }
@@ -152,7 +152,7 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// - Note: When this property is set, the progress view updates its progress value automatically using information it
     ///         receives from the [Progress](https://developer.apple.com/documentation/foundation/progress)
     ///         object. Set the property to nil when you want to update the progress manually.  `Defaults to nil`.
-    public var observedProgress: Progress? {
+    open var observedProgress: Progress? {
         didSet {
             observedProgress.h.notEqual(oldValue, do: updateProgressDisplayLink())
         }
@@ -186,7 +186,8 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
         populator?(self)
     }
 
-    public override func commonInit() {
+    /// Common initialization method.
+    open override func commonInit() {
         backgroundColor = .clear
         isOpaque = false
     }
@@ -198,7 +199,10 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
 #endif
     }
 
-    public override func draw(_ rect: CGRect) {
+    /// Draws the receiver’s image within the passed-in rectangle.
+    /// - Parameter rect: The portion of the view’s bounds that needs to be updated. The first time your view is drawn, this rectangle is typically the entire
+    ///                   visible bounds of your view. However, during subsequent drawing operations, the rectangle may specify only part of your view.
+    open override func draw(_ rect: CGRect) {
         guard let progressTintColor = progressTintColor else { return }
 
         let progress = CGFloat(min(progress, 1.0))
@@ -217,21 +221,24 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
         animationBuilder.makeLabel(in: layer, progress: progress, color: progressTintColor, font: labelFont)
     }
 
-    public override var bounds: CGRect {
+    /// The bounds rectangle, which describes the view’s location and size in its own coordinate system.
+    open override var bounds: CGRect {
         didSet {
             bounds.h.notEqual(oldValue, do: invalidateIntrinsicContentSize())
         }
     }
 
     private var windowIsNil: Bool = false
-    public override func didMoveToWindow() {
+    /// Tells the view that its window object changed.
+    open override func didMoveToWindow() {
         guard window != nil else { return windowIsNil = true }
         guard windowIsNil else { return }
         windowIsNil = false
         setNeedsDisplay()
     }
 
-    public override var intrinsicContentSize: CGSize {
+    /// The natural size for the receiving view, considering only properties of the view itself.
+    open override var intrinsicContentSize: CGSize {
         bounds.isEmpty ? style.defaultSize : bounds.size
     }
 
@@ -247,19 +254,22 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
 
     // MARK: Progress
 
-    public override var alpha: CGFloat {
+    /// The view’s alpha value.
+    open override var alpha: CGFloat {
         didSet {
             updateProgressDisplayLink()
         }
     }
 
-    public override var isHidden: Bool {
+    /// A Boolean value that determines whether the view is hidden.
+    open override var isHidden: Bool {
         didSet {
             updateProgressDisplayLink()
         }
     }
 
-    public override func didMoveToSuperview() {
+    /// Tells the view that its superview changed.
+    open override func didMoveToSuperview() {
         updateProgressDisplayLink()
     }
 
@@ -274,7 +284,7 @@ public class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     }
 
     /// Refreshing the progress only every frame draw.
-    public func updateScreenInDisplayLink() {
+    open func updateScreenInDisplayLink() {
         guard let observedProgress = observedProgress else { return }
         progress = Float(observedProgress.fractionCompleted)
     }

@@ -30,9 +30,11 @@ extension BackgroundView {
     }
 }
 
-public class BackgroundView: BaseView {
+/// The view to use as the background of the HUD.
+/// HUD adds the background view as a subview behind all other views and uses its current frame location.
+open class BackgroundView: BaseView {
     /// The rounded corner mode of the button. `Default to .radius(0.0)`.
-    public var roundedCorners: RoundedCorners = .radius(0.0) {
+    open var roundedCorners: RoundedCorners = .radius(0.0) {
         didSet {
             roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }
@@ -41,14 +43,14 @@ public class BackgroundView: BaseView {
     // MARK: - Properties
 
     /// The background style. `Defaults to .solidColor`.
-    public var style: Style = .solidColor {
+    open var style: Style = .solidColor {
         didSet {
             style.h.notEqual(oldValue, do: updateForBackgroundStyle())
         }
     }
 
     /// The background color or the blur tint color. `Defaults to .clear`.
-    public var color: UIColor? = .clear {
+    open var color: UIColor? = .clear {
         didSet {
             color.h.notEqual(oldValue, do: backgroundColor = color)
         }
@@ -58,14 +60,16 @@ public class BackgroundView: BaseView {
 
     // MARK: - Lifecycle
 
-    public override func commonInit() {
+    /// Common initialization method.
+    open override func commonInit() {
         clipsToBounds = true
         updateForBackgroundStyle()
     }
 
     // MARK: - Layout
 
-    public override func layoutSubviews() {
+    /// Lays out subviews.
+    open override func layoutSubviews() {
         super.layoutSubviews()
         switch roundedCorners {
         case .radius(let value):
@@ -75,7 +79,8 @@ public class BackgroundView: BaseView {
         }
     }
 
-    public override var intrinsicContentSize: CGSize {
+    /// The natural size for the receiving view, considering only properties of the view itself.
+    open override var intrinsicContentSize: CGSize {
         .zero // Smallest size possible. Content pushes against this.
     }
 

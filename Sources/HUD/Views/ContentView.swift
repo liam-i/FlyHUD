@@ -135,7 +135,8 @@ extension ContentView {
 
 // MARK: - ContentView
 
-/// The content view of the HUD object. The view containing the labels and indicator (or customView).
+/// The content view of the HUD object. The view containing the labels, button and indicator (or customView).
+/// The HUD object places the content in this view in front of any background views.
 public class ContentView: BackgroundView, DisplayLinkDelegate {
     /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label: UILabel = Label(fontSize: 16.0, numberOfLines: 1, textColor: contentColor)
@@ -207,6 +208,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 
     // MARK: - Lifecycle
 
+    /// Common initialization method.
     public override func commonInit() {
         clipsToBounds = true
         isHidden = true
