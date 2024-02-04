@@ -1,0 +1,186 @@
+
+/* Class = "UIButton"; normalTitle = "vSpacing"; ObjectID = "031-eQ-8fl"; */
+"031-eQ-8fl.normalTitle" = "vSpacing";
+
+/* Class = "UIButton"; normalTitle = "hSpacing"; ObjectID = "1QZ-bf-Zwq"; */
+"1QZ-bf-Zwq.normalTitle" = "hSpacing";
+
+/* Class = "UISegmentedControl"; 2BM-uK-RJE.segmentTitles[0] = "Dark"; ObjectID = "2BM-uK-RJE"; */
+"2BM-uK-RJE.segmentTitles[0]" = "Dark";
+
+/* Class = "UISegmentedControl"; 2BM-uK-RJE.segmentTitles[1] = "Light"; ObjectID = "2BM-uK-RJE"; */
+"2BM-uK-RJE.segmentTitles[1]" = "Light";
+
+/* Class = "UIButton"; normalTitle = "MotionEffectsEnabled"; ObjectID = "2QI-DB-Bpl"; */
+"2QI-DB-Bpl.normalTitle" = "MotionEffectsEnabled";
+
+/* Class = "UIButton"; normalTitle = "Multiple HUDs"; ObjectID = "3LJ-yg-q3H"; */
+"3LJ-yg-q3H.normalTitle" = "Multiple HUDs";
+
+/* Class = "UIButton"; normalTitle = "Present"; ObjectID = "6FB-Le-C4R"; */
+"6FB-Le-C4R.normalTitle" = "Present";
+
+/* Class = "UIButton"; normalTitle = "UseDefaultStyle"; ObjectID = "7dj-lN-zTW"; */
+"7dj-lN-zTW.normalTitle" = "UseDefaultStyle";
+
+/* Class = "UIButton"; normalTitle = "Show HUD"; ObjectID = "8bF-3g-zx1"; */
+"8bF-3g-zx1.normalTitle" = "Show HUD";
+
+/* Class = "UIButton"; normalTitle = "duration"; ObjectID = "8ru-6N-H7j"; */
+"8ru-6N-H7j.normalTitle" = "duration";
+
+/* Class = "UIButton"; normalTitle = "tintColor"; ObjectID = "9It-PZ-un4"; */
+"9It-PZ-un4.normalTitle" = "tintColor";
+
+/* Class = "UIButton"; normalTitle = "Alignment"; ObjectID = "9JD-Du-xnW"; */
+"9JD-Du-xnW.normalTitle" = "Alignment";
+
+/* Class = "UIButton"; normalTitle = "vMargin"; ObjectID = "A7C-yE-mye"; */
+"A7C-yE-mye.normalTitle" = "vMargin";
+
+/* Class = "UITableViewSection"; headerTitle = "HUD ProgressView"; ObjectID = "BAY-cY-Nzv"; */
+"BAY-cY-Nzv.headerTitle" = "HUD ProgressView";
+
+/* Class = "UIButton"; normalTitle = "beColor"; ObjectID = "CO2-fS-K9s"; */
+"CO2-fS-K9s.normalTitle" = "beColor";
+
+/* Class = "UITableViewSection"; headerTitle = "HUD property configuration"; ObjectID = "Cvq-pK-MTf"; */
+"Cvq-pK-MTf.headerTitle" = "HUD property configuration";
+
+/* Class = "UIButton"; normalTitle = "taskTime"; ObjectID = "DV9-zJ-Eht"; */
+"DV9-zJ-Eht.normalTitle" = "taskTime";
+
+/* Class = "UIButton"; normalTitle = "style"; ObjectID = "EUv-Sy-WEA"; */
+"EUv-Sy-WEA.normalTitle" = "style";
+
+/* Class = "UIButton"; normalTitle = "damping"; ObjectID = "G01-Xc-wcO"; */
+"G01-Xc-wcO.normalTitle" = "damping";
+
+/* Class = "UIButton"; normalTitle = "Position"; ObjectID = "HE5-Gj-j1Q"; */
+"HE5-Gj-j1Q.normalTitle" = "Position";
+
+/* Class = "UIButton"; normalTitle = "ShowTo"; ObjectID = "K46-bb-z8G"; */
+"K46-bb-z8G.normalTitle" = "ShowTo";
+
+/* Class = "UIButton"; normalTitle = "offset.y"; ObjectID = "LSI-7p-5nV"; */
+"LSI-7p-5nV.normalTitle" = "offset.y";
+
+/* Class = "UIButton"; normalTitle = "URLSession"; ObjectID = "Lkz-8E-tQS"; */
+"Lkz-8E-tQS.normalTitle" = "URLSession";
+
+/* Class = "UIButton"; normalTitle = "EventDeliveryEnabled"; ObjectID = "Mr8-wU-AaU"; */
+"Mr8-wU-AaU.normalTitle" = "EventDeliveryEnabled";
+
+/* Class = "UIButton"; normalTitle = "Keyboard"; ObjectID = "Obd-Up-Sin"; */
+"Obd-Up-Sin.normalTitle" = "Keyboard";
+
+/* Class = "UIButton"; normalTitle = "Hide top-most HUD"; ObjectID = "OnU-gd-eYF"; */
+"OnU-gd-eYF.normalTitle" = "Hide top-most HUD";
+
+/* Class = "UIButton"; normalTitle = "Mode Switching"; ObjectID = "Q3B-dJ-AOt"; */
+"Q3B-dJ-AOt.normalTitle" = "Mode Switching";
+
+/* Class = "UITableViewSection"; headerTitle = "HUD"; ObjectID = "QeU-JE-Mtt"; */
+"QeU-JE-Mtt.headerTitle" = "HUD";
+
+/* Class = "UIButton"; normalTitle = "Observed Progress"; ObjectID = "RnV-R1-uE3"; */
+"RnV-R1-uE3.normalTitle" = "Observed Progress";
+
+/* Class = "UIButton"; normalTitle = "bgColor"; ObjectID = "SQa-pw-lhW"; */
+"SQa-pw-lhW.normalTitle" = "bgColor";
+
+/* Class = "UIButton"; normalTitle = "graceTime"; ObjectID = "Tg0-PT-gTA"; */
+"Tg0-PT-gTA.normalTitle" = "graceTime";
+
+/* Class = "UIButton"; normalTitle = "Status (Custom)"; ObjectID = "U4O-Kc-5Jb"; */
+"U4O-Kc-5Jb.normalTitle" = "Status (Custom)";
+
+/* Class = "UIButton"; normalTitle = "minShowTime"; ObjectID = "Wxt-Qc-fx8"; */
+"Wxt-Qc-fx8.normalTitle" = "minShowTime";
+
+/* Class = "UIButton"; normalTitle = "square"; ObjectID = "Y41-Z4-6Mm"; */
+"Y41-Z4-6Mm.normalTitle" = "square";
+
+/* Class = "UIButton"; normalTitle = "bgBlur"; ObjectID = "Yyq-J2-4ak"; */
+"Yyq-J2-4ak.normalTitle" = "bgBlur";
+
+/* Class = "UIButton"; normalTitle = "hMargin"; ObjectID = "aNj-zA-6N6"; */
+"aNj-zA-6N6.normalTitle" = "hMargin";
+
+/* Class = "UIButton"; normalTitle = "KeyboardGuide"; ObjectID = "b8y-dJ-gWk"; */
+"b8y-dJ-gWk.normalTitle" = "KeyboardGuide";
+
+/* Class = "UIButton"; normalTitle = "minWidth"; ObjectID = "bQ1-cQ-NCs"; */
+"bQ1-cQ-NCs.normalTitle" = "minWidth";
+
+/* Class = "UIButton"; normalTitle = "safeLayout"; ObjectID = "bjW-9q-ljW"; */
+"bjW-9q-ljW.normalTitle" = "safeLayout";
+
+/* Class = "UIButton"; normalTitle = "fDuration"; ObjectID = "car-Gt-htP"; */
+"car-Gt-htP.normalTitle" = "fDuration";
+
+/* Class = "UIButton"; normalTitle = "LabelEnabled"; ObjectID = "dg2-Yj-b71"; */
+"dg2-Yj-b71.normalTitle" = "LabelEnabled";
+
+/* Class = "UINavigationItem"; title = "HUD"; ObjectID = "fMb-uS-lXR"; */
+"fMb-uS-lXR.title" = "HUD";
+
+/* Class = "UIButton"; normalTitle = "isForce"; ObjectID = "gff-K3-gae"; */
+"gff-K3-gae.normalTitle" = "isForce";
+
+/* Class = "UIButton"; normalTitle = "beBlur"; ObjectID = "gix-Mb-RRr"; */
+"gix-Mb-RRr.normalTitle" = "beBlur";
+
+/* Class = "UIButton"; normalTitle = "ButtonEnabled"; ObjectID = "gta-bu-ekb"; */
+"gta-bu-ekb.normalTitle" = "ButtonEnabled";
+
+/* Class = "UILabel"; text = "Tap the screen to hide the keyboard."; ObjectID = "iIy-3b-H1l"; */
+"iIy-3b-H1l.text" = "Tap the screen to hide the keyboard.";
+
+/* Class = "UIButton"; normalTitle = "CountEnabled"; ObjectID = "j9D-wu-qWk"; */
+"j9D-wu-qWk.normalTitle" = "CountEnabled";
+
+/* Class = "UILabel"; text = "----- Layout -----"; ObjectID = "lKK-23-OsL"; */
+"lKK-23-OsL.text" = "----- Layout -----";
+
+/* Class = "UILabel"; text = "----- Force Animation -----"; ObjectID = "llG-0C-Dyq"; */
+"llG-0C-Dyq.text" = "----- Force Animation -----";
+
+/* Class = "UIButton"; normalTitle = "hInsets"; ObjectID = "nFe-c2-SA7"; */
+"nFe-c2-SA7.normalTitle" = "hInsets";
+
+/* Class = "UILabel"; text = "----- Other -----"; ObjectID = "qBB-vB-7nV"; */
+"qBB-vB-7nV.text" = "----- Other -----";
+
+/* Class = "UIButton"; normalTitle = "hideAfterDelay"; ObjectID = "qHJ-lA-KHe"; */
+"qHJ-lA-KHe.normalTitle" = "hideAfterDelay";
+
+/* Class = "UIButton"; normalTitle = "DetailLEnabled"; ObjectID = "qeD-qc-zw9"; */
+"qeD-qc-zw9.normalTitle" = "DetailLEnabled";
+
+/* Class = "UIButton"; normalTitle = "vInsets"; ObjectID = "rec-kB-ELx"; */
+"rec-kB-ELx.normalTitle" = "vInsets";
+
+/* Class = "UIButton"; normalTitle = "fDamping"; ObjectID = "s8Q-bM-jbd"; */
+"s8Q-bM-jbd.normalTitle" = "fDamping";
+
+/* Class = "UIButton"; normalTitle = "minHeight"; ObjectID = "sgv-hH-YEt"; */
+"sgv-hH-YEt.normalTitle" = "minHeight";
+
+/* Class = "UIButton"; normalTitle = "Hide All HUD"; ObjectID = "tHP-0t-Cvk"; */
+"tHP-0t-Cvk.normalTitle" = "Hide All HUD";
+
+/* Class = "UIButton"; normalTitle = "fStyle"; ObjectID = "tp5-cl-3Zx"; */
+"tp5-cl-3Zx.normalTitle" = "fStyle";
+
+/* Class = "UILabel"; text = "----- Animation -----"; ObjectID = "wV4-ij-hkY"; */
+"wV4-ij-hkY.text" = "----- Animation -----";
+
+/* Class = "UIButton"; normalTitle = "Toast"; ObjectID = "x4c-ZJ-ltU"; */
+"x4c-ZJ-ltU.normalTitle" = "Toast";
+
+/* Class = "UITextField"; placeholder = "Show Keyboard"; ObjectID = "yQX-fl-mps"; */
+"yQX-fl-mps.placeholder" = "Show Keyboard";
+
+/* Class = "UITableViewSection"; headerTitle = "HUD ActivityIndicatorView"; ObjectID = "zd6-I2-oOo"; */
+"zd6-I2-oOo.headerTitle" = "HUD ActivityIndicatorView";

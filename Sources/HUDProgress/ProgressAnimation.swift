@@ -23,9 +23,12 @@ public protocol ProgressAnimationBuildable {
 extension ProgressAnimationBuildable {
     public func makeLabel(in layer: CALayer, progress: CGFloat, color: UIColor, font: UIFont) {
         let size = layer.bounds.size
-        let text = NSAttributedString(string: "\(Int(progress * 100))%", attributes: [.font: font, .foregroundColor: color])
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        let text = NSAttributedString(string: "\(Int(progress * 100))%",
+                                      attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraphStyle])
         let textSize = text.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size
-        text.draw(in: CGRect(x: (size.width - textSize.width) / 2.0, y: (size.height - textSize.height) / 2.0, width: size.width, height: size.height))
+        text.draw(in: CGRect(x: 0.0, y: (size.height - textSize.height) / 2.0, width: size.width, height: size.height))
     }
 }
 
