@@ -513,7 +513,6 @@ open class HUD: BaseView, ContentViewDelegate {
         }
 
         guard animation.style != .none, showStarted != nil else { return completionBlock(true) }
-
         let style = animation.style.corrected(showing) // Automatically determine the correct animation style
 
         // Set starting state
