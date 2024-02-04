@@ -1,12 +1,12 @@
 PODS:
-  - LPHUD (1.5.2):
-    - LPHUD/HUD (= 1.5.2)
-    - LPHUD/HUDIndicator (= 1.5.2)
-    - LPHUD/HUDProgress (= 1.5.2)
-  - LPHUD/HUD (1.5.2)
-  - LPHUD/HUDIndicator (1.5.2):
+  - LPHUD (1.5.3):
+    - LPHUD/HUD (= 1.5.3)
+    - LPHUD/HUDIndicator (= 1.5.3)
+    - LPHUD/HUDProgress (= 1.5.3)
+  - LPHUD/HUD (1.5.3)
+  - LPHUD/HUDIndicator (1.5.3):
     - LPHUD/HUD
-  - LPHUD/HUDProgress (1.5.2):
+  - LPHUD/HUDProgress (1.5.3):
     - LPHUD/HUD
 
 DEPENDENCIES:
@@ -17,8 +17,8 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  LPHUD: 581770b9c0ea82e6dc740a5c92a296597066fb3a
+  LPHUD: 1208af092bcbe9b553f84196cee3c2a604506337
 
 PODFILE CHECKSUM: b62abc5b850b474615b023b3b96a1179313b4c85
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.0
