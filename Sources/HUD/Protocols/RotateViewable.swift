@@ -11,6 +11,7 @@
 
 import UIKit
 
+/// A rotate view that shows that a task is in progress.
 public protocol RotateViewable: AnyObject where Self: UIView {
     /// Specifies the basic duration of the animation, in seconds.
     var duration: CFTimeInterval { get }

@@ -18,6 +18,7 @@ public enum RoundedCorners: Equatable, HUDExtended {
     case full
 }
 
+/// A control that executes your custom code in response to user interactions.
 open class Button: UIButton {
     /// The rounded corner mode of the button. `Default to .full`.
     open var roundedCorners: RoundedCorners = .full {

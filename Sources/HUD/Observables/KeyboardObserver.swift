@@ -12,6 +12,7 @@
 import UIKit
 
 #if !os(tvOS)
+/// keyboard information model.
 public struct KeyboardInfo {
     public enum Name {
         /// A event that posts immediately prior to a change in the keyboard’s frame.
