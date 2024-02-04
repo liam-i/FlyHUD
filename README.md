@@ -112,7 +112,6 @@ The documentation for releases and `main` are available here:
   Other versions
   </summary>
 
-* [1.5.1](https://liam-i.github.io/HUD/1.5.1/documentation/lphud)
 * [1.5.0](https://liam-i.github.io/HUD/1.5.0/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
