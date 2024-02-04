@@ -19,7 +19,7 @@ class PresentViewController: UIViewController {
                        mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
                        label: "You have an unfinished task.", 
                        offset: .h.vMinOffset) {
-            $0.contentView.indicatorPosition = .left
+            $0.contentView.indicatorPosition = .leading
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }
@@ -45,7 +45,7 @@ class PresentViewController: UIViewController {
                        mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
                        label: "You have a message.",
                        offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
-            $0.contentView.indicatorPosition = .right
+            $0.contentView.indicatorPosition = .trailing
             $0.isEventDeliveryEnabled = true
             $0.keyboardGuide = .bottom()
         }

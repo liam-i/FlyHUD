@@ -12,6 +12,10 @@
 import UIKit
 
 extension UIView {
+    static var isRTL: Bool {
+        UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
+    }
+
     /// UIStackView isHidden bug fixed: - http://www.openradar.me/25087688
     var isHiddenInStackView: Bool {
         get { isHidden }

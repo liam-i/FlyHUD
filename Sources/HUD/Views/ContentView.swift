@@ -55,33 +55,33 @@ extension ContentView {
         case top
         /// Adds the given indicator to the bottom of other views.
         case bottom
-        /// Inserts the given indicator to the left of other views.
-        case left
-        /// Adds the given indicator to the right of other views.
-        case right
+        /// Inserts the given indicator to the leading of other views.
+        case leading
+        /// Adds the given indicator to the trailing of other views.
+        case trailing
     }
 
     public enum Alignment: Equatable, CaseIterable {
         /// A layout where the stack view aligns the center of its arranged views with its center along its axis.
         case center
         /// A layout for vertical stacks where the stack view aligns the leading edge of its arranged views along its leading edge.
-        case left
+        case leading
         /// A layout for vertical stacks where the stack view aligns the trailing edge of its arranged views along its trailing edge.
-        case right
+        case trailing
 
         fileprivate var valueOfStackView: UIStackView.Alignment {
             switch self {
             case .center:   return .center
-            case .left:     return .leading
-            case .right:    return .trailing
+            case .leading:  return .leading
+            case .trailing: return .trailing
             }
         }
 
         fileprivate var valueOfText: NSTextAlignment {
             switch self {
             case .center:   return .center
-            case .left:     return .left
-            case .right:    return .right
+            case .leading:  return UIView.isRTL ? .right : .left
+            case .trailing: return UIView.isRTL ? .left : .right
             }
         }
     }
@@ -288,8 +288,8 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
             switch indicatorPosition {
             case .top:      vStackView.insertArrangedSubview(newValue, at: 0)
             case .bottom:   vStackView.addArrangedSubview(newValue)
-            case .left:     hStackView.insertArrangedSubview(newValue, at: 0)
-            case .right:    hStackView.addArrangedSubview(newValue)
+            case .leading:  hStackView.insertArrangedSubview(newValue, at: 0)
+            case .trailing: hStackView.addArrangedSubview(newValue)
             }
         }
         indicator = newValue
@@ -377,7 +377,6 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         vStackView.alignment = layout.alignment.valueOfStackView
         label.textAlignment = layout.alignment.valueOfText
         detailsLabel.textAlignment = label.textAlignment
-        button.titleLabel?.textAlignment = label.textAlignment
         constraint.update(with: layout)
 
         guard isInitialized == false else { return }

@@ -29,6 +29,7 @@ extension HUD {
         public var edgeInsets: UIEdgeInsets
 
         /// The layout guide representing the portion of your view that is unobscured by bars and other content.
+        /// - Warning: This property setting only takes effect after the HUD is initialized and before `show` is executed for the first time.
         public var isSafeAreaLayoutGuideEnabled: Bool
 
         /// Creates a new Layout.
@@ -39,6 +40,7 @@ extension HUD {
         ///   - edgeInsets: This also represents the minimum contentView distance to the edge of the HUD.
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
+        /// - Warning: The `isSafeAreaLayoutGuideEnabled` property setting only takes effect after the HUD is initialized and before `show` is executed for the first time.
         public init(offset: CGPoint = .zero,
                     edgeInsets: UIEdgeInsets = .init(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
                     isSafeAreaLayoutGuideEnabled: Bool = true) {
