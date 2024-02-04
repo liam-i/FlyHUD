@@ -58,7 +58,7 @@ end
 
 Using `HUD` in your application is very simple.
 
-* Shows the status of indeterminate tasks.
+* Displays the status HUD of an indeterminate tasks.
 
 ```swift
 let hud = HUD.show(to: view)
@@ -70,7 +70,7 @@ DispatchQueue.global().async {
 }
 ```
 
-* Shows the progress of the task.
+* Displays a task's progress HUD.
 
 ```swift
 let hud = HUD.show(to: view, mode: .progress(), label: "Loading")
@@ -81,16 +81,38 @@ Task.request { progress in
 }
 ```
 
-* Show text-only status.
+* Displays a text-only status HUD.
 
 ```swift
 HUD.showStatus(to: view, label: "Wrong password")
 ```
 
-* Shows the status of a custom view. e.g. a UIImageView.
+* Displays a custom view's status HUD. e.g. a UIImageView.
 
 ```swift
 HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))), label: "Completed")
+```
+
+* Displays a custom view's status HUD. And the UIImageView is on the left.
+
+```swift
+HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "warning"))), label: "You have an unfinished task.") {
+    $0.contentView.indicatorPosition = .leading
+}
+```
+
+* Sets the animation that should be used when showing and hiding the HUD. E.g. style, duration, spring damping.
+
+```swift
+HUD.showStatus(to: view, using: .animation(.slideUpDown, damping: .default, duration: 0.3), label: "Wrong password")
+```
+
+* Enable keyboard layout guide to track the keyboard's position in your app’s layout.
+
+```swift
+HUD.showStatus(to: view, label: "You have a message.") {
+    $0.keyboardGuide = .center()
+}
 ```
 
 > [!WARNING]

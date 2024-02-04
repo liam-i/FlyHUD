@@ -36,7 +36,7 @@ open class HUD: BaseView, ContentViewDelegate {
         }
     }
 
-    /// The animation (type, duration, damping) that should be used when the HUD is shown and hidden.
+    /// The animation (style, duration, damping) that should be used when the HUD is shown and hidden.
     public var animation: Animation = .init()
     /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
     ///
