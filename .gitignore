@@ -61,7 +61,7 @@ Pods/Headers/
 Pods/Local Podspecs/
 Pods/Manifest.lock
 Pods/Pods.xcodeproj/
-Pods/Target Support Files/
+Pods/Target Support Files/Pods-*/
 
 # Add this line if you want to avoid checking in source code from the Xcode workspace
 # *.xcworkspace
