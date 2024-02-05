@@ -1,0 +1,749 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D875ADE740304FEF948448379D49DE8 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3060A18A9F7B0E0D2C4155DADA474 /* KeyboardObserver.swift */; };
+		112561C5A4A4A40D51C17C21A8B1BB2E /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D905C213DB358E77B1DE8347E6813F /* ShapeBuilder.swift */; };
+		13F5488C0E03F0D6A71E3393335DA864 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA276B428E4CF138996B5A0B9731B4E /* BaseView.swift */; };
+		1E484BE83DF1ACE7595C4C0EF5D2FB62 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48988F8174DAC85798BC502D0FC4882F /* Label.swift */; };
+		23F1D5072ADBDDFF878983C78A0FB711 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404D1B45B541DD5289DD67A4F22DB583 /* ProgressView.swift */; };
+		2438EBA2DD3473066E60187B8613F234 /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE8310A64790D14342D930C4AC17F0E /* HUDExtended.swift */; };
+		2A1F92174C0B8EE0601ED3F1F842D718 /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6C2834B7DA9954B16DD8657DFA6EC9 /* HUD+ActivityIndicatorView.swift */; };
+		2E6572DA72EE8E42B8C4DC16277CCC09 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9739ACDA17B236DB68B9DA77320B7BD8 /* HUD.swift */; };
+		2FF9E390DC0E93C2C8EFDA2A6F21F34B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C416EA833F8F1E0E5F0CC9299F607B1 /* Model.swift */; };
+		39CD3F49E1F17874FF1EFF95417B0E72 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69326C6366FF7265F333653D07093B3A /* ContentView.swift */; };
+		437FA778F215A882A6768B005F033EDB /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DE6E51BF2A97DE0543196D68FAC7AC /* ActivityIndicatorView.swift */; };
+		47F77C83AF43AD6403AEA86A17C36566 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA276B428E4CF138996B5A0B9731B4E /* BaseView.swift */; };
+		49670B06A769054A0F5EBC1B6C813ABE /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB2F53AFDE414B7CC838B321CBB05F7 /* DisplayLink.swift */; };
+		544640A86280F868504FAC89EB13B78D /* LPHUD-iOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F9D3E4DCA4160AAC582957B7C3EEB27 /* LPHUD-iOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54F70C453A4FE35F858F6D43E968ECD3 /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010541D04FAF6A8F1C6040FCC8D31BED /* ProgressAnimation.swift */; };
+		5725B8D68C5EBC371251405FDAB7CE39 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5455B77E889F89C926D6FD36526400 /* Foundation.framework */; };
+		5F7AF78D41A5B067A49AED5ED9563D26 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C416EA833F8F1E0E5F0CC9299F607B1 /* Model.swift */; };
+		62C0332F5386AB0E282C617D0926765D /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6C2834B7DA9954B16DD8657DFA6EC9 /* HUD+ActivityIndicatorView.swift */; };
+		664EB2840B31D83345DBB0185D1D9DA6 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE19DFBCD0F968F84894E51B680DE95 /* BackgroundView.swift */; };
+		665D5B9CC08320ECE61F20C7347ABAD7 /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C5881CF9201BBC53B5E5E414D9859E /* HUD+ProgressView.swift */; };
+		6733426B383A7392E386D43F571AF014 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE19DFBCD0F968F84894E51B680DE95 /* BackgroundView.swift */; };
+		682408E627840DD29C5E53CE2A66C7CA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306962D1934A711E3EF686E373E91D6 /* Extensions.swift */; };
+		70BB3E71DFF744B834241D252D073500 /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106077B9F8581F8C3F9B707EE8C10644 /* ProgressViewable.swift */; };
+		76AA924A96719CF67492F2DB6E29F6E7 /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F286B080C3202B6BE67A67DEBC946957 /* ActivityIndicatorViewable.swift */; };
+		78FA379D4ABD78ECB91AB0C06F845F7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69326C6366FF7265F333653D07093B3A /* ContentView.swift */; };
+		7CF4341A22523CDF2E92F74ABAF57F31 /* LPHUD-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 900720740EF257B5D5E54FCE35DA1B6F /* LPHUD-iOS-dummy.m */; };
+		7E3389772A15EC2AE4AABDB6341D6093 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512B824031A20D1B509E9F811E0B404A /* Foundation.framework */; };
+		7F00AB41975E983670A498161DD80FB1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306962D1934A711E3EF686E373E91D6 /* Extensions.swift */; };
+		8EDE88E17D4D8BED12A3DE95EF6CB634 /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010541D04FAF6A8F1C6040FCC8D31BED /* ProgressAnimation.swift */; };
+		9235F143F929B76D81B5873E46F367A8 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E51E076C1094A4B4D861F16CCFEE8AB /* Button.swift */; };
+		937E6ED5D48AA714D7EF11D0591DD7C0 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9739ACDA17B236DB68B9DA77320B7BD8 /* HUD.swift */; };
+		A4B7D86DF34029B183EF4F5A4CA541EC /* LPHUD-tvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C1B639FF73405E935F7D838BCB255ACE /* LPHUD-tvOS-dummy.m */; };
+		AACE74348B8291C53F14BA4D1E5D310E /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D905C213DB358E77B1DE8347E6813F /* ShapeBuilder.swift */; };
+		AAEE7A1F45C9D9D4CC6F55EB7C43C1EA /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E51E076C1094A4B4D861F16CCFEE8AB /* Button.swift */; };
+		AD6B5155549AD7B31D7F859AA558374C /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DE6E51BF2A97DE0543196D68FAC7AC /* ActivityIndicatorView.swift */; };
+		B6E184059C011856182DF7664323F194 /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAC7A076E60883C2F554BFE5D828183 /* ActivityIndicatorAnimation.swift */; };
+		C1F21E75A5F1A4745D9421E2232FE41B /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48988F8174DAC85798BC502D0FC4882F /* Label.swift */; };
+		C92079962E9D073FB4C8D2C0D0E649B2 /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE8310A64790D14342D930C4AC17F0E /* HUDExtended.swift */; };
+		CA50499EF9880F1CF728827D375237D8 /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAC7A076E60883C2F554BFE5D828183 /* ActivityIndicatorAnimation.swift */; };
+		CF6F08EB4FA7BD3E11ED435EB5A7FB38 /* LPHUD-tvOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 79BAA363FB08BE806CEA1AC4E53E7221 /* LPHUD-tvOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D931586ECB37183985F2CC44509DA7B4 /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106077B9F8581F8C3F9B707EE8C10644 /* ProgressViewable.swift */; };
+		E383FC2B515671A96F2AED18AB0A04EE /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404D1B45B541DD5289DD67A4F22DB583 /* ProgressView.swift */; };
+		E7DDEC180C1AF6EAF066266887C58EF0 /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BF204265C27C20FCA21769D23E2D64 /* RotateViewable.swift */; };
+		E818E5D1CC6BDD8319A2D90A667C2B4C /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F286B080C3202B6BE67A67DEBC946957 /* ActivityIndicatorViewable.swift */; };
+		ECD6B40D46628C736FFCA91444A54659 /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BF204265C27C20FCA21769D23E2D64 /* RotateViewable.swift */; };
+		F90FD06A6E6D388CBC2FBF6F77097A4B /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB2F53AFDE414B7CC838B321CBB05F7 /* DisplayLink.swift */; };
+		FD423B9D09C2E28A8AA4C0696ACE3DE6 /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C5881CF9201BBC53B5E5E414D9859E /* HUD+ProgressView.swift */; };
+		FD65F720CE397E1576797314CD1EEB3A /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C3060A18A9F7B0E0D2C4155DADA474 /* KeyboardObserver.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		001D88BAA70722EE9252A87D4A40EABB /* LPHUD-tvOS */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "LPHUD-tvOS"; path = LPHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		010541D04FAF6A8F1C6040FCC8D31BED /* ProgressAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressAnimation.swift; path = Sources/HUDProgress/ProgressAnimation.swift; sourceTree = "<group>"; };
+		03F7D90F01E344DB80052D4DC04D13C6 /* LPHUD-iOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "LPHUD-iOS-Info.plist"; sourceTree = "<group>"; };
+		09DE6E51BF2A97DE0543196D68FAC7AC /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActivityIndicatorView.swift; path = Sources/HUDIndicator/ActivityIndicatorView.swift; sourceTree = "<group>"; };
+		0DA276B428E4CF138996B5A0B9731B4E /* BaseView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		0F9D3E4DCA4160AAC582957B7C3EEB27 /* LPHUD-iOS-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "LPHUD-iOS-umbrella.h"; sourceTree = "<group>"; };
+		106077B9F8581F8C3F9B707EE8C10644 /* ProgressViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProgressViewable.swift; sourceTree = "<group>"; };
+		1B2A8B96F7C71068EA20C1AEB220E46C /* LPHUD-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "LPHUD-tvOS.release.xcconfig"; path = "../LPHUD-tvOS/LPHUD-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		1CAC7A076E60883C2F554BFE5D828183 /* ActivityIndicatorAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActivityIndicatorAnimation.swift; path = Sources/HUDIndicator/ActivityIndicatorAnimation.swift; sourceTree = "<group>"; };
+		230A23EA97E652FC8D959BB99BA9FA7A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		273B75EFEEFD95A940C8AD58D207BE39 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		2BB2F53AFDE414B7CC838B321CBB05F7 /* DisplayLink.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisplayLink.swift; sourceTree = "<group>"; };
+		36BBBD21F1C44C7BB913B717C57D0818 /* LPHUD.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = LPHUD.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		404D1B45B541DD5289DD67A4F22DB583 /* ProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = Sources/HUDProgress/ProgressView.swift; sourceTree = "<group>"; };
+		48988F8174DAC85798BC502D0FC4882F /* Label.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		512B824031A20D1B509E9F811E0B404A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5306962D1934A711E3EF686E373E91D6 /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5E51E076C1094A4B4D861F16CCFEE8AB /* Button.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		5F884F6B36B7E13CC59603C9440C3007 /* LPHUD-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "LPHUD-iOS.release.xcconfig"; sourceTree = "<group>"; };
+		69326C6366FF7265F333653D07093B3A /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		69BF204265C27C20FCA21769D23E2D64 /* RotateViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RotateViewable.swift; sourceTree = "<group>"; };
+		69C5881CF9201BBC53B5E5E414D9859E /* HUD+ProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "HUD+ProgressView.swift"; path = "Sources/HUDProgress/HUD+ProgressView.swift"; sourceTree = "<group>"; };
+		6CA3EA48C0AEA42E49DA1DE740674D55 /* LPHUD-tvOS-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "LPHUD-tvOS-prefix.pch"; path = "../LPHUD-tvOS/LPHUD-tvOS-prefix.pch"; sourceTree = "<group>"; };
+		6D5455B77E889F89C926D6FD36526400 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		76C3060A18A9F7B0E0D2C4155DADA474 /* KeyboardObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
+		79BAA363FB08BE806CEA1AC4E53E7221 /* LPHUD-tvOS-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "LPHUD-tvOS-umbrella.h"; path = "../LPHUD-tvOS/LPHUD-tvOS-umbrella.h"; sourceTree = "<group>"; };
+		7BE8310A64790D14342D930C4AC17F0E /* HUDExtended.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HUDExtended.swift; sourceTree = "<group>"; };
+		81DCCF340B04C6C8D6E3A20D9F25B6F1 /* LPHUD-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "LPHUD-tvOS.debug.xcconfig"; path = "../LPHUD-tvOS/LPHUD-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		900720740EF257B5D5E54FCE35DA1B6F /* LPHUD-iOS-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "LPHUD-iOS-dummy.m"; sourceTree = "<group>"; };
+		91BECE8BC7B68E4E0851625341E806FA /* LPHUD-tvOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; name = "LPHUD-tvOS.modulemap"; path = "../LPHUD-tvOS/LPHUD-tvOS.modulemap"; sourceTree = "<group>"; };
+		94DB7DDF7E2A978B7C88835C726D8F39 /* LPHUD-tvOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "LPHUD-tvOS-Info.plist"; path = "../LPHUD-tvOS/LPHUD-tvOS-Info.plist"; sourceTree = "<group>"; };
+		9739ACDA17B236DB68B9DA77320B7BD8 /* HUD.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HUD.swift; path = Sources/HUD/HUD.swift; sourceTree = "<group>"; };
+		9C416EA833F8F1E0E5F0CC9299F607B1 /* Model.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Sources/HUD/Model.swift; sourceTree = "<group>"; };
+		A482027011DCB31D48F6548FBFEB5459 /* LPHUD-iOS */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "LPHUD-iOS"; path = LPHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAE19DFBCD0F968F84894E51B680DE95 /* BackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
+		AB300E2FABAA1A4312B5EE81CFD57AFB /* LPHUD-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "LPHUD-iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		B0D905C213DB358E77B1DE8347E6813F /* ShapeBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShapeBuilder.swift; path = Sources/HUDIndicator/ShapeBuilder.swift; sourceTree = "<group>"; };
+		C1B639FF73405E935F7D838BCB255ACE /* LPHUD-tvOS-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "LPHUD-tvOS-dummy.m"; path = "../LPHUD-tvOS/LPHUD-tvOS-dummy.m"; sourceTree = "<group>"; };
+		C8FD027D362D45FBDEAC84EF5528771F /* LPHUD-iOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "LPHUD-iOS.modulemap"; sourceTree = "<group>"; };
+		CDEE01CA35586954FCF57B120A998936 /* LPHUD-iOS-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "LPHUD-iOS-prefix.pch"; sourceTree = "<group>"; };
+		EF6C2834B7DA9954B16DD8657DFA6EC9 /* HUD+ActivityIndicatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "HUD+ActivityIndicatorView.swift"; path = "Sources/HUDIndicator/HUD+ActivityIndicatorView.swift"; sourceTree = "<group>"; };
+		F286B080C3202B6BE67A67DEBC946957 /* ActivityIndicatorViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewable.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		496CBECBD548C1E31CA8641761EFFF55 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5725B8D68C5EBC371251405FDAB7CE39 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA19516303BD2135DEBA9CE593333A1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E3389772A15EC2AE4AABDB6341D6093 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0CE705E4F274CB31FDA4CF998CC77BE2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A482027011DCB31D48F6548FBFEB5459 /* LPHUD-iOS */,
+				001D88BAA70722EE9252A87D4A40EABB /* LPHUD-tvOS */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1EF99F687E5D65DDE5C8E30EFFE65D2D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5306962D1934A711E3EF686E373E91D6 /* Extensions.swift */,
+				7BE8310A64790D14342D930C4AC17F0E /* HUDExtended.swift */,
+			);
+			name = Extensions;
+			path = Sources/HUD/Extensions;
+			sourceTree = "<group>";
+		};
+		2CB1317258FA634756546BFBEC842222 /* HUDProgress */ = {
+			isa = PBXGroup;
+			children = (
+				69C5881CF9201BBC53B5E5E414D9859E /* HUD+ProgressView.swift */,
+				010541D04FAF6A8F1C6040FCC8D31BED /* ProgressAnimation.swift */,
+				404D1B45B541DD5289DD67A4F22DB583 /* ProgressView.swift */,
+			);
+			name = HUDProgress;
+			sourceTree = "<group>";
+		};
+		404132CBF214DE67D9FB9AA64994E50C /* HUD */ = {
+			isa = PBXGroup;
+			children = (
+				9739ACDA17B236DB68B9DA77320B7BD8 /* HUD.swift */,
+				9C416EA833F8F1E0E5F0CC9299F607B1 /* Model.swift */,
+				1EF99F687E5D65DDE5C8E30EFFE65D2D /* Extensions */,
+				C034314B484D4EEE8F990AF29DFF53F1 /* Observables */,
+				437A9D30B2B491D4E8F535DBAA2944B6 /* Protocols */,
+				D5922886B48E6AA9A974081FAAEB569C /* Views */,
+			);
+			name = HUD;
+			sourceTree = "<group>";
+		};
+		41FDBDB1B64B9362AC6AD3DC6658A186 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				6D5455B77E889F89C926D6FD36526400 /* Foundation.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
+		424E20E62FC1E397B658C5D7E2A8B40F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				512B824031A20D1B509E9F811E0B404A /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		437A9D30B2B491D4E8F535DBAA2944B6 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F286B080C3202B6BE67A67DEBC946957 /* ActivityIndicatorViewable.swift */,
+				106077B9F8581F8C3F9B707EE8C10644 /* ProgressViewable.swift */,
+				69BF204265C27C20FCA21769D23E2D64 /* RotateViewable.swift */,
+			);
+			name = Protocols;
+			path = Sources/HUD/Protocols;
+			sourceTree = "<group>";
+		};
+		5778AE82EF09A916FAA759ED0136E060 /* HUDIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				1CAC7A076E60883C2F554BFE5D828183 /* ActivityIndicatorAnimation.swift */,
+				09DE6E51BF2A97DE0543196D68FAC7AC /* ActivityIndicatorView.swift */,
+				EF6C2834B7DA9954B16DD8657DFA6EC9 /* HUD+ActivityIndicatorView.swift */,
+				B0D905C213DB358E77B1DE8347E6813F /* ShapeBuilder.swift */,
+			);
+			name = HUDIndicator;
+			sourceTree = "<group>";
+		};
+		8CF7EFB55B34AB31E91BCB9AC1D176FF /* LPHUD */ = {
+			isa = PBXGroup;
+			children = (
+				404132CBF214DE67D9FB9AA64994E50C /* HUD */,
+				5778AE82EF09A916FAA759ED0136E060 /* HUDIndicator */,
+				2CB1317258FA634756546BFBEC842222 /* HUDProgress */,
+				FB475E2642C20B837164383FC94A895C /* Pod */,
+				FCC8958FE0688CF39ABEFA3F0D3C1099 /* Support Files */,
+			);
+			name = LPHUD;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		C034314B484D4EEE8F990AF29DFF53F1 /* Observables */ = {
+			isa = PBXGroup;
+			children = (
+				2BB2F53AFDE414B7CC838B321CBB05F7 /* DisplayLink.swift */,
+				76C3060A18A9F7B0E0D2C4155DADA474 /* KeyboardObserver.swift */,
+			);
+			name = Observables;
+			path = Sources/HUD/Observables;
+			sourceTree = "<group>";
+		};
+		C9CFE15C5D107338A244ACADA8DE98AC = {
+			isa = PBXGroup;
+			children = (
+				EFC8B2239CE0A3E9E395865F264096D4 /* Frameworks */,
+				8CF7EFB55B34AB31E91BCB9AC1D176FF /* LPHUD */,
+				0CE705E4F274CB31FDA4CF998CC77BE2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D5922886B48E6AA9A974081FAAEB569C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AAE19DFBCD0F968F84894E51B680DE95 /* BackgroundView.swift */,
+				0DA276B428E4CF138996B5A0B9731B4E /* BaseView.swift */,
+				5E51E076C1094A4B4D861F16CCFEE8AB /* Button.swift */,
+				69326C6366FF7265F333653D07093B3A /* ContentView.swift */,
+				48988F8174DAC85798BC502D0FC4882F /* Label.swift */,
+			);
+			name = Views;
+			path = Sources/HUD/Views;
+			sourceTree = "<group>";
+		};
+		EFC8B2239CE0A3E9E395865F264096D4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				424E20E62FC1E397B658C5D7E2A8B40F /* iOS */,
+				41FDBDB1B64B9362AC6AD3DC6658A186 /* tvOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FB475E2642C20B837164383FC94A895C /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				230A23EA97E652FC8D959BB99BA9FA7A /* LICENSE */,
+				36BBBD21F1C44C7BB913B717C57D0818 /* LPHUD.podspec */,
+				273B75EFEEFD95A940C8AD58D207BE39 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		FCC8958FE0688CF39ABEFA3F0D3C1099 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C8FD027D362D45FBDEAC84EF5528771F /* LPHUD-iOS.modulemap */,
+				900720740EF257B5D5E54FCE35DA1B6F /* LPHUD-iOS-dummy.m */,
+				03F7D90F01E344DB80052D4DC04D13C6 /* LPHUD-iOS-Info.plist */,
+				CDEE01CA35586954FCF57B120A998936 /* LPHUD-iOS-prefix.pch */,
+				0F9D3E4DCA4160AAC582957B7C3EEB27 /* LPHUD-iOS-umbrella.h */,
+				AB300E2FABAA1A4312B5EE81CFD57AFB /* LPHUD-iOS.debug.xcconfig */,
+				5F884F6B36B7E13CC59603C9440C3007 /* LPHUD-iOS.release.xcconfig */,
+				91BECE8BC7B68E4E0851625341E806FA /* LPHUD-tvOS.modulemap */,
+				C1B639FF73405E935F7D838BCB255ACE /* LPHUD-tvOS-dummy.m */,
+				94DB7DDF7E2A978B7C88835C726D8F39 /* LPHUD-tvOS-Info.plist */,
+				6CA3EA48C0AEA42E49DA1DE740674D55 /* LPHUD-tvOS-prefix.pch */,
+				79BAA363FB08BE806CEA1AC4E53E7221 /* LPHUD-tvOS-umbrella.h */,
+				81DCCF340B04C6C8D6E3A20D9F25B6F1 /* LPHUD-tvOS.debug.xcconfig */,
+				1B2A8B96F7C71068EA20C1AEB220E46C /* LPHUD-tvOS.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "Pods/Target Support Files/LPHUD-iOS";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		F09D6081B552975414F6310045D51FBC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF6F08EB4FA7BD3E11ED435EB5A7FB38 /* LPHUD-tvOS-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FDFC829F51B06F9C590F4FDA454D73CE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				544640A86280F868504FAC89EB13B78D /* LPHUD-iOS-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1A1C24AC807270998E4BC9E4491ACDDF /* LPHUD-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9FC59710AC0A5F7D091ACFD8D3B9E46A /* Build configuration list for PBXNativeTarget "LPHUD-iOS" */;
+			buildPhases = (
+				FDFC829F51B06F9C590F4FDA454D73CE /* Headers */,
+				00176FEF58D26FB6ABF9903F9D4967CA /* Sources */,
+				EA19516303BD2135DEBA9CE593333A1F /* Frameworks */,
+				39FA88822845022550D8B4D6FEC24BA9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LPHUD-iOS";
+			productName = LPHUD;
+			productReference = A482027011DCB31D48F6548FBFEB5459 /* LPHUD-iOS */;
+			productType = "com.apple.product-type.framework";
+		};
+		F06103214677460402FB753596A70197 /* LPHUD-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0086039645BA1A0FBB059D934932A83 /* Build configuration list for PBXNativeTarget "LPHUD-tvOS" */;
+			buildPhases = (
+				F09D6081B552975414F6310045D51FBC /* Headers */,
+				3010C24EEDB7A099983944E05165A8BF /* Sources */,
+				496CBECBD548C1E31CA8641761EFFF55 /* Frameworks */,
+				F82236F6812926CC7046E16AC4EAFCC6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LPHUD-tvOS";
+			productName = LPHUD;
+			productReference = 001D88BAA70722EE9252A87D4A40EABB /* LPHUD-tvOS */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3253AF453335E1C6DD3F70CE07289B88 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = 4E0B61CA12D8CDF16DA9708C7053F37D /* Build configuration list for PBXProject "LPHUD" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C9CFE15C5D107338A244ACADA8DE98AC;
+			productRefGroup = 0CE705E4F274CB31FDA4CF998CC77BE2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A1C24AC807270998E4BC9E4491ACDDF /* LPHUD-iOS */,
+				F06103214677460402FB753596A70197 /* LPHUD-tvOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		39FA88822845022550D8B4D6FEC24BA9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F82236F6812926CC7046E16AC4EAFCC6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00176FEF58D26FB6ABF9903F9D4967CA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B6E184059C011856182DF7664323F194 /* ActivityIndicatorAnimation.swift in Sources */,
+				AD6B5155549AD7B31D7F859AA558374C /* ActivityIndicatorView.swift in Sources */,
+				E818E5D1CC6BDD8319A2D90A667C2B4C /* ActivityIndicatorViewable.swift in Sources */,
+				6733426B383A7392E386D43F571AF014 /* BackgroundView.swift in Sources */,
+				47F77C83AF43AD6403AEA86A17C36566 /* BaseView.swift in Sources */,
+				9235F143F929B76D81B5873E46F367A8 /* Button.swift in Sources */,
+				78FA379D4ABD78ECB91AB0C06F845F7A /* ContentView.swift in Sources */,
+				49670B06A769054A0F5EBC1B6C813ABE /* DisplayLink.swift in Sources */,
+				7F00AB41975E983670A498161DD80FB1 /* Extensions.swift in Sources */,
+				2E6572DA72EE8E42B8C4DC16277CCC09 /* HUD.swift in Sources */,
+				2A1F92174C0B8EE0601ED3F1F842D718 /* HUD+ActivityIndicatorView.swift in Sources */,
+				FD423B9D09C2E28A8AA4C0696ACE3DE6 /* HUD+ProgressView.swift in Sources */,
+				C92079962E9D073FB4C8D2C0D0E649B2 /* HUDExtended.swift in Sources */,
+				0D875ADE740304FEF948448379D49DE8 /* KeyboardObserver.swift in Sources */,
+				1E484BE83DF1ACE7595C4C0EF5D2FB62 /* Label.swift in Sources */,
+				7CF4341A22523CDF2E92F74ABAF57F31 /* LPHUD-iOS-dummy.m in Sources */,
+				5F7AF78D41A5B067A49AED5ED9563D26 /* Model.swift in Sources */,
+				8EDE88E17D4D8BED12A3DE95EF6CB634 /* ProgressAnimation.swift in Sources */,
+				E383FC2B515671A96F2AED18AB0A04EE /* ProgressView.swift in Sources */,
+				70BB3E71DFF744B834241D252D073500 /* ProgressViewable.swift in Sources */,
+				E7DDEC180C1AF6EAF066266887C58EF0 /* RotateViewable.swift in Sources */,
+				AACE74348B8291C53F14BA4D1E5D310E /* ShapeBuilder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3010C24EEDB7A099983944E05165A8BF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA50499EF9880F1CF728827D375237D8 /* ActivityIndicatorAnimation.swift in Sources */,
+				437FA778F215A882A6768B005F033EDB /* ActivityIndicatorView.swift in Sources */,
+				76AA924A96719CF67492F2DB6E29F6E7 /* ActivityIndicatorViewable.swift in Sources */,
+				664EB2840B31D83345DBB0185D1D9DA6 /* BackgroundView.swift in Sources */,
+				13F5488C0E03F0D6A71E3393335DA864 /* BaseView.swift in Sources */,
+				AAEE7A1F45C9D9D4CC6F55EB7C43C1EA /* Button.swift in Sources */,
+				39CD3F49E1F17874FF1EFF95417B0E72 /* ContentView.swift in Sources */,
+				F90FD06A6E6D388CBC2FBF6F77097A4B /* DisplayLink.swift in Sources */,
+				682408E627840DD29C5E53CE2A66C7CA /* Extensions.swift in Sources */,
+				937E6ED5D48AA714D7EF11D0591DD7C0 /* HUD.swift in Sources */,
+				62C0332F5386AB0E282C617D0926765D /* HUD+ActivityIndicatorView.swift in Sources */,
+				665D5B9CC08320ECE61F20C7347ABAD7 /* HUD+ProgressView.swift in Sources */,
+				2438EBA2DD3473066E60187B8613F234 /* HUDExtended.swift in Sources */,
+				FD65F720CE397E1576797314CD1EEB3A /* KeyboardObserver.swift in Sources */,
+				C1F21E75A5F1A4745D9421E2232FE41B /* Label.swift in Sources */,
+				A4B7D86DF34029B183EF4F5A4CA541EC /* LPHUD-tvOS-dummy.m in Sources */,
+				2FF9E390DC0E93C2C8EFDA2A6F21F34B /* Model.swift in Sources */,
+				54F70C453A4FE35F858F6D43E968ECD3 /* ProgressAnimation.swift in Sources */,
+				23F1D5072ADBDDFF878983C78A0FB711 /* ProgressView.swift in Sources */,
+				D931586ECB37183985F2CC44509DA7B4 /* ProgressViewable.swift in Sources */,
+				ECD6B40D46628C736FFCA91444A54659 /* RotateViewable.swift in Sources */,
+				112561C5A4A4A40D51C17C21A8B1BB2E /* ShapeBuilder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		561F0E3E75202AA65A17BCF58FB3AD9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F884F6B36B7E13CC59603C9440C3007 /* LPHUD-iOS.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/LPHUD-iOS/LPHUD-iOS-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/LPHUD-iOS/LPHUD-iOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/LPHUD-iOS/LPHUD-iOS.modulemap";
+				PRODUCT_MODULE_NAME = LPHUD;
+				PRODUCT_NAME = LPHUD;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7C634056FEC6B53367C9D63C552762A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+		A46FBDBC4A7C64BD1EE85ED8977DEEEE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB300E2FABAA1A4312B5EE81CFD57AFB /* LPHUD-iOS.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/LPHUD-iOS/LPHUD-iOS-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/LPHUD-iOS/LPHUD-iOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/LPHUD-iOS/LPHUD-iOS.modulemap";
+				PRODUCT_MODULE_NAME = LPHUD;
+				PRODUCT_NAME = LPHUD;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B7B3A4D637237DE5E8BCD8B572FCA79A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B2A8B96F7C71068EA20C1AEB220E46C /* LPHUD-tvOS.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS.modulemap";
+				PRODUCT_MODULE_NAME = LPHUD;
+				PRODUCT_NAME = LPHUD;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		EEA22F684CCB7159F70D8A4D247D079E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		F033A8896BB4F46D6174028EAFE9D717 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 81DCCF340B04C6C8D6E3A20D9F25B6F1 /* LPHUD-tvOS.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/LPHUD-tvOS/LPHUD-tvOS.modulemap";
+				PRODUCT_MODULE_NAME = LPHUD;
+				PRODUCT_NAME = LPHUD;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E0B61CA12D8CDF16DA9708C7053F37D /* Build configuration list for PBXProject "LPHUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EEA22F684CCB7159F70D8A4D247D079E /* Debug */,
+				7C634056FEC6B53367C9D63C552762A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9FC59710AC0A5F7D091ACFD8D3B9E46A /* Build configuration list for PBXNativeTarget "LPHUD-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A46FBDBC4A7C64BD1EE85ED8977DEEEE /* Debug */,
+				561F0E3E75202AA65A17BCF58FB3AD9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0086039645BA1A0FBB059D934932A83 /* Build configuration list for PBXNativeTarget "LPHUD-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F033A8896BB4F46D6174028EAFE9D717 /* Debug */,
+				B7B3A4D637237DE5E8BCD8B572FCA79A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3253AF453335E1C6DD3F70CE07289B88 /* Project object */;
+}
