@@ -52,9 +52,7 @@
 		0CEAB7312B6F5AD00032DCAD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		0CEAB7332B6F5AD30032DCAD /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
 		1828E0952643B700004E75A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		1920AE6D1EB88DD79BE4144A /* Pods-HUD_ExampleTV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_ExampleTV.release.xcconfig"; path = "Target Support Files/Pods-HUD_ExampleTV/Pods-HUD_ExampleTV.release.xcconfig"; sourceTree = "<group>"; };
 		49272EEED1155CB868DD89DB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ./LICENSE; sourceTree = "<group>"; };
-		4E7FC5A9D07F1CE1E2EC1C82 /* Pods-HUD_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_Tests.debug.xcconfig"; path = "Target Support Files/Pods-HUD_Tests/Pods-HUD_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		560C516F554DA412B5D00A24 /* LPHUD.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LPHUD.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		607FACD01AFB9204008FA782 /* HUD_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HUD_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,17 +62,13 @@
 		607FACE51AFB9204008FA782 /* HUD_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HUD_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		8455F49E9B0D4A06B5C7D512 /* Pods-HUD_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_Tests.release.xcconfig"; path = "Target Support Files/Pods-HUD_Tests/Pods-HUD_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		8E333683C8DD139C20143545 /* Pods_HUD_ExampleTV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HUD_ExampleTV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E0324869DDCF5B38A611744 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ./README.md; sourceTree = "<group>"; };
 		9EED4F337959D651BB720686 /* Pods_HUD_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HUD_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D45F90F5C8308FF9FCF2567E /* Pods-HUD_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_Example.debug.xcconfig"; path = "Target Support Files/Pods-HUD_Example/Pods-HUD_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		D4BCC752D7BFFC6A6D56BBC3 /* Pods-HUD_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_Example.release.xcconfig"; path = "Target Support Files/Pods-HUD_Example/Pods-HUD_Example.release.xcconfig"; sourceTree = "<group>"; };
 		E8921D922B5D5DE10005BD10 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		E8AD997B275CFDFC00910F91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8AD997F275D06D700910F91 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		E8B21F622B62AA9E00A52A9C /* PresentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentViewController.swift; sourceTree = "<group>"; };
-		EEDC094872A14F0F9BBCAADD /* Pods-HUD_ExampleTV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HUD_ExampleTV.debug.xcconfig"; path = "Target Support Files/Pods-HUD_ExampleTV/Pods-HUD_ExampleTV.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +130,6 @@
 				0C7754702B550B200000AA43 /* ExampleTV for HUD */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
-				D339BF044395BF42F6F8241E /* Pods */,
 				038A1C5E209A6636B10E8B69 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -187,19 +180,6 @@
 				49272EEED1155CB868DD89DB /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		D339BF044395BF42F6F8241E /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D45F90F5C8308FF9FCF2567E /* Pods-HUD_Example.debug.xcconfig */,
-				D4BCC752D7BFFC6A6D56BBC3 /* Pods-HUD_Example.release.xcconfig */,
-				EEDC094872A14F0F9BBCAADD /* Pods-HUD_ExampleTV.debug.xcconfig */,
-				1920AE6D1EB88DD79BE4144A /* Pods-HUD_ExampleTV.release.xcconfig */,
-				4E7FC5A9D07F1CE1E2EC1C82 /* Pods-HUD_Tests.debug.xcconfig */,
-				8455F49E9B0D4A06B5C7D512 /* Pods-HUD_Tests.release.xcconfig */,
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -490,7 +470,6 @@
 /* Begin XCBuildConfiguration section */
 		0C7754932B550B210000AA43 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EEDC094872A14F0F9BBCAADD /* Pods-HUD_ExampleTV.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -529,7 +508,6 @@
 		};
 		0C7754942B550B210000AA43 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1920AE6D1EB88DD79BE4144A /* Pods-HUD_ExampleTV.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -674,7 +652,6 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D45F90F5C8308FF9FCF2567E /* Pods-HUD_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9RH4FTGH32;
@@ -693,7 +670,6 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4BCC752D7BFFC6A6D56BBC3 /* Pods-HUD_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 9RH4FTGH32;
@@ -712,7 +688,6 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E7FC5A9D07F1CE1E2EC1C82 /* Pods-HUD_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
@@ -737,7 +712,6 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8455F49E9B0D4A06B5C7D512 /* Pods-HUD_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 9RH4FTGH32;
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
