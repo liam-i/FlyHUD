@@ -29,13 +29,38 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 #### Swift Package Manager
 
+##### ...using `swift build`
+
+If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your Package.swift file and import the HUD library into the desired targets:
+```swift
+dependencies: [
+    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.4")
+],
+targets: [
+    .target(
+        name: "MyTarget", dependencies: [
+            .product(name: "HUD", package: "HUD"),         // Optional
+            .product(name: "HUDProgress", package: "HUD"), // Optional
+            .product(name: "HUDIndicator", package: "HUD") // Optional
+        ])
+]
+```
+
+##### ...using Xcode
+
+If you are using Xcode, then you should:
+
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.5.3"
+- Select "Up to Next Minor" with "1.5.4"
+
+> [!TIP]
+> Add this SwiftPM package as dependency of your xcode project:
+  [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
 
 #### CocoaPods
 
-HUD is available through [CocoaPods](https://cocoapods.org). To install it, simply add the following line to your Podfile:
+If you're using [CocoaPods](https://cocoapods.org), add this to your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -44,15 +69,30 @@ use_frameworks!
 
 target 'MyApp' do
   # HUD + HUDIndicator + HUDProgress
-  pod 'LPHUD', '~> 1.5.3'
+  pod 'LPHUD', '~> 1.5.4'
   # or, only HUD
-  pod 'LPHUD', '~> 1.5.3', :subspecs => ['HUD']
+  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUD']
   # or, HUD + HUDIndicator
-  pod 'LPHUD', '~> 1.5.3', :subspecs => ['HUDIndicator']
+  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
   # or, HUD + HUDProgress
-  pod 'LPHUD', '~> 1.5.3', :subspecs => ['HUDProgress']
+  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
 end
 ```
+
+And run `pod install`.
+
+> [!IMPORTANT]  
+> CocoaPods 1.14.3 or newer is required.
+
+#### Carthage
+
+If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
+
+```ruby
+github "liam-i/HUD" ~> 1.5.4
+```
+
+And run `carthage update --platform iOS --use-xcframeworks`.
 
 ## Usage
 
@@ -127,15 +167,14 @@ To run the example project, first clone the repo, then `cd` to the root director
 The documentation for releases and `main` are available here:
 
 * [main](https://liam-i.github.io/HUD/main/documentation/lphud)
-* [1.5.3](https://liam-i.github.io/HUD/1.5.3/documentation/lphud)
+* [1.5.4](https://liam-i.github.io/HUD/1.5.4/documentation/lphud)
 
 <details>
   <summary>
   Other versions
   </summary>
 
-* [1.5.2](https://liam-i.github.io/HUD/1.5.2/documentation/lphud)
-* [1.5.0](https://liam-i.github.io/HUD/1.5.0/documentation/lphud)
+* [1.5.3](https://liam-i.github.io/HUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
 * [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)

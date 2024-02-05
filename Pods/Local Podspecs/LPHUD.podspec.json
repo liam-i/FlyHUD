@@ -1,6 +1,6 @@
 {
   "name": "LPHUD",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "summary": "A lightweight and easy-to-use HUD for iOS and tvOS apps.",
   "description": "LPHUD is a lightweight and easy-to-use HUD designed to display \nthe progress and status of ongoing tasks on iOS and tvOS.",
   "homepage": "https://github.com/liam-i/HUD",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/liam-i/HUD.git",
-    "tag": "1.5.3"
+    "tag": "1.5.4"
   },
   "platforms": {
     "ios": "11.0",

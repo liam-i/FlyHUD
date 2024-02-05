@@ -1,6 +1,6 @@
 //
 //  Task.swift
-//  HUD_Example
+//  Example iOS
 //
 //  Created by Liam on 2024/1/21.
 //  Copyright © 2024 CocoaPods. All rights reserved.

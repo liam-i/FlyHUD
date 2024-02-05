@@ -8,17 +8,17 @@ install! 'cocoapods',
 #use_frameworks!
 use_frameworks! :linkage => :static
 
-target 'HUD_Example' do
+target 'Example iOS' do
   platform :ios, '11.0'
 
   pod 'LPHUD', :path => './'#, :subspecs => ['HUD']
 
-  target 'HUD_Tests' do
+  target 'Example Tests' do
     inherit! :search_paths
   end
 end
 
-target 'HUD_ExampleTV' do
+target 'Example tvOS' do
   platform :tvos, '11.0'
 
   pod 'LPHUD', :path => './'#, :subspecs => ['HUD']

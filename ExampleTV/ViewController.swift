@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  HUD_ExampleTV
+//  Example tvOS
 //
 //  Created by liam on 2024/1/15.
 //  Copyright © 2024 CocoaPods. All rights reserved.

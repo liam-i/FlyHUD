@@ -1,6 +1,0 @@
-framework module Pods_HUD_ExampleTV {
-  umbrella header "Pods-HUD_ExampleTV-umbrella.h"
-
-  export *
-  module * { export * }
-}

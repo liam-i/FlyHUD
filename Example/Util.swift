@@ -1,6 +1,6 @@
 //
 //  Util.swift
-//  HUD_Example
+//  Example iOS
 //
 //  Created by liam on 2024/1/23.
 //  Copyright © 2024 CocoaPods. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  HUD
+//  Example iOS
 //
 //  Created by Liam on 07/09/2021.
 //  Copyright (c) 2021 Liam. All rights reserved.
