@@ -81,7 +81,7 @@ target 'MyApp' do
   # 或者，只使用 HUD 和 HUDIndicator 组件。
   pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
 
-  # 或者，只使用 HUD 和 HUDIndicator 组件。
+  # 或者，只使用 HUD 和 HUDProgress 组件。
   pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
 end
 ```

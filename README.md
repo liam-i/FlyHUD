@@ -71,7 +71,7 @@ platform :ios, '11.0'
 use_frameworks!
 
 target 'MyApp' do
-  # Use the HUD, HUDIndicator, and HUDProgress components.
+  # Use the HUD, HUDIndicator and HUDProgress components.
   pod 'LPHUD', '~> 1.5.4'
 
   # Or, just use the HUD component.
