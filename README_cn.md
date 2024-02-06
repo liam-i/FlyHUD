@@ -20,7 +20,7 @@
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8.png)
 [![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
 
-## 环境要求
+## 要求
 
 * iOS 11.0+ 
 * tvOS 11.0+ 
