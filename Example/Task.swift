@@ -3,7 +3,7 @@
 //  Example iOS
 //
 //  Created by Liam on 2024/1/21.
-//  Copyright © 2024 CocoaPods. All rights reserved.
+//  Copyright © 2024 Liam. All rights reserved.
 //
 
 import UIKit
