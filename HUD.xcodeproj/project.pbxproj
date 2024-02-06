@@ -270,7 +270,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1510;
 				LastUpgradeCheck = 1250;
-				ORGANIZATIONNAME = CocoaPods;
+				ORGANIZATIONNAME = Liam;
 				TargetAttributes = {
 					0C77546E2B550B200000AA43 = {
 						CreatedOnToolsVersion = 15.1;
