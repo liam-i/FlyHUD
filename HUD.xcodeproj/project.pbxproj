@@ -46,6 +46,7 @@
 		0C7754782B550B200000AA43 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0C77547B2B550B200000AA43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0CA1718E2B4FC97500179E2A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		0CA494362B71FC4000C0C8C7 /* README_cn.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_cn.md; sourceTree = "<group>"; };
 		0CEAB72D2B6F5AB30032DCAD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		0CEAB72F2B6F5AB40032DCAD /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		0CEAB7312B6F5AD00032DCAD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -183,6 +184,7 @@
 			children = (
 				0CA1718E2B4FC97500179E2A /* Package.swift */,
 				560C516F554DA412B5D00A24 /* LPHUD.podspec */,
+				0CA494362B71FC4000C0C8C7 /* README_cn.md */,
 				9E0324869DDCF5B38A611744 /* README.md */,
 				49272EEED1155CB868DD89DB /* LICENSE */,
 			);
