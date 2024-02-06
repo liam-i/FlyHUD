@@ -29,9 +29,9 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 ## Installation
 
-#### Swift Package Manager
+### Swift Package Manager
 
-##### ...using `swift build`
+#### ...using `swift build`
 
 If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your `Package.swift` file and import the HUD library into the desired targets:
 ```swift
@@ -48,7 +48,7 @@ targets: [
 ]
 ```
 
-##### ...using Xcode
+#### ...using Xcode
 
 If you are using Xcode, then you should:
 
@@ -59,7 +59,7 @@ If you are using Xcode, then you should:
 > [!TIP]
 > For detailed tutorials, see: [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
 
-#### CocoaPods
+### CocoaPods
 
 If you're using [CocoaPods](https://cocoapods.org), add this to your `Podfile`:
 
@@ -90,7 +90,7 @@ And run `pod install`.
 > [!IMPORTANT]  
 > CocoaPods 1.14.3 or newer is required.
 
-#### Carthage
+### Carthage
 
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
@@ -104,7 +104,7 @@ And run `carthage update --platform iOS --use-xcframeworks`.
 
 Using `HUD` in your application is very simple.
 
-* Displays the status HUD of an indeterminate tasks.
+* Displays the status HUD of an indeterminate tasks:
 
 ```swift
 let hud = HUD.show(to: view)
@@ -116,7 +116,7 @@ DispatchQueue.global().async {
 }
 ```
 
-* Displays a task's progress HUD.
+* Displays a task's progress HUD:
 
 ```swift
 let hud = HUD.show(to: view, mode: .progress(), label: "Loading")
@@ -127,19 +127,19 @@ Task.request { progress in
 }
 ```
 
-* Displays a text-only status HUD.
+* Displays a text-only status HUD:
 
 ```swift
 HUD.showStatus(to: view, label: "Wrong password")
 ```
 
-* Displays a custom view's status HUD. e.g. a UIImageView.
+* Displays a custom view's status HUD. e.g. a UIImageView:
 
 ```swift
 HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "Checkmark")?.withRenderingMode(.alwaysTemplate))), label: "Completed")
 ```
 
-* Displays a custom view's status HUD. And the UIImageView is on the left.
+* Displays a custom view's status HUD. And the UIImageView is on the left:
 
 ```swift
 HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "warning"))), label: "You have an unfinished task.") {
@@ -147,13 +147,13 @@ HUD.showStatus(to: view, mode: .custom(UIImageView(image: UIImage(named: "warnin
 }
 ```
 
-* Sets the animation that should be used when showing and hiding the HUD. E.g. style, duration, spring damping.
+* Sets the animation that should be used when showing and hiding the HUD. E.g. style, duration, spring damping:
 
 ```swift
 HUD.showStatus(to: view, using: .animation(.slideUpDown, damping: .default, duration: 0.3), label: "Wrong password")
 ```
 
-* Enable keyboard layout guide to track the keyboard's position in your app’s layout.
+* Enable keyboard layout guide to track the keyboard's position in your app’s layout:
 
 ```swift
 HUD.showStatus(to: view, label: "You have a message.") {

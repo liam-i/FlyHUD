@@ -29,9 +29,9 @@
 
 ## 安装
 
-#### Swift Package Manager
+### Swift Package Manager
 
-##### ...使用 `swift build`
+#### ...使用 `swift build`
 
 如果你使用 [Swift Package Manager](https://www.swift.org/documentation/package-manager)，可在你的 `Package.swift` 文件添加依赖，并将 HUD 库导入到所需的目标中：
 
@@ -49,7 +49,7 @@ targets: [
 ]
 ```
 
-##### ...使用 Xcode
+#### ...使用 Xcode
 
 如果你使用 Xcode，那么你应该：
 
@@ -60,7 +60,7 @@ targets: [
 > [!TIP]
 > 相关详细教程，请查看：[Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
 
-#### CocoaPods
+### CocoaPods
 
 如果你使用 [CocoaPods](https://cocoapods.org)，可将一下内容添加到你的 `Podfile` 中：
 
@@ -91,7 +91,7 @@ end
 > [!IMPORTANT]  
 > 需要 CocoaPods 1.14.3 或更高版本。
 
-#### Carthage
+### Carthage
 
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
