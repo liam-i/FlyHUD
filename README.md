@@ -6,7 +6,7 @@
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
 [![Carthage](https://img.shields.io/badge/Carthage-supported-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
 [![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/HUD/main/documentation/lphud)
-[![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
+[![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://github.com/liam-i/HUD/blob/dev/LICENSE)
 
 English | [简体中文](./README_cn.md)
 
