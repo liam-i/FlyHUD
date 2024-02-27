@@ -7,74 +7,20 @@
 //
 
 import UIKit
-import LPHUD
 
 class PresentViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
 
     @IBAction func showHUDClicked(_ sender: UIButton) {
-        HUD.showStatus(to: view, 
-                       duration: .greatestFiniteMagnitude,
-                       using: .animation(.slideDownUp, damping: .default),
-                       mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
-                       label: "You have an unfinished task.", 
-                       offset: .h.vMinOffset) {
-            $0.contentView.indicatorPosition = .leading
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .bottom()
-        }
-        HUD.show(to: view, 
-                 using: .animation(.zoomInOut, damping: .default),
-                 label: "Loading") {
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .center()
-        }
-        HUD.showStatus(to: view, 
-                       duration: .greatestFiniteMagnitude,
-                       using: .animation(.slideUpDown, damping: .default),
-                       mode: .text, 
-                       label: "Wrong password",
-                       offset: .h.vMaxOffset) {
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .bottom()
-        }
-
-        HUD.showStatus(to: containerView, 
-                       duration: .greatestFiniteMagnitude,
-                       using: .animation(.slideDownUp, damping: .default),
-                       mode: .custom(UIImageView(image: UIImage(named: "warning"))), 
-                       label: "You have a message.",
-                       offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
-            $0.contentView.indicatorPosition = .trailing
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .bottom()
-        }
-        HUD.show(to: containerView,
-                 using: .animation(.zoomOutIn, damping: .default),
-                 label: "Loading") {
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .center()
-            $0.layout.offset.x = .h.maxOffset
-        }
-        HUD.showStatus(to: containerView, 
-                       duration: .greatestFiniteMagnitude,
-                       using: .animation(.slideUpDown, damping: .default),
-                       mode: .text,
-                       label: "Wrong password",
-                       offset: CGPoint(x: .h.maxOffset, y: .h.maxOffset)) {
-            $0.isEventDeliveryEnabled = true
-            $0.keyboardGuide = .bottom()
-        }
+        HUDBridgingOC.showMultipleHUDs(to: view, containerView: containerView)
     }
 
     @IBAction func hideTopHUDClicked(_ sender: UIButton) {
-        HUD.hide(for: view)
-        HUD.hide(for: containerView)
+        HUDBridgingOC.hide(for: view, containerView: containerView)
     }
 
-    @IBAction func hideAllHUDClicked(_ sender: Any) {
-        HUD.hideAll(for: view)
-        HUD.hideAll(for: containerView)
+    @IBAction func hideAllHUDClicked(_ sender: UIButton) {
+        HUDBridgingOC.hideAll(for: view, containerView: containerView)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

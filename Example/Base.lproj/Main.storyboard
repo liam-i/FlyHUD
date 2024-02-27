@@ -11,7 +11,7 @@
         <!--HUD-->
         <scene sceneID="cgo-QS-Bds">
             <objects>
-                <tableViewController id="jRh-Me-Knz" customClass="ViewController" customModule="HUD_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="jRh-Me-Knz" customClass="ViewController" customModule="Example_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="gSI-xk-1i8">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -448,7 +448,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5JC-JI-jWj">
                                                                     <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="50"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1000" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-Vs-J3p" customClass="RotateImageView" customModule="HUD_Example" customModuleProvider="target">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1000" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="Qh7-Vs-J3p" customClass="RotateImageView" customModule="Example_iOS" customModuleProvider="target">
                                                                             <rect key="frame" x="46.666666666666629" y="6.6666666666666679" width="37" height="37"/>
                                                                             <color key="tintColor" systemColor="secondaryLabelColor"/>
                                                                             <constraints>
@@ -1303,7 +1303,7 @@
         <!--Present View Controller-->
         <scene sceneID="zs9-th-lKA">
             <objects>
-                <viewController id="ewt-GE-0bB" customClass="PresentViewController" customModule="HUD_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ewt-GE-0bB" customClass="PresentViewController" customModule="Example_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oMv-Ls-hFs"/>
                         <viewControllerLayoutGuide type="bottom" id="UwV-Lm-xEK"/>
@@ -1356,7 +1356,7 @@
                                     <color key="titleColor" systemColor="systemGray2Color"/>
                                 </state>
                                 <connections>
-                                    <action selector="hideAllHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="BDM-6i-q09"/>
+                                    <action selector="hideAllHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="RMC-Vg-Co7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OnU-gd-eYF">
@@ -1373,13 +1373,29 @@
                                     <action selector="hideTopHUDClicked:" destination="ewt-GE-0bB" eventType="touchUpInside" id="lks-FW-1HJ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dRe-Ck-41g">
+                                <rect key="frame" x="289" y="20" width="88" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Present OC">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" systemColor="systemGray2Color"/>
+                                </state>
+                                <connections>
+                                    <segue destination="nt7-lU-qf6" kind="presentation" id="ok4-cU-WYC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="wSB-GJ-efW" secondAttribute="bottom" id="Bhg-1K-FTr"/>
                             <constraint firstItem="iIy-3b-H1l" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="EmH-ju-aNT"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="dRe-Ck-41g" secondAttribute="trailing" id="N9s-9Z-3l2"/>
                             <constraint firstItem="8bF-3g-zx1" firstAttribute="top" secondItem="oMv-Ls-hFs" secondAttribute="bottom" constant="20" id="NqK-Q7-e7m"/>
                             <constraint firstItem="OnU-gd-eYF" firstAttribute="top" secondItem="8bF-3g-zx1" secondAttribute="bottom" constant="5" id="SkY-9n-Atm"/>
+                            <constraint firstItem="dRe-Ck-41g" firstAttribute="top" secondItem="oMv-Ls-hFs" secondAttribute="bottom" constant="20" id="Th0-Bv-H7G"/>
                             <constraint firstItem="8bF-3g-zx1" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="Uiu-om-rAs"/>
                             <constraint firstAttribute="trailing" secondItem="wSB-GJ-efW" secondAttribute="trailing" id="VHl-sZ-dvT"/>
                             <constraint firstItem="tHP-0t-Cvk" firstAttribute="leading" secondItem="I7T-zT-QAM" secondAttribute="leadingMargin" id="W5E-DL-h4H"/>
@@ -1418,6 +1434,104 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kjq-as-CLg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="238" y="160"/>
+        </scene>
+        <!--Present View Controller-->
+        <scene sceneID="NA5-Ik-tf5">
+            <objects>
+                <viewController id="nt7-lU-qf6" customClass="OCPresentViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dd3-qa-rd3"/>
+                        <viewControllerLayoutGuide type="bottom" id="kbM-Ty-GIv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dcY-93-Fct">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Show Keyboard" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Ku-oj-3Rh">
+                                <rect key="frame" x="16" y="139" width="129" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lga-Za-cZ7">
+                                <rect key="frame" x="93" y="542" width="300" height="300"/>
+                                <color key="backgroundColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="C9L-he-sUw"/>
+                                    <constraint firstAttribute="height" constant="300" id="bcQ-K1-mmK"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap the screen to hide the keyboard." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbB-Px-8pB">
+                                <rect key="frame" x="16" y="183" width="236" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="systemGray3Color"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lm0-8i-KvY">
+                                <rect key="frame" x="16" y="20" width="83" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Show HUD">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" systemColor="systemGray2Color"/>
+                                </state>
+                                <connections>
+                                    <action selector="showHUDClicked:" destination="nt7-lU-qf6" eventType="touchUpInside" id="L7O-MB-anI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6zk-87-jq5">
+                                <rect key="frame" x="16" y="96" width="99" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Hide All HUD">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" systemColor="systemGray2Color"/>
+                                </state>
+                                <connections>
+                                    <action selector="hideAllHUDClicked:" destination="nt7-lU-qf6" eventType="touchUpInside" id="1ae-eo-UEj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fms-uD-eFo">
+                                <rect key="frame" x="16" y="58" width="152" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Hide top-most HUD">
+                                    <color key="titleColor" systemColor="labelColor"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" systemColor="systemGray2Color"/>
+                                </state>
+                                <connections>
+                                    <action selector="hideTopHUDClicked:" destination="nt7-lU-qf6" eventType="touchUpInside" id="5Iy-NT-1yr"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Lm0-8i-KvY" firstAttribute="leading" secondItem="dcY-93-Fct" secondAttribute="leadingMargin" id="4SH-1G-MpR"/>
+                            <constraint firstItem="Fms-uD-eFo" firstAttribute="top" secondItem="Lm0-8i-KvY" secondAttribute="bottom" constant="5" id="Fw4-Yh-S5Q"/>
+                            <constraint firstAttribute="bottom" secondItem="lga-Za-cZ7" secondAttribute="bottom" id="Iko-sv-iBV"/>
+                            <constraint firstItem="6zk-87-jq5" firstAttribute="leading" secondItem="dcY-93-Fct" secondAttribute="leadingMargin" id="JTd-D2-lOv"/>
+                            <constraint firstItem="6zk-87-jq5" firstAttribute="top" secondItem="Fms-uD-eFo" secondAttribute="bottom" constant="5" id="KDr-dc-o9G"/>
+                            <constraint firstItem="Fms-uD-eFo" firstAttribute="leading" secondItem="dcY-93-Fct" secondAttribute="leadingMargin" id="KuZ-er-N04"/>
+                            <constraint firstItem="dbB-Px-8pB" firstAttribute="top" secondItem="8Ku-oj-3Rh" secondAttribute="bottom" constant="10" id="R4z-Td-5RO"/>
+                            <constraint firstItem="8Ku-oj-3Rh" firstAttribute="leading" secondItem="dcY-93-Fct" secondAttribute="leadingMargin" id="bfR-wh-1p8"/>
+                            <constraint firstAttribute="trailing" secondItem="lga-Za-cZ7" secondAttribute="trailing" id="cvB-Ox-ZZ6"/>
+                            <constraint firstItem="dbB-Px-8pB" firstAttribute="leading" secondItem="dcY-93-Fct" secondAttribute="leadingMargin" id="eus-Jl-HQc"/>
+                            <constraint firstItem="Lm0-8i-KvY" firstAttribute="top" secondItem="dd3-qa-rd3" secondAttribute="bottom" constant="20" id="gfa-nY-RxD"/>
+                            <constraint firstItem="8Ku-oj-3Rh" firstAttribute="top" secondItem="6zk-87-jq5" secondAttribute="bottom" constant="10" id="kg6-Z8-QE0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="lga-Za-cZ7" id="GVn-br-7CI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QVm-Se-Neu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2479" y="158"/>
         </scene>
     </scenes>
     <resources>

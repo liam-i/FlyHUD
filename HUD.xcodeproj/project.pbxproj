@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0C18476D2B5F8E1000E0E8FC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C18476C2B5F8E1000E0E8FC /* Util.swift */; };
+		0C2619412B8DD4E500F6DF16 /* OCPresentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2619402B8DD4E500F6DF16 /* OCPresentViewController.m */; };
+		0C2619452B8DD5D400F6DF16 /* HUD-Bridging-OC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2619442B8DD5D400F6DF16 /* HUD-Bridging-OC.swift */; };
 		0C7754722B550B200000AA43 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7754712B550B200000AA43 /* AppDelegate.swift */; };
 		0C7754742B550B200000AA43 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7754732B550B200000AA43 /* ViewController.swift */; };
 		0C7754772B550B200000AA43 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C7754752B550B200000AA43 /* Main.storyboard */; };
@@ -39,6 +41,10 @@
 
 /* Begin PBXFileReference section */
 		0C18476C2B5F8E1000E0E8FC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		0C26193E2B8DD4E400F6DF16 /* Example iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example iOS-Bridging-Header.h"; sourceTree = "<group>"; };
+		0C26193F2B8DD4E500F6DF16 /* OCPresentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCPresentViewController.h; sourceTree = "<group>"; };
+		0C2619402B8DD4E500F6DF16 /* OCPresentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCPresentViewController.m; sourceTree = "<group>"; };
+		0C2619442B8DD5D400F6DF16 /* HUD-Bridging-OC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HUD-Bridging-OC.swift"; sourceTree = "<group>"; };
 		0C77546F2B550B200000AA43 /* Example tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C7754712B550B200000AA43 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0C7754732B550B200000AA43 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -161,10 +167,14 @@
 				E8AD997F275D06D700910F91 /* Configuration.swift */,
 				0C18476C2B5F8E1000E0E8FC /* Util.swift */,
 				E8921D922B5D5DE10005BD10 /* Task.swift */,
+				0C2619442B8DD5D400F6DF16 /* HUD-Bridging-OC.swift */,
+				0C26193F2B8DD4E500F6DF16 /* OCPresentViewController.h */,
+				0C2619402B8DD4E500F6DF16 /* OCPresentViewController.m */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				1828E0942643B700004E75A3 /* LaunchScreen.storyboard */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
 				E8AD997B275CFDFC00910F91 /* Assets.xcassets */,
+				0C26193E2B8DD4E400F6DF16 /* Example iOS-Bridging-Header.h */,
 			);
 			name = "Example iOS";
 			path = Example;
@@ -278,7 +288,7 @@
 					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 1250;
+						LastSwiftMigration = 1520;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -423,6 +433,8 @@
 			files = (
 				E8921D932B5D5DE10005BD10 /* Task.swift in Sources */,
 				E8AD9980275D06D700910F91 /* Configuration.swift in Sources */,
+				0C2619412B8DD4E500F6DF16 /* OCPresentViewController.m in Sources */,
+				0C2619452B8DD5D400F6DF16 /* HUD-Bridging-OC.swift in Sources */,
 				E8B21F632B62AA9E00A52A9C /* PresentViewController.swift in Sources */,
 				0C18476D2B5F8E1000E0E8FC /* Util.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
@@ -677,6 +689,7 @@
 			baseConfigurationReference = 3685DFBEC5C23405346300DE /* Pods-Example iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = "";
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				INFOPLIST_FILE = Example/Info.plist;
@@ -685,6 +698,8 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.liam.HUD-ExampleiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example iOS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
@@ -695,6 +710,7 @@
 			baseConfigurationReference = E28BB3D6BB51EF73A439CBB2 /* Pods-Example iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = "";
 				DOCC_HOSTING_BASE_PATH = HUD/1.4.0;
 				INFOPLIST_FILE = Example/Info.plist;
@@ -703,6 +719,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.liam.HUD-ExampleiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example iOS-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 			};
