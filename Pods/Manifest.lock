@@ -1,12 +1,12 @@
 PODS:
-  - FlyHUD (1.5.4):
-    - FlyHUD/HUD (= 1.5.4)
-    - FlyHUD/HUDIndicator (= 1.5.4)
-    - FlyHUD/HUDProgress (= 1.5.4)
-  - FlyHUD/HUD (1.5.4)
-  - FlyHUD/HUDIndicator (1.5.4):
+  - FlyHUD (1.5.5):
+    - FlyHUD/HUD (= 1.5.5)
+    - FlyHUD/HUDIndicator (= 1.5.5)
+    - FlyHUD/HUDProgress (= 1.5.5)
+  - FlyHUD/HUD (1.5.5)
+  - FlyHUD/HUDIndicator (1.5.5):
     - FlyHUD/HUD
-  - FlyHUD/HUDProgress (1.5.4):
+  - FlyHUD/HUDProgress (1.5.5):
     - FlyHUD/HUD
 
 DEPENDENCIES:
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :path: "./"
 
 SPEC CHECKSUMS:
-  FlyHUD: 4c49a37bc9886f3e6ad0eb91b7c30e557d451f17
+  FlyHUD: d1559a49c1b4abd6d2aab0ce8880cbe8dd86fdc8
 
 PODFILE CHECKSUM: b9f59304c22c4959e5fd5c7d53dde243fdfae42c
 

@@ -38,7 +38,7 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your `Package.swift` file and import the HUD library into the desired targets:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.4")
+    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.5")
 ],
 targets: [
     .target(
@@ -56,7 +56,7 @@ If you are using Xcode, then you should:
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.5.4"
+- Select "Up to Next Minor" with "1.5.5"
 
 > [!TIP]
 > For detailed tutorials, see: [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -74,16 +74,16 @@ use_frameworks!
 
 target 'MyApp' do
   # Use the HUD, HUDIndicator and HUDProgress components.
-  pod 'FlyHUD', '~> 1.5.4'
+  pod 'FlyHUD', '~> 1.5.5'
 
   # Or, just use the HUD component.
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUD']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUD']
 
   # Or, just use the HUD and HUDIndicator components.
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUDIndicator']
 
   # Or, just use the HUD and HUDProgress components.
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUDProgress']
 end
 ```
 
@@ -97,7 +97,7 @@ And run `pod install`.
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
 ```ruby
-github "liam-i/HUD" ~> 1.5.4
+github "liam-i/HUD" ~> 1.5.5
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.
@@ -174,14 +174,15 @@ To run the example project, first clone the repo, then `cd` to the root director
 
 The documentation for releases and `main` are available here:
 
-* [main](https://liam-i.github.io/FlyHUD/main/documentation/lphud)
-* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
+* [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
+* [1.5.5](https://liam-i.github.io/FlyHUD/1.5.5/documentation/flyhud)
 
 <details>
   <summary>
   Other versions
   </summary>
 
+* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)

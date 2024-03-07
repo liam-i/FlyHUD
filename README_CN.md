@@ -39,7 +39,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.4")
+    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.5")
 ],
 targets: [
     .target(
@@ -57,7 +57,7 @@ targets: [
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/HUD.git`
-- Select "Up to Next Minor" with "1.5.4"
+- Select "Up to Next Minor" with "1.5.5"
 
 > [!TIP]
 > 相关详细教程，请查看：[Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -75,16 +75,16 @@ use_frameworks!
 
 target 'MyApp' do
   # 使用 HUD、HUDIndicator 和 HUDProgress 组件。
-  pod 'FlyHUD', '~> 1.5.4'
+  pod 'FlyHUD', '~> 1.5.5'
 
   # 或者，只使用 HUD 组件。
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUD']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUD']
 
   # 或者，只使用 HUD 和 HUDIndicator 组件。
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUDIndicator']
 
   # 或者，只使用 HUD 和 HUDProgress 组件。
-  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
+  pod 'FlyHUD', '~> 1.5.5', :subspecs => ['HUDProgress']
 end
 ```
 
@@ -98,7 +98,7 @@ end
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
 ```ruby
-github "liam-i/HUD" ~> 1.5.4
+github "liam-i/HUD" ~> 1.5.5
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。
@@ -175,14 +175,15 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
 版本和 `main` 分支的文档可查看此处：
 
-* [main](https://liam-i.github.io/FlyHUD/main/documentation/lphud)
-* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
+* [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
+* [1.5.5](https://liam-i.github.io/FlyHUD/1.5.5/documentation/flyhud)
 
 <details>
   <summary>
   其他版本
   </summary>
 
+* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
