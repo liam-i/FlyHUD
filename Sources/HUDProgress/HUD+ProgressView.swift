@@ -1,6 +1,6 @@
 //
 //  Model+ProgressView.swift
-//  HUD <https://github.com/liam-i/HUD>
+//  HUD <https://github.com/liam-i/FlyHUD>
 //
 //  Created by liam on 2024/1/19.
 //  Copyright (c) 2021 Liam. All rights reserved.

@@ -38,14 +38,14 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your `Package.swift` file and import the HUD library into the desired targets:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.5")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.5")
 ],
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "HUD", package: "HUD"),         // Optional
-            .product(name: "HUDProgress", package: "HUD"), // Optional
-            .product(name: "HUDIndicator", package: "HUD") // Optional
+            .product(name: "HUD", package: "FlyHUD"),         // Optional
+            .product(name: "HUDProgress", package: "FlyHUD"), // Optional
+            .product(name: "HUDIndicator", package: "FlyHUD") // Optional
         ])
 ]
 ```
@@ -55,7 +55,7 @@ targets: [
 If you are using Xcode, then you should:
 
 - File > Swift Packages > Add Package Dependency
-- Add `https://github.com/liam-i/HUD.git`
+- Add `https://github.com/liam-i/FlyHUD.git`
 - Select "Up to Next Minor" with "1.5.5"
 
 > [!TIP]
@@ -97,7 +97,7 @@ And run `pod install`.
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
 ```ruby
-github "liam-i/HUD" ~> 1.5.5
+github "liam-i/FlyHUD" ~> 1.5.5
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.

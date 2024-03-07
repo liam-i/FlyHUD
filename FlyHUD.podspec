@@ -7,10 +7,10 @@ Pod::Spec.new do |s|
                         the progress and status of ongoing tasks on iOS and tvOS.
                        DESC
 
-  s.homepage         = 'https://github.com/liam-i/HUD'
+  s.homepage         = 'https://github.com/liam-i/FlyHUD'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Liam' => 'liam_i@163.com' }
-  s.source           = { :git => 'https://github.com/liam-i/HUD.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/liam-i/FlyHUD.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.0'
   s.tvos.deployment_target = '12.0'

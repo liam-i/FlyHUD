@@ -39,14 +39,14 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/HUD.git", from: "1.5.5")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.5")
 ],
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "HUD", package: "HUD"),         // 可选
-            .product(name: "HUDProgress", package: "HUD"), // 可选
-            .product(name: "HUDIndicator", package: "HUD") // 可选
+            .product(name: "HUD", package: "FlyHUD"),         // 可选
+            .product(name: "HUDProgress", package: "FlyHUD"), // 可选
+            .product(name: "HUDIndicator", package: "FlyHUD") // 可选
         ])
 ]
 ```
@@ -56,7 +56,7 @@ targets: [
 如果你使用 Xcode，那么你应该：
 
 - File > Swift Packages > Add Package Dependency
-- Add `https://github.com/liam-i/HUD.git`
+- Add `https://github.com/liam-i/FlyHUD.git`
 - Select "Up to Next Minor" with "1.5.5"
 
 > [!TIP]
@@ -98,7 +98,7 @@ end
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
 ```ruby
-github "liam-i/HUD" ~> 1.5.5
+github "liam-i/FlyHUD" ~> 1.5.5
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。
