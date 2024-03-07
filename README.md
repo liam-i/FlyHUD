@@ -191,6 +191,10 @@ The documentation for releases and `main` are available here:
 
   </details>
 
+## Why the name FlyHUD?
+
+The name FlyHUD combines `Fly` and `HUD` and stands out for its simplicity and expressiveness. `Fly` implies fast, efficient and flexible meaning, which is consistent with the real-time and immediacy of `HUD`. Overall, FlyHUD expresses the ability of `HUD` to present information and data quickly and efficiently.
+
 ## Credits and thanks
 
 * Thanks a lot to [Jonathan George](https://github.com/jdg) for building [MBProgressHUD](https://github.com/jdg/MBProgressHUD) - all ideas in here and many implementation details were provided by his library.

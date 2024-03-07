@@ -192,6 +192,10 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
   </details>
 
+## 为什么取名 FlyHUD？
+
+FlyHUD 这个名字结合了 `Fly` 和 `HUD`，在简洁性和表达能力上都很突出。`Fly` 暗示了快速、高效和灵活的含义，与 `HUD` 的实时性和即时性相契合。总体而言，FlyHUD 表达了 `HUD` 能够快速和高效的呈现信息和数据的能力。
+
 ## 致谢
 
 * 感谢 [Jonathan George](https://github.com/jdg) 构建的 [MBProgressHUD](https://github.com/jdg/MBProgressHUD) - 我的所有想法和许多实现细节均来自他的库。
