@@ -60,7 +60,7 @@
 /* Begin PBXFileReference section */
 		01335BF22A61841D9A87CFAF9056A24F /* FlyHUD-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "FlyHUD-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		085E909E2AA5C81EBDBCD8939E0B5FAE /* FlyHUD-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "FlyHUD-iOS.release.xcconfig"; sourceTree = "<group>"; };
-		08ADDA35011265A2F0AE701A027CB4F2 /* FlyHUD.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FlyHUD.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		08ADDA35011265A2F0AE701A027CB4F2 /* FlyHUD.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FlyHUD.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		0DD966424895D78A94D834D24B21B984 /* FlyHUD-tvOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "FlyHUD-tvOS-Info.plist"; path = "../FlyHUD-tvOS/FlyHUD-tvOS-Info.plist"; sourceTree = "<group>"; };
 		1E9E15A4B77777E2ED282F7C311AFCA5 /* FlyHUD-iOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "FlyHUD-iOS.modulemap"; sourceTree = "<group>"; };
 		1F104548CE3C430F3333D398FD74479F /* FlyHUD-iOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FlyHUD-iOS-Info.plist"; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		4160F115F17290AFCBEB21858987E8FD /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		437F8E2C20F842D690CA06B3BA2341F9 /* DisplayLink.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisplayLink.swift; sourceTree = "<group>"; };
 		48ED563CBFE4C6E5E2FDC92737649167 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD-iOS */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "FlyHUD-iOS"; path = FlyHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlyHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F923BDA6784BBDC85F4EB18DC23CFC3 /* ProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = Sources/HUDProgress/ProgressView.swift; sourceTree = "<group>"; };
 		654B38C761451AA5C3D5BEF46A31B7BC /* HUD+ProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "HUD+ProgressView.swift"; path = "Sources/HUDProgress/HUD+ProgressView.swift"; sourceTree = "<group>"; };
 		66972BE77577BC1D726AF8404D60D00F /* Model.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Sources/HUD/Model.swift; sourceTree = "<group>"; };
@@ -84,14 +84,14 @@
 		7177488F2B4E6BBA119E1059E32C8EAD /* FlyHUD-iOS-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FlyHUD-iOS-prefix.pch"; sourceTree = "<group>"; };
 		776798C68E61BD3F6BFFE51E4C1BA33D /* FlyHUD-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "FlyHUD-tvOS.debug.xcconfig"; path = "../FlyHUD-tvOS/FlyHUD-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		8B132AF1F130EDB35A0C018C5F11B7AB /* BaseView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
-		8DE94C5422D30B2857F2DDF9F8E93529 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		8DE94C5422D30B2857F2DDF9F8E93529 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		90CB266473FAFE9C10392CFBC9A07AF2 /* ShapeBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ShapeBuilder.swift; path = Sources/HUDIndicator/ShapeBuilder.swift; sourceTree = "<group>"; };
 		92B555476496BA7EFD293D4E91E1BD36 /* HUD+ActivityIndicatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "HUD+ActivityIndicatorView.swift"; path = "Sources/HUDIndicator/HUD+ActivityIndicatorView.swift"; sourceTree = "<group>"; };
 		9AE7E7A63F9B7B7C81E990C280A37CE4 /* FlyHUD-tvOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; name = "FlyHUD-tvOS.modulemap"; path = "../FlyHUD-tvOS/FlyHUD-tvOS.modulemap"; sourceTree = "<group>"; };
 		9E1F3559FD7BD9BF4F5CE59B0133D8C1 /* BackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		9EE3B4D4080920E7A2C62CC0894EA862 /* Button.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		AA5759797CA289E9FF1AA5FD0B71E239 /* FlyHUD-iOS-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FlyHUD-iOS-dummy.m"; sourceTree = "<group>"; };
-		C256970FB7043C3DBDD5A0C470A19E13 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		C256970FB7043C3DBDD5A0C470A19E13 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		D00887417989AD6EE2FC40B91C42DAB4 /* ActivityIndicatorViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorViewable.swift; sourceTree = "<group>"; };
 		D51348747BAD47076543E38C7CF36F13 /* FlyHUD-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "FlyHUD-tvOS.release.xcconfig"; path = "../FlyHUD-tvOS/FlyHUD-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		D86C079668F93D02BCD5F4AB693C8D7F /* RotateViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RotateViewable.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		5E154212910C2FBB54A28CB9A8543068 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD-iOS */,
+				58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD.framework */,
 				203C10320CBE020DDBDA79F1EEF7EEB3 /* FlyHUD-tvOS */,
 			);
 			name = Products;
@@ -325,7 +325,7 @@
 			);
 			name = "FlyHUD-iOS";
 			productName = FlyHUD;
-			productReference = 58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD-iOS */;
+			productReference = 58C0174DE6DC8FF4532FBEA5C0BB0E16 /* FlyHUD.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		E62C8D3F29D8E816648808C1363D5D81 /* FlyHUD-tvOS */ = {
@@ -565,6 +565,7 @@
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DOCC_HOSTING_BASE_PATH = FlyHUD/main;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -602,6 +603,7 @@
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DOCC_HOSTING_BASE_PATH = FlyHUD/main;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

@@ -167,7 +167,7 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD 是一个 UI 类，因此只能在主线程上访问。
 
-有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/FlyHUD/main/documentation/lphud)。
+有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)。
 
 运行 `example` 项目，先克隆存储库，然后 `cd` 到根目录并运行 `pod install`。 最后在 Xcode 中打开 `HUD.xcworkspace`。
 

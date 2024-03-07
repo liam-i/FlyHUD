@@ -166,7 +166,7 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD is a UI class and should therefore only be accessed on the main thread.
 
-For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [here](https://liam-i.github.io/FlyHUD/main/documentation/lphud).
+For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [here](https://liam-i.github.io/FlyHUD/main/documentation/flyhud).
 
 To run the example project, first clone the repo, then `cd` to the root directory and run `pod install`. Then open HUD.xcworkspace in Xcode.
 
