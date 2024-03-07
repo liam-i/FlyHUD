@@ -1,31 +1,31 @@
-# HUD
+# FlyHUD
 
 [![Swift](https://img.shields.io/badge/Swift-5.7_5.8_5.9-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.7_5.8_5.9-Orange?style=flat-square)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS_tvOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-iOS_tvOS-Green?style=flat-square)
-[![CocoaPods](https://img.shields.io/cocoapods/v/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
+[![CocoaPods](https://img.shields.io/cocoapods/v/FlyHUD.svg?style=flat)](https://cocoapods.org/pods/FlyHUD)
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
 [![Carthage](https://img.shields.io/badge/Carthage-supported-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/HUD/main/documentation/lphud)
-[![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://github.com/liam-i/HUD/blob/dev/LICENSE)
+[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
+[![License](https://img.shields.io/cocoapods/l/FlyHUD.svg?style=flat)](https://github.com/liam-i/FlyHUD/blob/dev/LICENSE)
 
-English | [简体中文](./README_cn.md)
+English | [简体中文](./README_CN.md)
 
 This is a lightweight and easy-to-use HUD designed to display the progress and status of ongoing tasks on iOS and tvOS.
 
 ## ScreenShots
 
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
 
 ## Requirements
 
-* iOS 11.0+ 
-* tvOS 11.0+ 
+* iOS 12.0+ 
+* tvOS 12.0+ 
 * Xcode 14.1+
 * Swift 5.7.1+
 
@@ -69,21 +69,21 @@ If you're using [CocoaPods](https://cocoapods.org), add this to your `Podfile`:
 source 'https://github.com/CocoaPods/Specs.git'
 # Or use CND source
 # source 'https://cdn.cocoapods.org/'
-platform :ios, '11.0'
+platform :ios, '12.0'
 use_frameworks!
 
 target 'MyApp' do
   # Use the HUD, HUDIndicator and HUDProgress components.
-  pod 'LPHUD', '~> 1.5.4'
+  pod 'FlyHUD', '~> 1.5.4'
 
   # Or, just use the HUD component.
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUD']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUD']
 
   # Or, just use the HUD and HUDIndicator components.
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
 
   # Or, just use the HUD and HUDProgress components.
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
 end
 ```
 
@@ -166,7 +166,7 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD is a UI class and should therefore only be accessed on the main thread.
 
-For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [here](https://liam-i.github.io/HUD/main/documentation/lphud).
+For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [here](https://liam-i.github.io/FlyHUD/main/documentation/lphud).
 
 To run the example project, first clone the repo, then `cd` to the root directory and run `pod install`. Then open HUD.xcworkspace in Xcode.
 
@@ -174,19 +174,19 @@ To run the example project, first clone the repo, then `cd` to the root director
 
 The documentation for releases and `main` are available here:
 
-* [main](https://liam-i.github.io/HUD/main/documentation/lphud)
-* [1.5.4](https://liam-i.github.io/HUD/1.5.4/documentation/lphud)
+* [main](https://liam-i.github.io/FlyHUD/main/documentation/lphud)
+* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 
 <details>
   <summary>
   Other versions
   </summary>
 
-* [1.5.3](https://liam-i.github.io/HUD/1.5.3/documentation/lphud)
-* [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
-* [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
-* [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
-* [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
+* [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
+* [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
+* [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
+* [1.2.6](https://liam-i.github.io/FlyHUD/1.2.6/documentation/lphud)
+* [1.1.0](https://liam-i.github.io/FlyHUD/1.1.0/documentation/lpprogresshud)
 
   </details>
 
@@ -198,4 +198,4 @@ The documentation for releases and `main` are available here:
 
 ## License
 
-HUD is available under the MIT license. See the [LICENSE](./LICENSE) file for more info.
+FlyHUD is available under the MIT license. See the [LICENSE](./LICENSE) file for more info.

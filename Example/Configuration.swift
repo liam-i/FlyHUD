@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LPHUD
+import FlyHUD
 
 enum ShowTo: CaseIterable {
     case view

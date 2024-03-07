@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double LPHUDVersionNumber;
-FOUNDATION_EXPORT const unsigned char LPHUDVersionString[];
+FOUNDATION_EXPORT double FlyHUDVersionNumber;
+FOUNDATION_EXPORT const unsigned char FlyHUDVersionString[];
 

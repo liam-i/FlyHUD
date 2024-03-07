@@ -4,19 +4,19 @@
 import PackageDescription
 
 let package = Package(
-    name: "HUD",
+    name: "FlyHUD",
     platforms: [.iOS(.v12), .tvOS(.v12)],
     products: [
         .library(
-            name: "HUD",
+            name: "FlyHUD",
             targets: ["HUD"]
         ),
         .library(
-            name: "HUDIndicator",
+            name: "FlyHUDIndicator",
             targets: ["HUDIndicator"]
         ),
         .library(
-            name: "HUDProgress",
+            name: "FlyHUDProgress",
             targets: ["HUDProgress"]
         ),
     ],

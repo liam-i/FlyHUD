@@ -1,12 +1,12 @@
-# HUD
+# FlyHUD
 
 [![Swift](https://img.shields.io/badge/Swift-5.7_5.8_5.9-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.7_5.8_5.9-Orange?style=flat-square)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS_tvOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-iOS_tvOS-Green?style=flat-square)
-[![CocoaPods](https://img.shields.io/cocoapods/v/LPHUD.svg?style=flat)](https://cocoapods.org/pods/LPHUD)
+[![CocoaPods](https://img.shields.io/cocoapods/v/FlyHUD.svg?style=flat)](https://cocoapods.org/pods/FlyHUD)
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
 [![Carthage](https://img.shields.io/badge/Carthage-supported-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/HUD/main/documentation/lphud)
-[![License](https://img.shields.io/cocoapods/l/LPHUD.svg?style=flat)](https://github.com/liam-i/HUD/blob/dev/LICENSE)
+[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
+[![License](https://img.shields.io/cocoapods/l/FlyHUD.svg?style=flat)](https://github.com/liam-i/FlyHUD/blob/dev/LICENSE)
 
 简体中文 | [English](./README.md)
 
@@ -14,18 +14,18 @@
 
 ## 屏幕截图
 
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-1.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-2.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-3.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-6.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-8.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/HUD/Screenshots/1-7.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
+[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
 
 ## 要求
 
-* iOS 11.0+ 
-* tvOS 11.0+ 
+* iOS 12.0+ 
+* tvOS 12.0+ 
 * Xcode 14.1+
 * Swift 5.7.1+
 
@@ -70,21 +70,21 @@ targets: [
 source 'https://github.com/CocoaPods/Specs.git'
 # 或者使用 CND 源
 # source 'https://cdn.cocoapods.org/'
-platform :ios, '11.0'
+platform :ios, '12.0'
 use_frameworks!
 
 target 'MyApp' do
   # 使用 HUD、HUDIndicator 和 HUDProgress 组件。
-  pod 'LPHUD', '~> 1.5.4'
+  pod 'FlyHUD', '~> 1.5.4'
 
   # 或者，只使用 HUD 组件。
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUD']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUD']
 
   # 或者，只使用 HUD 和 HUDIndicator 组件。
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDIndicator']
 
   # 或者，只使用 HUD 和 HUDProgress 组件。
-  pod 'LPHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
+  pod 'FlyHUD', '~> 1.5.4', :subspecs => ['HUDProgress']
 end
 ```
 
@@ -167,7 +167,7 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD 是一个 UI 类，因此只能在主线程上访问。
 
-有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/HUD/main/documentation/lphud)。
+有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/FlyHUD/main/documentation/lphud)。
 
 运行 `example` 项目，先克隆存储库，然后 `cd` 到根目录并运行 `pod install`。 最后在 Xcode 中打开 `HUD.xcworkspace`。
 
@@ -175,19 +175,19 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
 版本和 `main` 分支的文档可查看此处：
 
-* [main](https://liam-i.github.io/HUD/main/documentation/lphud)
-* [1.5.4](https://liam-i.github.io/HUD/1.5.4/documentation/lphud)
+* [main](https://liam-i.github.io/FlyHUD/main/documentation/lphud)
+* [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 
 <details>
   <summary>
   其他版本
   </summary>
 
-* [1.5.3](https://liam-i.github.io/HUD/1.5.3/documentation/lphud)
-* [1.4.0](https://liam-i.github.io/HUD/1.4.0/documentation/lphud)
-* [1.3.7](https://liam-i.github.io/HUD/1.3.7/documentation/lphud)
-* [1.2.6](https://liam-i.github.io/HUD/1.2.6/documentation/lphud)
-* [1.1.0](https://liam-i.github.io/HUD/1.1.0/documentation/lpprogresshud)
+* [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
+* [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
+* [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
+* [1.2.6](https://liam-i.github.io/FlyHUD/1.2.6/documentation/lphud)
+* [1.1.0](https://liam-i.github.io/FlyHUD/1.1.0/documentation/lpprogresshud)
 
   </details>
 
@@ -199,4 +199,4 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
 ## 协议
 
-HUD 使用 MIT 协议。有关详细信息，请参阅 [LICENSE](./LICENSE) 文件。
+FlyHUD 使用 MIT 协议。有关详细信息，请参阅 [LICENSE](./LICENSE) 文件。

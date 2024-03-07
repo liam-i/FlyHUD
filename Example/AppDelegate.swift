@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LPHUD
+import FlyHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import LPHUD
+import FlyHUD
 
 class HUDBridgingOC: NSObject {
     @objc class func showMultipleHUDs(to view: UIView, containerView: UIView) {

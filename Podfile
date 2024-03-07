@@ -8,10 +8,12 @@ install! 'cocoapods',
 #use_frameworks!
 use_frameworks! :linkage => :static
 
-target 'Example iOS' do
-  platform :ios, '11.0'
+workspace 'FlyHUD.xcworkspace'
 
-  pod 'LPHUD', :path => './'#, :subspecs => ['HUD']
+target 'Example iOS' do
+  platform :ios, '12.0'
+
+  pod 'FlyHUD', :path => './'#, :subspecs => ['HUD']
 
   target 'Example Tests' do
     inherit! :search_paths
@@ -19,7 +21,7 @@ target 'Example iOS' do
 end
 
 target 'Example tvOS' do
-  platform :tvos, '11.0'
+  platform :tvos, '12.0'
 
-  pod 'LPHUD', :path => './'#, :subspecs => ['HUD']
+  pod 'FlyHUD', :path => './'#, :subspecs => ['HUD']
 end

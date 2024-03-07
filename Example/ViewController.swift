@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LPHUD
+import FlyHUD
 
 class RotateImageView: UIImageView, RotateViewable {
     static var loading: RotateImageView { .init(named: "loading") }

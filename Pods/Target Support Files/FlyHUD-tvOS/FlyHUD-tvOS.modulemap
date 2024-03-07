@@ -1,0 +1,6 @@
+framework module FlyHUD {
+  umbrella header "FlyHUD-tvOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

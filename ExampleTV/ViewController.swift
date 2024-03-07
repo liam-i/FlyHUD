@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LPHUD
+import FlyHUD
 
 class ViewController: UIViewController {
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
             sender.isEnabled = true
         }
     }
-    
+
     static func request(_ sec: UInt32 = 3, progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
         let us = sec * 1000 * 1000 / 100
 

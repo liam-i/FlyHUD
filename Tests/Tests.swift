@@ -1,5 +1,5 @@
 import XCTest
-import LPHUD
+import FlyHUD
 
 class Tests: XCTestCase {
     override func setUpWithError() throws {

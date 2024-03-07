@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1250"
+   LastUpgradeVersion = "1530"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -17,7 +17,7 @@
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
                BuildableName = "Example iOS.app"
                BlueprintName = "Example iOS"
-               ReferencedContainer = "container:HUD.xcodeproj">
+               ReferencedContainer = "container:FlyHUD.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
                BuildableName = "Example Tests.xctest"
                BlueprintName = "Example Tests"
-               ReferencedContainer = "container:HUD.xcodeproj">
+               ReferencedContainer = "container:FlyHUD.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "Example iOS.app"
             BlueprintName = "Example iOS"
-            ReferencedContainer = "container:HUD.xcodeproj">
+            ReferencedContainer = "container:FlyHUD.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -58,7 +58,7 @@
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
                BuildableName = "Example Tests.xctest"
                BlueprintName = "Example Tests"
-               ReferencedContainer = "container:HUD.xcodeproj">
+               ReferencedContainer = "container:FlyHUD.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -80,7 +80,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "Example iOS.app"
             BlueprintName = "Example iOS"
-            ReferencedContainer = "container:HUD.xcodeproj">
+            ReferencedContainer = "container:FlyHUD.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -97,7 +97,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "Example iOS.app"
             BlueprintName = "Example iOS"
-            ReferencedContainer = "container:HUD.xcodeproj">
+            ReferencedContainer = "container:FlyHUD.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

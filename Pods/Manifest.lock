@@ -1,24 +1,24 @@
 PODS:
-  - LPHUD (1.5.4):
-    - LPHUD/HUD (= 1.5.4)
-    - LPHUD/HUDIndicator (= 1.5.4)
-    - LPHUD/HUDProgress (= 1.5.4)
-  - LPHUD/HUD (1.5.4)
-  - LPHUD/HUDIndicator (1.5.4):
-    - LPHUD/HUD
-  - LPHUD/HUDProgress (1.5.4):
-    - LPHUD/HUD
+  - FlyHUD (1.5.4):
+    - FlyHUD/HUD (= 1.5.4)
+    - FlyHUD/HUDIndicator (= 1.5.4)
+    - FlyHUD/HUDProgress (= 1.5.4)
+  - FlyHUD/HUD (1.5.4)
+  - FlyHUD/HUDIndicator (1.5.4):
+    - FlyHUD/HUD
+  - FlyHUD/HUDProgress (1.5.4):
+    - FlyHUD/HUD
 
 DEPENDENCIES:
-  - LPHUD (from `./`)
+  - FlyHUD (from `./`)
 
 EXTERNAL SOURCES:
-  LPHUD:
+  FlyHUD:
     :path: "./"
 
 SPEC CHECKSUMS:
-  LPHUD: 023c955af0752d19e37b870a05ff1c9c0f928e8e
+  FlyHUD: 4c49a37bc9886f3e6ad0eb91b7c30e557d451f17
 
-PODFILE CHECKSUM: 94f03a8e69d5d63c7c1d684e9373ada939ae7de6
+PODFILE CHECKSUM: b9f59304c22c4959e5fd5c7d53dde243fdfae42c
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.15.2

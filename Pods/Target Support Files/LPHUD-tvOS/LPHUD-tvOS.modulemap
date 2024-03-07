@@ -1,6 +1,0 @@
-framework module LPHUD {
-  umbrella header "LPHUD-tvOS-umbrella.h"
-
-  export *
-  module * { export * }
-}

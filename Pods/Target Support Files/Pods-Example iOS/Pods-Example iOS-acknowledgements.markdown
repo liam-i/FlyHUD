@@ -1,7 +1,7 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## LPHUD
+## FlyHUD
 
 Copyright (c) 2021 Liam <liam_i@163.com>
 

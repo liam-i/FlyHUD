@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LPl-n0-fjf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LPl-n0-fjf">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,7 +36,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D3v-QL-Rj0">
                                                                     <rect key="frame" x="0.0" y="0.0" width="196" height="30"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qnR-tH-Adf" customClass="ProgressView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qnR-tH-Adf" customClass="ProgressView" customModule="FlyHUD">
                                                                             <rect key="frame" x="38" y="10" width="120" height="10"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="10" id="JcE-ww-aoK"/>
@@ -67,7 +67,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ups-kV-cV6">
                                                                     <rect key="frame" x="197" y="0.0" width="196" height="30"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VC6-zh-Idk" customClass="ProgressView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VC6-zh-Idk" customClass="ProgressView" customModule="FlyHUD">
                                                                             <rect key="frame" x="38" y="10" width="120" height="10"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="120" id="Gk3-z3-Nbq"/>
@@ -106,7 +106,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H6i-MH-PRb">
                                                                     <rect key="frame" x="0.0" y="0.0" width="130.33333333333334" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFA-KL-ZmS" customClass="ProgressView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFA-KL-ZmS" customClass="ProgressView" customModule="FlyHUD">
                                                                             <rect key="frame" x="46.666666666666657" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="37" id="ORz-G3-mwq"/>
@@ -137,7 +137,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kcf-hd-ev1">
                                                                     <rect key="frame" x="131.33333333333331" y="0.0" width="130.33333333333331" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37u-FC-hyK" customClass="ProgressView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="37u-FC-hyK" customClass="ProgressView" customModule="FlyHUD">
                                                                             <rect key="frame" x="46.666666666666657" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="37" id="Awc-P4-pET"/>
@@ -168,7 +168,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ih0-vM-ipc">
                                                                     <rect key="frame" x="262.66666666666669" y="0.0" width="130.33333333333331" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1N-KZ-doJ" customClass="ProgressView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a1N-KZ-doJ" customClass="ProgressView" customModule="FlyHUD">
                                                                             <rect key="frame" x="46.666666666666629" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="37" id="GzJ-qT-Pdc"/>
@@ -231,7 +231,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8T5-ls-jak">
                                                                     <rect key="frame" x="0.0" y="0.0" width="97.666666666666671" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ozY-AA-wVv" customClass="ActivityIndicatorView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ozY-AA-wVv" customClass="ActivityIndicatorView" customModule="FlyHUD">
                                                                             <rect key="frame" x="30.333333333333329" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="37" id="7In-tB-hXX"/>
@@ -262,7 +262,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6dc-Wr-afO">
                                                                     <rect key="frame" x="98.666666666666686" y="0.0" width="97.333333333333314" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b9Q-1b-E6p" customClass="ActivityIndicatorView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b9Q-1b-E6p" customClass="ActivityIndicatorView" customModule="FlyHUD">
                                                                             <rect key="frame" x="29.999999999999986" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="37" id="2rE-vL-urY"/>
@@ -293,7 +293,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfT-gA-cs6">
                                                                     <rect key="frame" x="197" y="0.0" width="97.666666666666686" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rpJ-OB-tdu" customClass="ActivityIndicatorView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rpJ-OB-tdu" customClass="ActivityIndicatorView" customModule="FlyHUD">
                                                                             <rect key="frame" x="30.333333333333343" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="37" id="8G6-TJ-tu5"/>
@@ -324,7 +324,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ves-zW-7rd">
                                                                     <rect key="frame" x="295.66666666666669" y="0.0" width="97.333333333333314" height="55"/>
                                                                     <subviews>
-                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfF-FT-POh" customClass="ActivityIndicatorView" customModule="LPHUD">
+                                                                        <view tag="1000" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfF-FT-POh" customClass="ActivityIndicatorView" customModule="FlyHUD">
                                                                             <rect key="frame" x="30" y="9" width="37" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="37" id="9GL-lX-OOP"/>
@@ -1540,28 +1540,28 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemFillColor">
-            <color red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray3Color">
-            <color red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F06103214677460402FB753596A70197"
-               BuildableName = "LPHUD.framework"
-               BlueprintName = "LPHUD-tvOS"
-               ReferencedContainer = "container:LPHUD.xcodeproj">
+               BlueprintIdentifier = "BE84E99F080999C15C639E453A009281"
+               BuildableName = "FlyHUD.framework"
+               BlueprintName = "FlyHUD-iOS"
+               ReferencedContainer = "container:FlyHUD.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
