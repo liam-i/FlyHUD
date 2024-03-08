@@ -16,17 +16,17 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '12.0'
   s.swift_versions = ['5.0']
 
-  s.subspec 'HUD' do |ss|
+  s.subspec 'FlyHUD' do |ss|
     ss.source_files = ['Sources/HUD/**/*']
   end
 
-  s.subspec 'HUDIndicator' do |ss|
-    ss.source_files = ['Sources/HUDIndicator/**/*']
-    ss.dependency 'FlyHUD/HUD'
+  s.subspec 'FlyIndicatorHUD' do |ss|
+    ss.source_files = ['Sources/IndicatorHUD/**/*']
+    ss.dependency 'FlyHUD/FlyHUD'
   end
 
-  s.subspec 'HUDProgress' do |ss|
-    ss.source_files = ['Sources/HUDProgress/**/*']
-    ss.dependency 'FlyHUD/HUD'
+  s.subspec 'FlyProgressHUD' do |ss|
+    ss.source_files = ['Sources/ProgressHUD/**/*']
+    ss.dependency 'FlyHUD/FlyHUD'
   end
 end

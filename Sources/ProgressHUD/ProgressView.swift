@@ -10,8 +10,9 @@
 //
 
 import UIKit
-#if canImport(HUD)
-import HUD
+
+#if !COCOAPODS && canImport(FlyHUD)
+import FlyHUD
 #endif
 
 /// The styles permitted for the progress bar.

@@ -13,7 +13,7 @@ workspace 'FlyHUD.xcworkspace'
 target 'Example iOS' do
   platform :ios, '12.0'
 
-  pod 'FlyHUD', :path => './'#, :subspecs => ['HUD']
+  pod 'FlyHUD', :path => './'#, :subspecs => ['FlyHUD']
 
   target 'Example Tests' do
     inherit! :search_paths
@@ -23,5 +23,5 @@ end
 target 'Example tvOS' do
   platform :tvos, '12.0'
 
-  pod 'FlyHUD', :path => './'#, :subspecs => ['HUD']
+  pod 'FlyHUD', :path => './'#, :subspecs => ['FlyHUD']
 end

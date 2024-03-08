@@ -24,29 +24,29 @@
   ],
   "subspecs": [
     {
-      "name": "HUD",
+      "name": "FlyHUD",
       "source_files": [
         "Sources/HUD/**/*"
       ]
     },
     {
-      "name": "HUDIndicator",
+      "name": "FlyIndicatorHUD",
       "source_files": [
-        "Sources/HUDIndicator/**/*"
+        "Sources/IndicatorHUD/**/*"
       ],
       "dependencies": {
-        "FlyHUD/HUD": [
+        "FlyHUD/FlyHUD": [
 
         ]
       }
     },
     {
-      "name": "HUDProgress",
+      "name": "FlyProgressHUD",
       "source_files": [
-        "Sources/HUDProgress/**/*"
+        "Sources/ProgressHUD/**/*"
       ],
       "dependencies": {
-        "FlyHUD/HUD": [
+        "FlyHUD/FlyHUD": [
 
         ]
       }

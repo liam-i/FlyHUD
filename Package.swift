@@ -9,28 +9,31 @@ let package = Package(
     products: [
         .library(
             name: "FlyHUD",
-            targets: ["HUD"]
+            targets: ["FlyHUD"]
         ),
         .library(
-            name: "FlyHUDIndicator",
-            targets: ["HUDIndicator"]
+            name: "FlyIndicatorHUD",
+            targets: ["FlyIndicatorHUD"]
         ),
         .library(
-            name: "FlyHUDProgress",
-            targets: ["HUDProgress"]
+            name: "FlyProgressHUD",
+            targets: ["FlyProgressHUD"]
         ),
     ],
     targets: [
         .target(
-            name: "HUD"
+            name: "FlyHUD",
+            path: "Sources/HUD"
         ),
         .target(
-            name: "HUDIndicator",
-            dependencies: ["HUD"]
+            name: "FlyIndicatorHUD",
+            dependencies: ["FlyHUD"],
+            path: "Sources/IndicatorHUD"
         ),
         .target(
-            name: "HUDProgress",
-            dependencies: ["HUD"]
+            name: "FlyProgressHUD",
+            dependencies: ["FlyHUD"],
+            path: "Sources/ProgressHUD"
         ),
     ]
 )
