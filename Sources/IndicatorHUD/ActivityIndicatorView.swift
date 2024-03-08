@@ -78,7 +78,8 @@ extension ActivityIndicatorView {
 ///         methods. To automatically hide the activity indicator when animation stops, set the hidesWhenStopped
 ///         property to true. You can set the color of the activity indicator by using the color property.
 open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
-    /// The basic appearance of the activity indicator view. The value of this property is a constant that specifies the style of the activity indicator view.
+    /// The basic appearance of the activity indicator view. The value of this property is a constant that specifies 
+    /// the style of the activity indicator view. `Default to Style.ringClipRotate`.
     ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ActivityIndicatorView.Style.
@@ -123,26 +124,21 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ActivityIndicatorView.Style for descriptions of the style constants.
-    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
-    ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
+    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates. `Default to .zero`.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public convenience init(style: Style, size: CGSize = .zero,
-                            populator: ((ActivityIndicatorView) -> Void)? = nil) {
-        self.init(styleable: style, size: size, populator: populator)
+    public convenience init(style: Style, size: CGSize = .zero) {
+        self.init(styleable: style, size: size)
     }
 
     /// Creates an activity indicator view with the specified style.
     ///
     /// - Parameters:
     ///   - styleable: A constant that specifies the style of the object to be created.
-    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.
-    ///   - populator: A block or function that populates the `ActivityIndicatorView`, which is passed into the block as an argument.
+    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.`Default to .zero`.
     /// - Returns: An initialized ActivityIndicatorView object.
-    public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero,
-                            populator: ((ActivityIndicatorView) -> Void)? = nil) {
+    public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero) {
         self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
-        populator?(self)
     }
 
     /// Common initialization method.

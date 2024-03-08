@@ -19,9 +19,9 @@ class ViewController: UIViewController {
         sender.isEnabled = false
 
         let hud = HUD.show(to: view) {
-            $0.contentView.mode = .custom(ProgressView(style: .buttBar, size: CGSize(width: 320, height: 40), populator: {
+            $0.contentView.mode = .custom(ProgressView(style: .buttBar, size: CGSize(width: 320, height: 40)).h.then {
                 $0.lineWidth = 10
-            }))
+            })
             $0.contentView.label.text = NSLocalizedString("Loading...", comment: "HUD loading title")
             $0.contentView.label.font = .boldSystemFont(ofSize: 36)
         }

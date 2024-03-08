@@ -94,7 +94,8 @@ extension ProgressView {
 ///
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
 open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
-    /// The current graphical style of the progress view. The value of this property is a constant that specifies the style of the progress view.
+    /// The current graphical style of the progress view. The value of this property is a constant that specifies
+    /// the style of the progress view. `Default to Style.buttBar`.
     ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
@@ -165,26 +166,21 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ProgressView.Style for descriptions of the style constants.
-    ///   - size: Specifying the size of the progress view in its superview’s coordinates.
-    ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
+    ///   - size: Specifying the size of the progress view in its superview’s coordinates. `Default to .zero`.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(style: Style, size: CGSize = .zero,
-                            populator: ((ProgressView) -> Void)? = nil) {
-        self.init(styleable: style, size: size, populator: populator)
+    public convenience init(style: Style, size: CGSize = .zero) {
+        self.init(styleable: style, size: size)
     }
 
     /// Creates a progress view with the specified style.
     ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created.
-    ///   - size: Specifying the size of the progress view in its superview’s coordinates.
-    ///   - populator: A block or function that populates the `ProgressView`, which is passed into the block as an argument.
+    ///   - size: Specifying the size of the progress view in its superview’s coordinates. `Default to .zero`.
     /// - Returns: An initialized ProgressView object.
-    public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero,
-                            populator: ((ProgressView) -> Void)? = nil) {
+    public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero) {
         self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
-        populator?(self)
     }
 
     /// Common initialization method.
