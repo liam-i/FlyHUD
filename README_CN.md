@@ -44,9 +44,9 @@ dependencies: [
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "HUD", package: "FlyHUD"),         // 可选
-            .product(name: "HUDProgress", package: "FlyHUD"), // 可选
-            .product(name: "HUDIndicator", package: "FlyHUD") // 可选
+            .product(name: "FlyHUD", package: "FlyHUD"),         // 可选
+            .product(name: "FlyProgressHUD", package: "FlyHUD"), // 可选
+            .product(name: "FlyIndicatorHUD", package: "FlyHUD") // 可选
         ])
 ]
 ```
@@ -74,17 +74,17 @@ platform :ios, '12.0'
 use_frameworks!
 
 target 'MyApp' do
-  # 使用 HUD、HUDIndicator 和 HUDProgress 组件。
+  # 使用 FlyHUD、FlyIndicatorHUD 和 FlyProgressHUD 组件。
   pod 'FlyHUD', '~> 1.5.6'
 
-  # 或者，只使用 HUD 组件。
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUD']
+  # 或者，只使用 FlyHUD 组件。
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyHUD']
 
-  # 或者，只使用 HUD 和 HUDIndicator 组件。
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUDIndicator']
+  # 或者，只使用 FlyHUD 和 FlyIndicatorHUD 组件。
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyIndicatorHUD']
 
-  # 或者，只使用 HUD 和 HUDProgress 组件。
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUDProgress']
+  # 或者，只使用 FlyHUD 和 FlyProgressHUD 组件。
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyProgressHUD']
 end
 ```
 

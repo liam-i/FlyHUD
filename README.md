@@ -43,9 +43,9 @@ dependencies: [
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "HUD", package: "FlyHUD"),         // Optional
-            .product(name: "HUDProgress", package: "FlyHUD"), // Optional
-            .product(name: "HUDIndicator", package: "FlyHUD") // Optional
+            .product(name: "FlyHUD", package: "FlyHUD"),         // Optional
+            .product(name: "FlyProgressHUD", package: "FlyHUD"), // Optional
+            .product(name: "FlyIndicatorHUD", package: "FlyHUD") // Optional
         ])
 ]
 ```
@@ -73,17 +73,17 @@ platform :ios, '12.0'
 use_frameworks!
 
 target 'MyApp' do
-  # Use the HUD, HUDIndicator and HUDProgress components.
+  # Use the FlyHUD, FlyIndicatorHUD and FlyProgressHUD components.
   pod 'FlyHUD', '~> 1.5.6'
 
-  # Or, just use the HUD component.
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUD']
+  # Or, just use the FlyHUD component.
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyHUD']
 
-  # Or, just use the HUD and HUDIndicator components.
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUDIndicator']
+  # Or, just use the FlyHUD and FlyIndicatorHUD components.
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyIndicatorHUD']
 
-  # Or, just use the HUD and HUDProgress components.
-  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['HUDProgress']
+  # Or, just use the FlyHUD and FlyProgressHUD components.
+  pod 'FlyHUD', '~> 1.5.6', :subspecs => ['FlyProgressHUD']
 end
 ```
 
