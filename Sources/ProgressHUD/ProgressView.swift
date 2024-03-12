@@ -200,7 +200,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// - Parameter rect: The portion of the view’s bounds that needs to be updated. The first time your view is drawn, this rectangle is typically the entire
     ///                   visible bounds of your view. However, during subsequent drawing operations, the rectangle may specify only part of your view.
     open override func draw(_ rect: CGRect) {
-        guard let progressTintColor = progressTintColor else { return }
+        guard let progressTintColor else { return }
 
         let progress = CGFloat(min(progress, 1.0))
         var animationBuilder: ProgressAnimationBuildable {
@@ -282,7 +282,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
 
     /// Refreshing the progress only every frame draw.
     open func updateScreenInDisplayLink() {
-        guard let observedProgress = observedProgress else { return }
+        guard let observedProgress else { return }
         progress = Float(observedProgress.fractionCompleted)
     }
 }

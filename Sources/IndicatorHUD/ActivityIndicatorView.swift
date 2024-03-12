@@ -216,7 +216,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     private func makeAnimation() {
-        guard let color = color else { return }
+        guard let color else { return }
         layer.sublayers = nil
         let animation = style.makeAnimation()
         animation.make(in: layer, color: color, trackColor: trackColor, lineWidth: lineWidth)

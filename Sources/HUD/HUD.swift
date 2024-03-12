@@ -401,7 +401,7 @@ open class HUD: BaseView, ContentViewDelegate {
 
         let workItem = DispatchWorkItem { [weak self] in
             // Show the HUD only if the task is still running
-            guard let `self` = self, isFinished == false else { return }
+            guard let self, isFinished == false else { return }
             performShow(animation)
         }
         graceWorkItem = workItem
@@ -465,7 +465,7 @@ open class HUD: BaseView, ContentViewDelegate {
         isFinished = true
 
         // If the minShow time is set, calculate how long the HUD was shown, and postpone the hiding operation if necessary
-        if let showStarted = showStarted, minShowTime > 0.0 {
+        if let showStarted, minShowTime > 0.0 {
             let interv = Date().timeIntervalSince(showStarted)
             if interv < minShowTime {
                 cancelMinShowWorkItem()
@@ -598,7 +598,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 
     private func update(constraints: Bool, keyboardGuide: Bool) {
-        guard let constraint = constraint else { return }
+        guard let constraint else { return }
 
         if constraints {
             constraint.update(offset: layout.offset, edge: layout.edgeInsets)
@@ -627,7 +627,7 @@ open class HUD: BaseView, ContentViewDelegate {
 
     @objc
     private func updateForCurrentOrientation() {
-        guard let superview = superview else { return }
+        guard let superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
     }
 

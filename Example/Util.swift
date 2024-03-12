@@ -72,7 +72,7 @@ enum Alert {
 extension UITextField {
     var floatOfText: CGFloat {
         var value: CGFloat = 0.0
-        if let text = text, let floatValue = Float(text) {
+        if let text, let floatValue = Float(text) {
             value = CGFloat(floatValue)
         }
         return value

@@ -255,7 +255,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
             view.h.notEqual(indicator, do: setIndicator(view))
         }
 
-        if let indicator = indicator {
+        if let indicator {
             indicator.setContentCompressionResistancePriorityForAxis(998.0)
             switch indicator {
             case let indicator as ActivityIndicatorViewable: indicator.startAnimating()
@@ -272,7 +272,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     }
 
     private func updateIndicatorPosition() {
-        guard let indicator = indicator else {
+        guard let indicator else {
             return updateIndicators(false)
         }
         setIndicator(indicator)
@@ -286,7 +286,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
             vStackView.removeArrangedSubview(oldValue)
             oldValue.removeFromSuperview()
         }
-        if let newValue = newValue {
+        if let newValue {
             switch indicatorPosition {
             case .top:      vStackView.insertArrangedSubview(newValue, at: 0)
             case .bottom:   vStackView.addArrangedSubview(newValue)
@@ -298,13 +298,13 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     }
 
     private func updateViewsContentColor() {
-        guard let contentColor = contentColor else { return } // If set to nil to manage color individually.
+        guard let contentColor else { return } // If set to nil to manage color individually.
 
         label.textColor = contentColor
         detailsLabel.textColor = contentColor
         button.setTitleColor(contentColor, for: .normal)
 
-        guard let indicator = indicator else { return }
+        guard let indicator else { return }
         switch indicator {
         case let indicator as ActivityIndicatorViewable: indicator.color = contentColor
         case let indicator as ProgressViewable:          indicator.progressTintColor = contentColor
@@ -333,11 +333,11 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 
     /// Refreshing the progress only every frame draw.
     public func updateScreenInDisplayLink() {
-        guard let progress = observedProgress, progress.fractionCompleted <= 1.0 else { return }
+        guard let observedProgress, observedProgress.fractionCompleted <= 1.0 else { return }
         // They can be customized or use the default text. To suppress one
         // (or both) of the labels, set the descriptions to empty strings.
-        label.text = progress.localizedDescription
-        detailsLabel.text = progress.localizedAdditionalDescription
+        label.text = observedProgress.localizedDescription
+        detailsLabel.text = observedProgress.localizedAdditionalDescription
     }
 
     // MARK: Motion effect
@@ -347,9 +347,9 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         // Only set the motion effect while the contentView is visible to avoid
         // unnecessarily creating the effect if it is disabled after initialization.
         guard isMotionEffectsEnabled && isHidden == false else {
-            if let motionEffects = motionEffectGroup {
-                motionEffectGroup = nil
-                removeMotionEffect(motionEffects)
+            if let motionEffectGroup {
+                self.motionEffectGroup = nil
+                removeMotionEffect(motionEffectGroup)
             }
             return
         }

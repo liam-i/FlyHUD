@@ -31,7 +31,7 @@ open class Label: UILabel {
 
     /// Whether the text displayed by the label is nil and empty.
     open var isEmptyOfText: Bool {
-        guard let text = text, text.isEmpty == false else { return true }
+        guard let text, text.isEmpty == false else { return true }
         return false
     }
 
