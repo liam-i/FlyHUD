@@ -232,9 +232,11 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     }
 
     private func registerForTraitChanges() {
+#if swift(>=5.9)
         if #available(iOS 17.0, tvOS 17.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
         }
+#endif
     }
 
     @objc private func makeAnimationIfNeeded() {

@@ -401,8 +401,8 @@ open class HUD: BaseView, ContentViewDelegate {
 
         let workItem = DispatchWorkItem { [weak self] in
             // Show the HUD only if the task is still running
-            guard let self, isFinished == false else { return }
-            performShow(animation)
+            guard let self, self.isFinished == false else { return }
+            self.performShow(animation)
         }
         graceWorkItem = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + graceTime, execute: workItem)
