@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -41,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		0C18476C2B5F8E1000E0E8FC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		0C2423122BB42F18008F5040 /* Package@swift-5.7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package@swift-5.7.swift"; sourceTree = "<group>"; };
 		0C26193E2B8DD4E400F6DF16 /* Example iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		0C26193F2B8DD4E500F6DF16 /* OCPresentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCPresentViewController.h; sourceTree = "<group>"; };
 		0C2619402B8DD4E500F6DF16 /* OCPresentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OCPresentViewController.m; sourceTree = "<group>"; };
@@ -193,7 +192,6 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				0C2423122BB42F18008F5040 /* Package@swift-5.7.swift */,
 				0CA1718E2B4FC97500179E2A /* Package.swift */,
 				560C516F554DA412B5D00A24 /* FlyHUD.podspec */,
 				0CA494362B71FC4000C0C8C7 /* README_CN.md */,
