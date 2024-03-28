@@ -162,7 +162,7 @@ extension HUD {
         }
     }
 
-#if !os(tvOS)
+#if os(iOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout.
     public enum KeyboardGuide: Equatable, HUDExtended {
         /// Disable keyboard tracking.

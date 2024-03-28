@@ -61,7 +61,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     open var isCountEnabled: Bool = false
 
-#if !os(tvOS)
+#if os(iOS)
     /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
     ///
     /// - Note: Global configuration. Priority less than member property keyboardGuide.
@@ -118,7 +118,7 @@ open class HUD: BaseView, ContentViewDelegate {
         layer.allowsGroupOpacity = false
         setupViews()
         isHidden = true // Make it invisible for now
-#if !os(tvOS)
+#if os(iOS)
         updateKeyboardObserver()
         registerForNotifications()
 #endif
@@ -128,7 +128,7 @@ open class HUD: BaseView, ContentViewDelegate {
         cancelHideDelayWorkItem()
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
-#if !os(tvOS)
+#if os(iOS)
         KeyboardObserver.shared.remove(self)
         unregisterFromNotifications()
 #endif
@@ -603,7 +603,7 @@ open class HUD: BaseView, ContentViewDelegate {
         if constraints {
             constraint.update(offset: layout.offset, edge: layout.edgeInsets)
         }
-#if !os(tvOS)
+#if os(iOS)
         if keyboardGuide {
             guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
             updateKeyboardGuide(with: keyboardInfo, animated: false)
@@ -647,7 +647,7 @@ open class HUD: BaseView, ContentViewDelegate {
     }
 }
 
-#if !os(tvOS)
+#if os(iOS)
 extension HUD: KeyboardObservable {
     // MARK: - Notifications
     private func registerForNotifications() {

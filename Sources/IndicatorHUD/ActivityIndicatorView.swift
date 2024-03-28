@@ -222,19 +222,25 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         animation.make(in: layer, color: color, trackColor: trackColor, lineWidth: lineWidth)
     }
 
+#if !os(visionOS)
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 17.0, tvOS 17.0, *) {
+        if #available(iOS 17.0, tvOS 17.0, visionOS 1.0, *) {
             // Use the trait change registration APIs
         } else {
             makeAnimationIfNeeded()
         }
     }
+#endif
 
     private func registerForTraitChanges() {
 #if swift(>=5.9)
-        if #available(iOS 17.0, tvOS 17.0, *) {
+        if #available(iOS 17.0, tvOS 17.0, visionOS 1.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
+        } else {
+#if os(visionOS)
+            registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
+#endif
         }
 #endif
     }

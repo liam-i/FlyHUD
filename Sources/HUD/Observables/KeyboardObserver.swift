@@ -11,7 +11,7 @@
 
 import UIKit
 
-#if !os(tvOS)
+#if os(iOS)
 /// keyboard information model.
 public struct KeyboardInfo {
     public enum Name {
