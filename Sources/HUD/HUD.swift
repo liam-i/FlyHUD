@@ -486,15 +486,11 @@ open class HUD: BaseView, ContentViewDelegate {
         // hide(using:afterDelay:) call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
         perform(animation, showing: false) { [self] in
-            cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
-
             if isFinished {
                 isHidden = true
                 if removeFromSuperViewOnHide {
                     removeFromSuperview()
                 }
-            } else {
-                assertionFailure("why?")
             }
 
             completionBlock?(self)

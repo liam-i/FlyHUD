@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,7 @@
 		0C7754772B550B200000AA43 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C7754752B550B200000AA43 /* Main.storyboard */; };
 		0C7754792B550B200000AA43 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C7754782B550B200000AA43 /* Assets.xcassets */; };
 		0C77547C2B550B200000AA43 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C77547A2B550B200000AA43 /* LaunchScreen.storyboard */; };
+		0CA85DF82BB6D53A00CE0F7C /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C18476C2B5F8E1000E0E8FC /* Util.swift */; };
 		1828E0962643B700004E75A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1828E0942643B700004E75A3 /* LaunchScreen.storyboard */; };
 		187E1230E7DCF2120C559BDC /* Pods_Example_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38099A9EC3DD59A73827993 /* Pods_Example_tvOS.framework */; };
 		4522701DF54E686D87B1D5F6 /* Pods_Example_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1212DCDD5C06CBEEE5C162 /* Pods_Example_iOS.framework */; };
@@ -448,6 +449,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				0CA85DF82BB6D53A00CE0F7C /* Util.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
