@@ -56,10 +56,14 @@ extension UIActivityIndicatorView.Style: HUDExtended {}
 extension HUDExtension where ExtendedType == UIActivityIndicatorView.Style {
     /// Defaults to `.large` on iOS 13 and later and. `.whiteLarge` on older systems.
     public static var large: UIActivityIndicatorView.Style {
-        if #available(iOS 13.0, tvOS 13.0, *) {
+#if os(visionOS)
+        return .large
+#else
+        if #available(iOS 13.0, tvOS 13.0, visionOS 1.0, *) {
             return .large
         } else {
             return .whiteLarge
         }
+#endif
     }
 }
