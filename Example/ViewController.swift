@@ -213,7 +213,11 @@ class ViewController: UITableViewController, HUDDelegate {
         print("completionBlock -> HUD was hidden.")
     }
 
-    var config: Configuration = .init() {
+    lazy var config: Configuration = {
+        var config = Configuration()
+        config.keyboardGuide = HUD.keyboardGuide
+        return config
+    }() {
         didSet {
             HUD.huds(for: v).forEach { update($0, label: nil) }
         }
@@ -366,16 +370,22 @@ class ViewController: UITableViewController, HUDDelegate {
         propertiesButton.forEach { sender in
             guard let title = sender.title(for: .normal) else { return assertionFailure() }
             let text = String(title[title.startIndex...title.index(title.startIndex, offsetBy: 4)])
-            func setTitle<T>(_ value: T) {
+            func setTitle<T>(_ value: T?) {
                 let mas = NSMutableAttributedString()
                 if let range = title.range(of: " ") {
                     mas.append(NSAttributedString(string: "\(title[title.startIndex..<range.lowerBound]) "))
                 } else {
                     mas.append(NSAttributedString(string: "\(title) "))
                 }
-                var newValue = String(describing: value)
-                if let isOn = value as? Bool {
-                    newValue = isOn.isOn
+                var newValue: String
+                if let value {
+                    if let isOn = value as? Bool {
+                        newValue = isOn.isOn
+                    } else {
+                        newValue = String(describing: value)
+                    }
+                } else {
+                    newValue = "nil"
                 }
                 mas.append(NSAttributedString(string: "(\(newValue))", attributes: [.foregroundColor: UIColor.systemRed]))
                 sender.setAttributedTitle(mas, for: .normal)

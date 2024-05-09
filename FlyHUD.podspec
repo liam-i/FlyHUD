@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'FlyHUD'
-  s.version          = '1.5.10'
+  s.version          = '1.5.11'
   s.summary          = 'A lightweight and easy-to-use HUD for iOS and tvOS apps.'
   s.description      = <<-DESC
                        FlyHUD is a lightweight and easy-to-use HUD designed to display
@@ -19,16 +19,18 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.subspec 'FlyHUD' do |ss|
-    ss.source_files = ['Sources/HUD/**/*']
+    ss.source_files = ['Sources/HUD/**/*.swift']
   end
 
   s.subspec 'FlyIndicatorHUD' do |ss|
-    ss.source_files = ['Sources/IndicatorHUD/**/*']
+    ss.source_files = ['Sources/IndicatorHUD/**/*.swift']
     ss.dependency 'FlyHUD/FlyHUD'
   end
 
   s.subspec 'FlyProgressHUD' do |ss|
-    ss.source_files = ['Sources/ProgressHUD/**/*']
+    ss.source_files = ['Sources/ProgressHUD/**/*.swift']
     ss.dependency 'FlyHUD/FlyHUD'
   end
+
+  s.resource_bundles = {'FlyHUD' => ['Sources/HUD/PrivacyInfo.xcprivacy']}
 end

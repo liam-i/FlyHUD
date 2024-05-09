@@ -5,7 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "FlyHUD",
-    platforms: [.iOS(.v12), .tvOS(.v12)],
+    platforms: [
+        .iOS(.v12),
+        .tvOS(.v12)
+    ],
     products: [
         .library(
             name: "FlyHUD",
@@ -23,17 +26,20 @@ let package = Package(
     targets: [
         .target(
             name: "FlyHUD",
-            path: "Sources/HUD"
+            path: "Sources/HUD",
+            exclude: ["PrivacyInfo.xcprivacy"]
         ),
         .target(
             name: "FlyIndicatorHUD",
             dependencies: ["FlyHUD"],
-            path: "Sources/IndicatorHUD"
+            path: "Sources/IndicatorHUD",
+            exclude: ["PrivacyInfo.xcprivacy"]
         ),
         .target(
             name: "FlyProgressHUD",
             dependencies: ["FlyHUD"],
-            path: "Sources/ProgressHUD"
+            path: "Sources/ProgressHUD",
+            exclude: ["PrivacyInfo.xcprivacy"]
         ),
     ]
 )

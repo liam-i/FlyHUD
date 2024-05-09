@@ -80,7 +80,7 @@ extension ContentView.Mode: CustomStringConvertible {
     }
 }
 
-extension HUD.KeyboardGuide {
+extension HUD.KeyboardGuide: CustomStringConvertible {
     public static var allCases: [String] { ["disable", "center", "bottom", "default"] }
 
     public init?(_ name: String) {
@@ -89,6 +89,14 @@ extension HUD.KeyboardGuide {
         case "center": self = .center()
         case "bottom": self = .bottom()
         default: return nil
+        }
+    }
+
+    public var description: String {
+        switch self {
+        case .disable: return "disable"
+        case .center:  return "center"
+        case .bottom:  return "bottom"
         }
     }
 }
