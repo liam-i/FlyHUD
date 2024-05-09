@@ -39,7 +39,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.11")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.12")
 ],
 targets: [
     .target(
@@ -57,7 +57,7 @@ targets: [
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/FlyHUD.git`
-- Select "Up to Next Minor" with "1.5.11"
+- Select "Up to Next Minor" with "1.5.12"
 
 > [!TIP]
 > 相关详细教程，请查看：[Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -75,30 +75,30 @@ use_frameworks!
 
 target 'MyApp' do
   # 使用 FlyHUD、FlyIndicatorHUD 和 FlyProgressHUD 组件。
-  pod 'FlyHUD', '~> 1.5.11'
+  pod 'FlyHUD', '~> 1.5.12'
 
   # 或者，只使用 FlyHUD 组件。
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyHUD']
 
   # 或者，只使用 FlyHUD 和 FlyIndicatorHUD 组件。
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyIndicatorHUD']
 
   # 或者，只使用 FlyHUD 和 FlyProgressHUD 组件。
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyProgressHUD']
 end
 ```
 
 并运行 `pod install`。
 
 > [!IMPORTANT]  
-> 需要 CocoaPods 1.14.3 或更高版本。
+> 需要 CocoaPods 1.13.0 或更高版本。
 
 ### Carthage
 
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.5.11
+github "liam-i/FlyHUD" ~> 1.5.12
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。

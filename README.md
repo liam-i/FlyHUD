@@ -38,7 +38,7 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your `Package.swift` file and import the HUD library into the desired targets:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.11")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.12")
 ],
 targets: [
     .target(
@@ -56,7 +56,7 @@ If you are using Xcode, then you should:
 
 - File > Swift Packages > Add Package Dependency
 - Add `https://github.com/liam-i/FlyHUD.git`
-- Select "Up to Next Minor" with "1.5.11"
+- Select "Up to Next Minor" with "1.5.12"
 
 > [!TIP]
 > For detailed tutorials, see: [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -74,30 +74,30 @@ use_frameworks!
 
 target 'MyApp' do
   # Use the FlyHUD, FlyIndicatorHUD and FlyProgressHUD components.
-  pod 'FlyHUD', '~> 1.5.11'
+  pod 'FlyHUD', '~> 1.5.12'
 
   # Or, just use the FlyHUD component.
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyHUD']
 
   # Or, just use the FlyHUD and FlyIndicatorHUD components.
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyIndicatorHUD']
 
   # Or, just use the FlyHUD and FlyProgressHUD components.
-  pod 'FlyHUD', '~> 1.5.11', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyProgressHUD']
 end
 ```
 
 And run `pod install`.
 
 > [!IMPORTANT]  
-> CocoaPods 1.14.3 or newer is required.
+> CocoaPods 1.13.0 or newer is required.
 
 ### Carthage
 
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.5.11
+github "liam-i/FlyHUD" ~> 1.5.12
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.

@@ -1,6 +1,6 @@
 {
   "name": "FlyHUD",
-  "version": "1.5.11",
+  "version": "1.5.12",
   "summary": "A lightweight and easy-to-use HUD for iOS and tvOS apps.",
   "description": "FlyHUD is a lightweight and easy-to-use HUD designed to display\n the progress and status of ongoing tasks on iOS and tvOS.",
   "homepage": "https://github.com/liam-i/FlyHUD",
@@ -13,8 +13,12 @@
   },
   "source": {
     "git": "https://github.com/liam-i/FlyHUD.git",
-    "tag": "1.5.11"
+    "tag": "1.5.12"
   },
+  "documentation_url": "https://liam-i.github.io/FlyHUD/main/documentation/flyhud",
+  "screenshots": "https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png",
+  "social_media_url": "https://liam-i.github.io",
+  "cocoapods_version": ">= 1.13.0",
   "platforms": {
     "ios": "12.0",
     "tvos": "12.0",
