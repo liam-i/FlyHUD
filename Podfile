@@ -6,7 +6,8 @@ install! 'cocoapods',
   :share_schemes_for_development_pods => true
 
 #use_frameworks!
-use_frameworks! :linkage => :static
+#use_frameworks! :linkage => :static
+use_frameworks! :linkage => :dynamic
 
 workspace 'FlyHUD.xcworkspace'
 
