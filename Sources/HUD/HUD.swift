@@ -625,7 +625,6 @@ open class HUD: BaseView, ContentViewDelegate {
     private func updateForCurrentOrientation() {
         guard let superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
-        print(frame, superview.bounds)
     }
 
     /// Returns the farthest descendant in the view hierarchy of the current view, including itself, that contains the specified point.
