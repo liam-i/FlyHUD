@@ -102,7 +102,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     open var style: ProgressViewStyleable = Style.buttBar {
         didSet {
             guard style.isEqual(oldValue) == false else { return }
-            updateProperties()
+            resetProperties()
         }
     }
 
@@ -239,7 +239,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
         bounds.isEmpty ? style.defaultSize : bounds.size
     }
 
-    private func updateProperties() {
+    private func resetProperties() {
         frame.size = style.defaultSize
         progressTintColor = style.defaultProgressTintColor
         trackTintColor = style.defaultTrackTintColor

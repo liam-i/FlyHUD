@@ -25,8 +25,8 @@
 
 ## 要求
 
-* iOS 12.0+ 
-* tvOS 12.0+ 
+* iOS 13.0+ 
+* tvOS 13.0+ 
 * Xcode 14.1+
 * Swift 5.7.1+
 
@@ -71,7 +71,7 @@ targets: [
 source 'https://github.com/CocoaPods/Specs.git'
 # 或者使用 CND 源
 # source 'https://cdn.cocoapods.org/'
-platform :ios, '12.0'
+platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do

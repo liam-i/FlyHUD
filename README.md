@@ -25,8 +25,8 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 ## Requirements
 
-* iOS 12.0+ 
-* tvOS 12.0+ 
+* iOS 13.0+ 
+* tvOS 13.0+ 
 * Xcode 14.1+
 * Swift 5.7.1+
 
@@ -70,7 +70,7 @@ If you're using [CocoaPods](https://cocoapods.org), add this to your `Podfile`:
 source 'https://github.com/CocoaPods/Specs.git'
 # Or use CND source
 # source 'https://cdn.cocoapods.org/'
-platform :ios, '12.0'
+platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do

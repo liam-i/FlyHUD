@@ -56,7 +56,7 @@ struct Configuration {
     var takeTime: UInt32 = 3 // task time.
 }
 
-extension ContentView.Mode: CustomStringConvertible {
+extension FlyHUD.ContentView.Mode: Swift.CustomStringConvertible {
     public var description: String {
         switch self {
         case .text:                                 return "Wrong password"
@@ -80,7 +80,7 @@ extension ContentView.Mode: CustomStringConvertible {
     }
 }
 
-extension HUD.KeyboardGuide: CustomStringConvertible {
+extension FlyHUD.HUD.KeyboardGuide: Swift.CustomStringConvertible {
     public static var allCases: [String] { ["disable", "center", "bottom", "default"] }
 
     public init?(_ name: String) {

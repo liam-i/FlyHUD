@@ -20,8 +20,8 @@
   "social_media_url": "https://liam-i.github.io",
   "cocoapods_version": ">= 1.13.0",
   "platforms": {
-    "ios": "12.0",
-    "tvos": "12.0",
+    "ios": "13.0",
+    "tvos": "13.0",
     "visionos": "1.0"
   },
   "swift_versions": [
@@ -45,9 +45,7 @@
         "Sources/IndicatorHUD/**/*.swift"
       ],
       "dependencies": {
-        "FlyHUD/FlyHUD": [
-
-        ]
+        "FlyHUD/FlyHUD": []
       }
     },
     {
@@ -56,9 +54,7 @@
         "Sources/ProgressHUD/**/*.swift"
       ],
       "dependencies": {
-        "FlyHUD/FlyHUD": [
-
-        ]
+        "FlyHUD/FlyHUD": []
       }
     }
   ],

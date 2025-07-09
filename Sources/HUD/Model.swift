@@ -174,5 +174,5 @@ extension HUD {
         /// - Parameter spacing: The spacing between the bottom of the contentView view and the top of the keyboard. `Default to 8`.
         case bottom(_ spacing: CGFloat = 8.0)
     }
-#endif
+#endif // os(iOS)
 }

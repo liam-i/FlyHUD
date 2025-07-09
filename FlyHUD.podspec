@@ -19,8 +19,8 @@ Pod::Spec.new do |s|
   # 1.13.0: visionOS is recognized as a platform.
   s.cocoapods_version = '>= 1.13.0'
 
-  s.ios.deployment_target = '12.0'
-  s.tvos.deployment_target = '12.0'
+  s.ios.deployment_target = '13.0'
+  s.tvos.deployment_target = '13.0'
   s.visionos.deployment_target = "1.0"
 
   s.swift_versions = ['5.0']

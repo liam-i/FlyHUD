@@ -79,7 +79,7 @@ open class HUD: BaseView, ContentViewDelegate {
             keyboardGuide.h.notEqual(oldValue, do: updateKeyboardObserver())
         }
     }
-#endif
+#endif // os(iOS)
 
     /// A Boolean value that controls the delivery of user events. `Defaults to false`.
     ///
@@ -604,7 +604,7 @@ open class HUD: BaseView, ContentViewDelegate {
             guard isKeyboardGuideEnabled, let keyboardInfo = KeyboardObserver.shared.keyboardInfo else { return }
             updateKeyboardGuide(with: keyboardInfo, animated: false)
         }
-#endif
+#endif // os(iOS)
     }
 
     // MARK: View Hierarchy
@@ -625,6 +625,7 @@ open class HUD: BaseView, ContentViewDelegate {
     private func updateForCurrentOrientation() {
         guard let superview else { return }
         frame = superview.bounds // Stay in sync with the superview in any case
+        print(frame, superview.bounds)
     }
 
     /// Returns the farthest descendant in the view hierarchy of the current view, including itself, that contains the specified point.
@@ -650,7 +651,7 @@ extension HUD: KeyboardObservable {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(updateForCurrentOrientation),
-            name: UIApplication.didChangeStatusBarOrientationNotification,
+            name: UIDevice.orientationDidChangeNotification,
             object: nil)
     }
 
@@ -721,4 +722,4 @@ extension HUD: KeyboardObservable {
         UIView.animate(withDuration: keyboard.animationDuration, delay: 0.0, options: options, animations: animations)
     }
 }
-#endif
+#endif // os(iOS)

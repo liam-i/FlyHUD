@@ -86,7 +86,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     open var style: ActivityIndicatorViewStyleable = Style.ringClipRotate {
         didSet {
             guard style.isEqual(oldValue) == false else { return }
-            updateProperties()
+            resetProperties()
         }
     }
 
@@ -207,7 +207,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         makeAnimation()
     }
 
-    private func updateProperties() {
+    private func resetProperties() {
         frame.size = style.defaultSize
         color = style.defaultColor
         trackColor = style.defaultColor
@@ -231,7 +231,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
             makeAnimationIfNeeded()
         }
     }
-#endif
+#endif // !os(visionOS)
 
     private func registerForTraitChanges() {
 #if swift(>=5.9)
@@ -242,7 +242,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
             registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
 #endif
         }
-#endif
+#endif // swift(>=5.9)
     }
 
     @objc private func makeAnimationIfNeeded() {

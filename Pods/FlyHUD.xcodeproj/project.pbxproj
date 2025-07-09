@@ -7,69 +7,69 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02FE237E813119E94A0E98B63687DEBF /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC9175CF056E760A4DD318ADE3F3A9 /* ActivityIndicatorViewable.swift */; };
-		03C7D7D168FC0F88AE6160EA31D046C6 /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FF52291DA12823FABB28128E542CE9 /* HUD+ProgressView.swift */; };
-		066C01B925617FC77D35DB256B853B64 /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E2B1B21F0CEC079233D16E1A2DED9 /* RotateViewable.swift */; };
-		0D199D0B6FF32E0D855F5C79FF876F22 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863E25151EED9D7856753FF22806745F /* HUD.swift */; };
-		0F60850F3C332804A01DF5E366224991 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */; };
-		0F916D96D9DB624511F2027FE734E0DE /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7E598336F1740224ADD83373EFFD18 /* ProgressAnimation.swift */; };
-		12C3270788AED4B59CCE9A5746D0B256 /* FlyHUD-iOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E3383328E898447AC09E3E642506B037 /* FlyHUD-iOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		15305C2FF74A27A2AD8758D357153861 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937654EE2D5F47761E05F4DBE056A2FA /* BaseView.swift */; };
-		15EF7305E88E9FECDF408BB702049B2A /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E2B1B21F0CEC079233D16E1A2DED9 /* RotateViewable.swift */; };
-		17A8225609F23BD8C4412CD778C7A550 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863E25151EED9D7856753FF22806745F /* HUD.swift */; };
-		1E5BEA3E7BCC07EFBA842B3DEAE4FE3C /* FlyHUD-tvOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36E8D066D3030B4C2200B5DAD904C047 /* FlyHUD-tvOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		20FFB705F4E9DC132FA71137DBAE8F4E /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B574EB238A033DDA96AE6A8F2C4BB /* Label.swift */; };
-		275637E22C9BD982B0F9FAC308525E7A /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B574A94D9305B3A4C074605B94C00 /* KeyboardObserver.swift */; };
-		28B9BE54DBE778CA98BC564BAAB7862F /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FF52291DA12823FABB28128E542CE9 /* HUD+ProgressView.swift */; };
-		29457EF996A9FFA6D67337831115F0BF /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0070FFA986B8342CD8E182BCFCFB814A /* HUDExtended.swift */; };
-		32037AF744DFDA2E4B885E2E1FAFDF65 /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBD71A43EB7CB7C4A905D7D42A2B599 /* ProgressViewable.swift */; };
-		326DF646588873BF6E8B0768CD11A068 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B574EB238A033DDA96AE6A8F2C4BB /* Label.swift */; };
-		331BEA16A68D88CF9FD1279CAED2A6F2 /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0070FFA986B8342CD8E182BCFCFB814A /* HUDExtended.swift */; };
-		420A2BE4980E814F4A705F53368A83C2 /* FlyHUD-iOS-FlyHUD in Resources */ = {isa = PBXBuildFile; fileRef = BD0A67857AF0B386B7F394EC371024D7 /* FlyHUD-iOS-FlyHUD */; };
-		42E6A8A72CC9FBA01332C914AB7A1BB4 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D366E4BF0785EC4C714470D6A2F349AF /* Model.swift */; };
-		4DADA75D728D5BD1B2E5AD7B5D3917FE /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427BCCB00DAE58C6AC82B949CD22C96 /* ActivityIndicatorView.swift */; };
-		51517B63A7898E63D815D94201795A65 /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBD71A43EB7CB7C4A905D7D42A2B599 /* ProgressViewable.swift */; };
-		610B45F2E1EE7D621BDA8930D004F117 /* FlyHUD-tvOS-FlyHUD in Resources */ = {isa = PBXBuildFile; fileRef = BB207109F884B4F97DDEA8AB19BD7162 /* FlyHUD-tvOS-FlyHUD */; };
-		631A61A4F2345F0C4F2EC68D0C13FD14 /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BECD70FE2339D8554EAE8C6B8C1AACF /* ActivityIndicatorAnimation.swift */; };
-		6B2B6B7D258C92AD3CC54C69CA8D653F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 82940AF1EFDFD62DC23F50389585286D /* PrivacyInfo.xcprivacy */; };
-		6D480E3F83B0BA7FEE790E634EB3229E /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937654EE2D5F47761E05F4DBE056A2FA /* BaseView.swift */; };
-		72ACF29829B6114B64C09E03B791ECF1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 82940AF1EFDFD62DC23F50389585286D /* PrivacyInfo.xcprivacy */; };
-		74F0A928DD3A65DD305A80B1F3E0CD46 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03D5C8D7581D57481E78A5E934963BF /* ShapeBuilder.swift */; };
-		7642FC9D04D182239A46FD649C96BFAD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8D61DC4F5AB78068D840F24BD7AB65 /* ContentView.swift */; };
-		7ECAB47306256E365D870B55682F32B4 /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC9175CF056E760A4DD318ADE3F3A9 /* ActivityIndicatorViewable.swift */; };
-		920821AA898FED93B4A5EA036C5A63DD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B135CC0BBC06E5847CF81B1EC5ED057C /* Extensions.swift */; };
-		9AE1DCAAE0250BCBFD206ECAA7C62CD2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D366E4BF0785EC4C714470D6A2F349AF /* Model.swift */; };
-		9B4FC2C91AF458B9BFC2FD30BA5F29E8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E1F9D82A71897808B5EB69575E17A39 /* Foundation.framework */; };
-		9C300BFF76CD0A7B77BBE3FF47BB4A96 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */; };
-		A758DD90E5F8269FBAED43AF26DB62C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B6185EF66AC5BC209DAA1AE181EAFA /* Foundation.framework */; };
-		B20CA70F8EBF3318DD3B6F0D71CDE586 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1EE625280CB2B3D08E7315DEAB2837 /* BackgroundView.swift */; };
-		B285496354044C1E9ED72CC565636F0E /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427BCCB00DAE58C6AC82B949CD22C96 /* ActivityIndicatorView.swift */; };
-		B2FA700D30E799B4797C2CB988B8D021 /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61363AE3606CDD40BA4E24552E9AF65 /* HUD+ActivityIndicatorView.swift */; };
-		B35047D0B82BF146B90761F936A2BD56 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B135CC0BBC06E5847CF81B1EC5ED057C /* Extensions.swift */; };
-		BAC52E43F951DE9C1C8F88EB756C23EE /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03D5C8D7581D57481E78A5E934963BF /* ShapeBuilder.swift */; };
-		BB36393B7965CB3F03B2BB10464E854A /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61363AE3606CDD40BA4E24552E9AF65 /* HUD+ActivityIndicatorView.swift */; };
-		C4C4BE3DC61130CCACD73F26A78736FD /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB23038D35517265656B338B8CB458 /* DisplayLink.swift */; };
-		C5AB6397FDED0D890AB30AE2DBD4DB72 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1EE625280CB2B3D08E7315DEAB2837 /* BackgroundView.swift */; };
-		CEA5EA038C4701C91E25BB95328A2C1B /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7E598336F1740224ADD83373EFFD18 /* ProgressAnimation.swift */; };
-		D2DF503D5BF803DEA004633418DA9E7F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8D61DC4F5AB78068D840F24BD7AB65 /* ContentView.swift */; };
-		D3A806AA2EBAF209F9BE58688111CB48 /* FlyHUD-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE128B302088479C113C1D8736364A1 /* FlyHUD-iOS-dummy.m */; };
-		E16FB8C7C49F275807BCFC08FB337C14 /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BECD70FE2339D8554EAE8C6B8C1AACF /* ActivityIndicatorAnimation.swift */; };
-		E6BE1AD6C1C5FA604D8FAAF057D370C2 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA93DEA6FEF974F5D1C9115B36FD9EC /* Button.swift */; };
-		F1D08305530E549BD3051B5C73C7715E /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA93DEA6FEF974F5D1C9115B36FD9EC /* Button.swift */; };
-		F67DAFD446250FEE0BBC952663C065FD /* FlyHUD-tvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 568A0FEA97D04495517C5239B5130114 /* FlyHUD-tvOS-dummy.m */; };
-		FDBCE05170F2466CF4FD26A3F943556E /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB23038D35517265656B338B8CB458 /* DisplayLink.swift */; };
-		FFA425FE5478B99F90F5C486CC9874A2 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B574A94D9305B3A4C074605B94C00 /* KeyboardObserver.swift */; };
+		02CBF957BFF8180CA0F23A3002AFC470 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B574A94D9305B3A4C074605B94C00 /* KeyboardObserver.swift */; };
+		03436EC4DB84E3C38B9074A15D301967 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B24395E657356C20A05DD4775C2ABB1 /* Foundation.framework */; };
+		045933858A0B7BCE0799D55EFCAD3BED /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBD71A43EB7CB7C4A905D7D42A2B599 /* ProgressViewable.swift */; };
+		05F4BD1F6C31088CB7698F141823BF90 /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61363AE3606CDD40BA4E24552E9AF65 /* HUD+ActivityIndicatorView.swift */; };
+		06A47A247112ECD2B51EBC2F3C172591 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03D5C8D7581D57481E78A5E934963BF /* ShapeBuilder.swift */; };
+		09208285192DD3C318F2F4DB003FC2A3 /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138B574A94D9305B3A4C074605B94C00 /* KeyboardObserver.swift */; };
+		0AC69E289569AF7E2972296856B7CB78 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */; };
+		0DCF9FC849A23D38368F7BED7B13E2E3 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA93DEA6FEF974F5D1C9115B36FD9EC /* Button.swift */; };
+		1D475E705DC4AE703F35D897010997BA /* FlyHUD-tvOS-FlyHUD in Resources */ = {isa = PBXBuildFile; fileRef = BB207109F884B4F97DDEA8AB19BD7162 /* FlyHUD-tvOS-FlyHUD */; };
+		1EB0EFA8474A0C7B7219B9EA9E99C9B2 /* ProgressViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBD71A43EB7CB7C4A905D7D42A2B599 /* ProgressViewable.swift */; };
+		2244A3A5D3708DB721EA2FE1E33F4940 /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7E598336F1740224ADD83373EFFD18 /* ProgressAnimation.swift */; };
+		227BE3C50E19CDB9D8AB6C1708ED5491 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427BCCB00DAE58C6AC82B949CD22C96 /* ActivityIndicatorView.swift */; };
+		298BED46E9D128A449A0A34AA17ED035 /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC9175CF056E760A4DD318ADE3F3A9 /* ActivityIndicatorViewable.swift */; };
+		38152B26FB4B6AD425F07F851405439F /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937654EE2D5F47761E05F4DBE056A2FA /* BaseView.swift */; };
+		39CB2C7FE4177F5A2AC4F7A803BC24E2 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1EE625280CB2B3D08E7315DEAB2837 /* BackgroundView.swift */; };
+		3FCF56ED83DA6B7EFEDCD623788DFD16 /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0070FFA986B8342CD8E182BCFCFB814A /* HUDExtended.swift */; };
+		47310E7397643DB43A172BC1D30B7E40 /* HUD+ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61363AE3606CDD40BA4E24552E9AF65 /* HUD+ActivityIndicatorView.swift */; };
+		5156521A165500BA9B343F5A82512A37 /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863E25151EED9D7856753FF22806745F /* HUD.swift */; };
+		5A58BD8DF9D030AE59D9A71E9B36EA3C /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E2B1B21F0CEC079233D16E1A2DED9 /* RotateViewable.swift */; };
+		5C1008219428AC62E5469DB9E0CD5700 /* FlyHUD-tvOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 568A0FEA97D04495517C5239B5130114 /* FlyHUD-tvOS-dummy.m */; };
+		5CBC3241EEE7BF3017A9F5AE75F2012B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B135CC0BBC06E5847CF81B1EC5ED057C /* Extensions.swift */; };
+		5CDAB10D5F6E87C13D656A49AEBF8D9D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA93DEA6FEF974F5D1C9115B36FD9EC /* Button.swift */; };
+		5E2CF4F4DAA6AB07DE0267681A319634 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 937654EE2D5F47761E05F4DBE056A2FA /* BaseView.swift */; };
+		618870DA548CB423F2C7A57DBBD5453B /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1EE625280CB2B3D08E7315DEAB2837 /* BackgroundView.swift */; };
+		6272A8892A63A6871F1DAA0780B1148F /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FF52291DA12823FABB28128E542CE9 /* HUD+ProgressView.swift */; };
+		6448E78263C006CE8BF5AB4825A5EA49 /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB23038D35517265656B338B8CB458 /* DisplayLink.swift */; };
+		6DAB19E2E60A7A013ADE19AFA1776C3D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4836D738FCE6995321E9C9D03EFF9486 /* Foundation.framework */; };
+		6E0461650ADD6D4EC03DBFF28CAA2D89 /* FlyHUD-tvOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36E8D066D3030B4C2200B5DAD904C047 /* FlyHUD-tvOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6FC657D3D537C0BBE444ADB55FED5091 /* ProgressAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7E598336F1740224ADD83373EFFD18 /* ProgressAnimation.swift */; };
+		74A1B907A5942ED313EFC9448B61332F /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BECD70FE2339D8554EAE8C6B8C1AACF /* ActivityIndicatorAnimation.swift */; };
+		7B1661824D1065E89C02583B20332442 /* DisplayLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCB23038D35517265656B338B8CB458 /* DisplayLink.swift */; };
+		7EED87C23E4861329DFDACE2482D8E66 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B574EB238A033DDA96AE6A8F2C4BB /* Label.swift */; };
+		82D952ADB0A2E9C4321F4E01580F0CF8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B574EB238A033DDA96AE6A8F2C4BB /* Label.swift */; };
+		8556B10CC7D373B099A396A6383CD9F1 /* HUDExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0070FFA986B8342CD8E182BCFCFB814A /* HUDExtended.swift */; };
+		9942C04FD93EA4BE6781839ABD8A6969 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 82940AF1EFDFD62DC23F50389585286D /* PrivacyInfo.xcprivacy */; };
+		A0E8F436164518D58C120D014E426C38 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B135CC0BBC06E5847CF81B1EC5ED057C /* Extensions.swift */; };
+		A8CF13E3F6D7BE23755D1D0D57C5CD7D /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */; };
+		AE663BB5A5D3531C9B51039D9026D017 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8D61DC4F5AB78068D840F24BD7AB65 /* ContentView.swift */; };
+		BE0E940416D500B32711A403C80892DA /* FlyHUD-iOS-FlyHUD in Resources */ = {isa = PBXBuildFile; fileRef = BD0A67857AF0B386B7F394EC371024D7 /* FlyHUD-iOS-FlyHUD */; };
+		C91DBEC420DF1323EF149740C317A0A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8D61DC4F5AB78068D840F24BD7AB65 /* ContentView.swift */; };
+		CAA4C5237E464FC53A2725429497EFDC /* ActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC9175CF056E760A4DD318ADE3F3A9 /* ActivityIndicatorViewable.swift */; };
+		CFE2EE9D457958CBAB019A5B9FF03579 /* FlyHUD-iOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE128B302088479C113C1D8736364A1 /* FlyHUD-iOS-dummy.m */; };
+		D02F4DEE5F0B3C1174649B9F6BED642D /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E427BCCB00DAE58C6AC82B949CD22C96 /* ActivityIndicatorView.swift */; };
+		D088860EF70D7461D881A9808B3FCBF0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D366E4BF0785EC4C714470D6A2F349AF /* Model.swift */; };
+		D1FF38B3E83A3993D00DDBD8B9A7027E /* HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863E25151EED9D7856753FF22806745F /* HUD.swift */; };
+		DC2960FAED470300767121F70AC1D4AF /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D366E4BF0785EC4C714470D6A2F349AF /* Model.swift */; };
+		EC156FC6E30B92A3FCFD0B9A5F85FD52 /* HUD+ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FF52291DA12823FABB28128E542CE9 /* HUD+ProgressView.swift */; };
+		F0543B13CF4FBAE589B26A4380FAF472 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03D5C8D7581D57481E78A5E934963BF /* ShapeBuilder.swift */; };
+		F11CF131107F267E06DB2FC0E6C59C9A /* ActivityIndicatorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BECD70FE2339D8554EAE8C6B8C1AACF /* ActivityIndicatorAnimation.swift */; };
+		F632DB05795679EC513B1F0938E214D8 /* RotateViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3E2B1B21F0CEC079233D16E1A2DED9 /* RotateViewable.swift */; };
+		F9A46E5085DA1973CFB9286F8465E951 /* FlyHUD-iOS-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E3383328E898447AC09E3E642506B037 /* FlyHUD-iOS-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FF96734788D0EBD2643F23CCCF2FE4B9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 82940AF1EFDFD62DC23F50389585286D /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		B46F13DD0A6360C6931F8B61E35B568E /* PBXContainerItemProxy */ = {
+		BD3EC885913AD77BB3A2F23C2618118A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3ACD9FFDC5147A5344E7E4F937AFEC0D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 93A62FE7782A5F81666E37B7C436609D;
 			remoteInfo = "FlyHUD-iOS-FlyHUD";
 		};
-		D700DEE03FB0A9140FB6D28EA44E747B /* PBXContainerItemProxy */ = {
+		E56E9C59707B84FA590B5F174523F92E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3ACD9FFDC5147A5344E7E4F937AFEC0D /* Project object */;
 			proxyType = 1;
@@ -84,14 +84,14 @@
 		138B574A94D9305B3A4C074605B94C00 /* KeyboardObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		1FCB23038D35517265656B338B8CB458 /* DisplayLink.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisplayLink.swift; sourceTree = "<group>"; };
 		203C10320CBE020DDBDA79F1EEF7EEB3 /* FlyHUD-tvOS */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "FlyHUD-tvOS"; path = FlyHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2E1F9D82A71897808B5EB69575E17A39 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		2EBD71A43EB7CB7C4A905D7D42A2B599 /* ProgressViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProgressViewable.swift; sourceTree = "<group>"; };
 		36C4DD2AAE4AF248C7CD978EC67EEF8F /* FlyHUD.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FlyHUD.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		36E8D066D3030B4C2200B5DAD904C047 /* FlyHUD-tvOS-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FlyHUD-tvOS-umbrella.h"; path = "../FlyHUD-tvOS/FlyHUD-tvOS-umbrella.h"; sourceTree = "<group>"; };
-		37B6185EF66AC5BC209DAA1AE181EAFA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3A7E598336F1740224ADD83373EFFD18 /* ProgressAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressAnimation.swift; path = Sources/ProgressHUD/ProgressAnimation.swift; sourceTree = "<group>"; };
 		3E2FAACF0A52F2EAACD1BA98B6DD0F54 /* ResourceBundle-FlyHUD-FlyHUD-iOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-FlyHUD-FlyHUD-iOS-Info.plist"; sourceTree = "<group>"; };
 		3E3E2B1B21F0CEC079233D16E1A2DED9 /* RotateViewable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RotateViewable.swift; sourceTree = "<group>"; };
+		4836D738FCE6995321E9C9D03EFF9486 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		4B24395E657356C20A05DD4775C2ABB1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		4BECD70FE2339D8554EAE8C6B8C1AACF /* ActivityIndicatorAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ActivityIndicatorAnimation.swift; path = Sources/IndicatorHUD/ActivityIndicatorAnimation.swift; sourceTree = "<group>"; };
 		519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ProgressView.swift; path = Sources/ProgressHUD/ProgressView.swift; sourceTree = "<group>"; };
 		54E67B346C4163BE5749B20785D54A21 /* FlyHUD-tvOS-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FlyHUD-tvOS-prefix.pch"; path = "../FlyHUD-tvOS/FlyHUD-tvOS-prefix.pch"; sourceTree = "<group>"; };
@@ -129,33 +129,33 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		16F5A5D718D173F63EBBD435D7B484F6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A758DD90E5F8269FBAED43AF26DB62C7 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39BCC65D35447D03BB9572C2118FFA2E /* Frameworks */ = {
+		65EE73A4352FAAF6608D9352777DA7CD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E301F75A94DD9175E00F33066DB50907 /* Frameworks */ = {
+		85C12F153F02D867D48BE9F33E784302 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03436EC4DB84E3C38B9074A15D301967 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FA204BA2006D666ECCC1EB51D1301610 /* Frameworks */ = {
+		9FF08E61A13B778ACC671AEB1E408E57 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B4FC2C91AF458B9BFC2FD30BA5F29E8 /* Foundation.framework in Frameworks */,
+				6DAB19E2E60A7A013ADE19AFA1776C3D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F184BAB943FCC4C29913DD1B4D2415C6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +244,14 @@
 			path = Sources/HUD/Views;
 			sourceTree = "<group>";
 		};
+		41DD19948F280CC40C87159743C8DAEB /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				4B24395E657356C20A05DD4775C2ABB1 /* Foundation.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
 		4C7034DB0B3020162D219756BD559FC7 /* FlyHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -268,19 +276,19 @@
 			path = Sources/HUD/Extensions;
 			sourceTree = "<group>";
 		};
-		7FA032FF8BA77B92971A34E2AE05533B /* tvOS */ = {
+		951D7ED91B5BF994B81F92E98F1DAC64 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				2E1F9D82A71897808B5EB69575E17A39 /* Foundation.framework */,
+				4836D738FCE6995321E9C9D03EFF9486 /* Foundation.framework */,
 			);
-			name = tvOS;
+			name = iOS;
 			sourceTree = "<group>";
 		};
 		A060E9C1F3B6A987E43411C9854E27FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B81FEAABDA5D722AAA53CD7C5052DA8B /* iOS */,
-				7FA032FF8BA77B92971A34E2AE05533B /* tvOS */,
+				951D7ED91B5BF994B81F92E98F1DAC64 /* iOS */,
+				41DD19948F280CC40C87159743C8DAEB /* tvOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -303,14 +311,6 @@
 				519C4BCC4B4246ECBD6F5F123F9C5081 /* ProgressView.swift */,
 			);
 			name = FlyProgressHUD;
-			sourceTree = "<group>";
-		};
-		B81FEAABDA5D722AAA53CD7C5052DA8B /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				37B6185EF66AC5BC209DAA1AE181EAFA /* Foundation.framework */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		C5A91BBC0A04369B83FB42808A597B5D /* Protocols */ = {
@@ -336,19 +336,19 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		4EEFB6351A110F5919AE53502662A311 /* Headers */ = {
+		6143A5F21DCBD9E329A2239F8F743C45 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E5BEA3E7BCC07EFBA842B3DEAE4FE3C /* FlyHUD-tvOS-umbrella.h in Headers */,
+				6E0461650ADD6D4EC03DBFF28CAA2D89 /* FlyHUD-tvOS-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		896D461FE342D8049429D9890D4ED66F /* Headers */ = {
+		A6A200824A19E06EC8F924428B9C5B62 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12C3270788AED4B59CCE9A5746D0B256 /* FlyHUD-iOS-umbrella.h in Headers */,
+				F9A46E5085DA1973CFB9286F8465E951 /* FlyHUD-iOS-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,11 +357,11 @@
 /* Begin PBXNativeTarget section */
 		93A62FE7782A5F81666E37B7C436609D /* FlyHUD-iOS-FlyHUD */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2EC2C25664CD28ABFCE3B315E17F870F /* Build configuration list for PBXNativeTarget "FlyHUD-iOS-FlyHUD" */;
+			buildConfigurationList = F4E2A99261FF74E72064455F6A543C07 /* Build configuration list for PBXNativeTarget "FlyHUD-iOS-FlyHUD" */;
 			buildPhases = (
-				494622148733FD4E904ED2D94198EEBE /* Sources */,
-				39BCC65D35447D03BB9572C2118FFA2E /* Frameworks */,
-				57D460A6EDE4DC6BBB77F66013C8DFDD /* Resources */,
+				B6617D5CB0D3804A6B535AF1A9E03563 /* Sources */,
+				65EE73A4352FAAF6608D9352777DA7CD /* Frameworks */,
+				196A10D9D85BD94A6503ABED1598805D /* Resources */,
 			);
 			buildRules = (
 			);
@@ -374,11 +374,11 @@
 		};
 		97B9DD28A4F04E63E8C614F599F3A476 /* FlyHUD-tvOS-FlyHUD */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 748B274FCA16DD6C2E8952840E2151B1 /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS-FlyHUD" */;
+			buildConfigurationList = 58E7AF19A53FA4DE4763EC01B83FDF54 /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS-FlyHUD" */;
 			buildPhases = (
-				331BBB17305DB9653CB8E6620E418222 /* Sources */,
-				E301F75A94DD9175E00F33066DB50907 /* Frameworks */,
-				FEBEA03E3C27C464A860C0C542D8B8A2 /* Resources */,
+				30185F2A855C2D7D506C564362198F6A /* Sources */,
+				F184BAB943FCC4C29913DD1B4D2415C6 /* Frameworks */,
+				EC767977AA283CCA7B96AD6A94F0FBA5 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -391,17 +391,17 @@
 		};
 		BE84E99F080999C15C639E453A009281 /* FlyHUD-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C2151A1BEA81C24F5B41BF99FAFD0CC5 /* Build configuration list for PBXNativeTarget "FlyHUD-iOS" */;
+			buildConfigurationList = 0D550AC2D46902168380EE5655355A7A /* Build configuration list for PBXNativeTarget "FlyHUD-iOS" */;
 			buildPhases = (
-				896D461FE342D8049429D9890D4ED66F /* Headers */,
-				B31A4016C848C66432763ABCB111F3A8 /* Sources */,
-				16F5A5D718D173F63EBBD435D7B484F6 /* Frameworks */,
-				7E9475E966257B114B7D526065F361AD /* Resources */,
+				A6A200824A19E06EC8F924428B9C5B62 /* Headers */,
+				4195BD4DCBA3E4EDEC232AFDDFBB0384 /* Sources */,
+				9FF08E61A13B778ACC671AEB1E408E57 /* Frameworks */,
+				358D98A1867BF4C6E6991F8551A00CBC /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				1F757D191D8AB04F0E2599BADE3F66F4 /* PBXTargetDependency */,
+				662FE7B9C127C9466470DFD5F5642C31 /* PBXTargetDependency */,
 			);
 			name = "FlyHUD-iOS";
 			productName = FlyHUD;
@@ -410,17 +410,17 @@
 		};
 		E62C8D3F29D8E816648808C1363D5D81 /* FlyHUD-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4F343B6098AD9D596C4196911630DC4C /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS" */;
+			buildConfigurationList = 8680C10CEFF1B719FD1BF7B48F6DB41B /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS" */;
 			buildPhases = (
-				4EEFB6351A110F5919AE53502662A311 /* Headers */,
-				E576D855FE493CFD4527237904808400 /* Sources */,
-				FA204BA2006D666ECCC1EB51D1301610 /* Frameworks */,
-				2B141B7FE40FB9C1A49C2B3544CC7CEF /* Resources */,
+				6143A5F21DCBD9E329A2239F8F743C45 /* Headers */,
+				A9A478B16F3B10DECF9A8C3E9E4EF951 /* Sources */,
+				85C12F153F02D867D48BE9F33E784302 /* Frameworks */,
+				742380A28B372FB9CBAD8049EFA03973 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4D7D7A7CF7BAB434464BCECE4280390D /* PBXTargetDependency */,
+				82A4271DE0C8A485D2EEB2B6E44230CB /* PBXTargetDependency */,
 			);
 			name = "FlyHUD-tvOS";
 			productName = FlyHUD;
@@ -433,8 +433,8 @@
 		3ACD9FFDC5147A5344E7E4F937AFEC0D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 30DF8B49B73D4425E6C7831E59BF5D1A /* Build configuration list for PBXProject "FlyHUD" */;
 			compatibilityVersion = "Xcode 12.0";
@@ -445,6 +445,8 @@
 				en,
 			);
 			mainGroup = F433B896BBE6BAB026E29F66D764549A;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 0CDB03DB25C2AB444ACA6FB582492954 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -458,132 +460,172 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2B141B7FE40FB9C1A49C2B3544CC7CEF /* Resources */ = {
+		196A10D9D85BD94A6503ABED1598805D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				610B45F2E1EE7D621BDA8930D004F117 /* FlyHUD-tvOS-FlyHUD in Resources */,
+				FF96734788D0EBD2643F23CCCF2FE4B9 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		57D460A6EDE4DC6BBB77F66013C8DFDD /* Resources */ = {
+		358D98A1867BF4C6E6991F8551A00CBC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B2B6B7D258C92AD3CC54C69CA8D653F /* PrivacyInfo.xcprivacy in Resources */,
+				BE0E940416D500B32711A403C80892DA /* FlyHUD-iOS-FlyHUD in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7E9475E966257B114B7D526065F361AD /* Resources */ = {
+		742380A28B372FB9CBAD8049EFA03973 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				420A2BE4980E814F4A705F53368A83C2 /* FlyHUD-iOS-FlyHUD in Resources */,
+				1D475E705DC4AE703F35D897010997BA /* FlyHUD-tvOS-FlyHUD in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FEBEA03E3C27C464A860C0C542D8B8A2 /* Resources */ = {
+		EC767977AA283CCA7B96AD6A94F0FBA5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72ACF29829B6114B64C09E03B791ECF1 /* PrivacyInfo.xcprivacy in Resources */,
+				9942C04FD93EA4BE6781839ABD8A6969 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		331BBB17305DB9653CB8E6620E418222 /* Sources */ = {
+		30185F2A855C2D7D506C564362198F6A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		494622148733FD4E904ED2D94198EEBE /* Sources */ = {
+		4195BD4DCBA3E4EDEC232AFDDFBB0384 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74A1B907A5942ED313EFC9448B61332F /* ActivityIndicatorAnimation.swift in Sources */,
+				227BE3C50E19CDB9D8AB6C1708ED5491 /* ActivityIndicatorView.swift in Sources */,
+				CAA4C5237E464FC53A2725429497EFDC /* ActivityIndicatorViewable.swift in Sources */,
+				39CB2C7FE4177F5A2AC4F7A803BC24E2 /* BackgroundView.swift in Sources */,
+				5E2CF4F4DAA6AB07DE0267681A319634 /* BaseView.swift in Sources */,
+				0DCF9FC849A23D38368F7BED7B13E2E3 /* Button.swift in Sources */,
+				AE663BB5A5D3531C9B51039D9026D017 /* ContentView.swift in Sources */,
+				6448E78263C006CE8BF5AB4825A5EA49 /* DisplayLink.swift in Sources */,
+				A0E8F436164518D58C120D014E426C38 /* Extensions.swift in Sources */,
+				CFE2EE9D457958CBAB019A5B9FF03579 /* FlyHUD-iOS-dummy.m in Sources */,
+				D1FF38B3E83A3993D00DDBD8B9A7027E /* HUD.swift in Sources */,
+				47310E7397643DB43A172BC1D30B7E40 /* HUD+ActivityIndicatorView.swift in Sources */,
+				EC156FC6E30B92A3FCFD0B9A5F85FD52 /* HUD+ProgressView.swift in Sources */,
+				8556B10CC7D373B099A396A6383CD9F1 /* HUDExtended.swift in Sources */,
+				09208285192DD3C318F2F4DB003FC2A3 /* KeyboardObserver.swift in Sources */,
+				82D952ADB0A2E9C4321F4E01580F0CF8 /* Label.swift in Sources */,
+				D088860EF70D7461D881A9808B3FCBF0 /* Model.swift in Sources */,
+				6FC657D3D537C0BBE444ADB55FED5091 /* ProgressAnimation.swift in Sources */,
+				A8CF13E3F6D7BE23755D1D0D57C5CD7D /* ProgressView.swift in Sources */,
+				1EB0EFA8474A0C7B7219B9EA9E99C9B2 /* ProgressViewable.swift in Sources */,
+				F632DB05795679EC513B1F0938E214D8 /* RotateViewable.swift in Sources */,
+				06A47A247112ECD2B51EBC2F3C172591 /* ShapeBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B31A4016C848C66432763ABCB111F3A8 /* Sources */ = {
+		A9A478B16F3B10DECF9A8C3E9E4EF951 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E16FB8C7C49F275807BCFC08FB337C14 /* ActivityIndicatorAnimation.swift in Sources */,
-				B285496354044C1E9ED72CC565636F0E /* ActivityIndicatorView.swift in Sources */,
-				7ECAB47306256E365D870B55682F32B4 /* ActivityIndicatorViewable.swift in Sources */,
-				C5AB6397FDED0D890AB30AE2DBD4DB72 /* BackgroundView.swift in Sources */,
-				6D480E3F83B0BA7FEE790E634EB3229E /* BaseView.swift in Sources */,
-				F1D08305530E549BD3051B5C73C7715E /* Button.swift in Sources */,
-				D2DF503D5BF803DEA004633418DA9E7F /* ContentView.swift in Sources */,
-				C4C4BE3DC61130CCACD73F26A78736FD /* DisplayLink.swift in Sources */,
-				920821AA898FED93B4A5EA036C5A63DD /* Extensions.swift in Sources */,
-				D3A806AA2EBAF209F9BE58688111CB48 /* FlyHUD-iOS-dummy.m in Sources */,
-				17A8225609F23BD8C4412CD778C7A550 /* HUD.swift in Sources */,
-				B2FA700D30E799B4797C2CB988B8D021 /* HUD+ActivityIndicatorView.swift in Sources */,
-				28B9BE54DBE778CA98BC564BAAB7862F /* HUD+ProgressView.swift in Sources */,
-				29457EF996A9FFA6D67337831115F0BF /* HUDExtended.swift in Sources */,
-				275637E22C9BD982B0F9FAC308525E7A /* KeyboardObserver.swift in Sources */,
-				20FFB705F4E9DC132FA71137DBAE8F4E /* Label.swift in Sources */,
-				9AE1DCAAE0250BCBFD206ECAA7C62CD2 /* Model.swift in Sources */,
-				CEA5EA038C4701C91E25BB95328A2C1B /* ProgressAnimation.swift in Sources */,
-				9C300BFF76CD0A7B77BBE3FF47BB4A96 /* ProgressView.swift in Sources */,
-				32037AF744DFDA2E4B885E2E1FAFDF65 /* ProgressViewable.swift in Sources */,
-				15EF7305E88E9FECDF408BB702049B2A /* RotateViewable.swift in Sources */,
-				74F0A928DD3A65DD305A80B1F3E0CD46 /* ShapeBuilder.swift in Sources */,
+				F11CF131107F267E06DB2FC0E6C59C9A /* ActivityIndicatorAnimation.swift in Sources */,
+				D02F4DEE5F0B3C1174649B9F6BED642D /* ActivityIndicatorView.swift in Sources */,
+				298BED46E9D128A449A0A34AA17ED035 /* ActivityIndicatorViewable.swift in Sources */,
+				618870DA548CB423F2C7A57DBBD5453B /* BackgroundView.swift in Sources */,
+				38152B26FB4B6AD425F07F851405439F /* BaseView.swift in Sources */,
+				5CDAB10D5F6E87C13D656A49AEBF8D9D /* Button.swift in Sources */,
+				C91DBEC420DF1323EF149740C317A0A9 /* ContentView.swift in Sources */,
+				7B1661824D1065E89C02583B20332442 /* DisplayLink.swift in Sources */,
+				5CBC3241EEE7BF3017A9F5AE75F2012B /* Extensions.swift in Sources */,
+				5C1008219428AC62E5469DB9E0CD5700 /* FlyHUD-tvOS-dummy.m in Sources */,
+				5156521A165500BA9B343F5A82512A37 /* HUD.swift in Sources */,
+				05F4BD1F6C31088CB7698F141823BF90 /* HUD+ActivityIndicatorView.swift in Sources */,
+				6272A8892A63A6871F1DAA0780B1148F /* HUD+ProgressView.swift in Sources */,
+				3FCF56ED83DA6B7EFEDCD623788DFD16 /* HUDExtended.swift in Sources */,
+				02CBF957BFF8180CA0F23A3002AFC470 /* KeyboardObserver.swift in Sources */,
+				7EED87C23E4861329DFDACE2482D8E66 /* Label.swift in Sources */,
+				DC2960FAED470300767121F70AC1D4AF /* Model.swift in Sources */,
+				2244A3A5D3708DB721EA2FE1E33F4940 /* ProgressAnimation.swift in Sources */,
+				0AC69E289569AF7E2972296856B7CB78 /* ProgressView.swift in Sources */,
+				045933858A0B7BCE0799D55EFCAD3BED /* ProgressViewable.swift in Sources */,
+				5A58BD8DF9D030AE59D9A71E9B36EA3C /* RotateViewable.swift in Sources */,
+				F0543B13CF4FBAE589B26A4380FAF472 /* ShapeBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E576D855FE493CFD4527237904808400 /* Sources */ = {
+		B6617D5CB0D3804A6B535AF1A9E03563 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				631A61A4F2345F0C4F2EC68D0C13FD14 /* ActivityIndicatorAnimation.swift in Sources */,
-				4DADA75D728D5BD1B2E5AD7B5D3917FE /* ActivityIndicatorView.swift in Sources */,
-				02FE237E813119E94A0E98B63687DEBF /* ActivityIndicatorViewable.swift in Sources */,
-				B20CA70F8EBF3318DD3B6F0D71CDE586 /* BackgroundView.swift in Sources */,
-				15305C2FF74A27A2AD8758D357153861 /* BaseView.swift in Sources */,
-				E6BE1AD6C1C5FA604D8FAAF057D370C2 /* Button.swift in Sources */,
-				7642FC9D04D182239A46FD649C96BFAD /* ContentView.swift in Sources */,
-				FDBCE05170F2466CF4FD26A3F943556E /* DisplayLink.swift in Sources */,
-				B35047D0B82BF146B90761F936A2BD56 /* Extensions.swift in Sources */,
-				F67DAFD446250FEE0BBC952663C065FD /* FlyHUD-tvOS-dummy.m in Sources */,
-				0D199D0B6FF32E0D855F5C79FF876F22 /* HUD.swift in Sources */,
-				BB36393B7965CB3F03B2BB10464E854A /* HUD+ActivityIndicatorView.swift in Sources */,
-				03C7D7D168FC0F88AE6160EA31D046C6 /* HUD+ProgressView.swift in Sources */,
-				331BEA16A68D88CF9FD1279CAED2A6F2 /* HUDExtended.swift in Sources */,
-				FFA425FE5478B99F90F5C486CC9874A2 /* KeyboardObserver.swift in Sources */,
-				326DF646588873BF6E8B0768CD11A068 /* Label.swift in Sources */,
-				42E6A8A72CC9FBA01332C914AB7A1BB4 /* Model.swift in Sources */,
-				0F916D96D9DB624511F2027FE734E0DE /* ProgressAnimation.swift in Sources */,
-				0F60850F3C332804A01DF5E366224991 /* ProgressView.swift in Sources */,
-				51517B63A7898E63D815D94201795A65 /* ProgressViewable.swift in Sources */,
-				066C01B925617FC77D35DB256B853B64 /* RotateViewable.swift in Sources */,
-				BAC52E43F951DE9C1C8F88EB756C23EE /* ShapeBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1F757D191D8AB04F0E2599BADE3F66F4 /* PBXTargetDependency */ = {
+		662FE7B9C127C9466470DFD5F5642C31 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "FlyHUD-iOS-FlyHUD";
 			target = 93A62FE7782A5F81666E37B7C436609D /* FlyHUD-iOS-FlyHUD */;
-			targetProxy = B46F13DD0A6360C6931F8B61E35B568E /* PBXContainerItemProxy */;
+			targetProxy = BD3EC885913AD77BB3A2F23C2618118A /* PBXContainerItemProxy */;
 		};
-		4D7D7A7CF7BAB434464BCECE4280390D /* PBXTargetDependency */ = {
+		82A4271DE0C8A485D2EEB2B6E44230CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "FlyHUD-tvOS-FlyHUD";
 			target = 97B9DD28A4F04E63E8C614F599F3A476 /* FlyHUD-tvOS-FlyHUD */;
-			targetProxy = D700DEE03FB0A9140FB6D28EA44E747B /* PBXContainerItemProxy */;
+			targetProxy = E56E9C59707B84FA590B5F174523F92E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0B346DC23D562ED6065849B2744F3312 /* Debug */ = {
+		057985C203ABAAA22237B27CDD5FBBB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D49E32C61D33BDF2C395E934E0A382A0 /* FlyHUD-iOS.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS.modulemap";
+				PRODUCT_MODULE_NAME = FlyHUD;
+				PRODUCT_NAME = FlyHUD;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		1E08A199500012FA0C2F677E82A6B1B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -636,7 +678,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -646,116 +688,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Debug;
 		};
-		3C9343BB0E6EE0BBD0CCC028D8940C2A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 889E785F095395DFC7E75F884DD17058 /* FlyHUD-iOS.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FlyHUD-iOS";
-				IBSC_MODULE = FlyHUD;
-				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/ResourceBundle-FlyHUD-FlyHUD-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				PRODUCT_NAME = FlyHUD;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		48950C7A51A58A2D5F47E577814EDF52 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 889E785F095395DFC7E75F884DD17058 /* FlyHUD-iOS.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS.modulemap";
-				PRODUCT_MODULE_NAME = FlyHUD;
-				PRODUCT_NAME = FlyHUD;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		5FFF34E96C070E1B3CDBAC1B02AAD2F5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F95F3E51B13B1A75AA4CB33F3E5E76C3 /* FlyHUD-tvOS.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FlyHUD-tvOS";
-				IBSC_MODULE = FlyHUD;
-				INFOPLIST_FILE = "Target Support Files/FlyHUD-tvOS/ResourceBundle-FlyHUD-FlyHUD-tvOS-Info.plist";
-				PRODUCT_NAME = FlyHUD;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
-		9AE560C4A3A9F0B32CE0D82BB813AA58 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D49E32C61D33BDF2C395E934E0A382A0 /* FlyHUD-iOS.release.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS.modulemap";
-				PRODUCT_MODULE_NAME = FlyHUD;
-				PRODUCT_NAME = FlyHUD;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		AC5EA4318677C781990ED54191C88542 /* Release */ = {
+		4B0130880B947C973F4EE63C11F6E541 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFC9319EC5A7A53E70990B678279AEA9 /* FlyHUD-tvOS.release.xcconfig */;
 			buildSettings = {
@@ -767,12 +704,85 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
-		B5A2F4C61210B70A2EFAAD404542C659 /* Release */ = {
+		4C40270295B56820BC42DEA84DAF5563 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F95F3E51B13B1A75AA4CB33F3E5E76C3 /* FlyHUD-tvOS.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FlyHUD-tvOS";
+				IBSC_MODULE = FlyHUD;
+				INFOPLIST_FILE = "Target Support Files/FlyHUD-tvOS/ResourceBundle-FlyHUD-FlyHUD-tvOS-Info.plist";
+				PRODUCT_NAME = FlyHUD;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		5E8B9372EB074A8DB0D5EE9A5525CCED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 889E785F095395DFC7E75F884DD17058 /* FlyHUD-iOS.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FlyHUD-iOS";
+				IBSC_MODULE = FlyHUD;
+				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/ResourceBundle-FlyHUD-FlyHUD-iOS-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_NAME = FlyHUD;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		6A75C6B7ADC33178EA14679DF21F03C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 889E785F095395DFC7E75F884DD17058 /* FlyHUD-iOS.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/FlyHUD-iOS/FlyHUD-iOS.modulemap";
+				PRODUCT_MODULE_NAME = FlyHUD;
+				PRODUCT_NAME = FlyHUD;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7FCB61E3B1C3CF83CBD2EDABC2D405F1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D49E32C61D33BDF2C395E934E0A382A0 /* FlyHUD-iOS.release.xcconfig */;
 			buildSettings = {
@@ -780,7 +790,7 @@
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/FlyHUD-iOS";
 				IBSC_MODULE = FlyHUD;
 				INFOPLIST_FILE = "Target Support Files/FlyHUD-iOS/ResourceBundle-FlyHUD-FlyHUD-iOS-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_NAME = FlyHUD;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -789,7 +799,7 @@
 			};
 			name = Release;
 		};
-		C339C8C8E0954E9E31E5255C8C04E9F3 /* Debug */ = {
+		A98A7889E13F9354C2E11E154EA86896 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F95F3E51B13B1A75AA4CB33F3E5E76C3 /* FlyHUD-tvOS.debug.xcconfig */;
 			buildSettings = {
@@ -801,7 +811,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-tvOS/FlyHUD-tvOS-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Target Support Files/FlyHUD-tvOS/FlyHUD-tvOS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -815,15 +828,16 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		DF07E725B960ABF81C6BE40E31116D62 /* Release */ = {
+		B0742CE347EDFAEBF6163FE5674C9D70 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -873,7 +887,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -882,11 +896,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
 			name = Release;
 		};
-		F5866E13DC1AE3631BA3AF7A62284790 /* Release */ = {
+		C7A08E25A338281E80E3C9256839BFAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFC9319EC5A7A53E70990B678279AEA9 /* FlyHUD-tvOS.release.xcconfig */;
 			buildSettings = {
@@ -898,7 +912,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PREFIX_HEADER = "Target Support Files/FlyHUD-tvOS/FlyHUD-tvOS-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Target Support Files/FlyHUD-tvOS/FlyHUD-tvOS-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -912,9 +929,10 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -924,11 +942,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2EC2C25664CD28ABFCE3B315E17F870F /* Build configuration list for PBXNativeTarget "FlyHUD-iOS-FlyHUD" */ = {
+		0D550AC2D46902168380EE5655355A7A /* Build configuration list for PBXNativeTarget "FlyHUD-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3C9343BB0E6EE0BBD0CCC028D8940C2A /* Debug */,
-				B5A2F4C61210B70A2EFAAD404542C659 /* Release */,
+				6A75C6B7ADC33178EA14679DF21F03C8 /* Debug */,
+				057985C203ABAAA22237B27CDD5FBBB6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -936,35 +954,35 @@
 		30DF8B49B73D4425E6C7831E59BF5D1A /* Build configuration list for PBXProject "FlyHUD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0B346DC23D562ED6065849B2744F3312 /* Debug */,
-				DF07E725B960ABF81C6BE40E31116D62 /* Release */,
+				1E08A199500012FA0C2F677E82A6B1B8 /* Debug */,
+				B0742CE347EDFAEBF6163FE5674C9D70 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4F343B6098AD9D596C4196911630DC4C /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS" */ = {
+		58E7AF19A53FA4DE4763EC01B83FDF54 /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS-FlyHUD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C339C8C8E0954E9E31E5255C8C04E9F3 /* Debug */,
-				F5866E13DC1AE3631BA3AF7A62284790 /* Release */,
+				4C40270295B56820BC42DEA84DAF5563 /* Debug */,
+				4B0130880B947C973F4EE63C11F6E541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		748B274FCA16DD6C2E8952840E2151B1 /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS-FlyHUD" */ = {
+		8680C10CEFF1B719FD1BF7B48F6DB41B /* Build configuration list for PBXNativeTarget "FlyHUD-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5FFF34E96C070E1B3CDBAC1B02AAD2F5 /* Debug */,
-				AC5EA4318677C781990ED54191C88542 /* Release */,
+				A98A7889E13F9354C2E11E154EA86896 /* Debug */,
+				C7A08E25A338281E80E3C9256839BFAD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C2151A1BEA81C24F5B41BF99FAFD0CC5 /* Build configuration list for PBXNativeTarget "FlyHUD-iOS" */ = {
+		F4E2A99261FF74E72064455F6A543C07 /* Build configuration list for PBXNativeTarget "FlyHUD-iOS-FlyHUD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				48950C7A51A58A2D5F47E577814EDF52 /* Debug */,
-				9AE560C4A3A9F0B32CE0D82BB813AA58 /* Release */,
+				5E8B9372EB074A8DB0D5EE9A5525CCED /* Debug */,
+				7FCB61E3B1C3CF83CBD2EDABC2D405F1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -12,7 +12,7 @@ use_frameworks! :linkage => :dynamic
 workspace 'FlyHUD.xcworkspace'
 
 target 'Example iOS' do
-  platform :ios, '12.0'
+  platform :ios, '13.0'
 
   pod 'FlyHUD', :path => './'#, :subspecs => ['FlyHUD']
 
@@ -22,7 +22,7 @@ target 'Example iOS' do
 end
 
 target 'Example tvOS' do
-  platform :tvos, '12.0'
+  platform :tvos, '13.0'
 
   pod 'FlyHUD', :path => './'#, :subspecs => ['FlyHUD']
 end
