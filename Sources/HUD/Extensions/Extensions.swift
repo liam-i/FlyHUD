@@ -16,7 +16,7 @@ extension UIView {
         UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
 
-    /// UIStackView isHidden bug fixed: - http://www.openradar.me/25087688
+    /// UIStackView isHidden bug fixed: - https://openradar.appspot.com/25087688
     var isHiddenInStackView: Bool {
         get { isHidden }
         set {
