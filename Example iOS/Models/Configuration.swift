@@ -1,0 +1,112 @@
+//
+//  Configuration.swift
+//  Example iOS
+//
+//  Created by liam on 2021/7/9.
+//  Copyright © 2021 Liam. All rights reserved.
+//
+
+import UIKit
+import FlyHUD
+import FlyIndicatorHUD
+import FlyProgressHUD
+
+enum ShowTo: CaseIterable {
+    case view
+    case navView
+    case window
+}
+
+struct Configuration {
+    var showTo: ShowTo = .view
+    var isDefaultModeStyle: Bool = true
+    var isEventDeliveryEnabled: Bool = false
+
+    var isLabelEnabled: Bool = true
+    var isDetailsLabelEnabled: Bool = false
+    var isButtonEnabled: Bool = false
+
+//    var mode: ContentView.Mode = .indicator()
+    var position: ContentView.IndicatorPosition = .top
+    var layout: HUD.Layout = .init()
+    var contentLayout: ContentView.Layout = .init()
+    var contentColor: Color = .default
+    var contentViewStyle: BackgroundView.Style = .blur()
+    var backgroundViewStyle: BackgroundView.Style = .solidColor
+    var contentViewColor: Color = .default
+    var backgroundViewColor: Color = .default
+
+//    var progress: Float = 0.0
+//    var observedProgress: Progress?
+    var animation: HUD.Animation = .init()
+    var forceAnimation: HUD.Animation = .init()
+    var isForceAnimationEnabled: Bool = false
+    var currAnimation: HUD.Animation { isForceAnimationEnabled ? forceAnimation : animation }
+
+    var graceTime: TimeInterval = 0.0
+    var minShowTime: TimeInterval = 0.0
+    var removeFromSuperViewOnHide: Bool = true
+    var isCountEnabled: Bool = false
+
+    #if os(iOS)
+    var keyboardGuide: HUD.KeyboardGuide?
+    #endif
+
+    var isMotionEffectsEnabled: Bool = false
+    var isDynamicTypeEnabled: Bool = false
+    var roundedCorners: CGFloat = 5.0
+//    weak var delegate: (ViewController & HUDDelegate)?
+//    var completionBlock: ((_ hud: HUD) -> Void)?
+
+    var hideAfterDelay: TimeInterval = 2.0 // status hud.
+    var takeTime: UInt32 = 3 // task time.
+}
+
+extension FlyHUD.ContentView.Mode: @retroactive Swift.CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .text:                                 return "Wrong password"
+        case .indicator:                            return "UIActivityIndicatorView"
+        case .progress:                             return "UIProgressView"
+        case .custom(let view):
+            return MainActor.assumeIsolated {
+                switch view {
+                case let view as ProgressView:          return "\(view.style)"
+                case let view as ActivityIndicatorView: return "\(view.style)"
+                default:                                return "Done"
+                }
+            }
+        }
+    }
+
+    var isProgressView: Bool {
+        switch self {
+        case .progress:         return true
+        case .custom(let view): return view is ProgressViewable
+        default:                return false
+        }
+    }
+}
+
+#if os(iOS)
+extension FlyHUD.HUD.KeyboardGuide: Swift.CustomStringConvertible {
+    public static var allCases: [String] { ["disable", "center", "bottom", "default"] }
+
+    public init?(_ name: String) {
+        switch name {
+        case "disable": self = .disable
+        case "center": self = .center()
+        case "bottom": self = .bottom()
+        default: return nil
+        }
+    }
+
+    public var description: String {
+        switch self {
+        case .disable: return "disable"
+        case .center:  return "center"
+        case .bottom:  return "bottom"
+        }
+    }
+}
+#endif

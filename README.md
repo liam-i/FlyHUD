@@ -1,7 +1,9 @@
+# FlyHUD
+
 ![FlyHUD: Easy-to-use HUD in Swift](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/logo-dark.png#gh-dark-mode-only)
 ![FlyHUD: Easy-to-use HUD in Swift](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/logo-light.png#gh-light-mode-only)
 
-[![Swift](https://img.shields.io/badge/Swift-5.7_5.8_5.9_5.10-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.7_5.8_5.9_5.10-Orange?style=flat-square)
+[![Swift](https://img.shields.io/badge/Swift-5.9_5.10_6.0-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.9_5.10_6.0-Orange?style=flat-square)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS_tvOS_visionOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-iOS_tvOS_visionOS-Green?style=flat-square)
 [![CocoaPods](https://img.shields.io/cocoapods/v/FlyHUD.svg?style=flat)](https://cocoapods.org/pods/FlyHUD)
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
@@ -15,20 +17,21 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 ## ScreenShots
 
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
+[![Indicator styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
+[![Progress styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
+[![Text mode](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
+[![Custom view](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
+[![Animation styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
+[![Keyboard guide](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
+[![Dark mode](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
 
 ## Requirements
 
-* iOS 13.0+ 
-* tvOS 13.0+ 
-* Xcode 14.1+
-* Swift 5.7.1+
+* iOS 13.0+
+* tvOS 13.0+
+* visionOS 1.0+
+* Xcode 15.0+
+* Swift 5.9+
 
 ## Installation
 
@@ -37,9 +40,10 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 #### ...using `swift build`
 
 If you are using the [Swift Package Manager](https://www.swift.org/documentation/package-manager), add a dependency to your `Package.swift` file and import the HUD library into the desired targets:
+
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.12")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.0")
 ],
 targets: [
     .target(
@@ -55,9 +59,9 @@ targets: [
 
 If you are using Xcode, then you should:
 
-- File > Swift Packages > Add Package Dependency
-- Add `https://github.com/liam-i/FlyHUD.git`
-- Select "Up to Next Minor" with "1.5.12"
+* File > Swift Packages > Add Package Dependency
+* Add `https://github.com/liam-i/FlyHUD.git`
+* Select "Up to Next Minor" with "1.6.0"
 
 > [!TIP]
 > For detailed tutorials, see: [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -68,23 +72,23 @@ If you're using [CocoaPods](https://cocoapods.org), add this to your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-# Or use CND source
+# Or use CDN source
 # source 'https://cdn.cocoapods.org/'
 platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do
   # Use the FlyHUD, FlyIndicatorHUD and FlyProgressHUD components.
-  pod 'FlyHUD', '~> 1.5.12'
+  pod 'FlyHUD', '~> 1.6.0'
 
   # Or, just use the FlyHUD component.
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUD']
 
   # Or, just use the FlyHUD and FlyIndicatorHUD components.
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyIndicatorHUD']
 
   # Or, just use the FlyHUD and FlyProgressHUD components.
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
 end
 ```
 
@@ -98,7 +102,7 @@ And run `pod install`.
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.5.12
+github "liam-i/FlyHUD" ~> 1.6.0
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.
@@ -124,7 +128,7 @@ DispatchQueue.global().async {
 ```swift
 let hud = HUD.show(to: view, mode: .progress(), label: "Loading")
 Task.request { progress in
-    hud.progress = progress
+    hud.contentView.progress = progress
 } completion: {
     hud.hide()
 }
@@ -167,9 +171,9 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD is a UI class and should therefore only be accessed on the main thread.
 
-For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [here](https://liam-i.github.io/FlyHUD/main/documentation/flyhud).
+For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [in the API docs](https://liam-i.github.io/FlyHUD/main/documentation/flyhud).
 
-To run the example project, first clone the repo, then `cd` to the root directory and run `pod install`. Then open HUD.xcworkspace in Xcode.
+To run the example project, clone the repo and open `FlyHUD.xcworkspace` in Xcode.
 
 ## Documentation
 
@@ -177,20 +181,12 @@ The documentation for releases and `main` are available here:
 
 * [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
 * [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
-
-<details>
-  <summary>
-  Other versions
-  </summary>
-
 * [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
 * [1.2.6](https://liam-i.github.io/FlyHUD/1.2.6/documentation/lphud)
 * [1.1.0](https://liam-i.github.io/FlyHUD/1.1.0/documentation/lpprogresshud)
-
-  </details>
 
 ## Why the name FlyHUD?
 

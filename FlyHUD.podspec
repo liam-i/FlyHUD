@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'FlyHUD'
-  s.version          = '1.5.13'
+  s.version          = '1.6.0'
   s.summary          = 'A lightweight and easy-to-use HUD for iOS and tvOS apps.'
   s.description      = <<-DESC
                        FlyHUD is a lightweight and easy-to-use HUD designed to display
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = '13.0'
   s.visionos.deployment_target = "1.0"
 
-  s.swift_versions = ['5.0']
+  s.swift_versions = ['5.0', '6.0']
 
   s.subspec 'FlyHUD' do |ss|
     ss.source_files = ['Sources/HUD/**/*.swift']

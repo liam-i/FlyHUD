@@ -1,7 +1,9 @@
+# FlyHUD
+
 ![FlyHUD: Easy-to-use HUD in Swift](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/logo-dark.png#gh-dark-mode-only)
 ![FlyHUD: Easy-to-use HUD in Swift](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/logo-light.png#gh-light-mode-only)
 
-[![Swift](https://img.shields.io/badge/Swift-5.7_5.8_5.9_5.10-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.7_5.8_5.9_5.10-Orange?style=flat-square)
+[![Swift](https://img.shields.io/badge/Swift-5.9_5.10_6.0-orange?style=flat-square)](https://img.shields.io/badge/Swift-5.9_5.10_6.0-Orange?style=flat-square)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS_tvOS_visionOS-yellowgreen?style=flat-square)](https://img.shields.io/badge/Platforms-iOS_tvOS_visionOS-Green?style=flat-square)
 [![CocoaPods](https://img.shields.io/cocoapods/v/FlyHUD.svg?style=flat)](https://cocoapods.org/pods/FlyHUD)
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
@@ -15,20 +17,21 @@
 
 ## 屏幕截图
 
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
-[![](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
+[![指示器样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
+[![进度条样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
+[![文本模式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
+[![自定义视图](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
+[![动画样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
+[![键盘引导](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
+[![深色模式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
 
 ## 要求
 
-* iOS 13.0+ 
-* tvOS 13.0+ 
-* Xcode 14.1+
-* Swift 5.7.1+
+* iOS 13.0+
+* tvOS 13.0+
+* visionOS 1.0+
+* Xcode 15.0+
+* Swift 5.9+
 
 ## 安装
 
@@ -40,7 +43,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.5.12")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.0")
 ],
 targets: [
     .target(
@@ -56,36 +59,36 @@ targets: [
 
 如果你使用 Xcode，那么你应该：
 
-- File > Swift Packages > Add Package Dependency
-- Add `https://github.com/liam-i/FlyHUD.git`
-- Select "Up to Next Minor" with "1.5.12"
+* File > Swift Packages > Add Package Dependency
+* Add `https://github.com/liam-i/FlyHUD.git`
+* Select "Up to Next Minor" with "1.6.0"
 
 > [!TIP]
 > 相关详细教程，请查看：[Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
 
 ### CocoaPods
 
-如果你使用 [CocoaPods](https://cocoapods.org)，可将一下内容添加到你的 `Podfile` 中：
+如果你使用 [CocoaPods](https://cocoapods.org)，可将以下内容添加到你的 `Podfile` 中：
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-# 或者使用 CND 源
+# 或者使用 CDN 源
 # source 'https://cdn.cocoapods.org/'
 platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do
   # 使用 FlyHUD、FlyIndicatorHUD 和 FlyProgressHUD 组件。
-  pod 'FlyHUD', '~> 1.5.12'
+  pod 'FlyHUD', '~> 1.6.0'
 
   # 或者，只使用 FlyHUD 组件。
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUD']
 
   # 或者，只使用 FlyHUD 和 FlyIndicatorHUD 组件。
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyIndicatorHUD']
 
   # 或者，只使用 FlyHUD 和 FlyProgressHUD 组件。
-  pod 'FlyHUD', '~> 1.5.12', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
 end
 ```
 
@@ -99,7 +102,7 @@ end
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.5.12
+github "liam-i/FlyHUD" ~> 1.6.0
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。
@@ -125,7 +128,7 @@ DispatchQueue.global().async {
 ```swift
 let hud = HUD.show(to: view, mode: .progress(), label: "Loading")
 Task.request { progress in
-    hud.progress = progress
+    hud.contentView.progress = progress
 } completion: {
     hud.hide()
 }
@@ -170,7 +173,7 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
 有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)。
 
-运行 `example` 项目，先克隆存储库，然后 `cd` 到根目录并运行 `pod install`。 最后在 Xcode 中打开 `HUD.xcworkspace`。
+运行 `example` 项目，先克隆存储库，然后在 Xcode 中打开 `FlyHUD.xcworkspace`。
 
 ## 文档
 
@@ -178,20 +181,12 @@ HUD.showStatus(to: view, label: "You have a message.") {
 
 * [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
 * [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
-
-<details>
-  <summary>
-  其他版本
-  </summary>
-
 * [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
 * [1.2.6](https://liam-i.github.io/FlyHUD/1.2.6/documentation/lphud)
 * [1.1.0](https://liam-i.github.io/FlyHUD/1.1.0/documentation/lpprogresshud)
-
-  </details>
 
 ## 为什么取名 FlyHUD？
 

@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -29,21 +29,21 @@ let package = Package(
             name: "FlyHUD",
             path: "Sources/HUD",
             resources: [.copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .target(
             name: "FlyIndicatorHUD",
             dependencies: ["FlyHUD"],
             path: "Sources/IndicatorHUD",
             resources: [.copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.swiftLanguageMode(.v6)]
         ),
         .target(
             name: "FlyProgressHUD",
             dependencies: ["FlyHUD"],
             path: "Sources/ProgressHUD",
             resources: [.copy("PrivacyInfo.xcprivacy")],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.swiftLanguageMode(.v6)]
         ),
     ]
 )
