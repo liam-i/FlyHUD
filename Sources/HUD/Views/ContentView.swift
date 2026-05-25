@@ -15,11 +15,11 @@ import UIKit
 
 extension ContentView {
     public enum Mode: Equatable, HUDExtended {
-        /// Shows only labels and button.
+        /// Shows only labels and a button.
         case text
-        /// UIActivityIndicatorView. Style `Defalut to .large`.
+        /// UIActivityIndicatorView. Style `Defaults to .large`.
         case indicator(UIActivityIndicatorView.Style = .h.large)
-        /// UIProgressView.  Style `Defalut to .default`.
+        /// UIProgressView. Style `Defaults to .default`.
         case progress(UIProgressView.Style = .default)
         /// Shows a custom view. e.g. a UIImageView. The view should implement intrinsicContentSize
         /// for proper sizing. For best results use approximately 37 by 37 pixels.
@@ -77,7 +77,7 @@ extension ContentView {
             }
         }
 
-        fileprivate var valueOfText: NSTextAlignment {
+        @MainActor fileprivate var valueOfText: NSTextAlignment {
             switch self {
             case .center:   return .center
             case .leading:  return UIView.isRTL ? .right : .left
@@ -138,7 +138,7 @@ extension ContentView {
 /// The content view of the HUD object. The view containing the labels, button and indicator (or customView).
 /// The HUD object places the content in this view in front of any background views.
 public class ContentView: BackgroundView, DisplayLinkDelegate {
-    /// A label that holds an optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
+    /// A label that holds an optional short message to be displayed near the activity indicator. The HUD is automatically resized to fit the entire text.
     public private(set) lazy var label: UILabel = Label(fontSize: 16.0, numberOfLines: 1, textColor: contentColor)
     /// A label that holds an optional details message displayed below the labelText message. The details text can span multiple lines.
     public private(set) lazy var detailsLabel: UILabel = Label(fontSize: 12.0, numberOfLines: 0, textColor: contentColor)
@@ -170,6 +170,16 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     public var contentColor: UIColor? = .h.content {
         didSet {
             contentColor.h.notEqual(oldValue, do: updateViewsContentColor())
+        }
+    }
+
+    /// Enables Dynamic Type support for all labels. When set to true, label fonts scale with the user's preferred content size.
+    ///
+    /// - Note: This is opt-in. Set to true to support accessibility text sizing.
+    public var isDynamicTypeEnabled: Bool = false {
+        didSet {
+            (label as? Label)?.isDynamicTypeEnabled = isDynamicTypeEnabled
+            (detailsLabel as? Label)?.isDynamicTypeEnabled = isDynamicTypeEnabled
         }
     }
 
@@ -221,12 +231,23 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         updateLayoutConstraints(true)
     }
 
-    deinit {
+#if compiler(>=6.2)
+    isolated deinit {
         observedProgress = nil // 1.observedProgress = nil; 2.DisplayLink.shared.remove(self)
 #if DEBUG
         print("👍👍👍 ContentView is released.")
 #endif
     }
+#else
+    deinit {
+        MainActor.assumeIsolated {
+            observedProgress = nil // 1.observedProgress = nil; 2.DisplayLink.shared.remove(self)
+        }
+#if DEBUG
+        print("👍👍👍 ContentView is released.")
+#endif
+    }
+#endif
 
     private func setupViews() {
         label.setContentCompressionResistancePriorityForAxis(997.0)
@@ -333,7 +354,9 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
 
     /// Refreshing the progress only every frame draw.
     public func updateScreenInDisplayLink() {
-        guard let observedProgress, observedProgress.fractionCompleted <= 1.0 else { return }
+        guard let observedProgress,
+              observedProgress.fractionCompleted >= 0.0,
+              observedProgress.fractionCompleted <= 1.0 else { return }
         // They can be customized or use the default text. To suppress one
         // (or both) of the labels, set the descriptions to empty strings.
         label.text = observedProgress.localizedDescription
@@ -385,7 +408,7 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
         delegate?.layoutConstraintsDidChange(from: self)
     }
 
-    private class Constraint {
+    @MainActor private class Constraint {
         let width, height, square: NSLayoutConstraint
         let edge: EdgeConstraint
 
@@ -424,6 +447,6 @@ extension UIStackView {
 
 // MARK: - Internal protocol
 
-protocol ContentViewDelegate: AnyObject {
+@MainActor protocol ContentViewDelegate: AnyObject {
     func layoutConstraintsDidChange(from contentView: ContentView)
 }

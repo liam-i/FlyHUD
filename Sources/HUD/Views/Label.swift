@@ -29,6 +29,19 @@ open class Label: UILabel {
         self.backgroundColor = .clear
     }
 
+    /// Enables Dynamic Type support. When set to true, the label font scales with the user's preferred content size.
+    ///
+    /// - Note: This property is opt-in. You must also set an appropriate scaled font
+    ///         (e.g., via `UIFontMetrics`) for scaling to take effect.
+    open var isDynamicTypeEnabled: Bool = false {
+        didSet {
+            adjustsFontForContentSizeCategory = isDynamicTypeEnabled
+            if isDynamicTypeEnabled {
+                font = UIFontMetrics.default.scaledFont(for: font)
+            }
+        }
+    }
+
     /// Whether the text displayed by the label is nil and empty.
     open var isEmptyOfText: Bool {
         guard let text, text.isEmpty == false else { return true }
