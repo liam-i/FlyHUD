@@ -3,7 +3,7 @@
 Detailed release notes for all FlyHUD versions. For the full changelog, see the
 [CHANGELOG](CHANGELOG) file.
 
-## 1.6.0 (Unreleased)
+## 1.6.0 (May 25, 2026)
 
 ### New Features
 
@@ -12,16 +12,22 @@ Detailed release notes for all FlyHUD versions. For the full changelog, see the
 - Swift 6.2 `isolated deinit` support
 - Dynamic Type support for HUD labels (`isDynamicTypeEnabled`)
 - `UnfairLock` utility for thread-safe state management
-- Comprehensive stress tests (350 test cases)
+- tvOS example app with scene lifecycle support
+- Comprehensive unit and stress tests (408 test cases)
 
 ### Changes
 
 - Minimum deployment target raised to iOS 13.0, tvOS 13.0, visionOS 1.0
 - Improved keyboard observer to use UIScene-compatible window acquisition
+- Removed redundant `proxy` property from `DisplayLink` (lifecycle managed by CADisplayLink)
 
 ### Fixes
 
+- Fixed `isCountEnabled` mode allowing negative count from unbalanced `hide()` calls
+- Fixed old indicator animations not being stopped when switching HUD mode
 - Fixed documentation comments with incorrect default values and typos
+
+**Full Changelog:** [1.5.13...1.6.0](https://github.com/liam-i/FlyHUD/compare/1.5.13...1.6.0)
 
 ---
 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.6.0] - Unreleased
+## [1.6.0] - 2026-05-25
 
 ### Added
 
@@ -13,15 +13,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Swift 6.2 `isolated deinit` support
 - Dynamic Type support for HUD labels (`isDynamicTypeEnabled`)
 - `UnfairLock` utility for thread-safe state management
-- Comprehensive stress tests (350 test cases)
+- tvOS example app with scene lifecycle support
+- Comprehensive unit and stress tests (408 test cases)
 
 ### Changed
 
 - Minimum deployment target raised to iOS 13.0, tvOS 13.0, visionOS 1.0
 - Improved keyboard observer to use UIScene-compatible window acquisition
+- Removed redundant `proxy` property from `DisplayLink` (lifecycle managed by CADisplayLink)
 
 ### Fixed
 
+- Fixed `isCountEnabled` mode allowing negative count from unbalanced `hide()` calls
+- Fixed old indicator animations not being stopped when switching HUD mode
 - Fixed documentation comments with incorrect default values and typos
 
 ## [1.5.13] - 2025-08-01
@@ -140,7 +144,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Keyboard layout guide
 - Dark mode support
 
-[1.6.0]: https://github.com/liam-i/FlyHUD/compare/1.5.13...HEAD
+[1.6.0]: https://github.com/liam-i/FlyHUD/compare/1.5.13...1.6.0
 [1.5.13]: https://github.com/liam-i/FlyHUD/compare/1.5.12...1.5.13
 [1.5.12]: https://github.com/liam-i/FlyHUD/compare/1.5.11...1.5.12
 [1.5.11]: https://github.com/liam-i/FlyHUD/compare/1.5.10...1.5.11
