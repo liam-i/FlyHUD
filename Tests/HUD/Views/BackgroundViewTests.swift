@@ -329,4 +329,83 @@ final class BackgroundViewTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - EffectView Tests
+
+    func testSolidColorNoEffectView() {
+        backgroundView.style = .solidColor
+        let effectView = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+        XCTAssertNil(effectView, "solidColor style should not create effectView")
+    }
+
+    func testBlurCreatesEffectView() {
+        backgroundView.style = .blur(.light)
+        let effectView = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+        XCTAssertNotNil(effectView, "blur style should create effectView")
+    }
+
+    func testBlurEffectViewHasAutoresizing() {
+        backgroundView.style = .blur(.dark)
+        let effectView = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+        XCTAssertEqual(effectView?.autoresizingMask, [.flexibleHeight, .flexibleWidth])
+    }
+
+    func testStyleSwitchRemovesOldEffectView() {
+        backgroundView.style = .blur(.light)
+        backgroundView.style = .solidColor
+
+        let effectView = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+        XCTAssertNil(effectView, "Switching to solidColor should remove effectView")
+    }
+
+    func testStyleSwitchReplacesEffectView() {
+        backgroundView.style = .blur(.light)
+        let effectView1 = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+
+        backgroundView.style = .blur(.dark)
+        let effectView2 = backgroundView.subviews.first(where: { $0 is UIVisualEffectView })
+
+        XCTAssertNotNil(effectView2)
+        XCTAssertTrue(effectView1 !== effectView2, "Switching blur styles should replace effectView")
+    }
+
+    // MARK: - Color Tests
+
+    func testDefaultColorIsClear() {
+        XCTAssertEqual(backgroundView.color, .clear)
+    }
+
+    func testColorUpdatesSolidBackground() {
+        backgroundView.style = .solidColor
+        backgroundView.color = .red
+        XCTAssertEqual(backgroundView.backgroundColor, .red)
+    }
+
+    func testColorUpdateForBlurStyle() {
+        backgroundView.style = .blur(.light)
+        backgroundView.color = .blue
+        XCTAssertEqual(backgroundView.backgroundColor, .blue)
+    }
+
+    // MARK: - Corner Radius Layout Tests
+
+    func testLayoutAppliesRadiusCornerRadius() {
+        backgroundView.roundedCorners = .radius(10)
+        backgroundView.bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+        backgroundView.layoutSubviews()
+
+        XCTAssertEqual(backgroundView.layer.cornerRadius, 10)
+    }
+
+    func testLayoutAppliesFullCornerRadius() {
+        backgroundView.roundedCorners = .full
+        backgroundView.bounds = CGRect(x: 0, y: 0, width: 80, height: 60)
+        backgroundView.layoutSubviews()
+
+        XCTAssertEqual(backgroundView.layer.cornerRadius, ceil(min(40, 30)))
+    }
+
+    func testIntrinsicContentSizeIsZero() {
+        XCTAssertEqual(backgroundView.intrinsicContentSize, .zero)
+    }
 }

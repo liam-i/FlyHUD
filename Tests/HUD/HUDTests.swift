@@ -456,4 +456,120 @@ final class HUDTests: XCTestCase, HUDDelegate {
             }
         }
     }
+
+    // MARK: - Count Behavior Tests
+
+    func testCountIncrementOnShow() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+
+        hud.show(animated: false)
+        XCTAssertEqual(hud.count, 1)
+
+        hud.show(animated: false)
+        XCTAssertEqual(hud.count, 2)
+    }
+
+    func testCountDecrementOnHide() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+
+        hud.show(animated: false)
+        hud.show(animated: false)
+        XCTAssertEqual(hud.count, 2)
+
+        hud.hide(animated: false)
+        XCTAssertEqual(hud.count, 1)
+    }
+
+    func testCountDoesNotHideUntilZero() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+        hud.removeFromSuperViewOnHide = false
+
+        hud.show(animated: false)
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        // Count is 1, should still be visible
+        XCTAssertEqual(hud.count, 1)
+        XCTAssertNotNil(hud.superview, "HUD should not be removed when count > 0")
+    }
+
+    func testCountNeverGoesNegative() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+        hud.removeFromSuperViewOnHide = false
+
+        hud.show(animated: false)
+        hud.hide(animated: false)
+        XCTAssertEqual(hud.count, 0)
+
+        // Extra hide calls should not make count negative
+        hud.hide(animated: false)
+        XCTAssertEqual(hud.count, 0, "Count should never go negative")
+
+        hud.hide(animated: false)
+        XCTAssertEqual(hud.count, 0, "Count should stay at 0 after repeated hides")
+    }
+
+    func testCountResetAfterFullCycle() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+        hud.removeFromSuperViewOnHide = false
+
+        // Show twice, hide twice
+        hud.show(animated: false)
+        hud.show(animated: false)
+        hud.hide(animated: false)
+        hud.hide(animated: false)
+
+        XCTAssertEqual(hud.count, 0)
+
+        // Should be able to show again normally
+        hud.show(animated: false)
+        XCTAssertEqual(hud.count, 1)
+    }
+
+    // MARK: - Completion Block Tests
+
+    func testCompletionBlockCalledOnHide() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        var completionCalled = false
+        hud.completionBlock = { _ in completionCalled = true }
+
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        XCTAssertTrue(completionCalled, "Completion block should be called on hide")
+    }
+
+    // MARK: - ShowStatus Tests
+
+    func testShowStatus() {
+        let hud = HUD.showStatus(to: testView, duration: 0.0, animated: false, mode: .text, label: "Done")
+        XCTAssertNotNil(hud)
+        XCTAssertTrue(hud.contentView.mode.isText)
+        hud.hide(animated: false)
+    }
+
+    func testShowWithLabel() {
+        let hud = HUD.show(to: testView, animated: false, mode: .text, label: "Loading")
+        XCTAssertNotNil(hud)
+        hud.hide(animated: false)
+    }
+
+    func testHideAllReturnsCount() {
+        let _ = HUD.show(to: testView, animated: false)
+        let _ = HUD.show(to: testView, animated: false)
+
+        let result = HUD.hideAll(for: testView, animated: false)
+        XCTAssertTrue(result, "hideAll should return true when HUDs were hidden")
+    }
 }

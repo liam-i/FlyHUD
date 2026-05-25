@@ -295,4 +295,139 @@ final class ProgressViewTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - Progress Property Tests
+
+    func testDefaultProgress() {
+        XCTAssertEqual(progressView.progress, 0.0)
+    }
+
+    func testProgressUpdate() {
+        progressView.progress = 0.5
+        XCTAssertEqual(progressView.progress, 0.5)
+    }
+
+    func testProgressBoundaryValues() {
+        progressView.progress = 0.0
+        XCTAssertEqual(progressView.progress, 0.0)
+
+        progressView.progress = 1.0
+        XCTAssertEqual(progressView.progress, 1.0)
+    }
+
+    func testProgressNegativeValue() {
+        progressView.progress = -0.5
+        XCTAssertEqual(progressView.progress, -0.5, "Property stores raw value; clamping happens in draw")
+    }
+
+    func testProgressAboveOne() {
+        progressView.progress = 1.5
+        XCTAssertEqual(progressView.progress, 1.5, "Property stores raw value; clamping happens in draw")
+    }
+
+    // MARK: - Color Property Tests
+
+    func testDefaultProgressTintColor() {
+        XCTAssertEqual(progressView.progressTintColor, progressView.style.defaultProgressTintColor)
+    }
+
+    func testProgressTintColorChange() {
+        progressView.progressTintColor = .red
+        XCTAssertEqual(progressView.progressTintColor, .red)
+    }
+
+    func testDefaultTrackTintColor() {
+        XCTAssertEqual(progressView.trackTintColor, progressView.style.defaultTrackTintColor)
+    }
+
+    func testTrackTintColorChange() {
+        progressView.trackTintColor = .blue
+        XCTAssertEqual(progressView.trackTintColor, .blue)
+    }
+
+    // MARK: - LineWidth Property Tests
+
+    func testDefaultLineWidth() {
+        XCTAssertEqual(progressView.lineWidth, progressView.style.defaultLineWidth)
+    }
+
+    func testLineWidthChange() {
+        progressView.lineWidth = 5.0
+        XCTAssertEqual(progressView.lineWidth, 5.0)
+    }
+
+    // MARK: - Label Property Tests
+
+    func testDefaultIsLabelEnabled() {
+        XCTAssertEqual(progressView.isLabelEnabled, progressView.style.defaultIsLabelEnabled)
+    }
+
+    func testIsLabelEnabledChange() {
+        let original = progressView.isLabelEnabled
+        progressView.isLabelEnabled = !original
+        XCTAssertEqual(progressView.isLabelEnabled, !original)
+    }
+
+    func testDefaultLabelFont() {
+        XCTAssertEqual(progressView.labelFont, progressView.style.defaultLabelFont)
+    }
+
+    func testLabelFontChange() {
+        let newFont = UIFont.systemFont(ofSize: 20)
+        progressView.labelFont = newFont
+        XCTAssertEqual(progressView.labelFont, newFont)
+    }
+
+    // MARK: - ObservedProgress Tests
+
+    func testObservedProgressDefault() {
+        XCTAssertNil(progressView.observedProgress)
+    }
+
+    func testObservedProgressSet() {
+        let progress = Progress(totalUnitCount: 100)
+        progressView.observedProgress = progress
+        XCTAssertEqual(progressView.observedProgress, progress)
+    }
+
+    func testObservedProgressClear() {
+        let progress = Progress(totalUnitCount: 100)
+        progressView.observedProgress = progress
+        progressView.observedProgress = nil
+        XCTAssertNil(progressView.observedProgress)
+    }
+
+    func testObservedProgressUpdatesProgress() {
+        let progress = Progress(totalUnitCount: 100)
+        progressView.observedProgress = progress
+        progress.completedUnitCount = 50
+
+        // Manually trigger the display link update
+        progressView.updateScreenInDisplayLink()
+
+        XCTAssertEqual(progressView.progress, 0.5, accuracy: 0.01)
+    }
+
+    // MARK: - IntrinsicContentSize Tests
+
+    func testIntrinsicContentSizeDefault() {
+        let size = progressView.intrinsicContentSize
+        XCTAssertEqual(size, progressView.style.defaultSize)
+    }
+
+    func testIntrinsicContentSizeWithBounds() {
+        progressView.bounds = CGRect(x: 0, y: 0, width: 200, height: 20)
+        let size = progressView.intrinsicContentSize
+        XCTAssertEqual(size, CGSize(width: 200, height: 20))
+    }
+
+    // MARK: - Visibility Tests
+
+    func testHiddenPropertyDefault() {
+        XCTAssertFalse(progressView.isHidden)
+    }
+
+    func testAlphaPropertyDefault() {
+        XCTAssertEqual(progressView.alpha, 1.0)
+    }
 }

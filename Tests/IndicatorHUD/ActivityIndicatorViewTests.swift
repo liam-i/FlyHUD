@@ -246,4 +246,111 @@ final class ActivityIndicatorViewTests: XCTestCase {
         // Should still be animating after style change
         XCTAssertTrue(activityIndicatorView.isAnimating, "Should still be animating after style change")
     }
+
+    // MARK: - Animation Lifecycle Tests
+
+    func testStartAnimating() {
+        XCTAssertFalse(activityIndicatorView.isAnimating, "Should not be animating initially")
+        XCTAssertTrue(activityIndicatorView.isHidden, "Should be hidden initially")
+
+        activityIndicatorView.startAnimating()
+
+        XCTAssertTrue(activityIndicatorView.isAnimating, "Should be animating after start")
+        XCTAssertFalse(activityIndicatorView.isHidden, "Should not be hidden while animating")
+    }
+
+    func testStopAnimating() {
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.stopAnimating()
+
+        XCTAssertFalse(activityIndicatorView.isAnimating, "Should not be animating after stop")
+        XCTAssertTrue(activityIndicatorView.isHidden, "Should be hidden after stop when hidesWhenStopped is true")
+    }
+
+    func testStopAnimatingWithHidesWhenStoppedFalse() {
+        activityIndicatorView.hidesWhenStopped = false
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.stopAnimating()
+
+        XCTAssertFalse(activityIndicatorView.isAnimating, "Should not be animating after stop")
+        XCTAssertFalse(activityIndicatorView.isHidden, "Should not be hidden when hidesWhenStopped is false")
+    }
+
+    func testStartAnimatingDoesNotDoubleStart() {
+        activityIndicatorView.startAnimating()
+        let sublayerCount = activityIndicatorView.layer.sublayers?.count ?? 0
+
+        activityIndicatorView.startAnimating() // Call again
+
+        let newSublayerCount = activityIndicatorView.layer.sublayers?.count ?? 0
+        XCTAssertEqual(sublayerCount, newSublayerCount, "Double start should not add extra sublayers")
+    }
+
+    func testStopAnimatingWhenNotAnimating() {
+        // Should not crash or change state
+        activityIndicatorView.stopAnimating()
+        XCTAssertFalse(activityIndicatorView.isAnimating)
+    }
+
+    func testHidesWhenStoppedDefault() {
+        XCTAssertTrue(activityIndicatorView.hidesWhenStopped, "Default should be true")
+    }
+
+    func testAnimationCreatesLayers() {
+        activityIndicatorView.startAnimating()
+        XCTAssertNotNil(activityIndicatorView.layer.sublayers, "Animating should create sublayers")
+        XCTAssertGreaterThan(activityIndicatorView.layer.sublayers?.count ?? 0, 0)
+    }
+
+    func testStopAnimatingRemovesLayers() {
+        activityIndicatorView.startAnimating()
+        activityIndicatorView.stopAnimating()
+
+        // hidesWhenStopped = true → sublayers should be nil
+        XCTAssertNil(activityIndicatorView.layer.sublayers, "Stopping should remove sublayers when hidesWhenStopped is true")
+    }
+
+    func testStopAnimatingRemovesAnimationsWhenNotHiding() {
+        activityIndicatorView.hidesWhenStopped = false
+        activityIndicatorView.startAnimating()
+
+        let sublayerCount = activityIndicatorView.layer.sublayers?.count ?? 0
+        XCTAssertGreaterThan(sublayerCount, 0)
+
+        activityIndicatorView.stopAnimating()
+
+        // Sublayers remain but animations are removed
+        XCTAssertEqual(activityIndicatorView.layer.sublayers?.count ?? 0, sublayerCount)
+    }
+
+    // MARK: - Property Tests
+
+    func testTrackColorDefault() {
+        XCTAssertEqual(activityIndicatorView.trackColor, activityIndicatorView.style.defaultTrackColor)
+    }
+
+    func testLineWidthDefault() {
+        XCTAssertEqual(activityIndicatorView.lineWidth, activityIndicatorView.style.defaultLineWidth)
+    }
+
+    func testTrackColorChange() {
+        activityIndicatorView.trackColor = .red
+        XCTAssertEqual(activityIndicatorView.trackColor, .red)
+    }
+
+    func testLineWidthChange() {
+        activityIndicatorView.lineWidth = 5.0
+        XCTAssertEqual(activityIndicatorView.lineWidth, 5.0)
+    }
+
+    func testIntrinsicContentSizeDefault() {
+        let size = activityIndicatorView.intrinsicContentSize
+        XCTAssertEqual(size, activityIndicatorView.style.defaultSize)
+    }
+
+    func testIntrinsicContentSizeWithBounds() {
+        activityIndicatorView.bounds = CGRect(x: 0, y: 0, width: 80, height: 80)
+        let size = activityIndicatorView.intrinsicContentSize
+        XCTAssertEqual(size, CGSize(width: 80, height: 80))
+    }
 }
