@@ -8,11 +8,13 @@
 
 import UIKit
 import FlyHUD
+import FlyIndicatorHUD
+import FlyProgressHUD
 
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        // Standard UIButton automatically adopts Liquid Glass on focus (tvOS 26+).
     }
 
     @IBAction func buttonClicked(_ sender: UIButton) {
@@ -26,33 +28,27 @@ class ViewController: UIViewController {
             $0.contentView.label.font = .boldSystemFont(ofSize: 36)
         }
 
-        Self.request { progress in
-            hud.contentView.progress = progress
-        } completion: {
+        Task {
+            await Self.simulateProgress { progress in
+                hud.contentView.progress = progress
+            }
             hud.hide()
-
             sender.isEnabled = true
         }
     }
 
-    static func request(_ sec: UInt32 = 3, progress: @escaping (Float) -> Void, completion: @escaping () -> Void) {
-        let us = sec * 1000 * 1000 / 100
+    /// Simulates a progress task using structured concurrency.
+    static func simulateProgress(
+        duration: UInt32 = 3,
+        onProgress: @MainActor @Sendable @escaping (Float) -> Void
+    ) async {
+        let steps = 100
+        let intervalNanoseconds = UInt64(duration) * 1_000_000_000 / UInt64(steps)
 
-        DispatchQueue.global().async {
-            // 模拟一个任务的完成进度
-            var progressValue: Float = 0.0
-            while progressValue < 1.0 {
-                progressValue += 0.01 // 1 / 0.01 = 100
-
-                /// 回到主线程刷新UI
-                DispatchQueue.main.async {
-                    progress(progressValue)
-                }
-
-                usleep(us)
-            }
-
-            DispatchQueue.main.async(execute: completion)
+        for step in 1...steps {
+            try? await Task.sleep(nanoseconds: intervalNanoseconds)
+            let progress = Float(step) / Float(steps)
+            await MainActor.run { onProgress(progress) }
         }
     }
 }
