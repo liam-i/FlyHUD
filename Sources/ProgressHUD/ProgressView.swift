@@ -16,7 +16,7 @@ import FlyHUD
 #endif
 
 /// The styles permitted for the progress bar.
-public protocol ProgressViewStyleable {
+public protocol ProgressViewStyleable: Sendable {
     /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
     ///
     /// - Parameter object: The object to be compared to the receiver.
@@ -175,7 +175,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// Creates a progress view with the specified style.
     ///
     /// - Parameters:
-    ///   - style: A constant that specifies the style of the object to be created.
+    ///   - styleable: A constant that specifies the style of the object to be created.
     ///   - size: Specifying the size of the progress view in its superview’s coordinates. `Default to .zero`.
     /// - Returns: An initialized ProgressView object.
     public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero) {
@@ -189,12 +189,23 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
         isOpaque = false
     }
 
-    deinit {
+#if compiler(>=6.2)
+    isolated deinit {
         DisplayLink.shared.remove(self)
 #if DEBUG
         print("👍👍👍 ProgressView is released.")
 #endif
     }
+#else
+    deinit {
+        MainActor.assumeIsolated {
+            DisplayLink.shared.remove(self)
+        }
+#if DEBUG
+        print("👍👍👍 ProgressView is released.")
+#endif
+    }
+#endif
 
     /// Draws the receiver’s image within the passed-in rectangle.
     /// - Parameter rect: The portion of the view’s bounds that needs to be updated. The first time your view is drawn, this rectangle is typically the entire
@@ -202,7 +213,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     open override func draw(_ rect: CGRect) {
         guard let progressTintColor else { return }
 
-        let progress = CGFloat(min(progress, 1.0))
+        let progress = CGFloat(max(0.0, min(progress, 1.0)))
         var animationBuilder: ProgressAnimationBuildable {
             if let builder = self.animationBuilder {
                 return builder

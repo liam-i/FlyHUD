@@ -1,5 +1,5 @@
 //
-//  Rotatable.swift
+//  RotateViewable.swift
 //  HUD <https://github.com/liam-i/FlyHUD>
 //
 //  Created by liam on 2024/1/23.
@@ -13,16 +13,16 @@ import UIKit
 
 /// A rotate view that shows that a task is in progress.
 public protocol RotateViewable: AnyObject where Self: UIView {
-    /// Specifies the basic duration of the animation, in seconds.
+    /// Specifies the basic duration of the animation, in seconds. `Defaults to 0.25`.
     var duration: CFTimeInterval { get }
 
     /// Starts the animation of the rotate view.
     ///
-    /// - Note: When the rotate view is animated, the view is animated until stopRotation() is called.
+    /// - Note: When the rotate view is animated, the view is animated until stopRotating() is called.
     func startRotating()
     /// Stops the animation of the rotate view.
     ///
-    /// - Note: Call this method to stop the animation of the rotate view started with a call to startRotation().
+    /// - Note: Call this method to stop the animation of the rotate view started with a call to startRotating().
     func stopRotating()
 }
 

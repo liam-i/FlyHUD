@@ -16,7 +16,7 @@ import UIKit
 /// - Note: You control when an activity indicator animates by calling the startAnimating() and stopAnimating() methods.
 ///         To automatically hide the activity indicator when animation stops, set the hidesWhenStopped property to true.
 ///         You can set the color of the activity indicator by using the color property.
-public protocol ActivityIndicatorViewable: AnyObject {
+@MainActor public protocol ActivityIndicatorViewable: AnyObject {
     /// The color of the activity indicator.
     ///
     /// - Note: If you set a color for an activity indicator, it overrides the color provided by the style property.
@@ -54,16 +54,8 @@ extension UIActivityIndicatorView: ActivityIndicatorViewable {
 
 extension UIActivityIndicatorView.Style: HUDExtended {}
 extension HUDExtension where ExtendedType == UIActivityIndicatorView.Style {
-    /// Defaults to `.large` on iOS 13 and later and. `.whiteLarge` on older systems.
+    /// Defaults to `.large`.
     public static var large: UIActivityIndicatorView.Style {
-#if os(visionOS)
         return .large
-#else
-        if #available(iOS 13.0, tvOS 13.0, visionOS 1.0, *) {
-            return .large
-        } else {
-            return .whiteLarge
-        }
-#endif
     }
 }

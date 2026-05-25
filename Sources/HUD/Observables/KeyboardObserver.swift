@@ -37,13 +37,15 @@ public struct KeyboardInfo {
 }
 
 /// A keyboard observer that tracks the keyboard’s position in your app’s layout.
-public protocol KeyboardObservable: AnyObject {
+@MainActor public protocol KeyboardObservable: AnyObject {
     /// Tells observers that the keyboard frame is about to change or has changed.
     func keyboardObserver(_ keyboardObserver: KeyboardObserver, keyboardInfoWillChange keyboardInfo: KeyboardInfo)
 }
 
-/// A keyboard observer that tracks the keyboard’s position in your app’s layout.
-public class KeyboardObserver {
+/// A keyboard observer that tracks the keyboard's position in your app's layout.
+// @unchecked Sendable is required for Swift 5.9 strict concurrency mode;
+// Swift 6 infers Sendable for @MainActor types automatically.
+@MainActor public final class KeyboardObserver: @unchecked Sendable {
     /// Enable keyboard observation. This method is equivalent to `KeyboardObserver.shared`.
     public static func enable() {
         _ = KeyboardObserver.shared
@@ -60,7 +62,7 @@ public class KeyboardObserver {
     /// - Parameter observer: The object to add to the keyboard observer list.
     ///                       This object must implement the KeyboardObservable protocol.
     public func add(_ observer: KeyboardObservable) {
-        observers.add(observer)
+        lock.withLock { observers.add(observer) }
     }
 
     /// Removes a given object from the keyboard observer list.
@@ -68,9 +70,13 @@ public class KeyboardObserver {
     /// - Parameter observer: The object to remove from the keyboard observer list.
     ///                       This object must implement the KeyboardObservable protocol.
     public func remove(_ observer: KeyboardObservable) {
-        observers.remove(observer)
+        lock.withLock { observers.remove(observer) }
     }
 
+    // Defensive lock: all access is @MainActor-isolated so concurrent access cannot occur,
+    // but the lock provides safety for Swift 5.9 strict concurrency mode where isolation
+    // is not fully enforced at runtime.
+    private let lock = UnfairLock()
     private var observers: NSHashTable<AnyObject> = .weakObjects()
 
     private init() {
@@ -95,18 +101,30 @@ public class KeyboardObserver {
         guard let userInfo = notification.userInfo,
               let frameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
 
+        let screenBounds: CGRect = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first(where: { $0.activationState == .foregroundActive })?
+            .screen.bounds
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .first?.screen.bounds
+            ?? CGRect(origin: .zero, size: frameEnd.size)
+
         let info = KeyboardInfo(
             name: notification.name == UIResponder.keyboardWillChangeFrameNotification ? .willChangeFrame : .didChangeFrame,
             animationDuration: userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.0,
             animationCurve: userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt ?? 0,
             frameBegin: userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect ?? .zero,
             frameEnd: frameEnd,
-            isVisible: frameEnd.minY < UIScreen.main.bounds.maxY
+            isVisible: frameEnd.minY < screenBounds.maxY
         )
         keyboardInfo = info
 
-        let enumerator = observers.objectEnumerator()
-        while case let observer as KeyboardObservable = enumerator.nextObject() {
+        let snapshot = lock.withLock {
+            observers.allObjects.compactMap { $0 as? KeyboardObservable }
+        }
+
+        for observer in snapshot {
             observer.keyboardObserver(self, keyboardInfoWillChange: info)
         }
     }

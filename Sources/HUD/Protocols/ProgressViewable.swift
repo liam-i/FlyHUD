@@ -1,5 +1,5 @@
 //
-//  UIProgressView+Extension.swift
+//  ProgressViewable.swift
 //  HUD <https://github.com/liam-i/FlyHUD>
 //
 //  Created by liam on 2024/1/19.
@@ -16,7 +16,7 @@ import UIKit
 /// The ProgressView class provides properties for managing the style of the progress bar and for getting and setting values that are pinned to the progress of a task.
 ///
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
-public protocol ProgressViewable: AnyObject {
+@MainActor public protocol ProgressViewable: AnyObject {
     /// The current progress of the progress view.
     ///
     /// - Note: 0.0 .. 1.0, default is 0.0. values outside are pinned.

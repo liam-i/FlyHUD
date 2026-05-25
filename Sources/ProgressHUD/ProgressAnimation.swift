@@ -16,9 +16,11 @@ import FlyHUD
 #endif
 
 /// Animation Builder
+///
+/// - Important: All methods operate on `CALayer` and must be called on the main thread.
 public protocol ProgressAnimationBuildable {
-    func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
-    func makeLabel(in layer: CALayer, progress: CGFloat, color: UIColor, font: UIFont)
+    @MainActor func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
+    @MainActor func makeLabel(in layer: CALayer, progress: CGFloat, color: UIColor, font: UIFont)
 }
 
 extension ProgressAnimationBuildable {
@@ -196,13 +198,13 @@ enum ProgressAnimation {
 
             // 90 degrees
             let startAngle = -(CGFloat.pi / 2.0)
-            let lineWidth = lineWidth * 2.0
-            let radius = (min(bounds.width, bounds.height) - lineWidth) / 2.0
+            let progressLineWidth = lineWidth * 2.0
+            let radius = max(0.0, (min(bounds.width, bounds.height) - progressLineWidth) / 2.0)
             let endAngle = (progress * 2.0 * CGFloat.pi) + startAngle
 
             // Draw progress
             UIBezierPath().h.then {
-                $0.lineWidth = lineWidth
+                $0.lineWidth = progressLineWidth
                 $0.lineCapStyle = .butt
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
@@ -218,7 +220,7 @@ enum ProgressAnimation {
         func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
             let size = layer.bounds.size
             let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
-            let radius = min(size.width, size.height) / 2.0 - lineWidth
+            let radius = max(0.0, min(size.width, size.height) / 2.0 - lineWidth)
 
             UIBezierPath(arcCenter: center, radius: radius, startAngle: 0.0, endAngle: .pi * 2.0, clockwise: false).h.then {
                 $0.lineWidth = lineWidth

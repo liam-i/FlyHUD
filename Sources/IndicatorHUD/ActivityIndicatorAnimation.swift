@@ -16,8 +16,10 @@ import FlyHUD
 #endif
 
 /// Animation Builder
+///
+/// - Important: All methods operate on `CALayer` and must be called on the main thread.
 public protocol ActivityIndicatorAnimationBuildable {
-    func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
+    @MainActor func make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
 }
 
 enum ActivityIndicatorAnimation {

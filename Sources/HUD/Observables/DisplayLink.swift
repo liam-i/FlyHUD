@@ -9,11 +9,10 @@
 //  LICENSE file in the root directory of this source tree.
 //
 
-import Foundation
-import QuartzCore
+import UIKit
 
 /// The methods adopted by the object that allows your app to synchronize its drawing to the refresh rate of the display.
-public protocol DisplayLinkDelegate: AnyObject {
+@MainActor public protocol DisplayLinkDelegate: AnyObject {
     /// Tells the delegate that the refreshing the screen only every frame draw.
     func updateScreenInDisplayLink()
 }
@@ -21,45 +20,99 @@ public protocol DisplayLinkDelegate: AnyObject {
 /// A timer object that allows your app to synchronize its drawing to the refresh rate of the display.
 ///
 /// - Note: application adds it to a run loop using the `add(to:.main, forMode:.default)` method.
-public class DisplayLink {
-    /// The shared singleton keyboard observer object.
+// @unchecked Sendable is required for Swift 5.9 strict concurrency mode;
+// Swift 6 infers Sendable for @MainActor types automatically.
+@MainActor public final class DisplayLink: @unchecked Sendable {
+    /// The shared singleton display link object.
     public static let shared = DisplayLink()
 
-    /// If necessary create a display link with the id and block you specify.
+    /// Adds a delegate to receive display link callbacks. Creates the display link if it doesn't exist yet.
     ///
-    /// - Parameter delegate: An delegate the system notifies to update the screen.
+    /// - Parameter delegate: A delegate the system notifies to update the screen.
     public func add(_ delegate: DisplayLinkDelegate) {
-        delegates.add(delegate)
+        lock.withLock {
+            delegates.add(delegate)
+        }
 
         guard displayLink == nil else { return }
 
-        let displayLink = CADisplayLink(target: self, selector: #selector(onScreenUpdate))
+        let proxy = DisplayLinkProxy(self)
+        let displayLink = CADisplayLink(target: proxy, selector: #selector(DisplayLinkProxy.onScreenUpdate(_:)))
         displayLink.add(to: .main, forMode: .default)
         self.displayLink = displayLink
     }
 
-    /// Removes the display link from all run loop modes if necessary..
+    /// Removes a delegate from display link callbacks. Invalidates the display link if no delegates remain.
     ///
-    /// - Parameter delegate: An delegate.
+    /// - Parameter delegate: A delegate to remove.
     public func remove(_ delegate: DisplayLinkDelegate) {
-        delegates.remove(delegate)
+        lock.withLock {
+            delegates.remove(delegate)
+        }
 
-        guard delegates.count == 0 || delegates.allObjects.isEmpty else { return }
+        guard delegates.allObjects.isEmpty else { return }
 
         displayLink?.invalidate()
         displayLink = nil
     }
 
-    @objc
-    private func onScreenUpdate() {
-        let enumerator = delegates.objectEnumerator()
-        while case let delegate as DisplayLinkDelegate = enumerator.nextObject() {
+    fileprivate func onScreenUpdate() {
+        let snapshot = lock.withLock {
+            delegates.allObjects.compactMap { $0 as? DisplayLinkDelegate }
+        }
+
+        for delegate in snapshot {
             delegate.updateScreenInDisplayLink()
         }
     }
 
-    private init() {}
+    private init() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil)
+    }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        // Singleton - never deallocated in practice.
+    }
+
+    @objc
+    private func applicationDidEnterBackground() {
+        displayLink?.isPaused = true
+    }
+
+    @objc
+    private func applicationWillEnterForeground() {
+        displayLink?.isPaused = false
+    }
+
+    // Defensive lock: all access is @MainActor-isolated so concurrent access cannot occur,
+    // but the lock provides safety for Swift 5.9 strict concurrency mode where isolation
+    // is not fully enforced at runtime.
+    private let lock = UnfairLock()
     private var displayLink: CADisplayLink?
     private var delegates: NSHashTable<AnyObject> = .weakObjects()
+}
+
+// MARK: - DisplayLinkProxy
+
+/// A weak proxy that breaks the CADisplayLink → DisplayLink retain cycle.
+@MainActor private class DisplayLinkProxy {
+    weak var target: DisplayLink?
+
+    init(_ target: DisplayLink) {
+        self.target = target
+    }
+
+    @objc func onScreenUpdate(_ displayLink: CADisplayLink) {
+        target?.onScreenUpdate()
+    }
 }

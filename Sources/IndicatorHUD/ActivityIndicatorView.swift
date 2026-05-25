@@ -16,7 +16,7 @@ import FlyHUD
 #endif
 
 /// The visual style of the activity indicator.
-public protocol ActivityIndicatorViewStyleable {
+public protocol ActivityIndicatorViewStyleable: Sendable {
     /// Returns a Boolean value that indicates whether the receiver and a given object are equal.
     ///
     /// - Parameter object: The object to be compared to the receiver.
@@ -113,7 +113,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     /// A Boolean value that controls whether the activity indicator is hidden when the animation is stopped.
     ///
     /// - Note: If the value of this property is true (the default), the receiver sets its isHidden property (UIView)
-    ///         to true when receiver is not animating. If the hidesWhenStopped property is false, the receiver is not
+    ///         to true when the receiver is not animating. If the hidesWhenStopped property is false, the receiver is not
     ///         hidden when animation stops. You stop an animating activity indicator with the stopAnimating() method.
     open lazy var hidesWhenStopped: Bool = true
 
@@ -176,7 +176,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         isAnimating = false
         if hidesWhenStopped {
             isHidden = true
-            layer.sublayers?.removeAll()
+            layer.sublayers = nil
         } else {
             layer.sublayers?.forEach {
                 $0.removeAnimation(forKey: ActivityIndicatorAnimation.key)
@@ -210,7 +210,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     private func resetProperties() {
         frame.size = style.defaultSize
         color = style.defaultColor
-        trackColor = style.defaultColor
+        trackColor = style.defaultTrackColor
         lineWidth = style.defaultLineWidth
         invalidateIntrinsicContentSize()
     }
@@ -237,10 +237,6 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
 #if swift(>=5.9)
         if #available(iOS 17.0, tvOS 17.0, visionOS 1.0, *) {
             registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
-        } else {
-#if os(visionOS)
-            registerForTraitChanges([UITraitUserInterfaceStyle.self], action: #selector(makeAnimationIfNeeded))
-#endif
         }
 #endif // swift(>=5.9)
     }

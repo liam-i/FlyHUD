@@ -53,25 +53,11 @@ extension CGFloat: HUDExtended {}
 extension NSObject: HUDExtended {}
 
 extension HUDExtension where ExtendedType == UIColor {
-    /// Defaults to `UIColor.label.withAlphaComponent(0.7)` on iOS 13
-    /// and later and. `UIColor(white: 0.0, alpha: 0.7)` on older systems.
-    public static let content: UIColor = {
-        if #available(iOS 13.0, tvOS 13.0, visionOS 1.0, *) {
-            return UIColor.label.withAlphaComponent(0.7)
-        } else {
-            return UIColor(white: 0.0, alpha: 0.7)
-        }
-    }()
+    /// Defaults to `UIColor.label.withAlphaComponent(0.7)`.
+    public static let content: UIColor = UIColor.label.withAlphaComponent(0.7)
 
-    /// The background color or the blur tint color. Defaults to `nil` on iOS 13
-    /// and later and. `UIColor(white: 0.8, alpha: 0.6)` on older systems.
-    public static let background: UIColor? = {
-        if #available(iOS 13.0, visionOS 1.0, *) {
-            return nil
-        } else {
-            return UIColor(white: 0.8, alpha: 0.6)
-        }
-    }()
+    /// The background color or the blur tint color. Defaults to `nil`.
+    public static let background: UIColor? = nil
 }
 
 extension HUDExtension where ExtendedType: Equatable {

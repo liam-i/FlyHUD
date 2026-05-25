@@ -16,7 +16,7 @@ extension UIView {
         UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
 
-    /// UIStackView isHidden bug fixed: - https://openradar.appspot.com/25087688
+    /// UIStackView isHidden bug fixed: https://openradar.appspot.com/25087688
     var isHiddenInStackView: Bool {
         get { isHidden }
         set {
@@ -32,7 +32,7 @@ extension UIView {
         setContentCompressionResistancePriority(priority, for: .vertical)
     }
 
-    class EdgeConstraint {
+    @MainActor class EdgeConstraint {
         let x, y, top, bottom, left, right: NSLayoutConstraint
 
         init(_ from: UIView, to: UIView, useSafeGuide: Bool, center: UILayoutPriority, edge: UILayoutPriority) {
