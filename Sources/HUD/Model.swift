@@ -1,5 +1,5 @@
 //
-//  HUDEnum.swift
+//  Model.swift
 //  HUD <https://github.com/liam-i/FlyHUD>
 //
 //  Created by Liam on 2017/6/1.
@@ -25,7 +25,7 @@ extension HUD {
         ///
         /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
         public var offset: CGPoint
-        /// This also represents the minimum contentView distance to the edge of the HUD. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
+        /// The minimum distance from the contentView to the edge of the HUD. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         public var edgeInsets: UIEdgeInsets
 
         /// The layout guide representing the portion of your view that is unobscured by bars and other content.
@@ -37,7 +37,7 @@ extension HUD {
         /// - Parameters:
         ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
         ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
-        ///   - edgeInsets: This also represents the minimum contentView distance to the edge of the HUD.
+        ///   - edgeInsets: The minimum distance from the contentView to the edge of the HUD.
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
         /// - Warning: The `isSafeAreaLayoutGuideEnabled` property setting only takes effect after the HUD is initialized and before `show` is executed for the first time.

@@ -38,7 +38,7 @@ open class Button: UIButton {
     /// Creates a new button.
     /// - Parameters:
     ///   - fontSize: The size (in points) for the bold font. This value must be greater than 0.0.
-    ///   - textColor: The title color used in normal state..
+    ///   - textColor: The title color used in normal state.
     public convenience init(fontSize: CGFloat, textColor: UIColor?) {
         self.init(type: .custom)
         self.titleLabel?.textAlignment = .center
@@ -69,14 +69,14 @@ open class Button: UIButton {
         case .radius(let value):
             layer.cornerRadius = ceil(value)
         case .full:
-            layer.cornerRadius = ceil(bounds.midY) // Fully rounded corners
+            layer.cornerRadius = ceil(min(bounds.midX, bounds.midY)) // Fully rounded corners
         }
     }
 
     /// The natural size for the receiving view, considering only properties of the view itself.
     open override var intrinsicContentSize: CGSize {
         if isEmptyOfText && allControlEvents.rawValue <= 0 {
-            return .zero // Only show if we have associated control events and a title
+            return .zero // Hide if no text and no associated control events
         }
         var size = super.intrinsicContentSize
         size.width += 20.0 // Add some side padding

@@ -12,8 +12,12 @@
 import UIKit
 
 /// A HUD observer that tracks the state of the HUD in your application.
-public protocol HUDDelegate: AnyObject {
+@MainActor public protocol HUDDelegate: AnyObject {
     /// Called after the HUD was fully hidden from the screen.
+    ///
+    /// - Note: This method is only called when the hide completes successfully. If a `show()` call interrupts
+    ///         the hide animation, this method will NOT be called since the HUD is still visible.
+    /// - SeeAlso: `completionBlock` — always called after the hide operation finishes, even if interrupted.
     func hudWasHidden(_ hud: HUD)
 }
 
@@ -44,9 +48,9 @@ open class HUD: BaseView, ContentViewDelegate {
     /// This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
     ///
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
-    ///         but instead need to alloc / init the HUD, configure the grace time and than show it manually.
+    ///         but instead need to alloc / init the HUD, configure the grace time and then show it manually.
     open var graceTime: TimeInterval = 0.0
-    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and than instantly hidden.
+    /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and then instantly hidden.
     ///
     /// `Defaults to 0.0 (no minimum show time)`.
     open var minShowTime: TimeInterval = 0.0
@@ -83,15 +87,18 @@ open class HUD: BaseView, ContentViewDelegate {
 
     /// A Boolean value that controls the delivery of user events. `Defaults to false`.
     ///
-    /// If set to true user events (click, touch) will be delivered normally to the HUD's parent view.
+    /// If set to true, user events (tap, touch) outside the contentView pass through the HUD to its parent view.
     ///
-    /// If set to false user events (click, touch) will be delivered normally to the HUD's subviews.
+    /// If set to false, the HUD intercepts all user events within its bounds.
     /// - Note: This property is affected by "isUserInteractionEnabled".
     open var isEventDeliveryEnabled: Bool = false
 
     /// The HUD delegate object. Receives HUD state notifications.
     open weak var delegate: HUDDelegate?
-    /// Called after the HUD was fully hidden from the screen.
+    /// Called after the hide operation completes (animation finished or was interrupted).
+    ///
+    /// - Note: Unlike `hudWasHidden(_:)`, this block is always called regardless of whether the HUD was actually hidden.
+    ///         This ensures that caller cleanup logic (e.g., re-enabling buttons, refreshing data) is never blocked.
     open var completionBlock: ((_ hud: HUD) -> Void)?
 
     private lazy var keyboardGuideView = UIView(frame: bounds)
@@ -110,6 +117,14 @@ open class HUD: BaseView, ContentViewDelegate {
         self.init(frame: view.bounds)
     }
 
+    /// Creates a new HUD instance for the given view. Override this method in subclasses to customize HUD creation.
+    ///
+    /// - Parameter view: The view instance that will provide the `bounds` for the HUD.
+    /// - Returns: A new HUD instance.
+    open class func makeHUD(with view: UIView) -> HUD {
+        self.init(frame: view.bounds)
+    }
+
     /// Common initialization method.
     open override func commonInit() {
         isOpaque = false // Transparent background
@@ -124,18 +139,35 @@ open class HUD: BaseView, ContentViewDelegate {
 #endif
     }
 
-    deinit {
-        cancelHideDelayWorkItem()
+#if compiler(>=6.2)
+    isolated deinit {
         cancelGraceWorkItem()
         cancelMinShowWorkItem()
+        cancelHideDelayWorkItem()
 #if os(iOS)
-        KeyboardObserver.shared.remove(self)
         unregisterFromNotifications()
+        KeyboardObserver.shared.remove(self)
 #endif
 #if DEBUG
         print("👍👍👍 HUD is released.")
 #endif
     }
+#else
+    deinit {
+        MainActor.assumeIsolated {
+            cancelGraceWorkItem()
+            cancelMinShowWorkItem()
+            cancelHideDelayWorkItem()
+#if os(iOS)
+            unregisterFromNotifications()
+            KeyboardObserver.shared.remove(self)
+#endif
+        }
+#if DEBUG
+        print("👍👍👍 HUD is released.")
+#endif
+    }
+#endif
 
     // MARK: - Show & hide
 
@@ -177,7 +209,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
     ///   - animated: If set to true the HUD will appear using the default animation.
     ///               If set to false the HUD will not use animations while appearing. `Default to true`.
-    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
+    ///   - mode: HUD operation mode. `Default to .text`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
     ///   - offset: The contentView offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD
@@ -212,10 +244,10 @@ open class HUD: BaseView, ContentViewDelegate {
     ///   - view: The view that the HUD will be added to
     ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
     ///   - animation: Use HUD.Animation.
-    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
+    ///   - mode: HUD operation mode. `Default to .text`.
     ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
-    ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` to move the HUD all the way to
+    ///   - offset: The contentView offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD all the way to
     ///             the screen edge in each direction. `Default to .vMaxOffset`.
     ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
     /// - Returns: A reference to the created HUD.
@@ -290,7 +322,7 @@ open class HUD: BaseView, ContentViewDelegate {
         detailsLabel: String? = nil,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
-        HUD(with: view).h.then { // Creates a new HUD
+        makeHUD(with: view).h.then { // Creates a new HUD
             $0.animation = animation
             $0.contentView.mode = mode
             $0.contentView.label.text = label
@@ -491,10 +523,10 @@ open class HUD: BaseView, ContentViewDelegate {
                 if removeFromSuperViewOnHide {
                     removeFromSuperview()
                 }
+                delegate?.hudWasHidden(self)
             }
 
             completionBlock?(self)
-            delegate?.hudWasHidden(self)
         }
         showStarted = nil
     }
@@ -698,7 +730,12 @@ extension HUD: KeyboardObservable {
 
             let topSafeArea = safeAreaInsets.top
             var frameToWindow = bounds
-            if let window = UIApplication.shared.delegate?.window {
+            if let window = self.window {
+                frameToWindow = convert(frameToWindow, to: window)
+            } else if let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) {
                 frameToWindow = convert(frameToWindow, to: window)
             }
 
