@@ -41,17 +41,18 @@ struct LiquidGlassView: View {
     // MARK: - HUD Demo
 
     private var hudDemoSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 24) {
             Text("HUD with Glass Style")
                 .font(.headline)
 
             Text("BackgroundView.Style.glass on the HUD contentView")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            Spacer()
 
             #if compiler(>=6.2) && !os(visionOS)
             if #available(iOS 26.0, *) {
-                VStack(spacing: 12) {
+                VStack(spacing: 16) {
                     Button("Glass HUD") { showGlassHUD() }
                         .buttonStyle(.glass)
 
@@ -64,6 +65,7 @@ struct LiquidGlassView: View {
                     Button("Text-Only Glass") { showTextGlassHUD() }
                         .buttonStyle(.glass)
                 }
+                .frame(maxWidth: .infinity)
             } else {
                 unavailableHint
             }

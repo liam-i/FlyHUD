@@ -50,7 +50,7 @@ swift build && swift test
 
 - [`Sources/AGENTS.md`](../Sources/AGENTS.md) — API surface & protocols
 - [`Sources/HUD/Documentation.docc/AGENTS.md`](../Sources/HUD/Documentation.docc/AGENTS.md) — DocC writing rules
-- [`Example iOS/AGENTS.md`](../Example%20iOS/AGENTS.md) — Demo app patterns
-- [`Example SwiftUI/AGENTS.md`](../Example%20SwiftUI/AGENTS.md) — SwiftUI bridge pattern
-- [`Example tvOS/AGENTS.md`](../Example%20tvOS/AGENTS.md) — tvOS scene lifecycle
+- [`Example iOS/AGENTS.md`](../Example iOS/AGENTS.md) — Demo app patterns
+- [`Example SwiftUI/AGENTS.md`](../Example SwiftUI/AGENTS.md) — SwiftUI bridge pattern
+- [`Example tvOS/AGENTS.md`](../Example tvOS/AGENTS.md) — tvOS scene lifecycle
 - [`Tests/AGENTS.md`](../Tests/AGENTS.md) — Test conventions
