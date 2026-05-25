@@ -1,0 +1,46 @@
+classDiagram
+    direction TB
+
+    class HUDDisplayable {
+        <<protocol>>
+        +showLoading(on view: UIView, label: String?)
+        +showSuccess(on view: UIView, label: String?)
+        +showError(on view: UIView, label: String?)
+        +hide(from view: UIView)
+    }
+
+    class RealHUDService {
+        +showLoading(on view: UIView, label: String?)
+        +showSuccess(on view: UIView, label: String?)
+        +showError(on view: UIView, label: String?)
+        +hide(from view: UIView)
+    }
+
+    class MockHUDService {
+        +showLoadingCalled: Bool
+        +showSuccessCalled: Bool
+        +showErrorCalled: Bool
+        +hideCalled: Bool
+        +lastLabel: String?
+        +showLoading(on view: UIView, label: String?)
+        +showSuccess(on view: UIView, label: String?)
+        +showError(on view: UIView, label: String?)
+        +hide(from view: UIView)
+    }
+
+    class ViewModel {
+        -hudService: HUDDisplayable
+        +fetchData() async
+    }
+
+    class FlyHUD {
+        <<framework>>
+    }
+
+    HUDDisplayable <|.. RealHUDService : conforms
+    HUDDisplayable <|.. MockHUDService : conforms
+    ViewModel --> HUDDisplayable : depends on
+    RealHUDService --> FlyHUD : imports
+
+    note for MockHUDService "Used in unit tests\nNo FlyHUD dependency"
+    note for RealHUDService "Used in production\nImports FlyHUD"

@@ -1,0 +1,18 @@
+flowchart TD
+    A[Need a custom indicator?] --> B{Simple rotation animation?}
+    B -->|Yes| C["Conform to RotateViewable\n• Set duration\n• Override draw(_:)"]
+    B -->|No| D{Complex custom animation?}
+    D -->|Yes| E["Implement ActivityIndicatorViewStyleable\n+ ActivityIndicatorAnimationBuildable"]
+    D -->|No| F{Any existing UIView?}
+    F -->|Yes| G["Pass directly to .custom(view)\nHUD manages show/hide"]
+
+    E --> H["Use: .indicator(MyStyle())"]
+    C --> I["Use: .custom(MyRotateView())"]
+    G --> J["Use: .custom(myView)"]
+
+    style C fill:#d4edda,stroke:#28a745
+    style E fill:#fff3cd,stroke:#ffc107
+    style G fill:#cce5ff,stroke:#007bff
+    style H fill:#fff3cd,stroke:#ffc107
+    style I fill:#d4edda,stroke:#28a745
+    style J fill:#cce5ff,stroke:#007bff

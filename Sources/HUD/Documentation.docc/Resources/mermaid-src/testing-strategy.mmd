@@ -1,0 +1,20 @@
+flowchart TD
+    A[What do you need to test?] --> B{HUD display logic?}
+    B -->|Yes| C{Needs animation?}
+    C -->|No| D["Use animated: false\nAssert state immediately"]
+    C -->|Yes| E["Use .animation(.none)\nor integration tests"]
+
+    B -->|No| F{Business logic with HUD?}
+    F -->|Yes| G["Create HUDDisplayable protocol\nUse MockHUDService in tests"]
+    F -->|No| H{Custom indicator/progress?}
+    H -->|Yes| I["Test start/stop state\nTest progress bounds\nTest intrinsicContentSize"]
+    H -->|No| J{Delegate callbacks?}
+    J -->|Yes| K["Conform test class to HUDDelegate\nAssert callback flags"]
+    J -->|No| L["Use HUDStressTests patterns\nfor edge cases"]
+
+    style D fill:#d4edda,stroke:#28a745
+    style E fill:#fff3cd,stroke:#ffc107
+    style G fill:#d4edda,stroke:#28a745
+    style I fill:#d4edda,stroke:#28a745
+    style K fill:#d4edda,stroke:#28a745
+    style L fill:#cce5ff,stroke:#007bff

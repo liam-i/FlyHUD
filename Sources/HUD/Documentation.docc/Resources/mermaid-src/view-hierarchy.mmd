@@ -1,0 +1,32 @@
+graph TB
+    HUD["HUD (full-screen overlay)"]
+    BG["BackgroundView<br/>(blur / solid / glass)"]
+    KG["keyboardGuideView<br/>(keyboard offset container)"]
+    CV["ContentView (rounded card)"]
+    HS["hStackView"]
+    IND["indicator (UIView)"]
+    VS["vStackView"]
+    LBL["label (UILabel)"]
+    DET["detailsLabel (UILabel)"]
+    BTN["button (UIButton)"]
+
+    HUD --> BG
+    HUD --> KG
+    KG --> CV
+    CV --> HS
+    HS --> IND
+    HS --> VS
+    VS --> LBL
+    VS --> DET
+    VS --> BTN
+
+    style HUD fill:#4A90D9,stroke:#2E6EA6,color:#fff
+    style BG fill:#E8A87C,stroke:#C8886C,color:#333
+    style KG fill:#95DAC1,stroke:#75BA91,color:#333
+    style CV fill:#F6E58D,stroke:#D6C56D,color:#333
+    style HS fill:#DDA0DD,stroke:#BD80BD,color:#333
+    style IND fill:#87CEEB,stroke:#67AEB5,color:#333
+    style VS fill:#DDA0DD,stroke:#BD80BD,color:#333
+    style LBL fill:#98FB98,stroke:#78DB78,color:#333
+    style DET fill:#98FB98,stroke:#78DB78,color:#333
+    style BTN fill:#FFB6C1,stroke:#DF969A,color:#333

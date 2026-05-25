@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant App as App Code
+    participant HUD as HUD
+    participant GT as Grace Timer
+    participant MST as MinShow Timer
+    participant UI as UI Display
+
+    Note over App,UI: Scenario 1: Fast task (< graceTime) — HUD never shown
+
+    App->>HUD: show()
+    activate HUD
+    HUD->>GT: Start graceTimer (0.5s)
+    App->>HUD: hide() (after 0.3s)
+    HUD->>GT: Cancel graceTimer
+    HUD->>HUD: removeFromSuperview()
+    deactivate HUD
+    Note over UI: User sees nothing
+
+    Note over App,UI: Scenario 2: Slow task (> graceTime) — HUD shown with minShowTime
+
+    App->>HUD: show()
+    activate HUD
+    HUD->>GT: Start graceTimer (0.5s)
+    GT-->>HUD: Timer fired (0.5s elapsed)
+    HUD->>UI: Display HUD
+    activate UI
+    HUD->>MST: Start minShowTimer (1.0s)
+    App->>HUD: hide() (after 0.7s, only 0.2s visible)
+    Note over MST: minShowTime not met yet
+    MST-->>HUD: Timer fired (1.0s total display)
+    HUD->>UI: Hide HUD
+    deactivate UI
+    HUD->>HUD: removeFromSuperview()
+    deactivate HUD

@@ -1,0 +1,30 @@
+sequenceDiagram
+    participant VC as ViewController
+    participant HUD as HUD
+    participant API as Async Task
+    participant UI as UI Update
+
+    VC->>HUD: HUD.show(to: view)
+    activate HUD
+    VC->>API: Start async operation
+
+    alt Success
+        API-->>VC: Result data
+        VC->>HUD: mode = .custom(checkmark)
+        VC->>HUD: label = "Done"
+        VC->>HUD: hide(afterDelay: 1.5)
+        Note over HUD: Auto-hide after 1.5s
+        HUD-->>VC: completionBlock
+        VC->>UI: Navigate / update UI
+    else Failure
+        API-->>VC: Error
+        VC->>HUD: mode = .text
+        VC->>HUD: label = "Error"
+        VC->>HUD: detailsLabel = error.message
+        VC->>HUD: hide(afterDelay: 3.0)
+        Note over HUD: Auto-hide after 3.0s
+        HUD-->>VC: completionBlock
+    end
+
+    deactivate HUD
+    Note over VC,UI: HUD removed from superview, no retain cycle

@@ -1,0 +1,85 @@
+classDiagram
+    direction TB
+
+    class ActivityIndicatorViewStyleable {
+        <<protocol>>
+        +isEqual(_ object: Any) Bool
+        +makeAnimation() ActivityIndicatorAnimationBuildable
+        +defaultSize CGSize
+        +defaultColor UIColor
+        +defaultTrackColor UIColor?
+        +defaultLineWidth CGFloat
+    }
+
+    class ActivityIndicatorAnimationBuildable {
+        <<protocol>>
+        +make(in layer: CALayer, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
+    }
+
+    class RotateViewable {
+        <<protocol>>
+        +duration CFTimeInterval
+    }
+
+    class ProgressViewStyleable {
+        <<protocol>>
+        +isEqual(_ object: Any) Bool
+        +makeAnimation() ProgressAnimationBuildable
+        +defaultSize CGSize
+        +defaultProgressTintColor UIColor
+        +defaultTrackTintColor UIColor?
+        +defaultLineWidth CGFloat
+        +defaultIsLabelEnabled Bool
+        +defaultLabelFont UIFont
+    }
+
+    class ProgressAnimationBuildable {
+        <<protocol>>
+        +makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat)
+    }
+
+    class ProgressViewable {
+        <<protocol>>
+        +progress Float
+        +progressTintColor UIColor?
+        +trackTintColor UIColor?
+        +observedProgress Progress?
+    }
+
+    class ActivityIndicatorView {
+        +style: ActivityIndicatorViewStyleable
+        +color: UIColor
+        +trackColor: UIColor?
+        +lineWidth: CGFloat
+        +startAnimating()
+        +stopAnimating()
+    }
+
+    class ProgressView {
+        +style: ProgressViewStyleable
+        +progress: Float
+        +progressTintColor: UIColor
+        +trackTintColor: UIColor?
+        +lineWidth: CGFloat
+    }
+
+    class UIView {
+        <<UIKit>>
+    }
+
+    ActivityIndicatorViewStyleable ..> ActivityIndicatorAnimationBuildable : creates
+    ProgressViewStyleable ..> ProgressAnimationBuildable : creates
+    ActivityIndicatorView ..|> UIView : inherits
+    ActivityIndicatorView --> ActivityIndicatorViewStyleable : uses style
+    ProgressView ..|> UIView : inherits
+    ProgressView ..|> ProgressViewable : conforms
+    ProgressView --> ProgressViewStyleable : uses style
+    RotateViewable ..|> UIView : extends UIView
+    UIView <.. HUD : .custom(view)
+
+    class HUD {
+        +show(to: UIView, mode: Mode)
+    }
+
+    HUD --> ActivityIndicatorView : .indicator(style)
+    HUD --> ProgressView : .progress(style)

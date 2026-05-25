@@ -1,0 +1,24 @@
+stateDiagram-v2
+    [*] --> Hidden: HUD initialized
+
+    Hidden --> GraceWait: show(animated)
+    Hidden --> Visible: show(animated: false)
+
+    GraceWait --> Visible: graceTimer fired
+    GraceWait --> Hidden: hide() before grace
+
+    Visible --> AnimatingOut: hide(animated)
+    Visible --> Hidden: hide(animated: false)
+    Visible --> Visible: update progress/label/mode
+
+    AnimatingOut --> Removed: animation complete
+    Removed --> [*]: removeFromSuperview
+
+    state Visible {
+        [*] --> Displaying
+        Displaying --> MinShowWait: hide() called, minShowTime active
+        MinShowWait --> [*]: minShowTimer fired
+    }
+
+    note right of Removed: completionBlock called
+    note right of GraceWait: Only if graceTime > 0

@@ -1,0 +1,41 @@
+flowchart TB
+    subgraph Top["indicatorPosition = .top (default)"]
+        direction TB
+        I1["🔄 Indicator View"]
+        L1["Label (bold, primary)"]
+        D1["DetailsLabel (secondary)"]
+        B1["Button (optional)"]
+        I1 --- L1 --- D1 --- B1
+    end
+
+    subgraph Bottom["indicatorPosition = .bottom"]
+        direction TB
+        L3["Label"]
+        D3["DetailsLabel"]
+        I3["🔄 Indicator View"]
+        L3 --- D3 --- I3
+    end
+
+    subgraph Leading["indicatorPosition = .leading"]
+        direction LR
+        I2["🔄 Indicator"] --- VStack2
+        subgraph VStack2["VStack"]
+            L2["Label"]
+            D2["DetailsLabel"]
+            B2["Button"]
+        end
+    end
+
+    subgraph Trailing["indicatorPosition = .trailing"]
+        direction LR
+        VStack4 --- I4["🔄 Indicator"]
+        subgraph VStack4["VStack"]
+            L4["Label"]
+            D4["DetailsLabel"]
+        end
+    end
+
+    style Top fill:#e8f4fd,stroke:#0077b6
+    style Bottom fill:#e8f4fd,stroke:#0077b6
+    style Leading fill:#d4edda,stroke:#28a745
+    style Trailing fill:#d4edda,stroke:#28a745

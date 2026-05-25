@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> Idle: count = 0
+
+    Idle --> Active_1: show() → count = 1
+    Active_1 --> Active_2: show() → count = 2
+    Active_2 --> Active_3: show() → count = 3
+    Active_3 --> Active_2: hide() → count = 2
+    Active_2 --> Active_1: hide() → count = 1
+    Active_1 --> Idle: hide() → count = 0
+
+    Idle --> [*]: removeFromSuperview
+
+    note right of Active_1: HUD visible
+    note right of Active_2: HUD visible
+    note right of Active_3: HUD visible
+    note left of Idle: HUD hidden

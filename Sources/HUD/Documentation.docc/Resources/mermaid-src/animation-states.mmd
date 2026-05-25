@@ -1,0 +1,33 @@
+stateDiagram-v2
+    [*] --> Hidden
+
+    Hidden --> AnimatingIn: show(animated: true)
+    Hidden --> Visible: show(animated: false)
+
+    state AnimatingIn {
+        [*] --> FadeIn: .fade
+        [*] --> ZoomIn: .zoomInOut / .zoomIn
+        [*] --> SlideIn: .slideUpDown / .slideUp / ...
+        FadeIn --> [*]
+        ZoomIn --> [*]
+        SlideIn --> [*]
+    }
+
+    AnimatingIn --> Visible: animation complete
+
+    Visible --> AnimatingOut: hide(animated: true)
+    Visible --> Hidden: hide(animated: false)
+
+    state AnimatingOut {
+        [*] --> FadeOut: .fade
+        [*] --> ZoomOut: .zoomInOut / .zoomOut
+        [*] --> SlideOut: .slideUpDown / .slideDown / ...
+        FadeOut --> [*]
+        ZoomOut --> [*]
+        SlideOut --> [*]
+    }
+
+    AnimatingOut --> Hidden: animation complete
+
+    note right of AnimatingIn : duration + spring damping
+    note right of AnimatingOut : Can override style per-hide

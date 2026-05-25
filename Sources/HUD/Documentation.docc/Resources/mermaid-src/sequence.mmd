@@ -1,0 +1,25 @@
+sequenceDiagram
+    participant App as App Code
+    participant HUD as HUD
+    participant CV as ContentView
+    participant BG as BackgroundView
+    participant Anim as Animation
+
+    App->>HUD: show(to: view, mode: .indicator)
+    activate HUD
+    HUD->>BG: Configure background style
+    HUD->>CV: Configure content (indicator, labels)
+    HUD->>Anim: Begin show animation
+    Anim-->>HUD: Animation complete
+
+    Note over App,Anim: HUD is visible
+
+    App->>HUD: Update progress / label
+    HUD->>CV: Update content views
+
+    App->>HUD: hide(animated: true)
+    HUD->>Anim: Begin hide animation
+    Anim-->>HUD: Animation complete
+    HUD->>HUD: removeFromSuperview()
+    HUD-->>App: completionBlock()
+    deactivate HUD

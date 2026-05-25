@@ -1,0 +1,26 @@
+stateDiagram-v2
+    [*] --> Loading: HUD.show(mode: .indicator)
+
+    Loading --> Success: Task succeeded
+    Loading --> Failure: Task failed
+
+    state Loading {
+        [*] --> Spinning
+        Spinning --> Spinning: update label/progress
+    }
+
+    state Success {
+        [*] --> ShowCheckmark: mode = .custom(checkmark)
+        ShowCheckmark --> AutoHide: hide(afterDelay: 1.5)
+    }
+
+    state Failure {
+        [*] --> ShowError: mode = .text
+        ShowError --> AutoHide2: hide(afterDelay: 3.0)
+    }
+
+    Success --> [*]: completionBlock
+    Failure --> [*]: completionBlock
+
+    note right of Success: Short delay, positive feedback
+    note right of Failure: Longer delay, show error details
