@@ -12,6 +12,7 @@ import XCTest
 extension String: @retroactive HUDExtended {}
 extension Int: @retroactive HUDExtended {}
 
+@MainActor
 final class HUDExtendedTests: XCTestCase {
 
     // MARK: - HUDExtension Tests

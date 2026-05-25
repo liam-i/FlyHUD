@@ -9,24 +9,23 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class ProgressViewableTests: XCTestCase {
 
     var progressView: UIProgressView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         progressView = UIProgressView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         progressView = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Protocol Conformance Tests
 
     func testUIProgressViewConformsToProtocol() {
-        XCTAssertTrue(progressView is ProgressViewable, "UIProgressView should conform to ProgressViewable")
+        XCTAssertNotNil(progressView as (any ProgressViewable)?, "UIProgressView should conform to ProgressViewable")
     }
 
     // MARK: - Progress Property Tests
@@ -146,13 +145,13 @@ final class ProgressViewableTests: XCTestCase {
     }
 
     func testIOSUIProgressViewConformsToProtocol() {
-        let customProgressView = iOSUIProgressView()
-        XCTAssertTrue(customProgressView is ProgressViewable, "iOSUIProgressView should conform to ProgressViewable")
+        let customProgressView: any ProgressViewable = iOSUIProgressView()
+        XCTAssertNotNil(customProgressView, "iOSUIProgressView should conform to ProgressViewable")
     }
 
     func testIOSUIProgressViewDeallocation() {
         var customProgressView: iOSUIProgressView? = iOSUIProgressView()
-        weak var weakProgressView = customProgressView
+        weak let weakProgressView = customProgressView
 
         customProgressView = nil
 

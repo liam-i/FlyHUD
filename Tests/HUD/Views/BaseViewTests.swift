@@ -9,6 +9,7 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class BaseViewTests: XCTestCase {
 
     // MARK: - Mock BaseView Subclass
@@ -126,7 +127,7 @@ final class BaseViewTests: XCTestCase {
 
     func testBaseViewDeallocation() {
         var baseView: BaseView? = BaseView(frame: .zero)
-        weak var weakBaseView = baseView
+        weak let weakBaseView = baseView
 
         baseView = nil
 
@@ -135,7 +136,7 @@ final class BaseViewTests: XCTestCase {
 
     func testMockBaseViewDeallocation() {
         var mockView: MockBaseView? = MockBaseView(frame: .zero)
-        weak var weakMockView = mockView
+        weak let weakMockView = mockView
 
         mockView = nil
 

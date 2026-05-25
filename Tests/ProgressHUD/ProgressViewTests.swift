@@ -8,19 +8,19 @@
 
 import XCTest
 @testable import FlyHUD
+@testable import FlyProgressHUD
 
+@MainActor
 final class ProgressViewTests: XCTestCase {
 
     var progressView: ProgressView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         progressView = ProgressView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         progressView = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Initialization Tests
@@ -192,7 +192,7 @@ final class ProgressViewTests: XCTestCase {
 
     func testProgressViewDeallocation() {
         var view: ProgressView? = ProgressView()
-        weak var weakView = view
+        weak let weakView = view
 
         view = nil
 

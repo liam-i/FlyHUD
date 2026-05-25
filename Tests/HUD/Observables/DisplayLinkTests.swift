@@ -9,21 +9,20 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class DisplayLinkTests: XCTestCase {
 
     var displayLink: DisplayLink!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         displayLink = DisplayLink.shared
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         // Clean up any delegates
         if let mockDelegate = mockDelegate {
             displayLink.remove(mockDelegate)
         }
-        try super.tearDownWithError()
     }
 
     private var mockDelegate: MockDisplayLinkDelegate?
@@ -170,7 +169,7 @@ final class DisplayLinkTests: XCTestCase {
 
     func testWeakDelegateReference() {
         var delegate: MockDisplayLinkDelegate? = MockDisplayLinkDelegate()
-        weak var weakDelegate = delegate
+        weak let weakDelegate = delegate
 
         // Add delegate
         displayLink.add(delegate!)
@@ -198,15 +197,15 @@ final class DisplayLinkTests: XCTestCase {
         let expectation1 = XCTestExpectation(description: "Concurrent add/remove operations")
         let expectation2 = XCTestExpectation(description: "Concurrent add/remove operations")
 
-        DispatchQueue.global(qos: .background).async {
-            self.displayLink.add(delegate1)
-            self.displayLink.remove(delegate1)
+        DispatchQueue.main.async { [self] in
+            displayLink.add(delegate1)
+            displayLink.remove(delegate1)
             expectation1.fulfill()
         }
 
-        DispatchQueue.global(qos: .background).async {
-            self.displayLink.add(delegate2)
-            self.displayLink.remove(delegate2)
+        DispatchQueue.main.async { [self] in
+            displayLink.add(delegate2)
+            displayLink.remove(delegate2)
             expectation2.fulfill()
         }
 

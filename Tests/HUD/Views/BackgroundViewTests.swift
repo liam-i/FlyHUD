@@ -9,18 +9,17 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class BackgroundViewTests: XCTestCase {
 
     var backgroundView: BackgroundView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         backgroundView = BackgroundView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         backgroundView = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Initialization Tests
@@ -224,7 +223,7 @@ final class BackgroundViewTests: XCTestCase {
 
     func testBackgroundViewDeallocation() {
         var view: BackgroundView? = BackgroundView()
-        weak var weakView = view
+        weak let weakView = view
 
         view = nil
 

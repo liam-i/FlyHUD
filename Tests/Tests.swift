@@ -1,15 +1,32 @@
 import XCTest
 import FlyHUD
+import FlyIndicatorHUD
+import FlyProgressHUD
 
+private extension UIApplication {
+    static var getKeyWindow: UIWindow? {
+        if #available(iOS 15.0, *) {
+            return UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .compactMap { $0.keyWindow }
+                .first
+        } else {
+            return UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first { $0.isKeyWindow }
+        }
+    }
+}
+
+@MainActor
 class Tests: XCTestCase, HUDDelegate {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        try super.tearDownWithError()
     }
 
     func testExample() throws {
@@ -434,20 +451,20 @@ class Tests: XCTestCase, HUDDelegate {
     }
 }
 
-func FHTestHUDIsVisible(_ hud: HUD, _ rootView: UIView) {
+@MainActor func FHTestHUDIsVisible(_ hud: HUD, _ rootView: UIView) {
     XCTAssertEqual(hud.superview, rootView, "The hud should be added to the view.")
     XCTAssertEqual(hud.alpha, 1.0, "The HUD should be visible.")
     XCTAssertFalse(hud.isHidden, "The HUD should be visible.")
     XCTAssertEqual(hud.contentView.alpha, 1.0, "The HUD should be visible.")
 }
 
-func FHTestHUDIsHidenAndRemoved(_ hud: HUD, _ rootView: UIView) {
+@MainActor func FHTestHUDIsHidenAndRemoved(_ hud: HUD, _ rootView: UIView) {
     XCTAssertFalse(rootView.subviews.contains(hud), "The HUD should not be part of the view hierarchy.")
     FHTestHUDIsHiden(hud, rootView)
     XCTAssertNil(hud.superview, "The HUD should not have a superview.")
 }
 
-func FHTestHUDIsHiden(_ hud: HUD, _ rootView: UIView) {
+@MainActor func FHTestHUDIsHiden(_ hud: HUD, _ rootView: UIView) {
     print("hud.isHidden=\(hud.isHidden)")
     XCTAssertTrue(hud.isHidden, "The hud should be faded out.")
 //    XCTAssertEqual(hud.alpha, 0.0, "The hud should be faded out.")

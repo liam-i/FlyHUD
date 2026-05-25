@@ -9,6 +9,7 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class RotateViewableTests: XCTestCase {
 
     // MARK: - Mock RotateViewable Implementation
@@ -23,21 +24,19 @@ final class RotateViewableTests: XCTestCase {
 
     private var rotateView: MockRotateView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         rotateView = MockRotateView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         rotateView?.stopRotating()
         rotateView = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Protocol Conformance Tests
 
     func testMockRotateViewConformsToProtocol() {
-        XCTAssertTrue(rotateView is RotateViewable, "MockRotateView should conform to RotateViewable")
+        XCTAssertNotNil(rotateView as (any RotateViewable)?, "MockRotateView should conform to RotateViewable")
     }
 
     // MARK: - Duration Property Tests
@@ -160,7 +159,7 @@ final class RotateViewableTests: XCTestCase {
 
     func testAnimationStateAfterViewDeallocation() {
         var testView: MockRotateView? = MockRotateView()
-        weak var weakView = testView
+        weak let weakView = testView
 
         testView?.startRotating()
 
@@ -239,24 +238,20 @@ final class RotateViewableTests: XCTestCase {
         let expectation1 = XCTestExpectation(description: "Concurrent start/stop operations")
         let expectation2 = XCTestExpectation(description: "Concurrent start/stop operations")
 
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                for _ in 0..<10 {
-                    self.rotateView.startRotating()
-                    self.rotateView.stopRotating()
-                }
-                expectation1.fulfill()
+        DispatchQueue.main.async { [self] in
+            for _ in 0..<10 {
+                self.rotateView.startRotating()
+                self.rotateView.stopRotating()
             }
+            expectation1.fulfill()
         }
 
-        DispatchQueue.global(qos: .background).async {
-            DispatchQueue.main.async {
-                for _ in 0..<10 {
-                    self.rotateView.startRotating()
-                    self.rotateView.stopRotating()
-                }
-                expectation2.fulfill()
+        DispatchQueue.main.async { [self] in
+            for _ in 0..<10 {
+                self.rotateView.startRotating()
+                self.rotateView.stopRotating()
             }
+            expectation2.fulfill()
         }
 
         wait(for: [expectation1, expectation2], timeout: 2.0)

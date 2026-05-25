@@ -9,6 +9,7 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class ModelTests: XCTestCase {
 
     // MARK: - HUD.Layout Tests
@@ -104,8 +105,14 @@ final class ModelTests: XCTestCase {
     func testAnimationStyleReversed() {
         XCTAssertEqual(HUD.Animation.Style.zoomIn.reversed, .zoomOut, "ZoomIn reverse should be zoomOut")
         XCTAssertEqual(HUD.Animation.Style.zoomOut.reversed, .zoomIn, "ZoomOut reverse should be zoomIn")
+        XCTAssertEqual(HUD.Animation.Style.slideUp.reversed, .slideDown, "SlideUp reverse should be slideDown")
+        XCTAssertEqual(HUD.Animation.Style.slideDown.reversed, .slideUp, "SlideDown reverse should be slideUp")
+        XCTAssertEqual(HUD.Animation.Style.slideRight.reversed, .slideLeft, "SlideRight reverse should be slideLeft")
+        XCTAssertEqual(HUD.Animation.Style.slideLeft.reversed, .slideRight, "SlideLeft reverse should be slideRight")
         XCTAssertNil(HUD.Animation.Style.fade.reversed, "Fade should not have a reverse")
         XCTAssertNil(HUD.Animation.Style.none.reversed, "None should not have a reverse")
+        XCTAssertNil(HUD.Animation.Style.zoomInOut.reversed, "Combined styles should not have a reverse")
+        XCTAssertNil(HUD.Animation.Style.slideUpDown.reversed, "Combined styles should not have a reverse")
     }
 
     func testAnimationEquality() {
@@ -114,4 +121,98 @@ final class ModelTests: XCTestCase {
 
         XCTAssertEqual(animation1, animation2, "Two default animations should be equal")
     }
+
+    func testAnimationCustomInitialization() {
+        let animation = HUD.Animation(style: .zoomIn, damping: .ratio(0.8), duration: 0.5)
+
+        XCTAssertEqual(animation.style, .zoomIn)
+        XCTAssertEqual(animation.damping, .ratio(0.8))
+        XCTAssertEqual(animation.duration, 0.5)
+    }
+
+    func testAnimationFactoryMethod() {
+        let animation = HUD.Animation.animation(.slideUp, damping: .default, duration: 0.4)
+
+        XCTAssertEqual(animation.style, .slideUp)
+        XCTAssertEqual(animation.damping, .default)
+        XCTAssertEqual(animation.duration, 0.4)
+    }
+
+    func testAnimationDefaultValues() {
+        let animation = HUD.Animation()
+
+        XCTAssertEqual(animation.style, .fade, "Default style should be fade")
+        XCTAssertEqual(animation.damping, .disable, "Default damping should be disable")
+        XCTAssertEqual(animation.duration, 0.3, "Default duration should be 0.3")
+    }
+
+    // MARK: - Animation.Damping Tests
+
+    func testDampingDisable() {
+        let damping = HUD.Animation.Damping.disable
+        XCTAssertEqual(damping.value, 1.0, "Disable damping should have value 1.0")
+    }
+
+    func testDampingDefault() {
+        let damping = HUD.Animation.Damping.default
+        XCTAssertEqual(damping.value, 0.65, "Default damping should have value 0.65")
+    }
+
+    func testDampingCustomRatio() {
+        let damping = HUD.Animation.Damping.ratio(0.8)
+        XCTAssertEqual(damping.value, 0.8, "Custom ratio damping should return provided value")
+    }
+
+    func testDampingEquality() {
+        XCTAssertEqual(HUD.Animation.Damping.disable, HUD.Animation.Damping.disable)
+        XCTAssertEqual(HUD.Animation.Damping.default, HUD.Animation.Damping.default)
+        XCTAssertEqual(HUD.Animation.Damping.ratio(0.5), HUD.Animation.Damping.ratio(0.5))
+        XCTAssertNotEqual(HUD.Animation.Damping.disable, HUD.Animation.Damping.default)
+        XCTAssertNotEqual(HUD.Animation.Damping.ratio(0.5), HUD.Animation.Damping.ratio(0.8))
+    }
+
+    // MARK: - Animation.Style AllCases Tests
+
+    func testAnimationStyleAllCasesCount() {
+        XCTAssertEqual(HUD.Animation.Style.allCases.count, 14, "Should have 14 animation styles")
+    }
+
+    #if os(iOS)
+    // MARK: - KeyboardGuide Tests
+
+    func testKeyboardGuideDisable() {
+        let guide = HUD.KeyboardGuide.disable
+        XCTAssertEqual(guide, .disable)
+    }
+
+    func testKeyboardGuideCenterDefault() {
+        let guide = HUD.KeyboardGuide.center()
+        XCTAssertEqual(guide, .center(0.0), "Default center offset should be 0.0")
+    }
+
+    func testKeyboardGuideCenterWithOffset() {
+        let guide = HUD.KeyboardGuide.center(10.0)
+        XCTAssertEqual(guide, .center(10.0))
+        XCTAssertNotEqual(guide, .center(0.0))
+    }
+
+    func testKeyboardGuideBottomDefault() {
+        let guide = HUD.KeyboardGuide.bottom()
+        XCTAssertEqual(guide, .bottom(8.0), "Default bottom spacing should be 8.0")
+    }
+
+    func testKeyboardGuideBottomWithSpacing() {
+        let guide = HUD.KeyboardGuide.bottom(16.0)
+        XCTAssertEqual(guide, .bottom(16.0))
+        XCTAssertNotEqual(guide, .bottom(8.0))
+    }
+
+    func testKeyboardGuideEquality() {
+        XCTAssertEqual(HUD.KeyboardGuide.disable, HUD.KeyboardGuide.disable)
+        XCTAssertEqual(HUD.KeyboardGuide.center(5.0), HUD.KeyboardGuide.center(5.0))
+        XCTAssertEqual(HUD.KeyboardGuide.bottom(10.0), HUD.KeyboardGuide.bottom(10.0))
+        XCTAssertNotEqual(HUD.KeyboardGuide.disable, HUD.KeyboardGuide.center())
+        XCTAssertNotEqual(HUD.KeyboardGuide.center(), HUD.KeyboardGuide.bottom())
+    }
+    #endif
 }

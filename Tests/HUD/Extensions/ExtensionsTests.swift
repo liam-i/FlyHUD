@@ -9,6 +9,7 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class ExtensionsTests: XCTestCase {
 
     // MARK: - UIView Extensions Tests

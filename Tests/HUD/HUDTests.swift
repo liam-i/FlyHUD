@@ -9,24 +9,23 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class HUDTests: XCTestCase, HUDDelegate {
 
     var testView: UIView!
     var hud: HUD!
     var delegateExpectation: XCTestExpectation?
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         testView = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         hud = HUD(with: testView)
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         hud?.removeFromSuperview()
         hud = nil
         testView = nil
         delegateExpectation = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Initialization Tests
@@ -279,4 +278,182 @@ final class HUDTests: XCTestCase, HUDDelegate {
         HUD.keyboardGuide = originalStaticKeyboardGuide
     }
     #endif
+
+    // MARK: - Event Delivery Tests
+
+    func testEventDeliveryDefault() {
+        XCTAssertFalse(hud.isEventDeliveryEnabled, "Event delivery should be disabled by default")
+    }
+
+    func testEventDeliveryEnabled() {
+        hud.isEventDeliveryEnabled = true
+        XCTAssertTrue(hud.isEventDeliveryEnabled)
+    }
+
+    // MARK: - Count Enabled Tests
+
+    func testCountEnabledDefault() {
+        XCTAssertFalse(hud.isCountEnabled, "Count should be disabled by default")
+        XCTAssertEqual(hud.count, 0, "Initial count should be 0")
+    }
+
+    func testCountEnabledToggle() {
+        hud.isCountEnabled = true
+        XCTAssertTrue(hud.isCountEnabled)
+
+        hud.isCountEnabled = false
+        XCTAssertFalse(hud.isCountEnabled)
+    }
+
+    // MARK: - Show / Hide Tests
+
+    func testShowNonAnimated() {
+        testView.addSubview(hud)
+        hud.show(animated: false)
+
+        XCTAssertFalse(hud.isHidden, "HUD should be visible after show")
+        XCTAssertEqual(hud.contentView.alpha, 1.0, "Content view should be fully visible")
+    }
+
+    func testHideNonAnimated() {
+        testView.addSubview(hud)
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        XCTAssertTrue(hud.isHidden, "HUD should be hidden after hide")
+    }
+
+    func testHideRemovesFromSuperview() {
+        testView.addSubview(hud)
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        XCTAssertNil(hud.superview, "HUD should be removed from superview")
+    }
+
+    func testHideDoesNotRemoveWhenFlagSet() {
+        testView.addSubview(hud)
+        hud.removeFromSuperViewOnHide = false
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        XCTAssertNotNil(hud.superview, "HUD should remain in superview when removeFromSuperViewOnHide is false")
+        XCTAssertTrue(hud.isHidden, "HUD should still be hidden")
+    }
+
+    // MARK: - Static Show / Hide Tests
+
+    func testStaticShow() {
+        let hud = HUD.show(to: testView, animated: false)
+
+        XCTAssertNotNil(hud)
+        XCTAssertEqual(hud.superview, testView)
+        XCTAssertFalse(hud.isHidden)
+
+        hud.hide(animated: false)
+    }
+
+    func testStaticShowWithMode() {
+        let hud = HUD.show(to: testView, animated: false, mode: .text, label: "Test")
+
+        XCTAssertTrue(hud.contentView.mode.isText)
+        XCTAssertEqual(hud.contentView.label.text, "Test")
+
+        hud.hide(animated: false)
+    }
+
+    func testStaticShowWithPopulator() {
+        var populatorCalled = false
+        let hud = HUD.show(to: testView, animated: false) { hud in
+            populatorCalled = true
+            hud.graceTime = 5.0
+        }
+
+        XCTAssertTrue(populatorCalled, "Populator should be called")
+        XCTAssertEqual(hud.graceTime, 5.0, "Populator changes should be applied")
+
+        hud.hide(animated: false)
+    }
+
+    func testStaticHide() {
+        let hud = HUD.show(to: testView, animated: false)
+        let result = HUD.hide(for: testView, animated: false)
+
+        XCTAssertTrue(result, "Should return true when HUD was found and hidden")
+        XCTAssertNil(hud.superview)
+    }
+
+    func testStaticHideWhenNoHUD() {
+        let result = HUD.hide(for: testView, animated: false)
+        XCTAssertFalse(result, "Should return false when no HUD found")
+    }
+
+    func testStaticHideAll() {
+        HUD.show(to: testView, animated: false)
+        HUD.show(to: testView, animated: false)
+
+        let result = HUD.hideAll(for: testView, animated: false)
+        XCTAssertTrue(result, "Should return true when HUDs were found")
+        XCTAssertEqual(HUD.huds(for: testView).count, 0, "All HUDs should be removed")
+    }
+
+    // MARK: - Animation Property Tests
+
+    func testAnimationPropertyDefault() {
+        let animation = hud.animation
+        XCTAssertEqual(animation.style, .fade, "Default animation style should be fade")
+        XCTAssertEqual(animation.damping, .disable, "Default damping should be disable")
+        XCTAssertEqual(animation.duration, 0.3, "Default duration should be 0.3")
+    }
+
+    func testAnimationPropertyCustom() {
+        hud.animation = HUD.Animation(style: .zoomIn, damping: .default, duration: 0.5)
+        XCTAssertEqual(hud.animation.style, .zoomIn)
+        XCTAssertEqual(hud.animation.damping, .default)
+        XCTAssertEqual(hud.animation.duration, 0.5)
+    }
+
+    // MARK: - Layout Property Tests
+
+    func testLayoutOffset() {
+        hud.layout = HUD.Layout(offset: CGPoint(x: 50, y: 100))
+        XCTAssertEqual(hud.layout.offset, CGPoint(x: 50, y: 100))
+    }
+
+    func testLayoutEdgeInsets() {
+        let insets = UIEdgeInsets(top: 10, left: 15, bottom: 20, right: 25)
+        hud.layout = HUD.Layout(edgeInsets: insets)
+        XCTAssertEqual(hud.layout.edgeInsets, insets)
+    }
+
+    func testLayoutSafeAreaFlag() {
+        hud.layout = HUD.Layout(isSafeAreaLayoutGuideEnabled: false)
+        XCTAssertFalse(hud.layout.isSafeAreaLayoutGuideEnabled)
+    }
+
+    // MARK: - Memory Management Tests
+
+    func testHUDDeallocation() {
+        weak var weakHUD: HUD?
+        autoreleasepool {
+            let localHUD = HUD(with: testView)
+            weakHUD = localHUD
+            testView.addSubview(localHUD)
+            localHUD.show(animated: false)
+            localHUD.hide(animated: false)
+        }
+
+        XCTAssertNil(weakHUD, "HUD should be deallocated after removal")
+    }
+
+    // MARK: - Performance Tests
+
+    func testShowHidePerformance() {
+        measure {
+            for _ in 0..<50 {
+                let hud = HUD.show(to: testView, animated: false)
+                hud.hide(animated: false)
+            }
+        }
+    }
 }

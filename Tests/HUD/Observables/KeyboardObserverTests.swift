@@ -10,21 +10,20 @@ import XCTest
 @testable import FlyHUD
 
 #if os(iOS)
+@MainActor
 final class KeyboardObserverTests: XCTestCase {
 
     var keyboardObserver: KeyboardObserver!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         keyboardObserver = KeyboardObserver.shared
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         // Clean up any observers
         if let mockObserver = mockObserver {
             keyboardObserver.remove(mockObserver)
         }
-        try super.tearDownWithError()
     }
 
     private var mockObserver: MockKeyboardObservable?
@@ -181,7 +180,7 @@ final class KeyboardObserverTests: XCTestCase {
 
     func testWeakObserverReference() {
         var observer: MockKeyboardObservable? = MockKeyboardObservable()
-        weak var weakObserver = observer
+        weak let weakObserver = observer
 
         // Add observer
         keyboardObserver.add(observer!)
@@ -283,15 +282,15 @@ final class KeyboardObserverTests: XCTestCase {
         let expectation1 = XCTestExpectation(description: "Concurrent add/remove operations")
         let expectation2 = XCTestExpectation(description: "Concurrent add/remove operations")
 
-        DispatchQueue.global(qos: .background).async {
-            self.keyboardObserver.add(observer1)
-            self.keyboardObserver.remove(observer1)
+        DispatchQueue.main.async { [self] in
+            keyboardObserver.add(observer1)
+            keyboardObserver.remove(observer1)
             expectation1.fulfill()
         }
 
-        DispatchQueue.global(qos: .background).async {
-            self.keyboardObserver.add(observer2)
-            self.keyboardObserver.remove(observer2)
+        DispatchQueue.main.async { [self] in
+            keyboardObserver.add(observer2)
+            keyboardObserver.remove(observer2)
             expectation2.fulfill()
         }
 

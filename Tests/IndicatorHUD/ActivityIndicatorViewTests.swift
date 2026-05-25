@@ -8,20 +8,20 @@
 
 import XCTest
 @testable import FlyHUD
+@testable import FlyIndicatorHUD
 
+@MainActor
 final class ActivityIndicatorViewTests: XCTestCase {
 
     var activityIndicatorView: ActivityIndicatorView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         activityIndicatorView = ActivityIndicatorView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         activityIndicatorView?.stopAnimating()
         activityIndicatorView = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Initialization Tests
@@ -182,7 +182,7 @@ final class ActivityIndicatorViewTests: XCTestCase {
 
     func testActivityIndicatorViewDeallocation() {
         var view: ActivityIndicatorView? = ActivityIndicatorView()
-        weak var weakView = view
+        weak let weakView = view
 
         view?.startAnimating()
         view?.stopAnimating()

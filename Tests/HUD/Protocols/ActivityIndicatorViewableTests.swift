@@ -9,24 +9,23 @@
 import XCTest
 @testable import FlyHUD
 
+@MainActor
 final class ActivityIndicatorViewableTests: XCTestCase {
 
     var activityIndicator: UIActivityIndicatorView!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
         activityIndicator = UIActivityIndicatorView()
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         activityIndicator = nil
-        try super.tearDownWithError()
     }
 
     // MARK: - Protocol Conformance Tests
 
     func testUIActivityIndicatorViewConformsToProtocol() {
-        XCTAssertTrue(activityIndicator is ActivityIndicatorViewable, "UIActivityIndicatorView should conform to ActivityIndicatorViewable")
+        XCTAssertNotNil(activityIndicator as (any ActivityIndicatorViewable)?, "UIActivityIndicatorView should conform to ActivityIndicatorViewable")
     }
 
     // MARK: - Color Property Tests
