@@ -303,6 +303,11 @@ public class ContentView: BackgroundView, DisplayLinkDelegate {
     private var indicator: UIView?
     private func setIndicator(_ newValue: UIView?) {
         if let oldValue = indicator {
+            switch oldValue {
+            case let v as ActivityIndicatorViewable: v.stopAnimating()
+            case let v as RotateViewable:           v.stopRotating()
+            default: break
+            }
             hStackView.removeArrangedSubview(oldValue)
             vStackView.removeArrangedSubview(oldValue)
             oldValue.removeFromSuperview()

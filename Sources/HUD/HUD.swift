@@ -464,6 +464,7 @@ open class HUD: BaseView, ContentViewDelegate {
         if isCountEnabled {
             count -= 1
             if count > 0 { return }
+            count = max(count, 0) // Prevent negative count from unbalanced hide() calls
         }
 
         let animation = animation ?? self.animation
