@@ -55,6 +55,7 @@ FlyHUD is split into three independent modules:
 - <doc:privacy>
 - <doc:benchmark>
 - <doc:release-notes>
+- <doc:CHANGELOG>
 
 ### Core Types
 

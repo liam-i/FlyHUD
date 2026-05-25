@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD024 -->
 # Release Notes
 
 Detailed release notes for all FlyHUD versions. For the full changelog, see the
