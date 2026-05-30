@@ -18,13 +18,19 @@
 
 ## 屏幕截图
 
-[![指示器样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
-[![进度条样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
-[![文本模式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
-[![自定义视图](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
-[![动画样式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
-[![键盘引导](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
-[![深色模式](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
+### iOS
+
+[![iOS 截图 1](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-1.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-1.png)
+[![iOS 截图 2](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-2.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-2.png)
+[![iOS 截图 3](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-3.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-3.png)
+[![iOS 截图 4](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-4.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-4.png)
+[![iOS 截图 5](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-5.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-5.png)
+[![iOS 截图 6](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-6.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-6.png)
+
+### tvOS & visionOS
+
+[![tvOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/tvOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/tvOS.png)
+[![visionOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/visionOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/visionOS.png)
 
 ## 要求
 

@@ -16,15 +16,21 @@ English | [简体中文](./README_CN.md)
 
 This is a lightweight and easy-to-use HUD designed to display the progress and status of ongoing tasks on iOS and tvOS.
 
-## ScreenShots
+## Screenshots
 
-[![Indicator styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-1.png)
-[![Progress styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-2.png)
-[![Text mode](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-3.png)
-[![Custom view](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-4.png)
-[![Animation styles](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png)
-[![Keyboard guide](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-8.png)
-[![Dark mode](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7-small.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-7.png)
+### iOS
+
+[![iOS Screenshot 1](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-1.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-1.png)
+[![iOS Screenshot 2](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-2.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-2.png)
+[![iOS Screenshot 3](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-3.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-3.png)
+[![iOS Screenshot 4](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-4.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-4.png)
+[![iOS Screenshot 5](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-5.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-5.png)
+[![iOS Screenshot 6](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-6.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-6.png)
+
+### tvOS & visionOS
+
+[![tvOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/tvOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/tvOS.png)
+[![visionOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/visionOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/visionOS.png)
 
 ## Requirements
 
