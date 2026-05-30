@@ -249,20 +249,23 @@ FlyHUD 提供了完整的 VoiceOver 和无障碍支持：
 
 版本和 `main` 分支的文档可查看此处：
 
-* [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
-* [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
+* [main](https://liam-i.github.io/FlyHUD/main/documentation/)
+* [1.6.0](https://liam-i.github.io/FlyHUD/1.6.0/documentation/)
 
 <details>
   <summary>
   其他版本
   </summary>
 
+* [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
 * [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
 * [1.3.7](https://liam-i.github.io/FlyHUD/1.3.7/documentation/lphud)
 * [1.2.6](https://liam-i.github.io/FlyHUD/1.2.6/documentation/lphud)
 * [1.1.0](https://liam-i.github.io/FlyHUD/1.1.0/documentation/lpprogresshud)
+
+</details>
 
 ## 为什么取名 FlyHUD？
 
