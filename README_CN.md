@@ -44,7 +44,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.0")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.1")
 ],
 targets: [
     .target(
@@ -63,7 +63,7 @@ targets: [
 
 * File > Add Package Dependencies...
 * Add `https://github.com/liam-i/FlyHUD.git`
-* Select "Up to Next Minor" with "1.6.0"
+* Select "Up to Next Minor" with "1.6.1"
 
 > [!TIP]
 > 相关详细教程，请查看：[Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -81,19 +81,19 @@ use_frameworks!
 
 target 'MyApp' do
   # 使用所有组件（FlyHUD、FlyIndicatorHUD、FlyProgressHUD 和 FlyHUDSwiftUI）。
-  pod 'FlyHUD', '~> 1.6.0'
+  pod 'FlyHUD', '~> 1.6.1'
 
   # 或者，只使用 FlyHUD 组件。
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyHUD']
 
   # 或者，只使用 FlyHUD 和 FlyIndicatorHUD 组件。
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyIndicatorHUD']
 
   # 或者，只使用 FlyHUD 和 FlyProgressHUD 组件。
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyProgressHUD']
 
   # 或者，只使用 FlyHUD 和 FlyHUDSwiftUI 组件。
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUDSwiftUI']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyHUDSwiftUI']
 end
 ```
 
@@ -107,7 +107,7 @@ end
 如果你使用 [Carthage](https://github.com/Carthage/Carthage), 可将以下内容添加到你的 `Cartfile` 中：
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.6.0
+github "liam-i/FlyHUD" ~> 1.6.1
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。

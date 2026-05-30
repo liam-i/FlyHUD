@@ -44,7 +44,7 @@ If you are using the [Swift Package Manager](https://www.swift.org/documentation
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.0")
+    .package(url: "https://github.com/liam-i/FlyHUD.git", from: "1.6.1")
 ],
 targets: [
     .target(
@@ -63,7 +63,7 @@ If you are using Xcode, then you should:
 
 * File > Add Package Dependencies...
 * Add `https://github.com/liam-i/FlyHUD.git`
-* Select "Up to Next Minor" with "1.6.0"
+* Select "Up to Next Minor" with "1.6.1"
 
 > [!TIP]
 > For detailed tutorials, see: [Apple Docs](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app)
@@ -81,19 +81,19 @@ use_frameworks!
 
 target 'MyApp' do
   # Use all components (FlyHUD, FlyIndicatorHUD, FlyProgressHUD and FlyHUDSwiftUI).
-  pod 'FlyHUD', '~> 1.6.0'
+  pod 'FlyHUD', '~> 1.6.1'
 
   # Or, just use the FlyHUD component.
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyHUD']
 
   # Or, just use the FlyHUD and FlyIndicatorHUD components.
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyIndicatorHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyIndicatorHUD']
 
   # Or, just use the FlyHUD and FlyProgressHUD components.
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyProgressHUD']
 
   # Or, just use the FlyHUD and FlyHUDSwiftUI components.
-  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUDSwiftUI']
+  pod 'FlyHUD', '~> 1.6.1', :subspecs => ['FlyHUDSwiftUI']
 end
 ```
 
@@ -107,7 +107,7 @@ And run `pod install`.
 If you're using [Carthage](https://github.com/Carthage/Carthage), add this to your `Cartfile`:
 
 ```ruby
-github "liam-i/FlyHUD" ~> 1.6.0
+github "liam-i/FlyHUD" ~> 1.6.1
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.

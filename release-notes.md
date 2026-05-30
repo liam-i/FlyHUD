@@ -3,6 +3,19 @@
 Detailed release notes for all FlyHUD versions. For the full changelog, see the
 <doc:CHANGELOG> file.
 
+## 1.6.1 (May 30, 2026)
+
+### Fixes
+
+- Fixed Swift Package Index builds failing on all platforms by adding `.spi.yml` manifest
+  - Restricts SPI builds to supported platforms (iOS, tvOS, visionOS)
+  - Configures DocC documentation generation on SPI
+  - Adds external documentation link to GitHub Pages
+
+**Full Changelog:** [1.6.0...1.6.1](https://github.com/liam-i/FlyHUD/compare/1.6.0...1.6.1)
+
+---
+
 ## 1.6.0 (May 25, 2026)
 
 ### Highlights

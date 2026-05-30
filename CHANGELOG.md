@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-05-30
+
+### Added
+
+- `.spi.yml` manifest for Swift Package Index build and documentation configuration
+
+### Fixed
+
+- Fixed Swift Package Index builds failing on all platforms due to missing platform configuration
+
 ## [1.6.0] - 2026-05-25
 
 ### Added
@@ -173,6 +183,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Keyboard layout guide
 - Dark mode support
 
+[1.6.1]: https://github.com/liam-i/FlyHUD/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/liam-i/FlyHUD/compare/1.5.13...1.6.0
 [1.5.13]: https://github.com/liam-i/FlyHUD/compare/1.5.12...1.5.13
 [1.5.12]: https://github.com/liam-i/FlyHUD/compare/1.5.11...1.5.12
