@@ -107,63 +107,21 @@ Use kebab-case matching the concept:
 
 ### Current Diagram Inventory
 
-| File | Type | Used In |
-| ---- | ---- | ------- |
-| `architecture.mmd` | Flowchart | overview.md |
-| `view-hierarchy.mmd` | Flowchart | overview.md |
-| `lifecycle.mmd` | State | overview.md |
-| `sequence.mmd` | Sequence | overview.md |
-| `basic-lifecycle.mmd` | State | basic-features.md |
-| `content-layout.mmd` | Flowchart | basic-features.md |
-| `animation-states.mmd` | State | advanced-features.md |
-| `grace-time.mmd` | Sequence | advanced-features.md |
-| `activity-count.mmd` | State | advanced-features.md |
-| `custom-protocols.mmd` | Class | custom-ui.md |
-| `custom-indicator-decision.mmd` | Flowchart | custom-ui.md |
-| `testing-mock.mmd` | Class | testing.md |
-| `testing-strategy.mmd` | Flowchart | testing.md |
-| `best-practices-lifecycle.mmd` | Sequence | best-practices.md |
-| `error-handling-states.mmd` | State | best-practices.md |
-
-### Supported Diagram Types
-
-| Type | Use Case | Mermaid Keyword |
-| ---- | -------- | --------------- |
-| Flowchart | Decision trees, layouts, architecture | `flowchart TD/LR/TB` |
-| Sequence | Temporal interactions, API call flows | `sequenceDiagram` |
-| State | Lifecycle, status transitions | `stateDiagram-v2` |
-| Class | Protocol hierarchies, relationships | `classDiagram` |
+Check `Resources/mermaid-src/*.mmd` for full list. Types used: Flowchart (`flowchart TD/LR`), Sequence (`sequenceDiagram`), State (`stateDiagram-v2`), Class (`classDiagram`).
 
 ### Mermaid Syntax Tips
 
-- Avoid `:` in `note` text (causes parse errors) — use alternative phrasing
-- In `sequenceDiagram`, don't `deactivate` the same participant in multiple `alt` branches
-- Use `direction TB/LR` inside subgraphs to control layout
-- Style nodes: `style NodeId fill:#color,stroke:#color`
-- Link styles: `A --> B` (arrow), `A --- B` (line), `A -.-> B` (dashed)
+- Avoid `:` in `note` text (causes parse errors)
+- Don't `deactivate` same participant in multiple `alt` branches
+- Use `direction TB/LR` inside subgraphs
+- Naming: kebab-case matching concept (e.g. `grace-time.mmd`, `animation-states.mmd`)
 
 ## Writing Guidelines
 
-### Tone & Structure
-
-- Start each article with a one-line description (after the `#` title)
+- Start each article with a one-line description after the `#` title
 - Use `##` for major sections, `###` for subsections
-- Include code examples for every API being documented
+- Include code examples for every API; always show `import FlyHUD` in first block
 - Use tables for property/method references
 - Use `> Note:`, `> Important:`, `> Warning:` for callouts
-
-### Code Examples
-
-- Always include `import FlyHUD` (or relevant module) at the top of the first code block
-- Use `// ...` to indicate omitted code
-- Show both simple and advanced usage patterns
-- Include both setup and cleanup (`show` and `hide`)
-
-### When to Add a Diagram
-
-Add a diagram when:
-- Explaining state transitions or lifecycles
-- Showing protocol/class relationships
-- Illustrating timing/sequencing of events
-- Presenting decision trees for choosing approaches
-- Visualizing view hierarchy or layout structure
+- Show both simple and advanced usage (setup + cleanup)
+- Add diagrams for: state transitions, protocol relationships, timing/sequencing, decision trees

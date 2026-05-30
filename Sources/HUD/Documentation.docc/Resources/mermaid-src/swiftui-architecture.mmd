@@ -1,0 +1,65 @@
+graph TD
+    subgraph "FlyHUDSwiftUI Module"
+        direction TB
+
+        subgraph L4["Layer 4: Liquid Glass (iOS 26+)"]
+            hudGlass[".hudGlass()"]
+        end
+
+        subgraph L3["Layer 3: Convenience Presets"]
+            hudLoading[".hudLoading()"]
+            hudToast[".hudToast()"]
+            hudProgress[".hudProgress()"]
+        end
+
+        subgraph L2["Layer 2: Declarative Modifiers"]
+            hudPresented[".hud(isPresented:)"]
+            hudItem[".hud(item:)"]
+            hudStatus[".hudStatus(isPresented:)"]
+        end
+
+        subgraph L1["Layer 1: UIKit Bridge"]
+            hudHost[".hudHost($hostView)"]
+        end
+
+        subgraph Internal["Internal Components"]
+            Modifier["ViewModifier"]
+            Representable["UIViewRepresentable"]
+            Coordinator["Coordinator"]
+            TargetView["HUDTargetView"]
+        end
+    end
+
+    subgraph UIKit["FlyHUD (UIKit Core)"]
+        HUD["HUD"]
+        ContentView["ContentView"]
+        BackgroundView["BackgroundView"]
+    end
+
+    %% Layer relationships
+    hudGlass --> hudPresented
+    hudLoading --> hudPresented
+    hudToast --> hudStatus
+    hudProgress --> Modifier
+
+    hudPresented --> Modifier
+    hudItem --> Modifier
+    hudStatus --> Modifier
+
+    hudHost --> TargetView
+
+    Modifier --> Representable
+    Representable --> Coordinator
+    Representable --> TargetView
+    Coordinator --> HUD
+
+    TargetView -.->|"didMoveToWindow"| Coordinator
+
+    %% Styling
+    classDef public fill:#e8f5e9,stroke:#4caf50
+    classDef internal fill:#fff3e0,stroke:#ff9800
+    classDef core fill:#e3f2fd,stroke:#2196f3
+
+    class hudGlass,hudLoading,hudToast,hudProgress,hudPresented,hudItem,hudStatus,hudHost public
+    class Modifier,Representable,Coordinator,TargetView internal
+    class HUD,ContentView,BackgroundView core

@@ -53,10 +53,10 @@ extension CGFloat: HUDExtended {}
 extension NSObject: HUDExtended {}
 
 extension HUDExtension where ExtendedType == UIColor {
-    /// Defaults to `UIColor.label.withAlphaComponent(0.7)`.
+    /// The default content color for labels and indicators. Defaults to `UIColor.label.withAlphaComponent(0.7)`.
     public static let content: UIColor = UIColor.label.withAlphaComponent(0.7)
 
-    /// The background color or the blur tint color. Defaults to `nil`.
+    /// The default background color for ContentView. Defaults to `nil`.
     public static let background: UIColor? = nil
 }
 

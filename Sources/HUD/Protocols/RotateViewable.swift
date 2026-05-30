@@ -18,16 +18,16 @@ public protocol RotateViewable: AnyObject where Self: UIView {
 
     /// Starts the animation of the rotate view.
     ///
-    /// - Note: When the rotate view is animated, the view is animated until stopRotating() is called.
+    /// - Note: When animated, the view continues rotating until stopRotating() is called.
     func startRotating()
     /// Stops the animation of the rotate view.
     ///
-    /// - Note: Call this method to stop the animation of the rotate view started with a call to startRotating().
+    /// - Note: Call this method to stop the rotation animation started by startRotating().
     func stopRotating()
 }
 
 extension RotateViewable {
-    /// Specifies the basic duration of the animation, in seconds. `Default to 0.25`
+    /// Specifies the basic duration of the animation, in seconds. `Defaults to 0.25`.
     public var duration: CFTimeInterval { 0.25 }
 
     public func startRotating() {

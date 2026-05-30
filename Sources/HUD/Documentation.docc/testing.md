@@ -252,10 +252,20 @@ func testProgressViewBounds() {
 
 ## Running Tests
 
-### SPM
+### Command Line
 
 ```bash
-swift test
+# Run all unit tests
+./scripts/build.sh test
+
+# Run specific test class
+./scripts/build.sh test HUDTests
+
+# Run UI tests
+./scripts/build.sh test ui
+
+# SPM build (swift test not supported — UIKit unavailable on macOS CLI)
+./scripts/build.sh swift
 ```
 
 ### Xcode

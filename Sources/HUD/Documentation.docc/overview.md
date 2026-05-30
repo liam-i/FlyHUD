@@ -15,7 +15,7 @@ blocking the user interface or requiring complex view controller orchestration.
 - **Thread-safe API** — All public methods are `@MainActor`-isolated
 - **Composable** — Mix and match indicator, progress, and custom views
 - **Customizable** — Fine-grained control over layout, animation, and appearance
-- **Accessible** — Supports Dynamic Type, VoiceOver, and RTL layouts
+- **Accessible** — Full VoiceOver support (modal focus, escape gesture, dynamic labels, contextual hints, progress announcements), Dynamic Type, and RTL layouts
 
 ## Architecture
 
@@ -27,7 +27,7 @@ FlyHUD follows a modular architecture with clear dependency boundaries:
 ┌─────────────────────────────────────────────────┐
 │                  Your App                        │
 ├────────────────┬────────────────┬───────────────┤
-│ FlyIndicatorHUD│  FlyProgressHUD│   (optional)  │
+│ FlyIndicatorHUD│  FlyProgressHUD│ FlyHUDSwiftUI │
 ├────────────────┴────────────────┴───────────────┤
 │                    FlyHUD                        │
 │  ┌──────────┐ ┌───────────┐ ┌────────────────┐ │
@@ -49,6 +49,7 @@ FlyHUD follows a modular architecture with clear dependency boundaries:
 | Module | Target | Responsibility |
 | ------ | ------ | -------------- |
 | FlyHUD | `FlyHUD` | Core HUD container, layout engine, animation system, background styles, keyboard tracking |
+| FlyHUDSwiftUI | `FlyHUDSwiftUI` | SwiftUI declarative modifiers, UIKit bridge, convenience presets |
 | FlyIndicatorHUD | `FlyIndicatorHUD` | Custom activity indicator animations (ring, ball spin, circle stroke, arc dot) |
 | FlyProgressHUD | `FlyProgressHUD` | Custom progress view styles (bar, round, annular, pie) |
 
@@ -56,9 +57,12 @@ FlyHUD follows a modular architecture with clear dependency boundaries:
 
 ```text
 FlyIndicatorHUD ──depends on──▶ FlyHUD ◀──depends on── FlyProgressHUD
+                                  ▲
+                                  │
+                            FlyHUDSwiftUI
 ```
 
-> Important: `FlyHUD` must never import `FlyIndicatorHUD` or `FlyProgressHUD`.
+> Important: `FlyHUD` must never import `FlyIndicatorHUD`, `FlyProgressHUD`, or `FlyHUDSwiftUI`.
 > Reverse dependencies are strictly forbidden.
 
 ## View Hierarchy

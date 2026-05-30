@@ -20,13 +20,13 @@ public enum RoundedCorners: Equatable, HUDExtended {
 
 /// A control that executes your custom code in response to user interactions.
 open class Button: UIButton {
-    /// The rounded corner mode of the button. `Default to .full`.
+    /// The rounded corner mode of the button. `Defaults to .full`.
     open var roundedCorners: RoundedCorners = .full {
         didSet {
             roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
         }
     }
-    /// Button border width. `Default to 1`.
+    /// Button border width. `Defaults to 1`.
     open var borderWidth: CGFloat = 1.0 {
         didSet {
             borderWidth.h.notEqual(oldValue, do: layer.borderWidth = borderWidth)
@@ -44,6 +44,9 @@ open class Button: UIButton {
         self.titleLabel?.textAlignment = .center
         self.titleLabel?.font = .boldSystemFont(ofSize: fontSize)
         self.setTitleColor(textColor, for: .normal)
+        // VoiceOver: Hidden from accessibility — ContentView exposes button
+        // actions via accessibilityCustomActions for a cleaner VoiceOver experience.
+        self.isAccessibilityElement = false
     }
 
     /// Creates a new button with the specified frame.
@@ -97,6 +100,11 @@ open class Button: UIButton {
     open override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         isHiddenInStackView = isEmptyOfText
+        // VoiceOver: Notify that accessibilityCustomActions may have changed on the parent
+        // ContentView (button action becomes available/unavailable when title is set/cleared).
+        if window != nil {
+            UIAccessibility.post(notification: .layoutChanged, argument: superview)
+        }
     }
 
     /// Sets the color of the title to use for the specified state.
@@ -121,5 +129,25 @@ open class Button: UIButton {
     open var isEmptyOfText: Bool {
         guard let text = title(for: .normal), text.isEmpty == false else { return true }
         return false
+    }
+
+    // MARK: - VoiceOver: Notify when control events change
+
+    /// Adds a target and action for the specified event.
+    /// VoiceOver is notified so accessibilityCustomActions on the parent ContentView can update.
+    open override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
+        super.addTarget(target, action: action, for: controlEvents)
+        if window != nil {
+            UIAccessibility.post(notification: .layoutChanged, argument: superview)
+        }
+    }
+
+    /// Removes a target and action for the specified event.
+    /// VoiceOver is notified so accessibilityCustomActions on the parent ContentView can update.
+    open override func removeTarget(_ target: Any?, action: Selector?, for controlEvents: UIControl.Event) {
+        super.removeTarget(target, action: action, for: controlEvents)
+        if window != nil {
+            UIAccessibility.post(notification: .layoutChanged, argument: superview)
+        }
     }
 }

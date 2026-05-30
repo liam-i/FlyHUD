@@ -22,9 +22,16 @@ fast, efficient, and flexible — consistent with the real-time nature of a HUD.
 
 ### Does FlyHUD support SwiftUI?
 
-FlyHUD is a UIKit library. For SwiftUI integration, wrap HUD display logic in a
-`UIViewRepresentable` or use it within a hosting controller. See the Example SwiftUI
-project for reference implementations.
+Yes! The `FlyHUDSwiftUI` module provides native SwiftUI support with declarative modifiers:
+
+```swift
+import FlyHUDSwiftUI
+
+MyView()
+    .hudLoading(isPresented: $isLoading, label: "Loading...")
+```
+
+See <doc:swiftui-integration> for complete documentation covering all API layers.
 
 ## Installation
 
@@ -33,6 +40,7 @@ project for reference implementations.
 | Need | Import |
 | ---- | ------ |
 | System spinner + custom views only | `FlyHUD` |
+| SwiftUI declarative modifiers | `FlyHUDSwiftUI` |
 | Custom indicator animations | `FlyHUD` + `FlyIndicatorHUD` |
 | Custom progress styles | `FlyHUD` + `FlyProgressHUD` |
 | All features | All three |

@@ -41,7 +41,7 @@ extension BackgroundView {
 /// The view to use as the background of the HUD.
 /// HUD adds the background view as a subview behind all other views and uses its current frame location.
 open class BackgroundView: BaseView {
-    /// The rounded corner mode of the button. `Default to .radius(0.0)`.
+    /// The rounded corner mode of the background view. `Defaults to .radius(0.0)`.
     open var roundedCorners: RoundedCorners = .radius(0.0) {
         didSet {
             roundedCorners.h.notEqual(oldValue, do: setNeedsLayout())
@@ -71,6 +71,10 @@ open class BackgroundView: BaseView {
     /// Common initialization method.
     open override func commonInit() {
         clipsToBounds = true
+        // VoiceOver: Background is purely decorative — hidden from accessibility
+        // so VoiceOver doesn't navigate to an empty element behind ContentView.
+        isAccessibilityElement = false
+        accessibilityElementsHidden = true
         updateForBackgroundStyle()
     }
 

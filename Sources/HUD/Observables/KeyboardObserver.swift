@@ -15,9 +15,9 @@ import UIKit
 /// keyboard information model.
 public struct KeyboardInfo {
     public enum Name {
-        /// A event that posts immediately prior to a change in the keyboard’s frame.
+        /// An event that posts immediately prior to a change in the keyboard's frame.
         case willChangeFrame
-        /// A event that posts immediately after a change in the keyboard’s frame.
+        /// An event that posts immediately after a change in the keyboard's frame.
         case didChangeFrame
     }
 
@@ -101,13 +101,9 @@ public struct KeyboardInfo {
         guard let userInfo = notification.userInfo,
               let frameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
 
-        let screenBounds: CGRect = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first(where: { $0.activationState == .foregroundActive })?
-            .screen.bounds
-            ?? UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .first?.screen.bounds
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let screenBounds: CGRect = scenes.first(where: { $0.activationState == .foregroundActive })?.screen.bounds
+            ?? scenes.first?.screen.bounds
             ?? CGRect(origin: .zero, size: frameEnd.size)
 
         let info = KeyboardInfo(

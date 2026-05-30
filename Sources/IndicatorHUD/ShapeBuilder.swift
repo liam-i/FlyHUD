@@ -26,7 +26,7 @@ enum ShapeBuilder: ShapeBuildable {
         let layer = CAShapeLayer()
         let path = UIBezierPath()
         let center = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
-        let radius = (min(size.width, size.height) - lineWidth) / 2.0
+        let radius = max(0.0, (min(size.width, size.height) - lineWidth) / 2.0)
 
         switch self {
         case .ring:

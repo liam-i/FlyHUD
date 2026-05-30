@@ -6,6 +6,7 @@ graph TB
     subgraph "Optional Modules"
         Indicator[FlyIndicatorHUD]
         Progress[FlyProgressHUD]
+        SwiftUI[FlyHUDSwiftUI]
     end
 
     subgraph "Core"
@@ -18,13 +19,16 @@ graph TB
 
     App --> Indicator
     App --> Progress
+    App --> SwiftUI
     App --> HUD
     Indicator --> HUD
     Progress --> HUD
+    SwiftUI --> HUD
     HUD --> UIKit
 
     style HUD fill:#4A90D9,stroke:#2E6EA6,color:#fff
     style Indicator fill:#7B68EE,stroke:#5B48CE,color:#fff
     style Progress fill:#7B68EE,stroke:#5B48CE,color:#fff
+    style SwiftUI fill:#7B68EE,stroke:#5B48CE,color:#fff
     style App fill:#50C878,stroke:#30A858,color:#fff
     style UIKit fill:#8B8B8B,stroke:#6B6B6B,color:#fff

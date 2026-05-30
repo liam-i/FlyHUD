@@ -210,6 +210,69 @@ saveDocument { result in
 
 ## Accessibility
 
+FlyHUD provides comprehensive VoiceOver and accessibility support out of the box.
+
+### VoiceOver Architecture
+
+![Diagram showing the single-element accessibility pattern where ContentView is the sole VoiceOver focus element](accessibility-architecture.svg)
+
+FlyHUD uses a **single-element** accessibility design:
+
+- `ContentView` is the sole VoiceOver focus element within the HUD
+- All child views (labels, buttons, indicators, progress views) are hidden from accessibility
+- VoiceOver reads a combined description of labels + progress status as one coherent announcement
+- Button actions are exposed via `accessibilityCustomActions` (swipe up/down to discover)
+
+The HUD automatically manages VoiceOver focus:
+
+```swift
+// When shown:  VoiceOver focus moves to HUD (via .screenChanged notification)
+// When hidden: VoiceOver focus returns to underlying content
+
+let hud = HUD.show(to: view, mode: .indicator(), label: "Loading...")
+// VoiceOver announces: "Loading..."
+
+hud.contentView.detailsLabel.text = "Please wait"
+// VoiceOver re-reads: "Loading..., Please wait"
+```
+
+### Escape Gesture
+
+VoiceOver users can dismiss the HUD via the standard two-finger Z-scrub (escape) gesture.
+This calls `accessibilityPerformEscape()` and hides the HUD with animation.
+
+### Contextual Hints
+
+`accessibilityHint` provides mode-aware context to VoiceOver users:
+
+- Indicator modes: "Loading in progress"
+- Progress modes: "Task in progress"
+- Text-only modes: no hint (nil)
+
+### Modal Focus Management
+
+HUD sets `accessibilityViewIsModal = true` to prevent VoiceOver from navigating
+to elements behind the overlay. This is automatic — no configuration needed.
+
+When `isEventDeliveryEnabled = true` (touches pass through), `accessibilityViewIsModal`
+is automatically set to `false` so VoiceOver focus can reach underlying content.
+
+### Progress Announcements
+
+In progress mode, VoiceOver users receive periodic updates:
+
+- `accessibilityValue` dynamically reports the current percentage (e.g., "45%")
+- `accessibilityTraits` includes `.updatesFrequently` for progress/indicator modes
+- Milestone announcements are posted at 25% intervals (0%, 25%, 50%, 75%, 100%)
+
+```swift
+let hud = HUD.show(to: view, mode: .progress(.round), label: "Downloading")
+// VoiceOver announces: "Downloading" with value "0%"
+
+hud.contentView.progress = 0.5
+// VoiceOver announces: "50%" (milestone notification)
+```
+
 ### Dynamic Type
 
 Enable Dynamic Type for HUD labels:
@@ -227,4 +290,28 @@ Ensure sufficient contrast between content and background:
 hud.contentView.style = .solidColor
 hud.contentView.color = UIColor(white: 0.1, alpha: 0.9)
 hud.contentView.contentColor = .white
+```
+
+### Custom Views & Accessibility
+
+When using `.custom(UIView)` mode, set `isAccessibilityElement = false` on your custom view
+to maintain the single-element pattern:
+
+```swift
+let checkmark = UIImageView(image: UIImage(systemName: "checkmark"))
+checkmark.isAccessibilityElement = false  // Recommended
+
+HUD.show(to: view, mode: .custom(checkmark), label: "Done")
+// VoiceOver announces: "Done" (not the image's default accessibility)
+```
+
+### Button Actions
+
+When a button is configured, VoiceOver exposes it via custom actions:
+
+```swift
+let hud = HUD.show(to: view, mode: .indicator(), label: "Uploading...")
+hud.contentView.button.setTitle("Cancel", for: .normal)
+hud.contentView.button.addTarget(self, action: #selector(cancel), for: .touchUpInside)
+// VoiceOver: Swipe up/down to discover "Cancel" action
 ```

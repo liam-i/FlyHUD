@@ -13,7 +13,7 @@ import UIKit
 
 #if !COCOAPODS && canImport(FlyHUD)
 import FlyHUD
-#endif
+#endif // !COCOAPODS && canImport(FlyHUD)
 
 extension ContentView.Mode {
     /// Creates a progress view with the specified style.

@@ -13,7 +13,7 @@ import UIKit
 
 #if !COCOAPODS && canImport(FlyHUD)
 import FlyHUD
-#endif
+#endif // !COCOAPODS && canImport(FlyHUD)
 
 /// Animation Builder
 ///
@@ -51,8 +51,8 @@ enum ActivityIndicatorAnimation {
             let bounds = layer.bounds
             let minSize = min(bounds.width, bounds.height)
             let spacing: CGFloat = 3.0
-            let dotSize = (minSize - 4.0 * spacing) / 3.5
-            let radius = (minSize - dotSize) / 2.0
+            let dotSize = max(1.0, (minSize - 4.0 * spacing) / 3.5)
+            let radius = max(0.0, (minSize - dotSize) / 2.0)
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
 
             let duration: CFTimeInterval = 1.0
@@ -131,7 +131,7 @@ enum ActivityIndicatorAnimation {
             let minSize = min(bounds.width, bounds.height)
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
             let lineWidth = minSize / 6.0
-            let radius = (minSize - lineWidth) / 2.0
+            let radius = max(0.0, (minSize - lineWidth) / 2.0)
             let count = 8
             let dotSize = radius / 3.0
 
@@ -149,7 +149,7 @@ enum ActivityIndicatorAnimation {
                                       y: center.y + radius * sin(angle) - dotSize / 2.0, width: dotSize, height: dotSize)
                     $0.backgroundColor = color.cgColor
                     $0.cornerRadius = dotSize / 2.0
-                    $0.add(animation, forKey: "circleAnimation")
+                    $0.add(animation, forKey: ActivityIndicatorAnimation.key)
                 })
             }
 

@@ -14,7 +14,7 @@ FlyHUD provides a simple yet powerful API for displaying Heads-Up Display (HUD) 
 - **Animations** — Fade, zoom, slide with spring damping
 - **Keyboard Tracking** — Automatic layout adjustment when keyboard appears
 - **Dark Mode** — Full support for light and dark appearance
-- **Accessibility** — Dynamic Type support for HUD labels
+- **Accessibility** — Full VoiceOver support, Dynamic Type, modal focus management
 
 ### Module Architecture
 
@@ -23,6 +23,7 @@ FlyHUD is split into three independent modules:
 | Module | Description |
 | ------ | ----------- |
 | `FlyHUD` | Core HUD class, layout, animation, background |
+| `FlyHUDSwiftUI` | SwiftUI declarative modifiers and UIKit bridge |
 | `FlyIndicatorHUD` | Custom activity indicator styles |
 | `FlyProgressHUD` | Custom progress view styles |
 
@@ -46,6 +47,7 @@ FlyHUD is split into three independent modules:
 
 - <doc:advanced-features>
 - <doc:custom-ui>
+- <doc:swiftui-integration>
 - <doc:best-practices>
 - <doc:testing>
 

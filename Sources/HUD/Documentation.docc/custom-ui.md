@@ -93,6 +93,15 @@ For simple rotation-based indicators, conform to `RotateViewable`:
 class SpinnerView: UIView, RotateViewable {
     var duration: CFTimeInterval { 0.5 }
 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        // VoiceOver: ContentView handles accessibility for the HUD.
+        // Custom indicators should not be separate focus elements.
+        isAccessibilityElement = false
+    }
+
+    required init?(coder: NSCoder) { fatalError() }
+
     override var intrinsicContentSize: CGSize {
         CGSize(width: 37, height: 37)
     }

@@ -21,9 +21,9 @@ extension HUDExtension where ExtendedType == CGPoint {
 extension HUD {
     public struct Layout: Equatable, HUDExtended {
         /// The contentView offset relative to the center of the view. You can use `.h.maxOffset` and `-.h.maxOffset` to move
-        /// the HUD all the way to the screen edge in each direction. `Default to .zero`
+        /// the HUD all the way to the screen edge in each direction. `Defaults to .zero`
         ///
-        /// - Note: If set to `.h.vMaxOffset` would position the HUD centered on the bottom edge. If set to `.zero` would position the HUD centered.
+        /// - Note: If set to `.h.vMaxOffset`, it would position the HUD centered on the bottom edge. If set to `.zero`, it would position the HUD centered.
         public var offset: CGPoint
         /// The minimum distance from the contentView to the edge of the HUD. Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         public var edgeInsets: UIEdgeInsets
@@ -36,7 +36,7 @@ extension HUD {
         ///
         /// - Parameters:
         ///   - offset: The contentView offset relative to the center of the view. You can use `.maxOffset` and `-.maxOffset` to move
-        ///             the HUD all the way to the screen edge in each direction. `Default to .zero`
+        ///             the HUD all the way to the screen edge in each direction. `Defaults to .zero`
         ///   - edgeInsets: The minimum distance from the contentView to the edge of the HUD.
         ///                 Defaults to UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0).
         ///   - isSafeAreaLayoutGuideEnabled: The layout guide representing the portion of your view that is unobscured by bars and other content.
@@ -56,29 +56,29 @@ extension HUD {
             case none
             /// Opacity animation
             case fade
-            /// Opacity + scale animation (zoom in when appearing zoom out when disappearing)
+            /// Opacity + scale animation (zoom in when appearing, zoom out when disappearing)
             case zoomInOut
-            /// Opacity + scale animation (zoom out when appearing zoom in when disappearing)
+            /// Opacity + scale animation (zoom out when appearing, zoom in when disappearing)
             case zoomOutIn
             /// Opacity + scale animation (zoom in style)
             case zoomIn
             /// Opacity + scale animation (zoom out style)
             case zoomOut
-            /// Opacity + slide animation (slide up when appearing slide down when disappearing)
+            /// Opacity + slide animation (slide up when appearing, slide down when disappearing)
             case slideUpDown
-            /// Opacity + slide animation (slide down when appearing slide up when disappearing)
+            /// Opacity + slide animation (slide down when appearing, slide up when disappearing)
             case slideDownUp
             /// Opacity + slide animation (slide up style)
             case slideUp
             /// Opacity + slide animation (slide down style)
             case slideDown
-            /// Opacity + slide animation (slide right when appearing slide left when disappearing)
+            /// Opacity + slide animation (slide right when appearing, slide left when disappearing)
             case slideRightLeft
-            /// Opacity + slide animation (slide left when appearing slide right when disappearing)
+            /// Opacity + slide animation (slide left when appearing, slide right when disappearing)
             case slideLeftRight
-            /// Opacity + slide animation (Slide out style right)
+            /// Opacity + slide animation (slide out style right)
             case slideRight
-            /// Opacity + slide animation (Slide out style left)
+            /// Opacity + slide animation (slide out style left)
             case slideLeft
 
             // Automatically determine the correct animation style
@@ -110,10 +110,10 @@ extension HUD {
         public enum Damping: Equatable {
             /// To smoothly decelerate the animation without oscillation.
             case disable
-            /// Employ a damping ratio closer to zero to increase oscillation. `Defaults to 0.65`.
+            /// A moderate spring damping that produces gentle oscillation. `Defaults to 0.65`.
             case `default`
-            /// Employ a damping ratio closer to zero to increase oscillation.
-            ///  - Note: If set to `1.0` the HUD will smoothly decelerate the animation without oscillation.
+            /// A custom damping ratio for the spring animation. Closer to zero increases oscillation.
+            /// - Note: If set to `1.0` the HUD will smoothly decelerate the animation without oscillation.
             case ratio(CGFloat)
 
             /// The damping ratio for the spring animation as it approaches its quiescent state.
@@ -168,10 +168,10 @@ extension HUD {
         /// Disable keyboard tracking.
         case disable
         /// Center alignment.
-        /// - Parameter offsetY: The vertical offset of the contentView view relative to the center of the empty area. `Default to 0`.
+        /// - Parameter offsetY: The vertical offset of the contentView view relative to the center of the empty area. `Defaults to 0`.
         case center(_ offsetY: CGFloat = 0.0)
         /// Content view bottom relative to keyboard top layout.
-        /// - Parameter spacing: The spacing between the bottom of the contentView view and the top of the keyboard. `Default to 8`.
+        /// - Parameter spacing: The spacing between the bottom of the contentView view and the top of the keyboard. `Defaults to 8`.
         case bottom(_ spacing: CGFloat = 8.0)
     }
 #endif // os(iOS)

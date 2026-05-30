@@ -13,7 +13,7 @@ import UIKit
 
 #if !COCOAPODS && canImport(FlyHUD)
 import FlyHUD
-#endif
+#endif // !COCOAPODS && canImport(FlyHUD)
 
 /// The visual style of the activity indicator.
 public protocol ActivityIndicatorViewStyleable: Sendable {
@@ -79,9 +79,9 @@ extension ActivityIndicatorView {
 ///         property to true. You can set the color of the activity indicator by using the color property.
 open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     /// The basic appearance of the activity indicator view. The value of this property is a constant that specifies 
-    /// the style of the activity indicator view. `Default to Style.ringClipRotate`.
+    /// the style of the activity indicator view. `Defaults to Style.ringClipRotate`.
     ///
-    /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
+    /// - Note: After style is changed, it will switch to the default style. e.g., color, line width, etc.
     /// - SeeAlso: For more on these constants, see ActivityIndicatorView.Style.
     open var style: ActivityIndicatorViewStyleable = Style.ringClipRotate {
         didSet {
@@ -124,7 +124,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ActivityIndicatorView.Style for descriptions of the style constants.
-    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates. `Default to .zero`.
+    ///   - size: Specifying the size of the activity indicator view in its superview's coordinates. `Defaults to .zero`.
     /// - Returns: An initialized ActivityIndicatorView object.
     public convenience init(style: Style, size: CGSize = .zero) {
         self.init(styleable: style, size: size)
@@ -134,11 +134,16 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
     ///
     /// - Parameters:
     ///   - styleable: A constant that specifies the style of the object to be created.
-    ///   - size: Specifying the size of the activity indicator view in its superview’s coordinates.`Default to .zero`.
+    ///   - size: Specifying the size of the activity indicator view in its superview's coordinates.`Defaults to .zero`.
     /// - Returns: An initialized ActivityIndicatorView object.
     public convenience init(styleable: ActivityIndicatorViewStyleable, size: CGSize = .zero) {
         self.init(frame: CGRect(origin: .zero, size: size))
         self.style = styleable
+        // Restore the user's custom size if provided, since resetProperties()
+        // in the style setter overwrites frame.size with the style's default.
+        if size != .zero {
+            frame.size = size
+        }    
     }
 
     /// Common initialization method.
@@ -147,6 +152,10 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         isOpaque = false
         isHidden = true
         registerForTraitChanges()
+
+        // VoiceOver: Hidden from accessibility — the parent ContentView serves as the
+        // single accessible element, providing context via its accessibilityLabel and traits.
+        isAccessibilityElement = false
     }
 
     deinit {
@@ -204,6 +213,7 @@ open class ActivityIndicatorView: BaseView, ActivityIndicatorViewable {
         guard window != nil else { return windowIsNil = true }
         guard windowIsNil else { return }
         windowIsNil = false
+        guard isAnimating else { return }
         makeAnimation()
     }
 

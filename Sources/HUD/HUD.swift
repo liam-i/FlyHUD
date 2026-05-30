@@ -33,7 +33,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// View covering the entire HUD area, placed behind contentView.
     public private(set) lazy var backgroundView = BackgroundView(frame: bounds)
 
-    /// HUD layout configuration. eg: offset, margin, padding, etc.
+    /// HUD layout configuration. e.g., offset, margin, padding, etc.
     open var layout: Layout = .init() {
         didSet {
             layout.h.notEqual(oldValue, do: update(constraints: true, keyboardGuide: true))
@@ -42,13 +42,13 @@ open class HUD: BaseView, ContentViewDelegate {
 
     /// The animation (style, duration, damping) that should be used when the HUD is shown and hidden.
     open var animation: Animation = .init()
-    /// Grace period is the time (in seconds) that the invoked method may be run without showing the HUD.
+    /// Grace period is the time (in seconds) before the HUD is displayed.
     ///
     /// If the task finishes before the grace time runs out, the HUD will not be shown at all.
     /// This may be used to prevent HUD display for very short tasks. `Defaults to 0.0 (no grace time)`.
     ///
     /// - Note: The graceTime needs to be set before the hud is shown. You thus can't use `show(to:using:)`,
-    ///         but instead need to alloc / init the HUD, configure the grace time and then show it manually.
+    ///         but instead need to initialize the HUD, configure the grace time and then show it manually.
     open var graceTime: TimeInterval = 0.0
     /// The minimum time (in seconds) that the HUD is shown. This avoids the problem of the HUD being shown and then instantly hidden.
     ///
@@ -59,14 +59,14 @@ open class HUD: BaseView, ContentViewDelegate {
 
     /// This is an activity count that records multiple shows and hides of the same HUD object.
     open private(set) var count: Int = 0
-    /// A Boolean value indicating whether the HUD is in the enable activity count. `Defaults to false`.
+    /// A Boolean value indicating whether the activity count is enabled. `Defaults to false`.
     ///
     /// - Note: If set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     open var isCountEnabled: Bool = false
 
 #if os(iOS)
-    /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to disable`.
+    /// A layout guide that tracks the keyboard's position in your app's layout. `Defaults to disable`.
     ///
     /// - Note: Global configuration. Priority less than member property keyboardGuide.
     public static var keyboardGuide: KeyboardGuide = .disable {
@@ -74,7 +74,7 @@ open class HUD: BaseView, ContentViewDelegate {
             keyboardGuide.h.notEqual(oldValue, do: updateKeyboardObserver())
         }
     }
-    /// A layout guide that tracks the keyboard’s position in your app’s layout. `Default to nil`.
+    /// A layout guide that tracks the keyboard's position in your app's layout. `Defaults to nil`.
     ///
     /// - Note: Priority greater than static property keyboardGuide.
     /// - Note: If set to nil, the static property keyboardGuide is used.
@@ -91,7 +91,18 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// If set to false, the HUD intercepts all user events within its bounds.
     /// - Note: This property is affected by "isUserInteractionEnabled".
-    open var isEventDeliveryEnabled: Bool = false
+    ///         When true, `accessibilityViewIsModal` is also set to false so VoiceOver
+    ///         can navigate to elements behind the HUD, matching the touch behavior.
+    open var isEventDeliveryEnabled: Bool = false {
+        didSet {
+            // VoiceOver: Keep modal state in sync with event delivery.
+            // When touches pass through, VoiceOver focus should too.
+            accessibilityViewIsModal = !isEventDeliveryEnabled
+            if !isHidden {
+                UIAccessibility.post(notification: .layoutChanged, argument: contentView)
+            }
+        }
+    }
 
     /// The HUD delegate object. Receives HUD state notifications.
     open weak var delegate: HUDDelegate?
@@ -131,6 +142,9 @@ open class HUD: BaseView, ContentViewDelegate {
         backgroundColor = .clear
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         layer.allowsGroupOpacity = false
+        // VoiceOver: Prevent focus from escaping behind the HUD overlay.
+        // When the HUD is visible, VoiceOver users will only navigate elements within the HUD.
+        accessibilityViewIsModal = true
         setupViews()
         isHidden = true // Make it invisible for now
 #if os(iOS)
@@ -206,15 +220,15 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
+    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Defaults to 2.0`.
     ///   - animated: If set to true the HUD will appear using the default animation.
-    ///               If set to false the HUD will not use animations while appearing. `Default to true`.
-    ///   - mode: HUD operation mode. `Default to .text`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
+    ///               If set to false the HUD will not use animations while appearing. `Defaults to true`.
+    ///   - mode: HUD operation mode. `Defaults to .text`.
+    ///   - label: An optional short message to be displayed below the indicator (or custom view). The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
     ///   - offset: The contentView offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD
-    ///             all the way to the screen edge in each direction. `Default to .zero`.
-    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    ///             all the way to the screen edge in each direction. `Defaults to .zero`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Defaults to nil`.
     /// - Returns: A reference to the created HUD.
     /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
@@ -242,14 +256,14 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Default to 2.0`.
+    ///   - duration: The total duration of the show, measured in seconds. Duration must be greater than 0.0. `Defaults to 2.0`.
     ///   - animation: Use HUD.Animation.
-    ///   - mode: HUD operation mode. `Default to .text`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
+    ///   - mode: HUD operation mode. `Defaults to .text`.
+    ///   - label: An optional short message to be displayed below the indicator (or custom view). The HUD is automatically resized to fit the entire text.
     ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.
     ///   - offset: The contentView offset relative to the center of the view. You can use `.h.maxOffset` to move the HUD all the way to
-    ///             the screen edge in each direction. `Default to .vMaxOffset`.
-    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    ///             the screen edge in each direction. `Defaults to .zero`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Defaults to nil`.
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
@@ -259,7 +273,7 @@ open class HUD: BaseView, ContentViewDelegate {
         using animation: Animation,
         mode: ContentView.Mode = .text,
         label: String?,
-        offset: CGPoint = .h.vMaxOffset,
+        offset: CGPoint = .zero,
         populator: ((HUD) -> Void)? = nil
     ) -> HUD {
         show(to: view, using: animation, mode: mode, label: label) {
@@ -275,12 +289,12 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
-    ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Default to true`.
-    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
-    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
-    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    ///   - animated: If set to true the HUD will appear using the default animation. If set to false the HUD will not use animations while appearing. `Defaults to true`.
+    ///   - mode: HUD operation mode. `Defaults to .indicator(.large)`.
+    ///   - label: An optional short message to be displayed below the indicator (or custom view). The HUD is automatically resized to fit the entire text.
+    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Defaults to nil`.
+    ///   - detailsLabel: An optional details message displayed below the label. The details text can span multiple lines.  `Defaults to nil`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Defaults to nil`.
     /// - Returns: A reference to the created HUD.
     /// - Note: Default animation `HUD.Animation(style:.fade,duration:0.3,damping:.disable)`
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
@@ -306,11 +320,11 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Parameters:
     ///   - view: The view that the HUD will be added to
     ///   - animation: Use HUD.Animation.
-    ///   - mode: HUD operation mode. `Default to .indicator(.large)`.
-    ///   - label: An optional short message to be displayed below the activity indicator. The HUD is automatically resized to fit the entire text.
-    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Default to nil`.
-    ///   - detailsLabel: An optional details message displayed below the labelText message. The details text can span multiple lines.  `Default to nil`.
-    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Default to nil`.
+    ///   - mode: HUD operation mode. `Defaults to .indicator(.large)`.
+    ///   - label: An optional short message to be displayed below the indicator (or custom view). The HUD is automatically resized to fit the entire text.
+    ///            If the text is too long it will get clipped by displaying "..." at the end. If left unchanged or set to "", then no message is displayed.  `Defaults to nil`.
+    ///   - detailsLabel: An optional details message displayed below the label. The details text can span multiple lines.  `Defaults to nil`.
+    ///   - populator: A block or function that populates the `HUD`, which is passed into the block as an argument. `Defaults to nil`.
     /// - Returns: A reference to the created HUD.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD. The activity count is decremented by 1 when hiding the HUD.
     @discardableResult
@@ -338,8 +352,8 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
-    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Defaults to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
     /// - SeeAlso: HUD.Animation.
     @discardableResult
@@ -352,7 +366,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - Returns: true if a HUD was found and removed, false otherwise.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
@@ -368,8 +382,8 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
-    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Defaults to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - Returns: true if one or more HUDs were found and removed, false otherwise.
     /// - SeeAlso: HUD.Animation.
     @discardableResult
@@ -382,7 +396,7 @@ open class HUD: BaseView, ContentViewDelegate {
     /// - Parameters:
     ///   - view: The view that is going to be searched for a HUD subview.
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - Returns: true if one or more HUDs were found and removed, false otherwise.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
@@ -398,7 +412,7 @@ open class HUD: BaseView, ContentViewDelegate {
 
     /// Displays the HUD.
     ///
-    /// - Parameter animated: If set to true the HUD will appear using the current animation. If set to false the HUD will not use animations while appearing. `Default to true`.
+    /// - Parameter animated: If set to true the HUD will appear using the current animation. If set to false the HUD will not use animations while appearing. `Defaults to true`.
     /// - Note: You need to make sure that the main thread completes its run loop soon after this method call so that the user interface can be updated.
     ///         Call this method when your task is already set up to be executed in a new thread (e.g., when using something like Operation or making an asynchronous call like URLRequest).
     /// - SeeAlso: HUD.Animation.
@@ -422,7 +436,7 @@ open class HUD: BaseView, ContentViewDelegate {
 
         isFinished = false
         cancelMinShowWorkItem()
-        cancelGraceWorkItem() // Modified grace time to 0 and show again
+        cancelGraceWorkItem() // Cancel any pending grace period timer
         cancelHideDelayWorkItem() // Cancel any scheduled hide(using:afterDelay:) calls
 
         let animation = animation ?? self.animation
@@ -443,8 +457,8 @@ open class HUD: BaseView, ContentViewDelegate {
     /// Hides the HUD. This still calls the `hudWasHidden(:)` delegate. This is the counterpart of the show: method. Use it to hide the HUD when your task completes.
     ///
     /// - Parameters:
-    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Default to true`.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - animated: If set to true the HUD will disappear using the current animation. If set to false the HUD will not use animations while disappearing. `Defaults to true`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - SeeAlso: HUD.Animation.
     open func hide(animated: Bool = true, afterDelay delay: TimeInterval = 0.0) {
         hide(using: animated ? nil : .init(style: .none), afterDelay: delay)
@@ -454,7 +468,7 @@ open class HUD: BaseView, ContentViewDelegate {
     ///
     /// - Parameters:
     ///   - animation: Use HUD.Animation. Priority greater than the current animation. If set to `nil` the HUD uses the animation of its member property.
-    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Default to 0.0`.
+    ///   - delay: Hides the HUD after a delay. Delay in seconds until the HUD is hidden. `Defaults to 0.0`.
     /// - Note: If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.
     ///         The activity count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
     open func hide(using animation: Animation?, afterDelay delay: TimeInterval = 0.0) {
@@ -462,9 +476,9 @@ open class HUD: BaseView, ContentViewDelegate {
         // If `isCountEnabled` is set to true, the activity count is incremented by 1 when showing the HUD.  The activity
         // count is decremented by 1 when hiding the HUD. Hide HUD if count reaches 0. Returns if count has not reached 0.
         if isCountEnabled {
+            guard count > 0 else { return } // Ignore unbalanced hide() calls
             count -= 1
             if count > 0 { return }
-            count = max(count, 0) // Prevent negative count from unbalanced hide() calls
         }
 
         let animation = animation ?? self.animation
@@ -491,6 +505,10 @@ open class HUD: BaseView, ContentViewDelegate {
 
         update(constraints: false, keyboardGuide: true)
         perform(animation, showing: true, completion: nil)
+
+        // VoiceOver: Post a screen-changed notification so VoiceOver immediately
+        // moves focus to the HUD content, announcing the label text to the user.
+        UIAccessibility.post(notification: .screenChanged, argument: contentView)
     }
 
     private func hide(_ animation: Animation) {
@@ -518,13 +536,24 @@ open class HUD: BaseView, ContentViewDelegate {
         // This needs to happen here instead of in done, to avoid races if another
         // hide(using:afterDelay:) call comes in while the HUD is animating out.
         cancelHideDelayWorkItem()
+        // Capture superview before potential removal for VoiceOver focus restoration.
+        let parentView = superview
         perform(animation, showing: false) { [self] in
             if isFinished {
+                // Reset keyboard guide transform so re-show starts from a clean state.
+                // Done here (after animation) to avoid a visual jump when the keyboard
+                // is visible — the content hides from its keyboard-offset position.
+                keyboardGuideView.transform = .identity
                 isHidden = true
                 if removeFromSuperViewOnHide {
                     removeFromSuperview()
                 }
                 delegate?.hudWasHidden(self)
+
+                // VoiceOver: Move focus to the next visible HUD, or let VoiceOver
+                // re-evaluate the screen if no other HUD is present.
+                let nextHUD = parentView.flatMap { HUD.lastHUD(for: $0) }
+                UIAccessibility.post(notification: .screenChanged, argument: nextHUD?.contentView)
             }
 
             completionBlock?(self)
@@ -541,7 +570,9 @@ open class HUD: BaseView, ContentViewDelegate {
             completion?()
         }
 
-        guard animation.style != .none, showStarted != nil else { return completionBlock(true) }
+        // Skip animation when style is .none, view isn't shown yet, or reduce motion is enabled.
+        guard animation.style != .none, showStarted != nil,
+              !UIAccessibility.isReduceMotionEnabled else { return completionBlock(true) }
         let style = animation.style.corrected(showing) // Automatically determine the correct animation style
 
         // Set starting state
@@ -673,6 +704,17 @@ open class HUD: BaseView, ContentViewDelegate {
 
         let contentViewRect = contentView.convert(contentView.bounds, to: self)
         return contentViewRect.contains(point) ? hitView : nil
+    }
+
+    // MARK: - VoiceOver Escape Gesture
+
+    /// VoiceOver: Allows users to dismiss the HUD via the two-finger Z-scrub (escape) gesture.
+    /// This is the standard dismissal mechanism for modal overlays in iOS accessibility.
+    /// Returns true if the HUD was successfully hidden, false if already hidden.
+    open override func accessibilityPerformEscape() -> Bool {
+        guard isHidden == false, isFinished == false else { return false }
+        hide(animated: true)
+        return true
     }
 }
 

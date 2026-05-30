@@ -13,13 +13,13 @@ import UIKit
 
 /// The methods adopted by the object that allows your app to synchronize its drawing to the refresh rate of the display.
 @MainActor public protocol DisplayLinkDelegate: AnyObject {
-    /// Tells the delegate that the refreshing the screen only every frame draw.
+    /// Tells the delegate to refresh the screen once per frame draw.
     func updateScreenInDisplayLink()
 }
 
 /// A timer object that allows your app to synchronize its drawing to the refresh rate of the display.
 ///
-/// - Note: application adds it to a run loop using the `add(to:.main, forMode:.default)` method.
+/// - Note: The display link is added to the main run loop using `add(to:.main, forMode:.default)`.
 // @unchecked Sendable is required for Swift 5.9 strict concurrency mode;
 // Swift 6 infers Sendable for @MainActor types automatically.
 @MainActor public final class DisplayLink: @unchecked Sendable {

@@ -4,9 +4,12 @@
 
 ```text
 FlyIndicatorHUD ──depends on──▶ FlyHUD ◀──depends on── FlyProgressHUD
+                                  ▲
+                                  │
+                            FlyHUDSwiftUI
 ```
 
-> **CRITICAL**: `FlyHUD` must never import `FlyIndicatorHUD` or `FlyProgressHUD`. Reverse dependencies are strictly forbidden.
+> **CRITICAL**: `FlyHUD` must never import `FlyIndicatorHUD`, `FlyProgressHUD`, or `FlyHUDSwiftUI`. Reverse dependencies are strictly forbidden.
 
 ## FlyHUD Core (`Sources/HUD/`)
 
@@ -44,91 +47,59 @@ FlyIndicatorHUD ──depends on──▶ FlyHUD ◀──depends on── FlyPr
 | `ProgressAnimation.swift` | All built-in progress styles (bar, round, pie, etc.) |
 | `HUD+ProgressView.swift` | Extension on HUD.Mode for `.progress(Style)` convenience |
 
+## FlyHUDSwiftUI (`Sources/SwiftUIHUD/`)
+
+| File | Responsibility |
+| ---- | -------------- |
+| `View+HUD.swift` | Public `View` extensions: `.hudHost()`, `.hud()`, `.hudStatus()`, `.hudLoading()`, `.hudToast()`, `.hudProgress()`, `.hudGlass()` |
+| `HUDHostView.swift` | `HUDTargetView` (bridge UIView), `HUDHostView` (UIViewRepresentable), `HUDContainerModifier` |
+| `HUDModifier.swift` | `HUDModifier` (Bool binding), `HUDRepresentable`, `HUDCoordinator` |
+| `HUDStatusModifier.swift` | `HUDStatusModifier` (auto-dismiss), `HUDStatusRepresentable`, `HUDStatusCoordinator` |
+| `HUDConvenienceModifiers.swift` | `HUDLoadingModifier`, `HUDToastModifier`, `HUDProgressModifier`, `HUDProgressRepresentable` |
+
+### SwiftUI API Layers
+
+| Layer | Modifier | Description |
+| ----- | -------- | ----------- |
+| 1. Basic Bridge | `.hudHost($hostView)` | Expose UIView binding for direct UIKit-style control |
+| 2. Declarative | `.hud(isPresented:)` | Bool-controlled HUD |
+| 2. Declarative | `.hud(item:)` | Item-controlled HUD (Identifiable) |
+| 2. Declarative | `.hudStatus(isPresented:duration:)` | Self-dismissing status HUD |
+| 3. Convenience | `.hudLoading(isPresented:label:)` | Simple loading indicator preset |
+| 3. Convenience | `.hudToast(isPresented:label:)` | Self-dismissing text toast preset |
+| 3. Convenience | `.hudProgress(isPresented:progress:)` | Progress HUD with bound value |
+| 4. Liquid Glass | `.hudGlass(isPresented:label:)` | iOS 26+ glass style preset |
+
 ## Public API Quick Reference
 
-### HUD Class Methods
+### Key HUD Methods
 
-| Method | Returns | Description |
-| ------ | ------- | ----------- |
-| `show(to:animated:mode:label:detailsLabel:populator:)` | `HUD` | Show HUD on view |
-| `show(to:using:mode:label:detailsLabel:populator:)` | `HUD` | Show with animation config |
-| `showStatus(to:duration:animated:mode:label:offset:populator:)` | `HUD` | Show auto-hiding status |
-| `showStatus(to:duration:using:mode:label:offset:populator:)` | `HUD` | Show status with animation config |
-| `hide(for:animated:afterDelay:)` | `Bool` | Hide top-most HUD |
-| `hide(for:using:afterDelay:)` | `Bool` | Hide with animation override |
-| `hideAll(for:animated:afterDelay:)` | `Bool` | Hide all HUDs on view |
-| `hideAll(for:using:afterDelay:)` | `Bool` | Hide all with animation override |
-| `huds(for:)` | `[HUD]` | Find all HUDs on view |
-| `lastHUD(for:)` | `HUD?` | Find top-most HUD |
-| `makeHUD(with:)` | `HUD` | Override point for subclassing |
+```swift
+// Class methods (all return HUD or Bool)
+HUD.show(to:animated:mode:label:detailsLabel:populator:)
+HUD.show(to:using:mode:label:detailsLabel:populator:)      // with Animation config
+HUD.showStatus(to:duration:animated:mode:label:offset:populator:)
+HUD.hide(for:animated:afterDelay:) / HUD.hideAll(for:...)
+HUD.huds(for:) / HUD.lastHUD(for:)
+HUD.makeHUD(with:)                                          // Override point for subclassing
 
-### HUD Instance Methods
+// Instance methods
+hud.show(animated:) / hud.show(using:)       // show (or increment count if isCountEnabled)
+hud.hide(animated:afterDelay:) / hud.hide(using:afterDelay:)
+```
 
-| Method | Description |
-| ------ | ----------- |
-| `show(animated:)` | Show (or increment count if `isCountEnabled`) |
-| `show(using:)` | Show with specific animation |
-| `hide(animated:afterDelay:)` | Hide (or decrement count) |
-| `hide(using:afterDelay:)` | Hide with animation override |
+### Key Properties (non-obvious defaults)
 
-### HUD Properties
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `contentView` | `ContentView` | — | Content card (lazy) |
-| `backgroundView` | `BackgroundView` | — | Full-screen overlay (lazy) |
-| `layout` | `HUD.Layout` | `.init()` | Position & insets |
-| `animation` | `HUD.Animation` | `.fade` | Show/hide animation |
-| `graceTime` | `TimeInterval` | `0.0` | Delay before showing (must set before `show()`) |
-| `minShowTime` | `TimeInterval` | `0.0` | Minimum display duration |
-| `isCountEnabled` | `Bool` | `false` | Activity reference counter mode |
-| `isEventDeliveryEnabled` | `Bool` | `false` | Touch pass-through for overlay |
-| `keyboardGuide` | `KeyboardGuide?` | `nil` | Per-instance keyboard tracking (iOS) |
-| `removeFromSuperViewOnHide` | `Bool` | `true` | Auto-remove on hide |
-| `delegate` | `HUDDelegate?` | `nil` | Weak delegate for hide notification |
-| `completionBlock` | `((HUD) → Void)?` | `nil` | Called after hide completes |
-
-### Static Properties
-
-| Property | Type | Platform | Description |
-| -------- | ---- | -------- | ----------- |
-| `HUD.keyboardGuide` | `KeyboardGuide` | iOS | Global keyboard guide setting |
-
-### ContentView
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `mode` | `Mode` | `.indicator(.large)` | Display mode |
-| `label` | `UILabel` | — | Primary text (bold) |
-| `detailsLabel` | `UILabel` | — | Secondary text (multi-line) |
-| `button` | `Button` | — | Action button |
-| `indicatorPosition` | `IndicatorPosition` | `.top` | Where indicator sits relative to labels |
-| `contentColor` | `UIColor?` | system | Unified color for all content |
-| `isDynamicTypeEnabled` | `Bool` | `false` | Dynamic Type for labels |
-| `isMotionEffectsEnabled` | `Bool` | `false` | Parallax tilt effect |
-| `progress` | `Float` | `0.0` | Manual progress (0.0–1.0) |
-| `observedProgress` | `Progress?` | `nil` | Auto-binding progress |
-| `layout` | `ContentView.Layout` | — | Margins, spacing, alignment |
-| `style` | `Style` | `.blur(...)` | Background style for card |
-| `color` | `UIColor?` | — | Background color for card |
-| `roundedCorners` | `RoundedCorners` | `.radius(...)` | Corner style |
-
-### ContentView.Mode Cases
-
-| Case | Description |
-| ---- | ----------- |
-| `.text` | Labels only, no indicator |
-| `.indicator(UIActivityIndicatorView.Style)` | System spinner |
-| `.progress(UIProgressView.Style)` | System progress bar |
-| `.custom(UIView)` | Any custom view |
-
-### BackgroundView
-
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `style` | `Style` | `.solidColor` | solidColor, blur, or glass (iOS 26+/tvOS 26+) |
-| `color` | `UIColor?` | `.clear` | Background color |
-| `roundedCorners` | `RoundedCorners` | `.radius(0)` | Corner radius |
+| Property | Default | Note |
+| -------- | ------- | ---- |
+| `graceTime` | `0.0` | **Must set before `show()`** — no effect after |
+| `minShowTime` | `0.0` | Prevents flicker for fast tasks |
+| `isCountEnabled` | `false` | Reference counter mode (show/hide must balance) |
+| `isEventDeliveryEnabled` | `false` | Touch pass-through; syncs with VoiceOver modal |
+| `removeFromSuperViewOnHide` | `true` | Set `false` to reuse HUD |
+| `contentView.mode` | `.indicator(.large)` | `.text`, `.indicator(_)`, `.progress(_)`, `.custom(_)` |
+| `contentView.observedProgress` | `nil` | Auto-binding to Foundation `Progress` |
+| `backgroundView.style` | `.solidColor` | `.blur(_)`, `.glass` (iOS 26+/tvOS 26+) |
 
 ### Protocols for Custom Views
 
@@ -145,37 +116,19 @@ FlyIndicatorHUD ──depends on──▶ FlyHUD ◀──depends on── FlyPr
 
 ## Animation System
 
-### HUD.Animation
-
 ```swift
-// Static constructors
 .fade                                    // default
-.animation(.fade)                        // explicit
 .animation(.zoomInOut, damping: .default) // with spring bounce
 .animation(.slideUp, duration: 0.5)      // custom duration
 ```
 
-### Available Styles (14 total)
+**14 styles**: `.none`, `.fade`, `.zoomInOut`, `.zoomOutIn`, `.zoomIn`, `.zoomOut`, `.slideUpDown`, `.slideDownUp`, `.slideUp`, `.slideDown`, `.slideRightLeft`, `.slideLeftRight`, `.slideRight`, `.slideLeft`
 
-`.none`, `.fade`, `.zoomInOut`, `.zoomOutIn`, `.zoomIn`, `.zoomOut`,
-`.slideUpDown`, `.slideDownUp`, `.slideUp`, `.slideDown`,
-`.slideRightLeft`, `.slideLeftRight`, `.slideRight`, `.slideLeft`
-
-### Damping Options
-
-| Case | Effect |
-| ---- | ------ |
-| `.disable` | No spring (smooth deceleration) |
-| `.default` | Standard bounce (0.65 ratio) |
-| `.ratio(CGFloat)` | Custom ratio (lower = more bounce) |
+**Damping**: `.disable` (no spring) | `.default` (0.65) | `.ratio(CGFloat)` (custom)
 
 ## KeyboardGuide (iOS only)
 
-| Mode | Behavior |
-| ---- | -------- |
-| `.disable` | No keyboard tracking (default) |
-| `.center(offsetY)` | Center HUD in visible area above keyboard |
-| `.bottom(spacing)` | Position bottom relative to keyboard top |
+`.disable` (default) | `.center(offsetY)` (center above keyboard) | `.bottom(spacing)` (relative to keyboard top)
 
 ## Concurrency & Thread Safety
 
@@ -209,3 +162,33 @@ All UIView subclasses (`HUD`, `ContentView`, `BackgroundView`, `Label`, `Button`
 ### UnfairLock (Mutex Backport)
 
 `UnfairLock` in `Observables/` is a lightweight synchronization primitive for protecting shared mutable state in `@unchecked Sendable` types. It wraps `os_unfair_lock` with `withLock(_:)` API similar to Swift 6's `Mutex`.
+
+## Accessibility (VoiceOver)
+
+### Single-Element Pattern
+
+`ContentView` is the **sole VoiceOver focus element**. All child views (`Label`, `Button`, `ActivityIndicatorView`, `ProgressView`, `HUDTargetView`) have `isAccessibilityElement = false`.
+
+- `HUD`: `accessibilityViewIsModal = true` (prevents focus escape), implements `accessibilityPerformEscape()` for Z-scrub dismissal
+- `BackgroundView`: `accessibilityElementsHidden = true`
+- `isEventDeliveryEnabled` syncs with `accessibilityViewIsModal`
+
+### ContentView Dynamic Properties
+
+| Property | Value |
+| -------- | ----- |
+| `accessibilityLabel` | `label.text + ", " + detailsLabel.text` |
+| `accessibilityHint` | "Loading in progress" (indicator) / "Task in progress" (progress) / `nil` |
+| `accessibilityValue` | `"\(Int(progress * 100))%"` when progress mode, else `nil` |
+| `accessibilityTraits` | `.updatesFrequently` (progress/indicator) / `.staticText` (other) |
+| `accessibilityCustomActions` | Button action (when button has title + events) |
+
+### Notifications
+
+- Show → `.screenChanged` with `contentView`; Hide → `.screenChanged` with `nil`
+- Mode/label/button change → `.layoutChanged`
+- Progress milestone (25%) → `.announcement` with percentage string
+
+### Custom View Rule
+
+Views passed via `.custom(UIView)` must set `isAccessibilityElement = false` — ContentView handles all accessibility.

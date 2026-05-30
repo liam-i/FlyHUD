@@ -27,6 +27,9 @@ open class Label: UILabel {
         self.font = .boldSystemFont(ofSize: fontSize)
         self.isOpaque = false
         self.backgroundColor = .clear
+        // VoiceOver: Hidden from accessibility — ContentView provides the combined
+        // label text via its own accessibilityLabel to avoid duplicate announcements.
+        self.isAccessibilityElement = false
     }
 
     /// Enables Dynamic Type support. When set to true, the label font scales with the user's preferred content size.
@@ -60,6 +63,13 @@ open class Label: UILabel {
     open override var text: String? {
         didSet {
             isHiddenInStackView = isEmptyOfText
+            // VoiceOver: Notify that the parent ContentView's accessibilityLabel has changed,
+            // so VoiceOver re-reads the updated combined text when focused.
+            // Guard: Only post when text actually changed to avoid flooding VoiceOver
+            // during observedProgress DisplayLink updates (~60fps).
+            if window != nil, text != oldValue {
+                UIAccessibility.post(notification: .layoutChanged, argument: superview)
+            }
         }
     }
 

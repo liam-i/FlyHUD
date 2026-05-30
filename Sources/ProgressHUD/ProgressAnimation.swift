@@ -13,7 +13,7 @@ import UIKit
 
 #if !COCOAPODS && canImport(FlyHUD)
 import FlyHUD
-#endif
+#endif // !COCOAPODS && canImport(FlyHUD)
 
 /// Animation Builder
 ///
@@ -41,7 +41,7 @@ enum ProgressAnimation {
         let isRound: Bool
 
         func makeShape(in layer: CALayer, progress: CGFloat, color: UIColor, trackColor: UIColor?, lineWidth: CGFloat) {
-            let size = layer.frame.size
+            let size = layer.bounds.size
 
             let lineWidthHalf = lineWidth / 2.0
             let borderRect = CGRect(x: lineWidthHalf, y: lineWidthHalf, width: size.width - lineWidth, height: size.height - lineWidth)
@@ -106,10 +106,7 @@ enum ProgressAnimation {
                 context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
                 context.addLine(to: CGPoint(x: amountRangeUpperBound, y: minY))
 
-                var angle = -acos(x / radius)
-                if angle.isNaN {
-                    angle = 0.0
-                }
+                let angle = -acos(min(max(x / radius, -1.0), 1.0))
                 context.addArc(center: CGPoint(x: amountRangeUpperBound, y: centerY), radius: radius, startAngle: .pi, endAngle: angle, clockwise: false)
                 context.addLine(to: CGPoint(x: amount, y: centerY))
 
@@ -117,14 +114,11 @@ enum ProgressAnimation {
                 context.addArc(tangent1End: CGPoint(x: minX, y: maxY), tangent2End: CGPoint(x: minX + radius, y: maxY), radius: radius)
                 context.addLine(to: CGPoint(x: amountRangeUpperBound, y: maxY))
 
-                angle = acos(x / radius)
-                if angle.isNaN {
-                    angle = 0.0
-                }
-                context.addArc(center: CGPoint(x: amountRangeUpperBound, y: centerY), radius: radius, startAngle: -.pi, endAngle: angle, clockwise: true)
+                let angle2 = acos(min(max(x / radius, -1.0), 1.0))
+                context.addArc(center: CGPoint(x: amountRangeUpperBound, y: centerY), radius: radius, startAngle: -.pi, endAngle: angle2, clockwise: true)
                 context.addLine(to: CGPoint(x: amount, y: centerY))
             }
-            // Progress is in the left arc
+            // Progress in the left arc
             else if amount < amountRange && amount > 0 {
                 context.move(to: CGPoint(x: minX, y: centerY))
                 context.addArc(tangent1End: CGPoint(x: minX, y: minY), tangent2End: CGPoint(x: minX + radius, y: minY), radius: radius)
@@ -155,7 +149,7 @@ enum ProgressAnimation {
             }
 
             let center = CGPoint(x: bounds.midX, y: bounds.midY)
-            let radius = (min(bounds.width, bounds.height) - lineWidth) / 2.0
+            let radius = max(0.0, (min(bounds.width, bounds.height) - lineWidth) / 2.0)
             let startAngle = -(CGFloat.pi / 2.0) // 90 degrees
             var endAngle = (2 * CGFloat.pi) + startAngle
             let lineCapStyle: CGLineCap = trackColor == .clear ? .round : .square
@@ -208,7 +202,7 @@ enum ProgressAnimation {
                 $0.lineCapStyle = .butt
                 $0.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
 
-                // Ensure that we don't get color overlaping when progressTintColor alpha < 1.0.
+                // Ensure that we don't get color overlapping when progressTintColor alpha < 1.0.
                 context.setBlendMode(.copy)
                 color.set()
                 $0.stroke()

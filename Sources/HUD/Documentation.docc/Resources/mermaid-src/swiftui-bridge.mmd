@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant View as SwiftUI View
+    participant Mod as HUDModifier
+    participant Rep as HUDRepresentable
+    participant Coord as HUDCoordinator
+    participant HUD as HUD (UIKit)
+
+    View->>Mod: .hud(isPresented: $binding)
+    Mod->>Rep: body → background(HUDRepresentable)
+    Rep->>Coord: makeCoordinator()
+
+    Note over View,HUD: Binding becomes true
+
+    View->>Rep: updateUIView (isPresented = true)
+    Rep->>Coord: updatePresentation()
+    Coord->>HUD: HUD.show(to: window)
+    activate HUD
+    HUD-->>Coord: HUD visible
+
+    Note over View,HUD: Binding becomes false
+
+    View->>Rep: updateUIView (isPresented = false)
+    Rep->>Coord: updatePresentation()
+    Coord->>HUD: hud.hide(using: animation)
+    HUD-->>Coord: completionBlock
+    deactivate HUD
+    Coord->>View: isPresentedBinding = false

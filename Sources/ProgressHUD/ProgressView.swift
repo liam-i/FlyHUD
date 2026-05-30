@@ -13,7 +13,7 @@ import UIKit
 
 #if !COCOAPODS && canImport(FlyHUD)
 import FlyHUD
-#endif
+#endif // !COCOAPODS && canImport(FlyHUD)
 
 /// The styles permitted for the progress bar.
 public protocol ProgressViewStyleable: Sendable {
@@ -23,7 +23,7 @@ public protocol ProgressViewStyleable: Sendable {
     /// - Returns: true if the receiver and object are equal, otherwise false.
     func isEqual(_ object: Any) -> Bool
 
-    /// Creates an animation builder
+    /// Creates an animation builder.
     func makeAnimation() -> ProgressAnimationBuildable
 
     /// Specifying the default size of the progress view in its superview’s coordinates.
@@ -95,7 +95,7 @@ extension ProgressView {
 /// - Note: For an indeterminate progress indicator — or a “spinner” — use an instance of the ActivityIndicatorView class.
 open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     /// The current graphical style of the progress view. The value of this property is a constant that specifies
-    /// the style of the progress view. `Default to Style.buttBar`.
+    /// the style of the progress view. `Defaults to Style.buttBar`.
     ///
     /// - Note: After style is changed, it will switch to the default style. E.g: color, line width, etc.
     /// - SeeAlso: For more on these constants, see ProgressView.Style.
@@ -166,7 +166,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     ///
     /// - Parameters:
     ///   - style: A constant that specifies the style of the object to be created. See ProgressView.Style for descriptions of the style constants.
-    ///   - size: Specifying the size of the progress view in its superview’s coordinates. `Default to .zero`.
+    ///   - size: Specifying the size of the progress view in its superview's coordinates. `Defaults to .zero`.
     /// - Returns: An initialized ProgressView object.
     public convenience init(style: Style, size: CGSize = .zero) {
         self.init(styleable: style, size: size)
@@ -176,17 +176,26 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     ///
     /// - Parameters:
     ///   - styleable: A constant that specifies the style of the object to be created.
-    ///   - size: Specifying the size of the progress view in its superview’s coordinates. `Default to .zero`.
+    ///   - size: Specifying the size of the progress view in its superview's coordinates. `Defaults to .zero`.
     /// - Returns: An initialized ProgressView object.
     public convenience init(styleable: ProgressViewStyleable, size: CGSize = .zero) {
         self.init(frame: CGRect(origin: .zero, size: size))
-        self.style = styleable
+        self.style = styleable        
+        // Restore the user's custom size if provided, since resetProperties()
+        // in the style setter overwrites frame.size with the style's default.
+        if size != .zero {
+            frame.size = size
+        }    
     }
 
     /// Common initialization method.
     open override func commonInit() {
         backgroundColor = .clear
         isOpaque = false
+
+        // VoiceOver: Hidden from accessibility — the parent ContentView reads progress
+        // percentage via its accessibilityValue. This view only posts milestone announcements.
+        isAccessibilityElement = false
     }
 
 #if compiler(>=6.2)
@@ -257,6 +266,7 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
         lineWidth = style.defaultLineWidth
         isLabelEnabled = style.defaultIsLabelEnabled
         labelFont = style.defaultLabelFont
+        animationBuilder = nil
         invalidateIntrinsicContentSize()
     }
 
@@ -282,8 +292,8 @@ open class ProgressView: BaseView, ProgressViewable, DisplayLinkDelegate {
     }
 
     private func updateProgressDisplayLink() {
-        // We're using CADisplayLink, because Progress can change very quickly and observing it
-        // may starve the main thread, so we're refreshing the progress only every frame draw
+        // CADisplayLink throttles progress updates to the screen refresh rate,
+        // preventing excessive redraws when Progress changes frequently.
         let enabled = isHidden == false && alpha > 0.0 && superview != nil
         guard enabled && observedProgress != nil else {
             return DisplayLink.shared.remove(self)
