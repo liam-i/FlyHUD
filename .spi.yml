@@ -1,0 +1,9 @@
+version: 1
+builder:
+  configs:
+    - platform: ios
+    - platform: tvos
+    - platform: visionos
+    - documentation_targets: [FlyHUD, FlyIndicatorHUD, FlyProgressHUD, FlyHUDSwiftUI]
+external_links:
+  documentation: "https://liam-i.github.io/FlyHUD/main/documentation"
