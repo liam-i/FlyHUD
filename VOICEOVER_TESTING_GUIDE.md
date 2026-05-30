@@ -71,7 +71,7 @@ Accessibility Inspector 是 Xcode 内置工具，**无需开启 VoiceOver** 即�
 
 ### 3.1 打开方式
 
-```
+```text
 Xcode → 菜单栏 → Xcode → Open Developer Tool → Accessibility Inspector
 ```
 
@@ -290,7 +290,7 @@ XCTAssertTrue(hudElement.exists, "HUD should be a single accessible element")
 
 **排查步骤**：
 
-1. 确认 mode 为 `.progress(...)` 
+1. 确认 mode 为 `.progress(...)`
 2. 在 Accessibility Inspector 的通知日志中查看是否有 `.announcement`
 
 ### Q: Z 形手势无法关闭 HUD？

@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Liam' => 'liam_i@163.com' }
   s.source           = { :git => 'https://github.com/liam-i/FlyHUD.git', :tag => s.version.to_s }
-  s.documentation_url = 'https://liam-i.github.io/FlyHUD/main/documentation/flyhud'
+  s.documentation_url = 'https://liam-i.github.io/FlyHUD/main/documentation/'
   s.screenshots  = 'https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/1-6.png'
   s.social_media_url   = "https://liam-i.github.io"
 

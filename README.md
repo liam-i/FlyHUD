@@ -9,7 +9,7 @@
 [![CocoaPods](https://img.shields.io/cocoapods/v/FlyHUD.svg?style=flat)](https://cocoapods.org/pods/FlyHUD)
 [![SPM](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager)
 [![Carthage](https://img.shields.io/badge/Carthage-supported-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
-[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
+[![Doc](https://img.shields.io/badge/Swift-Doc-DE5C43.svg?style=flat)](https://liam-i.github.io/FlyHUD/main/documentation/)
 [![License](https://img.shields.io/cocoapods/l/FlyHUD.svg?style=flat)](https://github.com/liam-i/FlyHUD/blob/main/LICENSE)
 
 English | [简体中文](./README_CN.md)
