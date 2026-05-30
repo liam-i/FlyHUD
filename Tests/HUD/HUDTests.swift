@@ -517,6 +517,28 @@ final class HUDTests: XCTestCase, HUDDelegate {
         XCTAssertEqual(hud.count, 0, "Count should stay at 0 after repeated hides")
     }
 
+    func testUnbalancedHideDoesNotTriggerDelegate() {
+        let hud = HUD(with: testView)
+        testView.addSubview(hud)
+        hud.isCountEnabled = true
+        hud.removeFromSuperViewOnHide = false
+        hud.delegate = self
+
+        // Show once, hide once (balanced)
+        hud.show(animated: false)
+        hud.hide(animated: false)
+
+        // Extra hide calls should be no-ops (delegate should NOT be called again)
+        delegateExpectation = XCTestExpectation(description: "Delegate should not be called")
+        delegateExpectation?.isInverted = true
+
+        hud.hide(animated: false)
+        hud.hide(animated: false)
+
+        wait(for: [delegateExpectation!], timeout: 0.3)
+        XCTAssertEqual(hud.count, 0)
+    }
+
     func testCountResetAfterFullCycle() {
         let hud = HUD(with: testView)
         testView.addSubview(hud)
@@ -571,5 +593,223 @@ final class HUDTests: XCTestCase, HUDDelegate {
 
         let result = HUD.hideAll(for: testView, animated: false)
         XCTAssertTrue(result, "hideAll should return true when HUDs were hidden")
+    }
+
+    // MARK: - Migrated from Tests.swift
+
+    func testEffectViewOrderAfterSettingBlurStyle() {
+        hud.contentView.subviews.enumerated().forEach { idx, view in
+            XCTAssert(!(view is UIVisualEffectView) || idx == 0,
+                      "Just the first subview should be a visual effect view.")
+        }
+        hud.contentView.style = .blur(.dark)
+        hud.contentView.subviews.enumerated().forEach { idx, view in
+            XCTAssert(!(view is UIVisualEffectView) || idx == 0,
+                      "Just the first subview should be a visual effect view even after changing the blurEffectStyle.")
+        }
+    }
+
+    func testUnfinishedHidingAnimation() {
+        let hud = HUD.show(to: testView, animated: false)
+        hud.hide(animated: true)
+
+        // Cancel all animations simulates app going to background
+        hud.contentView.layer.removeAllAnimations()
+        hud.backgroundView.layer.removeAllAnimations()
+
+        let exp = expectation(description: "HUD should eventually be removed")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            XCTAssertNil(hud.superview, "HUD should be removed after cancelled animation completes")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 5)
+    }
+
+    func testAnimatedImmediateHudReuse() {
+        hud.removeFromSuperViewOnHide = false
+        testView.addSubview(hud)
+        hud.show(animated: true)
+
+        hud.hide(animated: true)
+        hud.show(animated: true) // Re-show during hide animation
+
+        let exp = expectation(description: "HUD should remain visible after reuse")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            XCTAssertEqual(self.hud.superview, self.testView, "HUD should remain in view")
+            XCTAssertFalse(self.hud.isHidden, "HUD should be visible after re-show")
+            self.hud.hide(animated: false)
+            self.hud.removeFromSuperview()
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 5)
+    }
+
+    func testDelayedHideDoesNotRace() {
+        hud.removeFromSuperViewOnHide = false
+        testView.addSubview(hud)
+
+        hud.show(animated: true)
+        hud.hide(animated: true, afterDelay: 0.3)
+
+        let exp = expectation(description: "Second hide-after-delay should complete cleanly")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            // Re-show and schedule another delayed hide
+            self.hud.show(animated: true)
+            self.hud.hide(animated: true, afterDelay: 0.3)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                XCTAssertTrue(self.hud.isHidden, "HUD should be hidden after second delay")
+                self.hud.removeFromSuperview()
+                exp.fulfill()
+            }
+        }
+        wait(for: [exp], timeout: 5)
+    }
+
+    // MARK: - hitTest Tests
+
+    func testHitTestWithEventDeliveryDisabled() {
+        testView.addSubview(hud)
+        hud.frame = testView.bounds
+        hud.show(animated: false)
+
+        // With isEventDeliveryEnabled = false, hitTest returns the hit view normally
+        let centerPoint = CGPoint(x: hud.bounds.midX, y: hud.bounds.midY)
+        let hitView = hud.hitTest(centerPoint, with: nil)
+        XCTAssertNotNil(hitView, "hitTest should return a view when event delivery is disabled")
+    }
+
+    func testHitTestWithEventDeliveryEnabled_InsideContentView() {
+        testView.addSubview(hud)
+        hud.frame = testView.bounds
+        hud.show(animated: false)
+        hud.isEventDeliveryEnabled = true
+
+        // Force layout so contentView has a valid frame
+        hud.layoutIfNeeded()
+
+        // Point inside contentView should return a hit view
+        let contentFrame = hud.contentView.convert(hud.contentView.bounds, to: hud)
+        let insidePoint = CGPoint(x: contentFrame.midX, y: contentFrame.midY)
+        let hitView = hud.hitTest(insidePoint, with: nil)
+        XCTAssertNotNil(hitView, "hitTest should return a view for point inside contentView")
+    }
+
+    func testHitTestWithEventDeliveryEnabled_OutsideContentView() {
+        testView.addSubview(hud)
+        hud.frame = testView.bounds
+        hud.show(animated: false)
+        hud.isEventDeliveryEnabled = true
+
+        // Force layout so contentView has a valid frame
+        hud.layoutIfNeeded()
+
+        // Point outside contentView but inside HUD should return nil (pass through)
+        let outsidePoint = CGPoint(x: 1, y: 1)
+        let hitView = hud.hitTest(outsidePoint, with: nil)
+        XCTAssertNil(hitView, "hitTest should return nil for point outside contentView when event delivery is enabled")
+    }
+
+    // MARK: - GraceTime with Delayed Show Tests
+
+    func testGraceTimeDelayedShow() {
+        testView.addSubview(hud)
+        hud.graceTime = 0.2
+        hud.show(animated: false)
+
+        // HUD should NOT be visible immediately
+        XCTAssertTrue(hud.isHidden, "HUD should be hidden during grace period")
+
+        let exp = expectation(description: "HUD shows after grace time")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            XCTAssertFalse(self.hud.isHidden, "HUD should be visible after grace time")
+            self.hud.hide(animated: false)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    func testGraceTimeHideBeforeShow() {
+        testView.addSubview(hud)
+        hud.graceTime = 0.5
+        hud.show(animated: false)
+
+        // Hide before grace time expires
+        hud.hide(animated: false)
+
+        let exp = expectation(description: "HUD should not show after grace time if hidden")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            XCTAssertTrue(self.hud.isHidden, "HUD should remain hidden if hide called before grace time")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    // MARK: - Show/Hide with Animation Tests
+
+    func testShowWithAnimation() {
+        testView.addSubview(hud)
+        hud.animation = .init(style: .zoomIn, damping: .default)
+        hud.show(using: hud.animation)
+
+        let exp = expectation(description: "Animation completes")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertFalse(self.hud.isHidden, "HUD should be visible after animated show")
+            self.hud.hide(animated: false)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    func testHideWithDelay() {
+        testView.addSubview(hud)
+        hud.show(animated: false)
+        hud.hide(using: .init(style: .none), afterDelay: 0.2)
+
+        let exp = expectation(description: "HUD hides after delay")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertTrue(self.hud.isHidden, "HUD should be hidden after delay")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    // MARK: - VoiceOver Accessibility Tests
+
+    func testAccessibilityViewIsModalDefaultsTrue() {
+        XCTAssertTrue(hud.accessibilityViewIsModal,
+            "HUD should be modal by default to trap VoiceOver focus")
+    }
+
+    func testAccessibilityViewIsModalSyncsWithEventDelivery() {
+        hud.isEventDeliveryEnabled = true
+        XCTAssertFalse(hud.accessibilityViewIsModal,
+            "When event delivery is enabled, modal should be false so VoiceOver can reach content behind")
+
+        hud.isEventDeliveryEnabled = false
+        XCTAssertTrue(hud.accessibilityViewIsModal,
+            "When event delivery is disabled, modal should be true")
+    }
+
+    func testAccessibilityPerformEscapeHidesHUD() {
+        testView.addSubview(hud)
+        hud.removeFromSuperViewOnHide = false
+        hud.show(animated: false)
+
+        let result = hud.accessibilityPerformEscape()
+        XCTAssertTrue(result, "Escape should return true when HUD is visible")
+
+        let exp = expectation(description: "HUD hides after escape")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            XCTAssertTrue(self.hud.isHidden, "HUD should be hidden after escape gesture")
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    func testAccessibilityPerformEscapeReturnsFalseWhenHidden() {
+        testView.addSubview(hud)
+        // HUD is hidden by default
+        let result = hud.accessibilityPerformEscape()
+        XCTAssertFalse(result, "Escape should return false when HUD is already hidden")
     }
 }

@@ -57,12 +57,17 @@ enum DemoAction: String, CaseIterable {
     case statusCustom     = "Status (Custom Icon)"
     case toast            = "Toast (Text Only)"
     case showStatus       = "ShowStatus (Auto-Hide)"
+    case graceTime        = "GraceTime (Skip Fast Tasks)"
+    case minShowTime      = "MinShowTime (Minimum Display)"
+    case customRotating   = "Custom Rotating View"
+    case animationStyles  = "Animation Styles"
     case multipleHUDs     = "Multiple HUDs (Count)"
     case modeSwitching    = "Mode Switching"
     case urlSession       = "URLSession Download"
     case observedProgress = "Observed Progress"
     case dynamicType      = "Dynamic Type Labels"
     case liquidGlass      = "Liquid Glass (iOS 26)"
+    case voiceOver        = "VoiceOver Accessibility"
     case presentVC        = "Present VC Demo"
     case ocPresentVC      = "OC Present VC Demo"
 }
@@ -337,7 +342,7 @@ enum ConfigItem: String, CaseIterable {
         case .graceTime:       config.graceTime = value
         case .minShowTime:     config.minShowTime = value
         case .hideAfterDelay:  config.hideAfterDelay = value
-        case .taskTime:        config.takeTime = UInt32(value)
+        case .taskTime:        config.takeTime = UInt32(clamping: Int(max(0, value)))
         case .roundedCorners:  config.roundedCorners = value
         default: break
         }

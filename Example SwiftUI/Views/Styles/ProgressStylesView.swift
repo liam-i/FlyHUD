@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 import FlyProgressHUD
 
 private typealias HUDProgressView = FlyProgressHUD.ProgressView
@@ -121,7 +122,7 @@ struct ProgressStylesView: View {
             var progress: Float = 0.0
             while progress < 1.0 {
                 try? await Task.sleep(for: .milliseconds(80))
-                progress += 0.03
+                progress = min(progress + 0.03, 1.0)
                 pv.progress = progress
             }
             hud.hide(afterDelay: 0.3)

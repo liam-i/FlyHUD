@@ -430,4 +430,59 @@ final class ProgressViewTests: XCTestCase {
     func testAlphaPropertyDefault() {
         XCTAssertEqual(progressView.alpha, 1.0)
     }
+
+    // MARK: - HUD+ProgressView Extension Tests
+
+    func testContentViewModeProgressWithStyle() {
+        let mode = ContentView.Mode.progress(.round)
+        XCTAssertTrue(mode.isProgress, "Mode created with ProgressView.Style should be progress")
+        if case let .custom(view) = mode {
+            XCTAssertTrue(view is ProgressView)
+        } else {
+            XCTFail("Should be .custom mode")
+        }
+    }
+
+    func testContentViewModeProgressWithStyleable() {
+        let style = ProgressView.Style.pie
+        let mode = ContentView.Mode.progress(style as ProgressViewStyleable)
+        XCTAssertTrue(mode.isProgress, "Mode created with ProgressViewStyleable should be progress")
+        if case let .custom(view) = mode {
+            XCTAssertTrue(view is ProgressView)
+        } else {
+            XCTFail("Should be .custom mode")
+        }
+    }
+
+    // MARK: - Animation Builder Reset Tests
+
+    func testStyleChangeResetsAnimationBuilder() {
+        // Create with bar style and draw to cache animationBuilder
+        let view = ProgressView(style: .buttBar, size: CGSize(width: 120, height: 20))
+        view.progress = 0.5
+        view.progressTintColor = .systemBlue
+
+        // Force a draw to cache the animation builder
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        window.addSubview(view)
+        view.setNeedsDisplay()
+        view.layoutIfNeeded()
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+
+        // Change to a style with different default size to verify resetProperties ran
+        view.style = ProgressView.Style.round
+        let newSize = view.frame.size
+
+        // .round has defaultSize 37x37 vs .buttBar's 120x10.
+        // If resetProperties() ran correctly, frame.size is updated.
+        XCTAssertEqual(newSize.width, 37.0, accuracy: 0.1,
+            "Frame width should match .round defaultSize after style change")
+        XCTAssertEqual(newSize.height, 37.0, accuracy: 0.1,
+            "Frame height should match .round defaultSize after style change")
+
+        // Verify drawing with new style doesn't crash
+        view.setNeedsDisplay()
+        view.layoutIfNeeded()
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1))
+    }
 }

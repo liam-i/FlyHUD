@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 import FlyIndicatorHUD
 
 // MARK: - ActivityIndicatorView Styles
@@ -98,7 +99,7 @@ struct ActivityIndicatorStylesView: View {
         let hud = HUD.show(to: view, mode: .custom(indicator), label: "hidesWhenStopped = false") { hud in
             hud.contentView.detailsLabel.text = "Stops after 2s, stays visible"
         }
-        Task {
+        Task { @MainActor in
             try? await Task.sleep(for: .seconds(2.0))
             indicator.stopAnimating()
             try? await Task.sleep(for: .seconds(2.0))

@@ -4,7 +4,6 @@
 
 ```text
 Tests/
-├── Tests.swift                    → Shared test utilities / imports
 ├── HUD/
 │   ├── HUDTests.swift             → Core show/hide lifecycle
 │   ├── HUDStressTests.swift       → Concurrent/stress scenarios
@@ -12,11 +11,24 @@ Tests/
 │   ├── Extensions/                → Extension tests
 │   ├── Observables/               → DisplayLink, Keyboard tests
 │   ├── Protocols/                 → Protocol conformance tests
-│   └── Views/                     → ContentView, BackgroundView tests
+│   └── Views/                     → ContentView, BackgroundView tests (incl. VoiceOver)
 ├── IndicatorHUD/
 │   └── ActivityIndicatorViewTests.swift
-└── ProgressHUD/
-    └── ProgressViewTests.swift
+├── ProgressHUD/
+│   └── ProgressViewTests.swift
+└── SwiftUIHUD/
+    ├── SwiftUIHUDTests.swift             → SwiftUI modifier unit tests
+    ├── SwiftUIHUDStressTests.swift       → SwiftUI stress/performance
+    └── SwiftUIHUDIntegrationTests.swift  → Indicator/Progress integration
+```
+
+UI tests (`UITests/`) complement unit tests:
+
+```text
+UITests/
+└── HUD/
+    ├── HUDUITests.swift               → Core show/hide, rotation, keyboard, stability
+    └── HUDAccessibilityUITests.swift  → VoiceOver label/value/hint/traits/escape validation
 ```
 
 ## Test Conventions
@@ -95,41 +107,18 @@ Tests mirror the Sources directory:
 ## Running Tests
 
 ```bash
-# SPM (all tests)
-swift test
-
-# Xcode (specific scheme)
-xcodebuild test -scheme "Example iOS" -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
-
-# Single test file in Xcode
-# Cmd+U in test navigator
+./scripts/build.sh test                   # All unit tests
+./scripts/build.sh test HUDTests          # Specific class
+./scripts/build.sh test HUDTests/testBasicShow  # Single method
+./scripts/build.sh test ui                # UI tests
 ```
+
+> `swift test` doesn't work — UIKit unavailable on macOS CLI.
 
 ## Mocking Pattern
 
-For app-level tests that use HUD, abstract behind a protocol:
-
-```swift
-@MainActor
-protocol HUDDisplayable {
-    func showLoading(on view: UIView, label: String?)
-    func showSuccess(on view: UIView, label: String?)
-    func showError(on view: UIView, label: String?)
-    func hide(from view: UIView)
-}
-```
-
-Provide `RealHUDService` (production, imports FlyHUD) and `MockHUDService` (tests, no dependency).
+For app-level tests, abstract HUD behind a protocol (`HUDDisplayable`) with `RealHUDService` (production) and `MockHUDService` (tests, no FlyHUD dependency).
 
 ## Test Coverage Priorities
 
-1. Show/hide lifecycle + state transitions
-2. Grace time + min show time timing logic
-3. Activity count reference management
-4. ContentView mode switching
-5. Event delivery (hit testing)
-6. Delegate & completion callbacks
-7. Keyboard guide positioning (iOS)
-8. Custom indicator start/stop
-9. Progress value clamping
-10. Background style transitions
+Lifecycle → grace/min time → count management → mode switching → event delivery → delegate/completion → keyboard guide → custom indicator → progress clamping → background styles → VoiceOver accessibility

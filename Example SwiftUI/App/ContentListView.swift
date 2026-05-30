@@ -7,13 +7,39 @@
 //
 
 import SwiftUI
-import FlyHUD
 
 // MARK: - Main Navigation
 
 struct ContentListView: View {
     var body: some View {
         List {
+            Section("SwiftUI Modifiers") {
+                NavigationLink(".hud(isPresented:)") {
+                    HUDIsPresentedView()
+                }
+                NavigationLink(".hud(item:)") {
+                    HUDItemView()
+                }
+                NavigationLink(".hudStatus()") {
+                    HUDStatusModifierView()
+                }
+                NavigationLink(".hudLoading()") {
+                    HUDLoadingView()
+                }
+                NavigationLink(".hudToast()") {
+                    HUDToastView()
+                }
+                NavigationLink(".hudProgress()") {
+                    HUDProgressModifierView()
+                }
+                NavigationLink(".hudGlass() (iOS 26+)") {
+                    HUDGlassModifierView()
+                }
+                NavigationLink("HUDHostView (Low-Level)") {
+                    HUDHostViewDemoView()
+                }
+            }
+
             Section("Basic Usage") {
                 NavigationLink("Show / Hide HUD") {
                     BasicHUDView()
@@ -23,6 +49,9 @@ struct ContentListView: View {
                 }
                 NavigationLink("Toast (Text Only)") {
                     ToastView()
+                }
+                NavigationLink("Icon Position (Leading / Trailing)") {
+                    IconPositionView()
                 }
             }
 
@@ -72,6 +101,15 @@ struct ContentListView: View {
             }
 
             Section("Advanced") {
+                NavigationLink("GraceTime (Skip Fast Tasks)") {
+                    GraceTimeView()
+                }
+                NavigationLink("MinShowTime (Minimum Display)") {
+                    MinShowTimeView()
+                }
+                NavigationLink("Download Progress") {
+                    URLSessionDownloadView()
+                }
                 NavigationLink("Multiple HUDs (Count)") {
                     MultipleHUDsView()
                 }
@@ -91,6 +129,9 @@ struct ContentListView: View {
                 }
                 NavigationLink("Delegate & Completion") {
                     DelegateCompletionView()
+                }
+                NavigationLink("VoiceOver Accessibility") {
+                    AccessibilityView()
                 }
             }
         }

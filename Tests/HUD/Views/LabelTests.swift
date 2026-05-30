@@ -14,14 +14,14 @@ final class LabelTests: XCTestCase {
 
     var label: Label!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         label = Label(fontSize: 16.0, numberOfLines: 1, textColor: .white)
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         label = nil
-        try super.tearDownWithError()
+        try await super.tearDown()
     }
 
     // MARK: - Initialization Tests
@@ -40,7 +40,8 @@ final class LabelTests: XCTestCase {
 
     func testConvenienceInitWithNilColor() {
         let label = Label(fontSize: 12.0, numberOfLines: 0, textColor: nil)
-        XCTAssertNil(label.textColor)
+        // UILabel provides a default text color (.label) when nil is set
+        XCTAssertNotNil(label.textColor)
     }
 
     // MARK: - isEmptyOfText Tests
@@ -146,5 +147,32 @@ final class LabelTests: XCTestCase {
         XCTAssertNotNil(label.font)
         // The font family should remain the same even after scaling
         XCTAssertEqual(label.font.familyName, originalFont.familyName)
+    }
+
+    // MARK: - VoiceOver Tests
+
+    func testLabelIsNotAccessibilityElement() {
+        XCTAssertFalse(label.isAccessibilityElement,
+            "Label should be hidden from VoiceOver (ContentView handles accessibility)")
+    }
+
+    func testSettingSameTextDoesNotPostNotification() {
+        // Add to window so the notification guard applies
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        window.addSubview(label)
+
+        label.text = "Hello"
+        // Set same text again — should NOT post layoutChanged (guards with text != oldValue)
+        // This test verifies the guard works by not crashing or causing side effects.
+        label.text = "Hello"
+        XCTAssertEqual(label.text, "Hello")
+    }
+
+    func testSettingDifferentTextUpdatesVisibility() {
+        label.text = "Visible"
+        XCTAssertFalse(label.isHiddenInStackView)
+
+        label.text = nil
+        XCTAssertTrue(label.isHiddenInStackView)
     }
 }

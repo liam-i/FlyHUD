@@ -2,7 +2,7 @@
 //  HUD-Bridging-OC.swift
 //  Example iOS
 //
-//  Created by liam on 2024/2/27.
+//  Created by Liam on 2024/2/27.
 //  Copyright © 2024 Liam. All rights reserved.
 //
 
@@ -16,7 +16,7 @@ class HUDBridgingOC: NSObject {
         HUD.showStatus(to: view,
                        duration: .greatestFiniteMagnitude,
                        using: .animation(.slideDownUp, damping: .default),
-                       mode: .custom(UIImageView(image: UIImage(named: "warning"))),
+                       mode: .custom(UIImageView(image: UIImage(named: "warning")).h.then { $0.isAccessibilityElement = false }),
                        label: "You have an unfinished task.",
                        offset: .h.vMinOffset) {
             $0.contentView.indicatorPosition = .leading
@@ -48,7 +48,7 @@ class HUDBridgingOC: NSObject {
         HUD.showStatus(to: containerView,
                        duration: .greatestFiniteMagnitude,
                        using: .animation(.slideDownUp, damping: .default),
-                       mode: .custom(UIImageView(image: UIImage(named: "warning"))),
+                       mode: .custom(UIImageView(image: UIImage(named: "warning")).h.then { $0.isAccessibilityElement = false }),
                        label: "You have a message.",
                        offset: CGPoint(x: .h.maxOffset, y: -.h.maxOffset)) {
             $0.contentView.indicatorPosition = .trailing

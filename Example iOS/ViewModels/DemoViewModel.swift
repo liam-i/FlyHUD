@@ -261,6 +261,134 @@ import FlyProgressHUD
         HUD.showStatus(to: view, duration: 2.0, mode: .custom(UIImageView(named: "Checkmark")), label: "Saved!")
     }
 
+    // MARK: - Demo: GraceTime
+
+    /// Demonstrates graceTime: HUD only appears if the task takes longer than the grace period.
+    /// A quick task (0.5s) won't show the HUD, while a slow task (3s) will.
+    ///
+    /// ```swift
+    /// let hud = HUD(with: view)
+    /// hud.graceTime = 1.0  // Must be set BEFORE show()
+    /// view.addSubview(hud)
+    /// hud.show()
+    /// // ... task completes in < 1s → HUD never appears
+    /// hud.hide()
+    /// ```
+    func showGraceTime(on view: UIView) {
+        // First: fast task (HUD won't appear)
+        let hud1 = HUD(with: view)
+        hud1.graceTime = 1.0
+        hud1.contentView.mode = .indicator()
+        hud1.contentView.label.text = "This won't appear (fast task)"
+        view.addSubview(hud1)
+        hud1.show(animated: false)
+
+        Task.request(0) { // ~0s task
+            hud1.hide()
+
+            // Then: slow task (HUD will appear after grace period)
+            let hud2 = HUD(with: view)
+            hud2.graceTime = 1.0
+            hud2.contentView.mode = .indicator()
+            hud2.contentView.label.text = "Slow task (graceTime = 1s)"
+            hud2.contentView.detailsLabel.text = "HUD appears after 1s grace period"
+            view.addSubview(hud2)
+            hud2.show()
+
+            Task.request(3) {
+                hud2.contentView.mode = .custom(UIImageView(named: "Checkmark"))
+                hud2.contentView.label.text = "Done!"
+                hud2.contentView.detailsLabel.text = nil
+                hud2.hide(afterDelay: 1.5)
+            }
+        }
+    }
+
+    // MARK: - Demo: MinShowTime
+
+    /// Demonstrates minShowTime: HUD stays visible for at least the specified duration.
+    /// Even though the task completes in ~0.5s, the HUD remains for 2s minimum.
+    ///
+    /// ```swift
+    /// let hud = HUD(with: view)
+    /// hud.minShowTime = 2.0
+    /// view.addSubview(hud)
+    /// hud.show()
+    /// // ... task completes quickly
+    /// hud.hide()  // Actual hide is delayed to meet minShowTime
+    /// ```
+    func showMinShowTime(on view: UIView) {
+        let hud = HUD(with: view)
+        hud.minShowTime = 2.0
+        hud.contentView.mode = .indicator()
+        hud.contentView.label.text = "MinShowTime = 2s"
+        hud.contentView.detailsLabel.text = "Task finishes fast, HUD stays for 2s"
+        view.addSubview(hud)
+        hud.show()
+
+        // Quick task (~0.5s)
+        Task.request(0) {
+            hud.contentView.mode = .custom(UIImageView(named: "Checkmark"))
+            hud.contentView.label.text = "Done! (still visible)"
+            hud.contentView.detailsLabel.text = "Waiting for minShowTime..."
+            hud.hide()
+        }
+    }
+
+    // MARK: - Demo: Custom Rotating View
+
+    /// Demonstrates the RotateViewable protocol for custom rotation animations.
+    ///
+    /// ```swift
+    /// class MyView: UIImageView, RotateViewable {}
+    /// let rotatingView = MyView(image: UIImage(named: "loading"))
+    /// HUD.show(to: view, mode: .custom(rotatingView), label: "Syncing...")
+    /// // RotateViewable auto-starts/stops rotation when added/removed
+    /// ```
+    func showCustomRotating(on view: UIView) {
+        let hud = showHUD(on: view, mode: .custom(RotateImageView.loading), label: "Syncing...")
+        hud.contentView.detailsLabel.text = "RotateViewable protocol"
+        hud.hide(afterDelay: 3.0)
+    }
+
+    // MARK: - Demo: Animation Styles
+
+    /// Demonstrates the different built-in animation styles for showing/hiding HUDs.
+    ///
+    /// ```swift
+    /// HUD.show(to: view, using: .animation(.zoomInOut, damping: .default), mode: .text, label: "Zoom")
+    /// hud.hide(using: .animation(.slideDown))
+    /// ```
+    func showAnimationStyles(on view: UIView) {
+        let styles: [(HUD.Animation.Style, String)] = [
+            (.fade, "Fade"),
+            (.zoomInOut, "Zoom In/Out"),
+            (.slideUpDown, "Slide Up/Down"),
+            (.slideRightLeft, "Slide Right/Left"),
+        ]
+        var index = 0
+
+        func showNext() {
+            guard index < styles.count else { return }
+            let (style, name) = styles[index]
+            index += 1
+            let animation: HUD.Animation = .animation(style, damping: .default)
+            let hud = HUD.show(to: view, using: animation, mode: .text) { hud in
+                hud.contentView.label.text = name
+                hud.contentView.detailsLabel.text = "\(index)/\(styles.count)"
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                hud.completionBlock = { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showNext()
+                    }
+                }
+                hud.hide(using: animation)
+            }
+        }
+        showNext()
+    }
+
     // MARK: - Demo: Dynamic Type
 
     /// Demonstrates Dynamic Type support for accessibility.

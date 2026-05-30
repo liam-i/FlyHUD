@@ -9,6 +9,11 @@
 import XCTest
 @testable import FlyHUD
 
+private final class Box<T: Sendable>: @unchecked Sendable {
+    var value: T
+    init(_ value: T) { self.value = value }
+}
+
 final class UnfairLockTests: XCTestCase {
 
     // MARK: - Initialization
@@ -52,7 +57,7 @@ final class UnfairLockTests: XCTestCase {
 
     func testConcurrentAccess() {
         let lock = UnfairLock()
-        var counter = 0
+        let counter = Box(0)
         let iterations = 1000
         let expectation = expectation(description: "Concurrent access")
         expectation.expectedFulfillmentCount = iterations
@@ -61,18 +66,18 @@ final class UnfairLockTests: XCTestCase {
 
         for _ in 0..<iterations {
             queue.async {
-                lock.withLock { counter += 1 }
+                lock.withLock { counter.value += 1 }
                 expectation.fulfill()
             }
         }
 
         wait(for: [expectation], timeout: 10.0)
-        XCTAssertEqual(counter, iterations, "Counter should equal iterations after concurrent increments")
+        XCTAssertEqual(counter.value, iterations, "Counter should equal iterations after concurrent increments")
     }
 
     func testConcurrentReadWrite() {
         let lock = UnfairLock()
-        var array: [Int] = []
+        let array = Box<[Int]>([])
         let writeCount = 500
         let expectation = expectation(description: "Concurrent read/write")
         expectation.expectedFulfillmentCount = writeCount * 2
@@ -81,17 +86,17 @@ final class UnfairLockTests: XCTestCase {
 
         for i in 0..<writeCount {
             queue.async {
-                lock.withLock { array.append(i) }
+                lock.withLock { array.value.append(i) }
                 expectation.fulfill()
             }
             queue.async {
-                _ = lock.withLock { array.count }
+                _ = lock.withLock { array.value.count }
                 expectation.fulfill()
             }
         }
 
         wait(for: [expectation], timeout: 10.0)
-        XCTAssertEqual(array.count, writeCount)
+        XCTAssertEqual(array.value.count, writeCount)
     }
 
     // MARK: - Multiple Instances

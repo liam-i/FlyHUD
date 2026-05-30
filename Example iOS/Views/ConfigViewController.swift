@@ -148,6 +148,9 @@ final class ConfigViewController: UITableViewController {
             window.rootViewController = nav
             window.semanticContentAttribute = attribute
             window.makeKeyAndVisible()
+
+            // VoiceOver: Notify screen changed so focus moves to the new root content.
+            UIAccessibility.post(notification: .screenChanged, argument: nil)
         }
     }
 

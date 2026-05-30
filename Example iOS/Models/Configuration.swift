@@ -2,7 +2,7 @@
 //  Configuration.swift
 //  Example iOS
 //
-//  Created by liam on 2021/7/9.
+//  Created by Liam on 2021/7/9.
 //  Copyright © 2021 Liam. All rights reserved.
 //
 

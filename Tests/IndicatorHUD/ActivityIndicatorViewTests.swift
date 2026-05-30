@@ -353,4 +353,27 @@ final class ActivityIndicatorViewTests: XCTestCase {
         let size = activityIndicatorView.intrinsicContentSize
         XCTAssertEqual(size, CGSize(width: 80, height: 80))
     }
+
+    // MARK: - HUD+ActivityIndicatorView Extension Tests
+
+    func testContentViewModeIndicatorWithStyle() {
+        let mode = ContentView.Mode.indicator(.ballSpinFade)
+        XCTAssertTrue(mode.isIndicator, "Mode created with ActivityIndicatorView.Style should be indicator")
+        if case let .custom(view) = mode {
+            XCTAssertTrue(view is ActivityIndicatorView)
+        } else {
+            XCTFail("Should be .custom mode")
+        }
+    }
+
+    func testContentViewModeIndicatorWithStyleable() {
+        let style = ActivityIndicatorView.Style.circleStrokeSpin
+        let mode = ContentView.Mode.indicator(style as ActivityIndicatorViewStyleable)
+        XCTAssertTrue(mode.isIndicator, "Mode created with ActivityIndicatorViewStyleable should be indicator")
+        if case let .custom(view) = mode {
+            XCTAssertTrue(view is ActivityIndicatorView)
+        } else {
+            XCTFail("Should be .custom mode")
+        }
+    }
 }

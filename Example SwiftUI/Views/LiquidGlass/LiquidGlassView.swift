@@ -8,23 +8,31 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 
 // MARK: - Liquid Glass Demo
 
 /// Demonstrates FlyHUD with Liquid Glass style (iOS 26+).
 struct LiquidGlassView: View {
     @State private var hostView: UIView?
+    #if compiler(>=6.2) && !os(visionOS)
+    @State private var showDeclarativeGlass = false
+    #endif
 
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 hudDemoSection
+                declarativeSection
             }
             .padding()
         }
         .background(backgroundGradient)
         .navigationTitle("Glass HUD")
         .hudHost($hostView)
+        #if compiler(>=6.2) && !os(visionOS)
+        .modifier(LiquidGlassDeclarativeModifier(showGlass: $showDeclarativeGlass))
+        #endif
     }
 
     // MARK: - Background
@@ -129,4 +137,59 @@ struct LiquidGlassView: View {
             .foregroundStyle(.secondary)
             .padding(.vertical, 8)
     }
+
+    // MARK: - Declarative Glass Modifier
+
+    private var declarativeSection: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            Text("Declarative .hudGlass() Modifier")
+                .font(.headline)
+
+            Text("Using .hudGlass(isPresented:label:detailsLabel:) convenience")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            #if compiler(>=6.2) && !os(visionOS)
+            if #available(iOS 26.0, *) {
+                Button("Show via .hudGlass() modifier") {
+                    showDeclarativeGlass = true
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(2.5))
+                        showDeclarativeGlass = false
+                    }
+                }
+                .buttonStyle(.glass)
+                .frame(maxWidth: .infinity)
+            } else {
+                unavailableHint
+            }
+            #else
+            unavailableHint
+            #endif
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
+
+#if compiler(>=6.2) && !os(visionOS)
+@available(iOS 26.0, tvOS 26.0, *)
+private struct LiquidGlassDeclarativeContent: ViewModifier {
+    @Binding var showGlass: Bool
+
+    func body(content: Content) -> some View {
+        content.hudGlass(isPresented: $showGlass, label: "Glass Modifier", detailsLabel: "Via .hudGlass()")
+    }
+}
+
+private struct LiquidGlassDeclarativeModifier: ViewModifier {
+    @Binding var showGlass: Bool
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            content.modifier(LiquidGlassDeclarativeContent(showGlass: $showGlass))
+        } else {
+            content
+        }
+    }
+}
+#endif

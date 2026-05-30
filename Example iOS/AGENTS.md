@@ -56,63 +56,21 @@ Sections are defined by `DemoSection` enum (raw Int values):
 
 ### ConfigItem Pattern
 
-Each `ConfigItem` case provides:
+Each `ConfigItem` case provides: `.section`, `.currentValue(from:)`, `.editDescriptor`, apply method, and `.isCustomOnly`/`.isForceAnimOnly` for conditional visibility.
 
-- `.section` → which `DemoSection` it belongs to
-- `.currentValue(from:)` → read from `Configuration` struct
-- `.editDescriptor` → defines the editing UI (switch, stepper, picker, etc.)
-- Apply method → writes value back to `Configuration`
-- `.isCustomOnly` / `.isForceAnimOnly` → conditional visibility
-
-### Data Flow
-
-```text
-ConfigViewController
-    ↕ (reads/writes)
-Configuration struct (value type)
-    ↕ (viewModel.onConfigChanged callback)
-DemoViewModel
-    ↕ (applies to)
-HUD instances
-```
+Data flow: `ConfigViewController` ↔ `Configuration` (value type) ↔ `DemoViewModel` → HUD instances.
 
 ## Cell Architecture
 
 | Cell Type | Reuse Strategy | Purpose |
 | --------- | -------------- | ------- |
-| `IndicatorStripCell` | Cached property | Displays indicator preview |
-| `ConfigCell` | `dequeueReusableCell` | Shows config item with edit control |
-| `DemoActionCell` | `dequeueReusableCell` | Navigation to demo screens |
-| `ToolCell` | `dequeueReusableCell` | Toolbar-style action buttons |
+| `IndicatorStripCell` | **Cached property** (NEVER dequeue) | Indicator preview |
+| `ConfigCell` | `dequeueReusableCell` | Config item + edit control |
+| `DemoActionCell` | `dequeueReusableCell` | Navigation to demos |
+| `ToolCell` | `dequeueReusableCell` | Toolbar actions |
 
 ## Common Tasks
 
-### Adding a new ConfigItem
-
-1. Add case to `ConfigItem` enum in `DemoSections.swift`
-2. Set readable raw value string (e.g. `"My Option"`)
-3. Add to appropriate `section` in `var section: DemoSection` switch
-4. Implement `currentValue(from:)` and `editDescriptor`
-5. Add apply logic in Configuration
-6. Set `isCustomOnly` / `isForceAnimOnly` if needed
-
-### Adding a new Demo
-
-1. Add case to `DemoAction` enum in `DemoSections.swift`
-2. Handle in `ViewController.handleDemoAction(_:)` → push or present
-
-### Adding a new ViewController
-
-1. Create file in `Example iOS/Views/`
-2. It auto-syncs via `PBXFileSystemSynchronizedRootGroup` — no pbxproj edit needed
-3. Add navigation from `ViewController` via `DemoAction`
-
-## Keyboard Guide Setup
-
-```swift
-// In AppDelegate.didFinishLaunching:
-HUD.keyboardGuide = .center()
-
-// Window acquisition (UIScene compatible):
-// self.window → UIApplication.shared.connectedScenes fallback
-```
+- **New ConfigItem**: Add case to `ConfigItem` enum → set `section` → implement `currentValue(from:)`/`editDescriptor` → add apply logic
+- **New Demo**: Add case to `DemoAction` → handle in `ViewController.handleDemoAction(_:)`
+- **New ViewController**: Create in `Example iOS/Views/` (auto-syncs, no pbxproj edit) → add `DemoAction` navigation

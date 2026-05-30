@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 import FlyIndicatorHUD
 import FlyProgressHUD
 
@@ -97,7 +98,7 @@ struct ProgressModeView: View {
             var progress: Float = 0.0
             while progress < 1.0 {
                 try? await Task.sleep(for: .milliseconds(100))
-                progress += 0.05
+                progress = min(progress + 0.05, 1.0)
                 hud.contentView.progress = progress
             }
             hud.hide(afterDelay: 0.3)
@@ -124,6 +125,7 @@ struct CustomModeView: View {
             Button("Checkmark Icon") {
                 guard let view = hostView else { return }
                 let iv = UIImageView(image: UIImage(systemName: "checkmark.circle.fill")?.withRenderingMode(.alwaysTemplate))
+                iv.isAccessibilityElement = false
                 let hud = HUD.show(to: view, mode: .custom(iv), label: "Completed!")
                 hud.hide(afterDelay: 2.0)
             }
@@ -153,6 +155,7 @@ struct CustomModeView: View {
                 let iv = RotateImageView(image: UIImage(systemName: "arrow.triangle.2.circlepath")?.withRenderingMode(.alwaysTemplate))
                 iv.frame = CGRect(x: 0, y: 0, width: 37, height: 37)
                 iv.contentMode = .scaleAspectFit
+                iv.isAccessibilityElement = false
                 iv.startRotating()
                 let hud = HUD.show(to: view, mode: .custom(iv), label: "Syncing...")
                 hud.hide(afterDelay: 3.0)
@@ -170,7 +173,7 @@ struct CustomModeView: View {
             var progress: Float = 0.0
             while progress < 1.0 {
                 try? await Task.sleep(for: .milliseconds(100))
-                progress += 0.04
+                progress = min(progress + 0.04, 1.0)
                 pv.progress = progress
             }
             hud.hide(afterDelay: 0.3)

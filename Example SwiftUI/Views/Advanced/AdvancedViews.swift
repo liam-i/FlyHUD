@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 import FlyProgressHUD
 
 private typealias HUDProgressView = FlyProgressHUD.ProgressView
@@ -33,16 +34,23 @@ struct MultipleHUDsView: View {
 
             Button("Show Counted HUD (x3)") {
                 guard let view = hostView else { return }
-                // Show 3 times
+                let hud = HUD(with: view)
+                hud.isCountEnabled = true
+                hud.contentView.mode = .indicator()
+                view.addSubview(hud)
+
+                // Show 3 times (count increments each time)
                 for i in 1...3 {
-                    let hud = HUD.show(to: view, mode: .indicator(), label: "Task \(i)")
-                    hud.isCountEnabled = true
+                    hud.show()
+                    hud.contentView.label.text = "Count: \(hud.count)"
+                    hud.contentView.detailsLabel.text = "Show \(i)/3"
                 }
-                // Hide 3 times with delay
+                // Hide 3 times with delay (count decrements each time)
                 for i in 1...3 {
-                    Task {
+                    Task { @MainActor in
                         try? await Task.sleep(for: .seconds(Double(i)))
-                        HUD.hide(for: view)
+                        hud.hide()
+                        hud.contentView.label.text = "Count: \(hud.count)"
                     }
                 }
             }
@@ -50,7 +58,7 @@ struct MultipleHUDsView: View {
             Button("Show Multiple Separate HUDs") {
                 guard let view = hostView else { return }
                 let hud1 = HUD.show(to: view, mode: .indicator(), label: "HUD 1")
-                Task {
+                Task { @MainActor in
                     try? await Task.sleep(for: .seconds(1.0))
                     hud1.contentView.mode = .text
                     hud1.contentView.label.text = "Done 1"
@@ -69,7 +77,7 @@ struct MultipleHUDsView: View {
             Button("HUD.lastHUD(for: view)") {
                 guard let view = hostView else { return }
                 let hud = HUD.show(to: view, mode: .indicator(), label: "First HUD")
-                Task {
+                Task { @MainActor in
                     try? await Task.sleep(for: .seconds(1.0))
                     if let last = HUD.lastHUD(for: view) {
                         last.contentView.label.text = "Found via lastHUD!"
@@ -118,10 +126,11 @@ struct ModeSwitchingView: View {
                     var progress: Float = 0.0
                     while progress < 1.0 {
                         try? await Task.sleep(for: .milliseconds(80))
-                        progress += 0.04
+                        progress = min(progress + 0.04, 1.0)
                         pv.progress = progress
                     }
                     let checkmark = UIImageView(image: UIImage(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate))
+                    checkmark.isAccessibilityElement = false
                     hud.contentView.mode = .custom(checkmark)
                     hud.contentView.label.text = "Complete!"
                     hud.hide(afterDelay: 1.5)
@@ -373,5 +382,139 @@ struct DelegateCompletionView: View {
         let f = DateFormatter()
         f.dateFormat = "HH:mm:ss"
         return f.string(from: Date())
+    }
+}
+
+// MARK: - GraceTime
+
+struct GraceTimeView: View {
+    @State private var hostView: UIView?
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("graceTime delays HUD display.\nIf the task finishes before the grace period, the HUD never appears.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Button("Fast Task (No HUD)") {
+                guard let view = hostView else { return }
+                let hud = HUD(with: view)
+                hud.graceTime = 1.0
+                hud.contentView.mode = .indicator()
+                hud.contentView.label.text = "Won't appear"
+                view.addSubview(hud)
+                hud.show(animated: false)
+
+                // Task completes in ~0.3s — within graceTime, so HUD never shows
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(300))
+                    hud.hide()
+                }
+            }
+
+            Button("Slow Task (HUD Appears)") {
+                guard let view = hostView else { return }
+                let hud = HUD(with: view)
+                hud.graceTime = 1.0
+                hud.contentView.mode = .indicator()
+                hud.contentView.label.text = "Slow task"
+                hud.contentView.detailsLabel.text = "graceTime = 1s"
+                view.addSubview(hud)
+                hud.show()
+
+                // Task takes 3s — exceeds graceTime, so HUD appears after 1s
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(3))
+                    hud.contentView.mode = .custom(UIImageView(image: UIImage(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.label.text = "Done!"
+                    hud.contentView.detailsLabel.text = nil
+                    hud.hide(afterDelay: 1.5)
+                }
+            }
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("GraceTime")
+        .hudHost($hostView)
+    }
+}
+
+// MARK: - MinShowTime
+
+struct MinShowTimeView: View {
+    @State private var hostView: UIView?
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("minShowTime ensures the HUD stays visible for a minimum duration, even if the task finishes early.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Button("Quick Task (minShowTime = 2s)") {
+                guard let view = hostView else { return }
+                let hud = HUD(with: view)
+                hud.minShowTime = 2.0
+                hud.contentView.mode = .indicator()
+                hud.contentView.label.text = "MinShowTime = 2s"
+                hud.contentView.detailsLabel.text = "Task finishes fast, HUD stays"
+                view.addSubview(hud)
+                hud.show()
+
+                // Task completes in ~0.5s, but HUD stays for 2s
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(500))
+                    hud.contentView.mode = .custom(UIImageView(image: UIImage(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.label.text = "Done!"
+                    hud.contentView.detailsLabel.text = "Waiting for minShowTime..."
+                    hud.hide()
+                }
+            }
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("MinShowTime")
+        .hudHost($hostView)
+    }
+}
+
+// MARK: - URLSession Download
+
+struct URLSessionDownloadView: View {
+    @State private var hostView: UIView?
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Demonstrates progress tracking with a simulated download task.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
+            Button("Start Download") {
+                guard let view = hostView else { return }
+                let hud = HUD.show(to: view, mode: .progress(.annularRound), label: "Downloading...")
+
+                Task { @MainActor in
+                    for i in 1...100 {
+                        try? await Task.sleep(for: .milliseconds(30))
+                        hud.contentView.progress = Float(i) / 100.0
+                    }
+                    hud.contentView.mode = .custom(UIImageView(image: UIImage(systemName: "checkmark")?.withRenderingMode(.alwaysTemplate)))
+                    hud.contentView.label.text = "Download Complete"
+                    hud.hide(afterDelay: 1.5)
+                }
+            }
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Download Progress")
+        .hudHost($hostView)
     }
 }

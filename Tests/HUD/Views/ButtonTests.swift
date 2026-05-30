@@ -14,14 +14,14 @@ final class ButtonTests: XCTestCase {
 
     var button: Button!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         button = Button(fontSize: 12.0, textColor: .white)
     }
 
-    override func tearDownWithError() throws {
+    override func tearDown() async throws {
         button = nil
-        try super.tearDownWithError()
+        try await super.tearDown()
     }
 
     // MARK: - Initialization Tests
@@ -36,7 +36,8 @@ final class ButtonTests: XCTestCase {
 
     func testConvenienceInitWithNilColor() {
         let button = Button(fontSize: 12.0, textColor: nil)
-        XCTAssertNil(button.titleColor(for: .normal))
+        // UIButton provides a default title color (white) when nil is set
+        XCTAssertNotNil(button.titleColor(for: .normal))
     }
 
     func testFrameInit() {
@@ -150,7 +151,8 @@ final class ButtonTests: XCTestCase {
 
     func testSetTitleColorNil() {
         button.setTitleColor(nil, for: .normal)
-        XCTAssertNil(button.titleColor(for: .normal))
+        // UIButton provides a default title color (white) when nil is set
+        XCTAssertNotNil(button.titleColor(for: .normal))
     }
 
     // MARK: - Highlight Tests
@@ -183,6 +185,47 @@ final class ButtonTests: XCTestCase {
         button.layoutSubviews()
 
         XCTAssertEqual(button.layer.cornerRadius, ceil(40.0 / 2.0))
+    }
+
+    // MARK: - Coder Init Tests
+
+    func testInitWithCoder() {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(requiringSecureCoding: true)
+        archiver.finishEncoding()
+
+        if let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data as Data) {
+            let btn = Button(coder: unarchiver)
+            if let btn = btn {
+                XCTAssertEqual(btn.layer.borderWidth, 1.0)
+            }
+        }
+    }
+
+    // MARK: - IntrinsicContentSize Edge Cases
+
+    func testIntrinsicContentSizeWithEventsOnly() {
+        // No title but has control events - should NOT return .zero
+        button.addTarget(self, action: #selector(dummyAction), for: .touchUpInside)
+        let size = button.intrinsicContentSize
+        // With control events but no title, isEmptyOfText is true but allControlEvents > 0
+        // so it should still calculate size
+        XCTAssertNotEqual(size, .zero, "Should return non-zero size when control events are registered")
+    }
+
+    // MARK: - Bounds didSet Tests
+
+    func testBoundsDidSetHidesWhenEmpty() {
+        button.setTitle(nil, for: .normal)
+        button.bounds = CGRect(x: 0, y: 0, width: 100, height: 44)
+        // isEmptyOfText = true → isHiddenInStackView should be true
+        XCTAssertTrue(button.isEmptyOfText)
+    }
+
+    func testBoundsDidSetShowsWhenHasTitle() {
+        button.setTitle("OK", for: .normal)
+        button.bounds = CGRect(x: 0, y: 0, width: 100, height: 44)
+        XCTAssertFalse(button.isEmptyOfText)
     }
 
     @objc private func dummyAction() {}

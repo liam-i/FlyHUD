@@ -203,4 +203,64 @@ final class HUDExtendedTests: XCTestCase {
         XCTAssertEqual(view.frame, CGRect(x: 0, y: 0, width: 100, height: 100), "Frame should be set by first then")
         XCTAssertEqual(view.backgroundColor, .blue, "Background color should be set by second then")
     }
+
+    // MARK: - h Setter Tests
+
+    func testStaticHSetter() {
+        // The static h setter is a no-op but exercising it covers the code path
+        String.h = HUDExtension<String>.self
+        // Should still work as before
+        let h = String.h
+        XCTAssertNotNil(h)
+    }
+
+    func testInstanceHSetter() {
+        // The instance h setter is a no-op but exercising it covers the code path
+        var string = "test"
+        string.h = HUDExtension(string)
+        // Should still work as before
+        let h = string.h
+        XCTAssertNotNil(h)
+    }
+
+    // MARK: - do Method Tests (Value Types)
+
+    func testDoMethodWithValueType() {
+        var point = CGPoint(x: 1, y: 2)
+        let result = point.h.do { p in
+            p.x = 10
+            p.y = 20
+        }
+        XCTAssertEqual(result.x, 10)
+        XCTAssertEqual(result.y, 20)
+    }
+
+    func testDoMethodWithRect() {
+        var rect = CGRect.zero
+        let result = rect.h.do { r in
+            r = CGRect(x: 5, y: 10, width: 100, height: 200)
+        }
+        XCTAssertEqual(result, CGRect(x: 5, y: 10, width: 100, height: 200))
+    }
+
+    func testDoMethodWithThrowingBlock() {
+        enum TestError: Error { case fail }
+        var value: Float = 1.0
+        do {
+            _ = try value.h.do { _ in throw TestError.fail }
+            XCTFail("Should have thrown")
+        } catch {
+            XCTAssertTrue(error is TestError)
+        }
+    }
+
+    // MARK: - NSObjectProtocol notEqual with equal isEqual
+
+    func testNotEqualWithNSObjectEqualObjects() {
+        // Test the case where == returns false but isEqual returns true
+        let obj = NSString(string: "hello")
+        var blockExecuted = false
+        obj.h.notEqual(obj, do: blockExecuted = true)
+        XCTAssertFalse(blockExecuted, "Block should not execute for identical objects")
+    }
 }

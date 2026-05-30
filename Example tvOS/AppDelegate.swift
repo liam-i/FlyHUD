@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Example tvOS
 //
-//  Created by liam on 2024/1/15.
+//  Created by Liam on 2024/1/15.
 //  Copyright © 2024 Liam. All rights reserved.
 //
 

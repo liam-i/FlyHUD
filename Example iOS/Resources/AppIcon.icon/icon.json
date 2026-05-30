@@ -19,9 +19,7 @@
     {
       "layers" : [
         {
-          "fill" : "automatic",
-          "hidden" : false,
-          "image-name" : "FlyHUD-LOGO 2.png",
+          "image-name" : "FlyHUD-LOGO.png",
           "name" : "FlyHUD-LOGO"
         }
       ],

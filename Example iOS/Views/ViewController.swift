@@ -28,7 +28,7 @@ final class ViewController: UITableViewController, HUDDelegate {
     private var progressViews: [ProgressView] = []
     private var systemProgressView: UIProgressView?
 
-    // MARK: - Cached Indicator Cells (never reused)
+    // MARK: - Cached Indicator Cells (not dequeued)
 
     private var progressBarCell: IndicatorStripCell?
     private var progressCircleCell: IndicatorStripCell?
@@ -244,6 +244,14 @@ final class ViewController: UITableViewController, HUDDelegate {
             hud.delegate = self
         case .showStatus:
             viewModel.showStatusDemo(on: targetView)
+        case .graceTime:
+            viewModel.showGraceTime(on: targetView)
+        case .minShowTime:
+            viewModel.showMinShowTime(on: targetView)
+        case .customRotating:
+            viewModel.showCustomRotating(on: targetView)
+        case .animationStyles:
+            viewModel.showAnimationStyles(on: targetView)
         case .multipleHUDs:
             viewModel.showMultipleHUDs(on: targetView)
         case .modeSwitching:
@@ -256,6 +264,8 @@ final class ViewController: UITableViewController, HUDDelegate {
             viewModel.showDynamicType(on: targetView)
         case .liquidGlass:
             showLiquidGlassDemo()
+        case .voiceOver:
+            showVoiceOverDemo()
         case .presentVC:
             let vc = PresentViewController()
             let nav = UINavigationController(rootViewController: vc)
@@ -281,6 +291,14 @@ final class ViewController: UITableViewController, HUDDelegate {
         // Fallback for pre-iOS 26: just show a hint HUD
         let hud = HUD.show(to: targetView, mode: .text, label: "Requires iOS 26+")
         hud.hide(afterDelay: 2.0)
+    }
+
+    // MARK: - VoiceOver Demo
+
+    private func showVoiceOverDemo() {
+        let vc = AccessibilityViewController()
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
     }
 
     // MARK: - Navigation Bar Items

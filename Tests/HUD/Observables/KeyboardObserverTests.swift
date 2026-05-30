@@ -298,5 +298,76 @@ final class KeyboardObserverTests: XCTestCase {
 
         XCTAssertTrue(true, "Concurrent observer management should complete without crashes")
     }
+
+    // MARK: - Edge Case Notification Tests
+
+    func testNotificationWithoutUserInfo() {
+        let observer = MockKeyboardObservable()
+        mockObserver = observer
+        keyboardObserver.add(observer)
+
+        // Post notification without userInfo - should be ignored (guard early return)
+        let notification = Notification(
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil,
+            userInfo: nil
+        )
+        NotificationCenter.default.post(notification)
+
+        // Observer should NOT be called
+        XCTAssertEqual(observer.keyboardInfoChanges.count, 0, "Observer should not be called for notification without userInfo")
+
+        keyboardObserver.remove(observer)
+    }
+
+    func testNotificationWithoutFrameEndKey() {
+        let observer = MockKeyboardObservable()
+        mockObserver = observer
+        keyboardObserver.add(observer)
+
+        // Post notification with userInfo but missing keyboardFrameEndUserInfoKey
+        let userInfo: [AnyHashable: Any] = [
+            UIResponder.keyboardAnimationDurationUserInfoKey: 0.3
+        ]
+        let notification = Notification(
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil,
+            userInfo: userInfo
+        )
+        NotificationCenter.default.post(notification)
+
+        // Observer should NOT be called (guard fails on frameEnd)
+        XCTAssertEqual(observer.keyboardInfoChanges.count, 0, "Observer should not be called for notification without frameEnd")
+
+        keyboardObserver.remove(observer)
+    }
+
+    func testNotificationWithMissingOptionalFields() {
+        let observer = MockKeyboardObservable()
+        let expectation = XCTestExpectation(description: "Should handle missing optional fields")
+        observer.keyboardObserverExpectation = expectation
+        mockObserver = observer
+        keyboardObserver.add(observer)
+
+        // Only frameEnd is required, others use defaults
+        let userInfo: [AnyHashable: Any] = [
+            UIResponder.keyboardFrameEndUserInfoKey: CGRect(x: 0, y: 500, width: 320, height: 216)
+        ]
+        let notification = Notification(
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil,
+            userInfo: userInfo
+        )
+        NotificationCenter.default.post(notification)
+
+        wait(for: [expectation], timeout: 1.0)
+
+        let info = observer.keyboardInfoChanges.first!
+        XCTAssertEqual(info.animationDuration, 0.0, "Missing animation duration should default to 0")
+        XCTAssertEqual(info.animationCurve, 0, "Missing animation curve should default to 0")
+        XCTAssertEqual(info.frameBegin, .zero, "Missing frame begin should default to zero")
+
+        keyboardObserver.remove(observer)
+    }
 }
 #endif // os(iOS)

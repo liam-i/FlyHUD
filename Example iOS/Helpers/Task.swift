@@ -32,7 +32,7 @@ final class Task: NSObject, @unchecked Sendable {
         DispatchQueue.global().async {
             canceled = false
 
-            // 模拟一个任务的完成进度
+            // Simulate task completion progress
             var progressValue: Float = 0.0
             while progressValue < 1.0 {
                 if canceled { break }
@@ -40,7 +40,7 @@ final class Task: NSObject, @unchecked Sendable {
                 progressValue += 0.01 // 1 / 0.01 = 100
                 let value = progressValue
 
-                /// 回到主线程刷新UI
+                // Dispatch to main thread for UI update
                 DispatchQueue.main.async {
                     progress?(value)
                 }
@@ -115,7 +115,16 @@ extension Task: URLSessionDelegate, URLSessionDownloadDelegate {
         }
     }
 
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        guard error != nil else { return }
+        DispatchQueue.main.async {
+            Task.shared.progress = nil
+            Task.shared.completion = nil
+        }
+    }
+
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        guard totalBytesExpectedToWrite > 0 else { return }
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
         DispatchQueue.main.async {
             Task.shared.progress?(progress)

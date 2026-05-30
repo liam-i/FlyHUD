@@ -8,6 +8,7 @@
 
 import SwiftUI
 import FlyHUD
+import FlyHUDSwiftUI
 
 // MARK: - Layout & Positioning
 
@@ -327,7 +328,7 @@ struct TimingConfigView: View {
                         hud.minShowTime = 3.0
                     }
                     // Hide immediately, but HUD stays for 3s
-                    Task {
+                    Task { @MainActor in
                         try? await Task.sleep(for: .seconds(0.5))
                         hud.hide()
                     }

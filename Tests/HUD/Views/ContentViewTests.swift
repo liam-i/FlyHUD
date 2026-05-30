@@ -333,4 +333,264 @@ final class ContentViewTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - Motion Effects (Visible) Tests
+
+    func testMotionEffectsEnabledWhileVisible() {
+        contentView.isHidden = false
+        contentView.isMotionEffectsEnabled = true
+        XCTAssertGreaterThan(contentView.motionEffects.count, 0, "Motion effects should be added when visible")
+    }
+
+    func testMotionEffectsDisabledRemovesEffect() {
+        contentView.isHidden = false
+        contentView.isMotionEffectsEnabled = true
+        XCTAssertGreaterThan(contentView.motionEffects.count, 0)
+
+        contentView.isMotionEffectsEnabled = false
+        XCTAssertEqual(contentView.motionEffects.count, 0, "Motion effects should be removed when disabled")
+    }
+
+    func testMotionEffectsRemovedWhenHidden() {
+        contentView.isHidden = false
+        contentView.isMotionEffectsEnabled = true
+        XCTAssertGreaterThan(contentView.motionEffects.count, 0)
+
+        contentView.isHidden = true
+        XCTAssertEqual(contentView.motionEffects.count, 0, "Motion effects should be removed when hidden")
+    }
+
+    func testMotionEffectsNotAddedWhenHidden() {
+        contentView.isHidden = true
+        contentView.isMotionEffectsEnabled = true
+        XCTAssertEqual(contentView.motionEffects.count, 0, "Motion effects should not be added when hidden")
+    }
+
+    // MARK: - ObservedProgress with DisplayLink Tests
+
+    func testObservedProgressWithVisibleView() {
+        contentView.mode = .progress()
+        contentView.isHidden = false
+        let progress = Progress(totalUnitCount: 100)
+        contentView.observedProgress = progress
+        // Should add to DisplayLink (no crash)
+        XCTAssertNotNil(contentView.observedProgress)
+
+        // Clean up
+        contentView.observedProgress = nil
+    }
+
+    func testObservedProgressRemovedOnHide() {
+        contentView.mode = .progress()
+        contentView.isHidden = false
+        let progress = Progress(totalUnitCount: 100)
+        contentView.observedProgress = progress
+
+        contentView.isHidden = true
+        // Should remove from DisplayLink (no crash)
+        XCTAssertNotNil(contentView.observedProgress)
+
+        contentView.observedProgress = nil
+    }
+
+    func testUpdateScreenInDisplayLink() {
+        contentView.mode = .progress()
+        contentView.isHidden = false
+        let progress = Progress(totalUnitCount: 100)
+        progress.completedUnitCount = 50
+        contentView.observedProgress = progress
+
+        // Simulate display link callback
+        contentView.updateScreenInDisplayLink()
+
+        // Labels should be updated with progress descriptions
+        XCTAssertNotNil(contentView.label.text)
+
+        contentView.observedProgress = nil
+    }
+
+    func testUpdateScreenInDisplayLinkOutOfRange() {
+        contentView.mode = .progress()
+        contentView.isHidden = false
+        let progress = Progress(totalUnitCount: 0) // fractionCompleted will be indeterminate
+        contentView.observedProgress = progress
+
+        // Should not crash even with indeterminate progress
+        contentView.updateScreenInDisplayLink()
+
+        contentView.observedProgress = nil
+    }
+
+    // MARK: - Indicator Position with Mode Tests
+
+    func testIndicatorPositionLeadingWithIndicator() {
+        contentView.mode = .indicator()
+        contentView.indicatorPosition = .leading
+        XCTAssertEqual(contentView.indicatorPosition, .leading)
+    }
+
+    func testIndicatorPositionTrailingWithIndicator() {
+        contentView.mode = .indicator()
+        contentView.indicatorPosition = .trailing
+        XCTAssertEqual(contentView.indicatorPosition, .trailing)
+    }
+
+    func testIndicatorPositionBottomWithIndicator() {
+        contentView.mode = .indicator()
+        contentView.indicatorPosition = .bottom
+        XCTAssertEqual(contentView.indicatorPosition, .bottom)
+    }
+
+    func testIndicatorPositionChangeWithNoIndicator() {
+        contentView.mode = .text
+        contentView.indicatorPosition = .leading
+        XCTAssertEqual(contentView.indicatorPosition, .leading)
+    }
+
+    // MARK: - ContentColor with Different Indicator Types Tests
+
+    func testContentColorAppliedToActivityIndicator() {
+        let indicator = ActivityIndicatorView(style: .ballSpinFade)
+        contentView.mode = .custom(indicator)
+        contentView.contentColor = .green
+        XCTAssertEqual(indicator.color, .green)
+    }
+
+    func testContentColorAppliedToProgressView() {
+        let progressView = FlyProgressHUD.ProgressView(style: .round)
+        contentView.mode = .custom(progressView)
+        contentView.contentColor = .blue
+        XCTAssertEqual(progressView.progressTintColor, .blue)
+    }
+
+    func testContentColorAppliedToCustomView() {
+        let customView = UIView()
+        contentView.mode = .custom(customView)
+        contentView.contentColor = .purple
+        XCTAssertEqual(customView.tintColor, .purple)
+    }
+
+    func testContentColorNilDoesNotCrash() {
+        contentView.mode = .indicator()
+        contentView.contentColor = nil
+        // Should not crash - colors are managed individually
+        XCTAssertNil(contentView.contentColor)
+    }
+
+    // MARK: - Layout Alignment Tests
+
+    func testLayoutAlignmentLeading() {
+        contentView.layout = ContentView.Layout(alignment: .leading)
+        XCTAssertEqual(contentView.layout.alignment, .leading)
+        // Text alignment should follow
+        XCTAssertNotEqual(contentView.label.textAlignment, .center)
+    }
+
+    func testLayoutAlignmentTrailing() {
+        contentView.layout = ContentView.Layout(alignment: .trailing)
+        XCTAssertEqual(contentView.layout.alignment, .trailing)
+    }
+
+    func testLayoutWithMinSize() {
+        contentView.layout = ContentView.Layout(minSize: CGSize(width: 150, height: 150))
+        XCTAssertEqual(contentView.layout.minSize, CGSize(width: 150, height: 150))
+    }
+
+    func testLayoutWithSquare() {
+        contentView.layout = ContentView.Layout(isSquare: true)
+        XCTAssertTrue(contentView.layout.isSquare)
+    }
+
+    // MARK: - isHidden didSet Tests
+
+    func testIsHiddenChangesIndicatorVisibility() {
+        contentView.mode = .indicator()
+        contentView.isHidden = false
+        // indicator should be visible
+        contentView.isHidden = true
+        // Should not crash
+        XCTAssertTrue(contentView.isHidden)
+    }
+
+    // MARK: - VoiceOver Accessibility Tests
+
+    func testAccessibilityHintForIndicatorMode() {
+        contentView.mode = .indicator()
+        XCTAssertEqual(contentView.accessibilityHint, "Loading in progress")
+    }
+
+    func testAccessibilityHintForProgressMode() {
+        contentView.mode = .progress()
+        XCTAssertEqual(contentView.accessibilityHint, "Task in progress")
+    }
+
+    func testAccessibilityHintForTextMode() {
+        contentView.mode = .text
+        XCTAssertNil(contentView.accessibilityHint, "Text mode should have no hint")
+    }
+
+    func testAccessibilityHintForCustomIndicator() {
+        contentView.mode = .indicator(.circleStrokeSpin)
+        XCTAssertEqual(contentView.accessibilityHint, "Loading in progress")
+    }
+
+    func testAccessibilityHintForCustomProgress() {
+        contentView.mode = .progress(.round)
+        XCTAssertEqual(contentView.accessibilityHint, "Task in progress")
+    }
+
+    func testAccessibilityLabelCombinesLabels() {
+        contentView.label.text = "Loading"
+        contentView.detailsLabel.text = "Please wait"
+        XCTAssertEqual(contentView.accessibilityLabel, "Loading, Please wait")
+    }
+
+    func testAccessibilityLabelWithOnlyMainLabel() {
+        contentView.label.text = "Saving"
+        contentView.detailsLabel.text = nil
+        XCTAssertEqual(contentView.accessibilityLabel, "Saving")
+    }
+
+    func testAccessibilityLabelWhenEmpty() {
+        contentView.label.text = nil
+        contentView.detailsLabel.text = nil
+        XCTAssertNil(contentView.accessibilityLabel)
+    }
+
+    func testAccessibilityValueForProgressMode() {
+        contentView.mode = .progress()
+        contentView.progress = 0.75
+        XCTAssertEqual(contentView.accessibilityValue, "75%")
+    }
+
+    func testAccessibilityValueNilForTextMode() {
+        contentView.mode = .text
+        contentView.progress = 0.5
+        XCTAssertNil(contentView.accessibilityValue, "Text mode should not report progress value")
+    }
+
+    func testAccessibilityTraitsForIndicator() {
+        contentView.mode = .indicator()
+        XCTAssertTrue(contentView.accessibilityTraits.contains(.updatesFrequently))
+    }
+
+    func testAccessibilityTraitsForTextMode() {
+        contentView.mode = .text
+        XCTAssertTrue(contentView.accessibilityTraits.contains(.staticText))
+    }
+
+    func testAccessibilityCustomActionsWithButton() {
+        contentView.button.setTitle("Cancel", for: .normal)
+        contentView.button.addTarget(self, action: #selector(dummyAction), for: .touchUpInside)
+        let actions = contentView.accessibilityCustomActions
+        XCTAssertEqual(actions?.count, 1)
+        XCTAssertEqual(actions?.first?.name, "Cancel")
+    }
+
+    func testAccessibilityCustomActionsNilWithoutButton() {
+        contentView.button.setTitle(nil, for: .normal)
+        XCTAssertNil(contentView.accessibilityCustomActions)
+    }
+
+    @objc private func dummyAction() {}
 }

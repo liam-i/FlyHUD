@@ -4,16 +4,17 @@
 
 ```text
 Tests/
-├── Tests.swift                        # Integration tests (show/hide lifecycle)
 ├── HUD/
 │   ├── HUDTests.swift                 # HUD class: init, properties, show/hide, static API
+│   ├── HUDStressTests.swift           # Concurrent/stress/performance scenarios
 │   ├── ModelTests.swift               # Layout, Animation, Damping, KeyboardGuide
 │   ├── Extensions/
 │   │   ├── ExtensionsTests.swift      # UIView helpers (RTL, stackView, constraints)
 │   │   └── HUDExtendedTests.swift     # HUDExtension protocol, notEqual, then
 │   ├── Observables/
 │   │   ├── DisplayLinkTests.swift     # Singleton, delegates, weak refs, concurrency
-│   │   └── KeyboardObserverTests.swift # KeyboardInfo, observers, notifications (iOS)
+│   │   ├── KeyboardObserverTests.swift # KeyboardInfo, observers, notifications (iOS)
+│   │   └── UnfairLockTests.swift      # Mutex backport, thread-safety, Sendable
 │   ├── Protocols/
 │   │   ├── ActivityIndicatorViewableTests.swift
 │   │   ├── ProgressViewableTests.swift
@@ -26,42 +27,90 @@ Tests/
 │       └── ButtonTests.swift          # RoundedCorners, border, title, highlight
 ├── IndicatorHUD/
 │   └── ActivityIndicatorViewTests.swift # 4 styles, animation builders, color
-└── ProgressHUD/
-    └── ProgressViewTests.swift        # 5 styles, animation mapping, default sizes
+├── ProgressHUD/
+│   └── ProgressViewTests.swift        # 5 styles, animation mapping, default sizes
+└── SwiftUIHUD/
+    ├── SwiftUIHUDTests.swift          # ViewModifier API, HUDHostView, convenience modifiers
+    ├── SwiftUIHUDIntegrationTests.swift # Coordinator lifecycle, custom view, item binding
+    └── SwiftUIHUDStressTests.swift    # 25 stress scenarios: rapid create/destroy, concurrency, memory
 ```
 
 ## Running Tests
 
-```bash
-# All tests (requires iOS Simulator)
-xcodebuild test \
-  -scheme "Example iOS" \
-  -destination 'platform=iOS Simulator,OS=latest,arch=arm64' \
-  -quiet
+### Quick Start
 
-# Specific test class
-xcodebuild test \
-  -scheme "Example iOS" \
-  -destination 'platform=iOS Simulator,OS=latest,arch=arm64' \
-  -only-testing:"Example Tests/HUDTests"
+```bash
+# Run all unit tests
+./scripts/build.sh test
+
+# Run all UI tests
+./scripts/build.sh test ui
+
+# Run both unit + UI tests
+./scripts/build.sh test all
+```
+
+### By Module
+
+```bash
+# HUD core tests
+./scripts/build.sh test HUDTests
+
+# HUD stress tests
+./scripts/build.sh test HUDStressTests
+
+# Model tests
+./scripts/build.sh test ModelTests
+
+# SwiftUI tests
+./scripts/build.sh test SwiftUIHUDTests
+./scripts/build.sh test SwiftUIHUDIntegrationTests
+./scripts/build.sh test SwiftUIHUDStressTests
+
+# Indicator tests
+./scripts/build.sh test ActivityIndicatorViewTests
+
+# Progress tests
+./scripts/build.sh test ProgressViewTests
+```
+
+### Single Method
+
+```bash
+./scripts/build.sh test HUDTests/testBasicShow
+```
+
+### Build Only (no simulator needed)
+
+```bash
+./scripts/build.sh build "Example iOS"
 ```
 
 > **Note:** `swift test` does not work because UIKit is unavailable on macOS command-line.
+> Use `./scripts/build.sh swift` to verify SPM compilation.
+
+### List Available Schemes & Platforms
+
+```bash
+./scripts/build.sh list
+```
 
 ## Coverage
 
-| Module | Test File Count | Key Areas |
+| Module | Test Files | Key Areas |
 | ------ | :-: | --- |
-| HUD (core) | 11 | Init, show/hide, grace/minShow time, count, animation, keyboard, delegates |
+| HUD (core) | 16 | Init, show/hide, grace/minShow time, count, animation, keyboard, lock, delegates, stress, views, protocols |
 | IndicatorHUD | 1 | 4 styles, animation builders, color, style switching |
 | ProgressHUD | 1 | 5 styles, default sizes, progress tint, line width |
-| Integration | 1 | Full lifecycle: show → animate → delay → hide → dealloc |
+| SwiftUIHUD | 3 | Modifiers, coordinators, convenience API, integration, stress (25 scenarios) |
 
-Total: 279 tests, 0 failures.
+Total: 699 tests, 0 failures.
 
 ## Notes
 
+* All test classes use `@MainActor` with `override func setUp() async throws`
 * KeyboardObserver tests run only on iOS (`#if os(iOS)`)
-* Integration tests (`Tests.swift`) require a key window (host app)
 * Performance tests use `measure {}` blocks for critical paths
 * Memory tests use `weak` references + `autoreleasepool`
+* SwiftUI stress tests cover up to 5000 rapid cycles and 100 concurrent coordinators
+* Use `animated: false` in tests to avoid flaky timing issues

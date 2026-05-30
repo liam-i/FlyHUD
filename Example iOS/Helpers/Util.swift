@@ -2,7 +2,7 @@
 //  Util.swift
 //  Example iOS
 //
-//  Created by liam on 2024/1/23.
+//  Created by Liam on 2024/1/23.
 //  Copyright © 2024 Liam. All rights reserved.
 //
 
@@ -28,45 +28,7 @@ enum Color: String, CaseIterable {
 extension UIImageView {
     convenience init(named: String) {
         self.init(image: UIImage(named: named)?.withRenderingMode(.alwaysTemplate))
-    }
-}
-
-@MainActor
-enum Alert {
-    static func `switch`(_ title: String, selected: @Sendable @escaping(_ isOn: Bool) -> Void, selected1: @Sendable @escaping(Bool) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then {
-            $0.addAction(UIAlertAction(title: "off", style: .destructive, handler: { _ in
-                selected(false); selected1(false)
-            }))
-            $0.addAction(UIAlertAction(title: "on", style: .default, handler: { _ in
-                selected(true); selected1(true)
-            }))
-            UIApplication.getKeyWindow?.rootViewController?.present($0, animated: true)
-        }
-    }
-    static func textField(_ title: String, selected: @Sendable @escaping(_ value: CGFloat) -> Void, selected1: @Sendable @escaping(CGFloat) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then { alert in
-            alert.addTextField { textField in
-                textField.keyboardType = .numberPad
-            }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { _ in
-                let value = alert.textFields?.first?.floatOfText ?? 0.0
-                selected(value); selected1(value)
-            }))
-            UIApplication.getKeyWindow?.rootViewController?.present(alert, animated: true)
-        }
-    }
-    static func list<T: Sendable>(_ title: String, list: [T], selected: @Sendable @escaping(T) -> Void, selected1: @Sendable @escaping(T) -> Void) {
-        UIAlertController(title: title, message: nil, preferredStyle: .alert).h.then { alert in
-            list.forEach { value in
-                alert.addAction(UIAlertAction(title: String(describing: value), style: .default, handler: { _ in
-                    selected(value); selected1(value)
-                }))
-            }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            UIApplication.getKeyWindow?.rootViewController?.present(alert, animated: true)
-        }
+        isAccessibilityElement = false
     }
 }
 

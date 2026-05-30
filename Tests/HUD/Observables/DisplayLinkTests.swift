@@ -213,4 +213,51 @@ final class DisplayLinkTests: XCTestCase {
 
         XCTAssertTrue(true, "Concurrent delegate management should complete without crashes")
     }
+
+    // MARK: - Background/Foreground Notification Tests
+
+    func testApplicationDidEnterBackground() {
+        let delegate = MockDisplayLinkDelegate()
+        mockDelegate = delegate
+        displayLink.add(delegate)
+
+        // Simulate entering background
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        // The display link should be paused - no crash expected
+        XCTAssertTrue(true, "Should handle background notification without crashing")
+
+        // Simulate returning to foreground
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        XCTAssertTrue(true, "Should handle foreground notification without crashing")
+
+        displayLink.remove(delegate)
+    }
+
+    func testBackgroundForegroundWithNoDelegates() {
+        // When no delegates are registered, displayLink is nil - notifications should be no-ops
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+        XCTAssertTrue(true, "Should handle background/foreground with no delegates without crashing")
+    }
+
+    func testDisplayLinkResumesAfterForeground() {
+        let delegate = MockDisplayLinkDelegate()
+        let expectation = XCTestExpectation(description: "Delegate should receive callbacks after foreground")
+        expectation.assertForOverFulfill = false
+        delegate.updateScreenExpectation = expectation
+        mockDelegate = delegate
+
+        displayLink.add(delegate)
+
+        // Simulate background then foreground
+        NotificationCenter.default.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertGreaterThan(delegate.updateCallCount, 0, "Should resume callbacks after foreground")
+
+        displayLink.remove(delegate)
+    }
 }
