@@ -15,9 +15,9 @@ Do NOT wrap the response in Markdown code blocks (e.g. ```). Output the raw comm
 
 <type>(<scope>): <subject>
 
-<body>
+[body]
 
-<footer>
+[footer]
 
 ## Cross-module change (multiple scopes)
 
@@ -25,9 +25,11 @@ When a single commit modifies multiple independent modules, separate scopes with
 
 <type>(<scope1>,<scope2>): <subject>
 
-<body>
+[body]
 
-<footer>
+[footer]
+
+> `[body]` is conditionally required (see below). `[footer]` is always optional.
 
 Scope selection rules (by priority):
 
@@ -56,7 +58,7 @@ Use the following project-specific scopes. Determine scope based on actual file 
 
 - `hud` — `Sources/HUD/` (HUD.swift, Model.swift, and other core files)
 - `views` — `Sources/HUD/Views/` (ContentView, BackgroundView, BezelView, etc.)
-- `animation` — `Sources/HUD/Extensions/` (animation-related extensions)
+- `extensions` — `Sources/HUD/Extensions/` (UIKit/Foundation convenience extensions)
 - `observables` — `Sources/HUD/Observables/` (DisplayLink, KeyboardObserver, UnfairLock)
 - `protocols` — `Sources/HUD/Protocols/` (protocol definitions)
 
@@ -64,6 +66,7 @@ Use the following project-specific scopes. Determine scope based on actual file 
 
 - `indicator` — `Sources/IndicatorHUD/` (activity indicator views)
 - `progress` — `Sources/ProgressHUD/` (progress views)
+- `swiftui` — `Sources/SwiftUIHUD/` (SwiftUI modifiers and host bridge)
 
 **Example Apps**
 
@@ -74,12 +77,14 @@ Use the following project-specific scopes. Determine scope based on actual file 
 **Tests**
 
 - `test` — `Tests/` (unit tests, stress tests)
+- `uitest` — `UITests/` (UI tests, accessibility tests)
 
 **Project Configuration**
 
-- `docs` — `Sources/HUD/Documentation.docc/`, `README.md`, `AGENTS.md`, etc.
+- `docs` — `Sources/HUD/Documentation.docc/`, `.github/*.md`, `CLAUDE.md`, and root `*.md` files (`README.md`, `README_CN.md`, `AGENTS.md`, `CHANGELOG.md`, `release-notes.md`)
 - `deps` — `Package.swift`, `Package@swift-6.0.swift`, `FlyHUD.podspec`
 - `project` — `FlyHUD.xcodeproj/`, `FlyHUD.xcworkspace/`
+- `scripts` — `scripts/` (build.sh, build-docs.sh)
 - `ci` — CI/CD pipeline configuration, GitHub Actions
 - `all` — broad cross-module impact (3+ modules affected)
 
@@ -111,7 +116,7 @@ Use the following project-specific scopes. Determine scope based on actual file 
 # footer (optional)
 
 - Breaking changes: start with `BREAKING CHANGE:` and describe impact and migration path
-- Closing issues: start with `ISSUES CLOSED:`
+- Closing issues: use GitHub auto-close keywords, e.g. `Closes #123` or `Fixes #456`
 
 # Prohibitions
 
@@ -159,61 +164,16 @@ feat(hud,indicator): add Liquid Glass style HUD support
 - Adapt ActivityIndicatorView contrast for glass backgrounds
 - Requires iOS 26+ compile environment
 
-test(test,hud): add HUD lifecycle unit tests
+refactor(hud,test): extract HUD timer logic into dedicated helper
 
-- Add timing accuracy tests for graceTime and minShowTime
-- Use animated: false to avoid animation timing interference
+- Move graceTime/minShowTime scheduling from HUD.swift to TimerScheduler
+- Update HUDTests to use new helper directly for timing assertions
+- Reduces HUD.swift by ~40 lines
 
-## 多 scope 提交
+## Commits without body (simple changes)
 
-feat(domain,application): 新增物品过期提醒 UseCase 完整链路
+fix(views): fix label truncation when text exceeds bounds
 
-- Domain: 定义 ScheduleExpiryRemindersUseCase 协议
-- Application: 实现批量过期通知调度逻辑
-- 支持 daily/weekly/monthly 三种频率
+style(hud): normalize import ordering
 
-fix(inventory,uifoundation): 修复空间详情页导航栈深度丢失
-
-- SpaceDetailView NavigationLink 目标改为 AppDestination 枚举
-- AppRouter 补充 .storageUnitDetail case 处理递归导航
-
-refactor(di,infra,application): DI 注册迁移至协议+实现双注册模式
-
-- Composition.swift 每个 Repository 同时注册协议与具体类型
-- 解决 UseCase 注入时 resolve 返回 nil 的问题
-
-## Lattice 架构常见提交模式
-
-### 新增完整功能链路（Domain → Application → Infrastructure → DI → Feature）
-
-feat(domain,application,infra): 新增物品过期提醒完整链路
-
-- Domain: 定义 ExpiryReminder Entity 和 ReminderRepository 协议
-- Application: 实现 ScheduleExpiryRemindersUseCase（struct + Sendable）
-- Infrastructure: 实现 ReminderRepositoryImpl（actor + SwiftData）
-- DI: Composition.swift 注册协议与实现双绑定
-
-### Domain Entity 迁移（class → struct）
-
-refactor(domain): 迁移 Item Entity 从 class 至纯 struct
-
-- Item 改为 struct + Sendable，移除 @Model 标注
-- 对象引用替换为 ID 引用（parentStorageUnit → parentStorageUnitId）
-- 所有消费方适配值类型语义（let → var）
-
-BREAKING CHANGE: Item 不再是 PersistentModel，消费方需通过 Repository 持久化
-
-### Repository actor 迁移
-
-refactor(infra): 将 SpaceRepository 从 class 迁移至 actor
-
-- SpaceRepositoryImpl 标记为 actor 消除数据竞争
-- 内部 SwiftData 操作改用 SDSpace 模型映射
-- toDomain() / update(from:) 实现双向转换
-
-### 合规修复（脚本检测到违规）
-
-fix(inventory): 修复 ViewModel 缺少 @MainActor 标注的合规违规
-
-- InventoryViewModel 补充 @MainActor @Observable 标注
-- 符合 Lattice verify-viewmodel-rules.sh 检查要求
+test(test): add missing assertion for hide(afterDelay:)

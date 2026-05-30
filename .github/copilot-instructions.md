@@ -1,56 +1,15 @@
 # FlyHUD - GitHub Copilot Instructions
 
-Refer to [AGENTS.md](../AGENTS.md) for the project overview and sub-directory guides.
+> [AGENTS.md](../AGENTS.md) is the primary reference (auto-loaded alongside this file). This file adds Copilot-specific notes only.
 
-## Quick Reference
+## Copilot-Specific Tips
 
-- **Swift 5.0+**, iOS 13+, tvOS 13+, visionOS 1.0+
-- **SPM targets**: FlyHUD, FlyIndicatorHUD, FlyProgressHUD
-- **Dependency rule**: FlyHUD must **never** import Indicator or Progress modules
-- **Example iOS**: UIScene lifecycle, programmatic UI, MVVM-light
-- Indicator cells are cached (not reuse-pooled) — never `dequeueReusableCell`
-
-## Key API Patterns
-
-```swift
-// Show
-HUD.show(to: view, mode: .indicator(.large), label: "Loading")
-HUD.show(to: view, using: .animation(.zoomInOut, damping: .default), mode: .custom(myView)) { hud in
-    hud.contentView.contentColor = .white
-}
-HUD.showStatus(to: view, duration: 2.0, mode: .text, label: "Saved")
-
-// Hide
-HUD.hide(for: view)
-hud.hide(afterDelay: 1.5)
-```
-
-## Swift 6 / Concurrency
-
-- `@MainActor` inherited on UIView subclasses — don't add redundantly
-- `#if compiler(>=6.2) isolated deinit` with `#else MainActor.assumeIsolated {}` fallback
-- Tests use `override func setUp() async throws` for `@MainActor` classes
-- Two manifests: `Package.swift` (5.9) + `Package@swift-6.0.swift` (6.0)
-
-## Build & Test
-
-```bash
-swift build && swift test
-# Xcode: Scheme "Example iOS" → iPhone 17 Pro simulator
-```
-
-## Common Pitfalls
-
-- `graceTime` must be set before `show()` — no effect after
-- Use `animated: false` in unit tests to avoid timing issues
-- Don't use `.swiftLanguageMode()` in Package.swift (only tools-version 6.0+)
-- Xcode auto-syncs `Example iOS/App/` files — no pbxproj edits needed
-
-## Detailed Guides
-
-- [`Sources/AGENTS.md`](../Sources/AGENTS.md) — API surface & protocols
-- [`Sources/HUD/Documentation.docc/AGENTS.md`](../Sources/HUD/Documentation.docc/AGENTS.md) — DocC writing rules
-- [`Example iOS/AGENTS.md`](../Example iOS/AGENTS.md) — Demo app patterns
-- [`Example SwiftUI/AGENTS.md`](../Example SwiftUI/AGENTS.md) — SwiftUI bridge pattern
-- [`Example tvOS/AGENTS.md`](../Example tvOS/AGENTS.md) — tvOS scene lifecycle
-- [`Tests/AGENTS.md`](../Tests/AGENTS.md) — Test conventions
+- After editing `Example iOS/` files, check `get_errors` — Xcode auto-syncs may surface type errors
+- `swift test` doesn't work (UIKit unavailable on macOS CLI) — use `./scripts/build.sh test`
+- Read sub-directory `AGENTS.md` files on demand when working in those areas:
+  - [`Sources/AGENTS.md`](../Sources/AGENTS.md) — API surface & protocols
+  - [`Sources/HUD/Documentation.docc/AGENTS.md`](../Sources/HUD/Documentation.docc/AGENTS.md) — DocC writing rules
+  - [`Example iOS/AGENTS.md`](../Example%20iOS/AGENTS.md) — Demo app patterns
+  - [`Example SwiftUI/AGENTS.md`](../Example%20SwiftUI/AGENTS.md) — SwiftUI bridge pattern
+  - [`Example tvOS/AGENTS.md`](../Example%20tvOS/AGENTS.md) — tvOS scene lifecycle
+  - [`Tests/AGENTS.md`](../Tests/AGENTS.md) — Test conventions
