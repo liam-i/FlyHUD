@@ -382,16 +382,17 @@ if [[ "${1:-}" == "deploy" ]]; then
     # Step 2: Update version directory
     print_step 2 "Updating ${DEPLOY_VERSION}/ directory"
 
-    # For "main": always replace. For versioned releases: overwrite this version
-    # but never delete other existing version directories.
+    # Safety guard: DEPLOY_VERSION must be a valid directory name (not empty, not path traversal)
+    if [[ -z "$DEPLOY_VERSION" || "$DEPLOY_VERSION" == "/" || "$DEPLOY_VERSION" == "." || "$DEPLOY_VERSION" == ".." || "$DEPLOY_VERSION" == */* ]]; then
+        print_error "Invalid DEPLOY_VERSION: '${DEPLOY_VERSION}'. Must be a simple name (e.g., 'main' or '1.6.0')."
+    fi
+
+    # Explicitly tell git to track deletions (more reliable than rm + git add -A
+    # in shallow clones where git may fail to detect filesystem deletions).
     if [[ -d "${DEPLOY_TEMP}/${DEPLOY_VERSION}" ]]; then
-        if [[ "${DEPLOY_VERSION}" == "main" ]]; then
-            rm -rf "${DEPLOY_TEMP}/${DEPLOY_VERSION}"
-            print_info "" "Removed old main/ directory"
-        else
-            print_warn "Version ${DEPLOY_VERSION}/ already exists — overwriting"
-            rm -rf "${DEPLOY_TEMP}/${DEPLOY_VERSION}"
-        fi
+        git -C "${DEPLOY_TEMP}" rm -rf "${DEPLOY_VERSION}" --quiet 2>/dev/null || true
+        rm -rf "${DEPLOY_TEMP:?}/${DEPLOY_VERSION:?}"
+        print_info "" "Removed old ${DEPLOY_VERSION}/ directory"
     fi
 
     cp -R "${EXPORT_DEST}" "${DEPLOY_TEMP}/${DEPLOY_VERSION}"
@@ -421,9 +422,14 @@ if [[ "${1:-}" == "deploy" ]]; then
         print_warn "No changes to commit (documentation unchanged)"
     fi
 
-    # Push — surface errors to user
-    if ! git -C "${DEPLOY_TEMP}" push -u origin "${DEPLOY_BRANCH}" 2>&1; then
-        print_error "git push failed. Check remote access and authentication."
+    # Push — use force-with-lease for safety: only overwrites remote if no one else
+    # has pushed since our clone. Falls back to --force if remote diverged
+    # (acceptable for automated docs deployment where we always want our state to win).
+    if ! git -C "${DEPLOY_TEMP}" push --force-with-lease origin "${DEPLOY_BRANCH}" 2>&1; then
+        print_warn "force-with-lease rejected (remote may have diverged), retrying with --force"
+        if ! git -C "${DEPLOY_TEMP}" push --force origin "${DEPLOY_BRANCH}" 2>&1; then
+            print_error "git push failed. Check remote access and authentication."
+        fi
     fi
     print_success "Pushed to ${DEPLOY_BRANCH}"
 
@@ -434,6 +440,12 @@ if [[ "${1:-}" == "deploy" ]]; then
     printf "\n"
     print_info "Version:" "${DEPLOY_VERSION}"
     print_info "Commit:" "${COMMIT_MSG}"
+    printf "\n"
+    printf "  ${BOLD}Documentation URL:${RESET}\n"
+    printf "  ${DIM}  https://liam-i.github.io/FlyHUD/${DEPLOY_VERSION}/documentation/flyhud${RESET}\n"
+    printf "\n"
+    printf "  ${DIM}Note: GitHub Pages CDN may cache old content for up to 10 minutes.${RESET}\n"
+    printf "  ${DIM}If the browser shows stale content, clear site data or use incognito.${RESET}\n"
     printf "\n"
     exit 0
 fi

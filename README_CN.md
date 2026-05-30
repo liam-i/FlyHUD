@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD033 -->
 # FlyHUD
 
 ![FlyHUD: Easy-to-use HUD in Swift](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/logo-dark.png#gh-dark-mode-only)
@@ -250,6 +251,12 @@ FlyHUD 提供了完整的 VoiceOver 和无障碍支持：
 
 * [main](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)
 * [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
+
+<details>
+  <summary>
+  其他版本
+  </summary>
+
 * [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)
 * [1.4.0](https://liam-i.github.io/FlyHUD/1.4.0/documentation/lphud)
