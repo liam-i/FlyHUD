@@ -20,17 +20,11 @@ This is a lightweight and easy-to-use HUD designed to display the progress and s
 
 ### iOS
 
-[![iOS Screenshot 1](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-1.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-1.png)
-[![iOS Screenshot 2](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-2.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-2.png)
-[![iOS Screenshot 3](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-3.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-3.png)
-[![iOS Screenshot 4](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-4.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-4.png)
-[![iOS Screenshot 5](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-5.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-5.png)
-[![iOS Screenshot 6](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-6.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-6.png)
+<a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-1.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-1.png" width="13%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-2.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-2.png" width="13%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-3.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-3.png" width="13%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-4.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-4.png" width="13%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-5.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-5.png" width="13%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/iOS-6.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/iOS-6.png" width="30%"></a>
 
 ### tvOS & visionOS
 
-[![tvOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/tvOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/tvOS.png)
-[![visionOS](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/visionOS.png)](https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/visionOS.png)
+<a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/tvOS.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/tvOS.png" width="49%"></a> <a href="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2/visionOS.png"><img src="https://raw.githubusercontent.com/wiki/liam-i/FlyHUD/Screenshots/v2-small/visionOS.png" width="49%"></a>
 
 ## Requirements
 
