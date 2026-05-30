@@ -1,20 +1,26 @@
+# =========================
 # macOS
+# =========================
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
 
+# =========================
 # Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+# =========================
 
 ## User settings
 xcuserdata/
 
-## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+## Build products
+build/
+build.out/
+DerivedData/
+
+## Xcode compatibility (legacy)
 *.xcscmblueprint
 *.xccheckout
-
-## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
-build/
-DerivedData/
 *.moved-aside
 *.pbxuser
 !default.pbxuser
@@ -25,7 +31,7 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 
-## Obj-C/Swift specific
+## Obj-C/Swift intermediate files
 *.hmap
 
 ## App packaging
@@ -33,68 +39,66 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 
+## Test results
+*.xcresult
+
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
 
+## Xcode Cloud
+ci_scripts/ci_post_clone.sh.log
+
+# =========================
 # Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-# *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-.swiftpm
-
+# =========================
 .build/
+.swiftpm
+Package.resolved
 
+# =========================
 # CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+# =========================
+# Pods/ directory not committed (re-install via `pod install`)
+# Pods/
 
-# Pods/Headers/
-# Pods/Local Podspecs/
-# Pods/Manifest.lock
-# Pods/Pods.xcodeproj/
-# Pods/FlyHUD.xcodeproj/xcuserdata/
-# Pods/Target Support Files/Pods-*/
-
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
-
+# =========================
 # Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
+# =========================
 Carthage/Build/
+# Carthage/Checkouts/
 
-# Accio dependency management
-Dependencies/
-.accio/
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
-
+# =========================
+# Build & CI
+# =========================
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-# Code Injection
-#
-# After new code Injection tools there's a generated folder /iOSInjectionProject
-# https://github.com/johnno1962/injectionforxcode
+# =========================
+# IDE & Editor
+# =========================
+.idea/
+.vscode/settings.json
+*.swp
+*~
 
+# =========================
+# Security & Signing
+# =========================
+*.p8
+*.p12
+*.key
+*.pem
+
+# =========================
+# Miscellaneous
+# =========================
+*.log
+*.orig
 iOSInjectionProject/
 
-build.out/
+# Accio dependency management
+Dependencies/
+.accio/

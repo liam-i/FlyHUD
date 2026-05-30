@@ -48,9 +48,10 @@ dependencies: [
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "FlyHUD", package: "FlyHUD"),         // Optional
-            .product(name: "FlyProgressHUD", package: "FlyHUD"), // Optional
-            .product(name: "FlyIndicatorHUD", package: "FlyHUD") // Optional
+            .product(name: "FlyHUD", package: "FlyHUD"),           // Optional
+            .product(name: "FlyHUDSwiftUI", package: "FlyHUD"),    // Optional
+            .product(name: "FlyProgressHUD", package: "FlyHUD"),   // Optional
+            .product(name: "FlyIndicatorHUD", package: "FlyHUD")   // Optional
         ])
 ]
 ```
@@ -59,7 +60,7 @@ targets: [
 
 If you are using Xcode, then you should:
 
-* File > Swift Packages > Add Package Dependency
+* File > Add Package Dependencies...
 * Add `https://github.com/liam-i/FlyHUD.git`
 * Select "Up to Next Minor" with "1.6.0"
 
@@ -78,7 +79,7 @@ platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do
-  # Use the FlyHUD, FlyIndicatorHUD and FlyProgressHUD components.
+  # Use all components (FlyHUD, FlyIndicatorHUD, FlyProgressHUD and FlyHUDSwiftUI).
   pod 'FlyHUD', '~> 1.6.0'
 
   # Or, just use the FlyHUD component.
@@ -89,6 +90,9 @@ target 'MyApp' do
 
   # Or, just use the FlyHUD and FlyProgressHUD components.
   pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
+
+  # Or, just use the FlyHUD and FlyHUDSwiftUI components.
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUDSwiftUI']
 end
 ```
 
@@ -106,6 +110,17 @@ github "liam-i/FlyHUD" ~> 1.6.0
 ```
 
 And run `carthage update --platform iOS --use-xcframeworks`.
+
+This produces the following XCFrameworks in `Carthage/Build/`:
+
+| Framework | Description |
+| --------- | ----------- |
+| `FlyHUD.xcframework` | Core HUD (required) |
+| `FlyIndicatorHUD.xcframework` | Activity indicators (depends on FlyHUD) |
+| `FlyProgressHUD.xcframework` | Progress views (depends on FlyHUD) |
+| `FlyHUDSwiftUI.xcframework` | SwiftUI bridge (depends on FlyHUD) |
+
+Drag the frameworks you need into your target's **Frameworks, Libraries, and Embedded Content** section and set them to **Embed & Sign**.
 
 ## Usage
 
@@ -171,9 +186,62 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD is a UI class and should therefore only be accessed on the main thread.
 
+### SwiftUI
+
+FlyHUD provides native SwiftUI support via the `FlyHUDSwiftUI` module:
+
+```swift
+import FlyHUDSwiftUI
+
+struct ContentView: View {
+    @State private var isLoading = false
+
+    var body: some View {
+        Button("Load") { isLoading = true }
+            .hudLoading(isPresented: $isLoading, label: "Loading...")
+    }
+}
+```
+
+More declarative modifiers are available:
+
+```swift
+// Boolean-driven HUD with full configuration
+.hud(isPresented: $isLoading) { hud in
+    hud.contentView.mode = .indicator()
+    hud.contentView.label.text = "Please wait..."
+}
+
+// Self-dismissing toast
+.hudToast(isPresented: $showSuccess, label: "Saved!")
+
+// Progress tracking
+.hudProgress(isPresented: $isUploading, progress: $progress, label: "Uploading")
+```
+
+> [!TIP]
+> See the [SwiftUI Integration guide](https://liam-i.github.io/FlyHUD/main/documentation/flyhud/swiftui-integration) for complete documentation.
 For more examples, including how to use the HUD with asynchronous operations such as URLSession, and how to customize the HUD style, take a look at the bundled example project. Extensive API documentation is available [in the API docs](https://liam-i.github.io/FlyHUD/main/documentation/flyhud).
 
 To run the example project, clone the repo and open `FlyHUD.xcworkspace` in Xcode.
+
+## Accessibility
+
+FlyHUD provides comprehensive VoiceOver and accessibility support:
+
+- **Modal focus** — `accessibilityViewIsModal` prevents VoiceOver from navigating behind the HUD
+- **Automatic focus management** — VoiceOver focus moves to the HUD on show and returns to content on hide
+- **Escape gesture** — Two-finger Z-scrub (`accessibilityPerformEscape`) dismisses the HUD
+- **Contextual hints** — `accessibilityHint` provides context ("Loading in progress" / "Task in progress")
+- **Combined announcements** — Label + details text are read as a single coherent description
+- **Progress updates** — Milestone announcements at 25% intervals; `accessibilityValue` reports percentage
+- **Button exposure** — Action buttons are discoverable via `accessibilityCustomActions` (swipe up/down)
+- **Dynamic updates** — Text/mode changes while the HUD is visible trigger VoiceOver re-reads
+- **Event delivery sync** — `isEventDeliveryEnabled` keeps `accessibilityViewIsModal` in sync; when touches pass through, VoiceOver focus can too
+- **Dynamic Type** — Opt-in font scaling via `isDynamicTypeEnabled`
+
+> [!TIP]
+> When using `.custom(UIView)` mode, set `isAccessibilityElement = false` on your custom view to avoid duplicate announcements.
 
 ## Documentation
 

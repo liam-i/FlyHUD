@@ -48,9 +48,10 @@ dependencies: [
 targets: [
     .target(
         name: "MyTarget", dependencies: [
-            .product(name: "FlyHUD", package: "FlyHUD"),         // 可选
-            .product(name: "FlyProgressHUD", package: "FlyHUD"), // 可选
-            .product(name: "FlyIndicatorHUD", package: "FlyHUD") // 可选
+            .product(name: "FlyHUD", package: "FlyHUD"),           // 可选
+            .product(name: "FlyHUDSwiftUI", package: "FlyHUD"),    // 可选
+            .product(name: "FlyProgressHUD", package: "FlyHUD"),   // 可选
+            .product(name: "FlyIndicatorHUD", package: "FlyHUD")   // 可选
         ])
 ]
 ```
@@ -59,7 +60,7 @@ targets: [
 
 如果你使用 Xcode，那么你应该：
 
-* File > Swift Packages > Add Package Dependency
+* File > Add Package Dependencies...
 * Add `https://github.com/liam-i/FlyHUD.git`
 * Select "Up to Next Minor" with "1.6.0"
 
@@ -78,7 +79,7 @@ platform :ios, '13.0'
 use_frameworks!
 
 target 'MyApp' do
-  # 使用 FlyHUD、FlyIndicatorHUD 和 FlyProgressHUD 组件。
+  # 使用所有组件（FlyHUD、FlyIndicatorHUD、FlyProgressHUD 和 FlyHUDSwiftUI）。
   pod 'FlyHUD', '~> 1.6.0'
 
   # 或者，只使用 FlyHUD 组件。
@@ -89,6 +90,9 @@ target 'MyApp' do
 
   # 或者，只使用 FlyHUD 和 FlyProgressHUD 组件。
   pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyProgressHUD']
+
+  # 或者，只使用 FlyHUD 和 FlyHUDSwiftUI 组件。
+  pod 'FlyHUD', '~> 1.6.0', :subspecs => ['FlyHUDSwiftUI']
 end
 ```
 
@@ -106,6 +110,17 @@ github "liam-i/FlyHUD" ~> 1.6.0
 ```
 
 并运行 `carthage update --platform iOS --use-xcframeworks`。
+
+这将在 `Carthage/Build/` 中生成以下 XCFrameworks：
+
+| Framework | 描述 |
+| --------- | ---- |
+| `FlyHUD.xcframework` | 核心 HUD（必需） |
+| `FlyIndicatorHUD.xcframework` | 活动指示器（依赖 FlyHUD） |
+| `FlyProgressHUD.xcframework` | 进度视图（依赖 FlyHUD） |
+| `FlyHUDSwiftUI.xcframework` | SwiftUI 桥接（依赖 FlyHUD） |
+
+将所需的 frameworks 拖入目标的 **Frameworks, Libraries, and Embedded Content** 部分，并设置为 **Embed & Sign**。
 
 ## 用法
 
@@ -171,9 +186,63 @@ HUD.showStatus(to: view, label: "You have a message.") {
 > [!WARNING]
 > HUD 是一个 UI 类，因此只能在主线程上访问。
 
+### SwiftUI
+
+FlyHUD 通过 `FlyHUDSwiftUI` 模块提供原生 SwiftUI 支持：
+
+```swift
+import FlyHUDSwiftUI
+
+struct ContentView: View {
+    @State private var isLoading = false
+
+    var body: some View {
+        Button("Load") { isLoading = true }
+            .hudLoading(isPresented: $isLoading, label: "Loading...")
+    }
+}
+```
+
+更多声明式修饰符可用：
+
+```swift
+// 基于布尔值的 HUD，支持完整配置
+.hud(isPresented: $isLoading) { hud in
+    hud.contentView.mode = .indicator()
+    hud.contentView.label.text = "请稍候..."
+}
+
+// 自动消失的 Toast
+.hudToast(isPresented: $showSuccess, label: "已保存！")
+
+// 进度追踪
+.hudProgress(isPresented: $isUploading, progress: $progress, label: "上传中")
+```
+
+> [!TIP]
+> 查看 [SwiftUI 集成指南](https://liam-i.github.io/FlyHUD/main/documentation/flyhud/swiftui-integration) 获取完整文档。
+
 有关更多示例，包括如何通过异步操作（例如 URLSession）使用 HUD，以及如何自定义 HUD 样式，请查看项目里的 `example`。这里提供了完整的 [API 文档](https://liam-i.github.io/FlyHUD/main/documentation/flyhud)。
 
 运行 `example` 项目，先克隆存储库，然后在 Xcode 中打开 `FlyHUD.xcworkspace`。
+
+## 无障碍
+
+FlyHUD 提供了完整的 VoiceOver 和无障碍支持：
+
+- **模态焦点** — `accessibilityViewIsModal` 防止 VoiceOver 导航到 HUD 下方的内容
+- **自动焦点管理** — 显示时 VoiceOver 焦点移至 HUD，隐藏时焦点返回底层内容
+- **退出手势** — 双指 Z 形轻扫（`accessibilityPerformEscape`）可关闭 HUD
+- **上下文提示** — `accessibilityHint` 提供语境描述（"Loading in progress" / "Task in progress"）
+- **合并播报** — 标题 + 详情文本作为单一描述朗读
+- **进度更新** — 每 25% 播报一次里程碑；`accessibilityValue` 报告百分比
+- **按钮暴露** — 操作按钮通过 `accessibilityCustomActions` 暴露（上/下滑动发现）
+- **动态更新** — HUD 可见时文本/模式变更会触发 VoiceOver 重新朗读
+- **事件传递同步** — `isEventDeliveryEnabled` 与 `accessibilityViewIsModal` 保持同步；触摸穿透时 VoiceOver 焦点也可穿透
+- **动态字体** — 通过 `isDynamicTypeEnabled` 启用字体缩放
+
+> [!TIP]
+> 使用 `.custom(UIView)` 模式时，请在自定义视图上设置 `isAccessibilityElement = false` 以避免重复播报。
 
 ## 文档
 

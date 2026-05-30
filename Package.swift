@@ -23,6 +23,10 @@ let package = Package(
             name: "FlyProgressHUD",
             targets: ["FlyProgressHUD"]
         ),
+        .library(
+            name: "FlyHUDSwiftUI",
+            targets: ["FlyHUDSwiftUI"]
+        ),
     ],
     targets: [
         .target(
@@ -35,14 +39,18 @@ let package = Package(
             name: "FlyIndicatorHUD",
             dependencies: ["FlyHUD"],
             path: "Sources/IndicatorHUD",
-            resources: [.copy("PrivacyInfo.xcprivacy")],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
         .target(
             name: "FlyProgressHUD",
             dependencies: ["FlyHUD"],
             path: "Sources/ProgressHUD",
-            resources: [.copy("PrivacyInfo.xcprivacy")],
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+        ),
+        .target(
+            name: "FlyHUDSwiftUI",
+            dependencies: ["FlyHUD"],
+            path: "Sources/SwiftUIHUD",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
         ),
     ]

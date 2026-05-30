@@ -4,29 +4,58 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [1.6.0] - 2026-05-25
 
 ### Added
 
-- Native visionOS support (no longer "Designed for iPhone")
-- Liquid Glass background style (`.glass`) for iOS 26+ and tvOS 26+
-- Swift 6.2 `isolated deinit` support
-- Dynamic Type support for HUD labels (`isDynamicTypeEnabled`)
-- `UnfairLock` utility for thread-safe state management
-- tvOS example app with scene lifecycle support
-- Comprehensive unit and stress tests (408 test cases)
+- **FlyHUDSwiftUI module** — Native SwiftUI support with declarative API
+  - 4-layer API: `.hudHost()`, `.hud(isPresented:)`, `.hudLoading()/.hudToast()/.hudProgress()`, `.hudGlass()`
+  - UIViewRepresentable bridge with @MainActor coordinators (Swift 6 safe)
+  - CocoaPods subspec `FlyHUD/FlyHUDSwiftUI`
+- **Native visionOS support** — first-class platform target (no longer "Designed for iPhone")
+- **Liquid Glass background style** (`.glass`) for iOS 26+ and tvOS 26+
+- **DocC documentation** — full article suite: getting-started, overview, basic/advanced features, SwiftUI integration, custom UI, testing, best practices, benchmark, FAQ, privacy policy
+- **VoiceOver accessibility** — `accessibilityPerformEscape()` Z-scrub dismissal, mode-aware `accessibilityHint`
+- **Dynamic Type** support for HUD labels (`isDynamicTypeEnabled`)
+- Swift 6.2 `isolated deinit` support with fallback for older compilers
+- `UnfairLock` utility for thread-safe state management (Mutex backport for iOS 13+)
+- tvOS example app with UIScene lifecycle and focus interaction
+- `scripts/build.sh` — unified build/test/clean script (all platforms, help, DerivedData clean, platform validation)
+- `scripts/build-docs.sh` — DocC build, preview, export, and GitHub Pages deploy pipeline
+- SPM test targets for all modules (`FlyHUDTests`, `FlyIndicatorHUDTests`, `FlyProgressHUDTests`, `SwiftUIHUDTests`)
+- End-to-end UI test suite (59 tests: VoiceOver, lifecycle, rotation, keyboard, navigation)
+- `release-notes.md` — version history (symlinked into DocC)
 
 ### Changed
 
 - Minimum deployment target raised to iOS 13.0, tvOS 13.0, visionOS 1.0
 - Improved keyboard observer to use UIScene-compatible window acquisition
 - Removed redundant `proxy` property from `DisplayLink` (lifecycle managed by CADisplayLink)
+- Example SwiftUI app migrated from local bridge to `FlyHUDSwiftUI` module
+- Test count increased from 279 to 699 (unit + integration + UI)
+- All developer documentation (`AGENTS.md`, `CLAUDE.md`, `Tests/README.md`, etc.) updated to use `scripts/build.sh` commands
+
+### Removed
+
+- `Tests/Tests.swift` (migrated to `Tests/HUD/HUDTests.swift`)
+- `Example SwiftUI/Helpers/HUDHostView.swift` (replaced by `import FlyHUDSwiftUI`)
+- Empty `Frameworks` PBXGroup from Xcode project navigator
 
 ### Fixed
 
-- Fixed `isCountEnabled` mode allowing negative count from unbalanced `hide()` calls
+- Fixed `isCountEnabled` allowing unbalanced `hide()` calls to fire delegate/completion multiple times
 - Fixed old indicator animations not being stopped when switching HUD mode
-- Fixed documentation comments with incorrect default values and typos
+- Fixed `ProgressView` style change not clearing cached `animationBuilder`, causing stale rendering after switching styles
+- Fixed SwiftUI `HUDItemCoordinator` reusing a hiding HUD when item ID changes, causing visual glitches
+- Fixed `keyboardGuideView.transform` not reset on hide, causing incorrect HUD position when re-shown with keyboard visible
+- Fixed `Button.addTarget`/`removeTarget` not posting VoiceOver `.layoutChanged` notification
+- Fixed `KeyboardObserver` redundantly traversing `connectedScenes` twice; now caches the scene array
+- Fixed `ProgressAnimation.Bar` using `layer.frame.size` instead of `layer.bounds.size` and `acos` returning NaN when input exceeds [-1, 1]
+- Added defensive geometry clamping (`max(0.0, ...)`) in `ShapeBuilder`, `BallSpinFade`, `CircleArcDotSpin`, and `Round` (annular mode) to prevent negative radius/size for extreme bounds
+- Fixed documentation comments: incorrect default values, typos, broken URL references
+- Fixed test compliance: `UnfairLockTests` Swift 6 concurrency, `ButtonTests`/`LabelTests` nil assertions, `HUDExtendedTests` spurious `@retroactive`
 
 ## [1.5.13] - 2025-08-01
 

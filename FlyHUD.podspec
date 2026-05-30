@@ -39,5 +39,11 @@ Pod::Spec.new do |s|
     ss.dependency 'FlyHUD/FlyHUD'
   end
 
+  s.subspec 'FlyHUDSwiftUI' do |ss|
+    ss.source_files = ['Sources/SwiftUIHUD/**/*.swift']
+    ss.dependency 'FlyHUD/FlyHUD'
+    ss.frameworks = 'SwiftUI'
+  end
+
   s.resource_bundles = {'FlyHUD' => ['Sources/HUD/PrivacyInfo.xcprivacy']}
 end
