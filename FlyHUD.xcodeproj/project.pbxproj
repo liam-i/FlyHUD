@@ -1176,7 +1176,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.liam.FlyHUD-ExampleiOS-UITests";
 				PRODUCT_NAME = UITests;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "Example SwiftUI";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1315,7 +1315,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.liam.FlyHUD-ExampleiOS-UITests";
 				PRODUCT_NAME = UITests;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TEST_TARGET_NAME = "Example SwiftUI";
 			};
 			name = Debug;
