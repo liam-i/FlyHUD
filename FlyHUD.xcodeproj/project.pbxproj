@@ -67,6 +67,7 @@
 /* Begin PBXFileReference section */
 		0C24FA332FBF8F6600C33036 /* copilot-instructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = "copilot-instructions.md"; path = ".github/copilot-instructions.md"; sourceTree = "<group>"; };
 		0C24FA342FBF8F7F00C33036 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		0C377CD22FCD57EC003DA91C /* .spi.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .spi.yml; sourceTree = "<group>"; };
 		0C62B1392FC69A5F00D95B99 /* FlyHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlyHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C62B13B2FC69A5F00D95B99 /* Example iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C62B13C2FC69A5F00D95B99 /* Example SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -309,6 +310,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				0C377CD22FCD57EC003DA91C /* .spi.yml */,
 				0C24FA342FBF8F7F00C33036 /* .gitignore */,
 				0C24FA332FBF8F6600C33036 /* copilot-instructions.md */,
 				0C7E82CA2FC85FE800F5488E /* copilot-commit-instructions.md */,
@@ -577,7 +579,7 @@
 			);
 			mainGroup = 607FACC71AFB9204008FA782;
 			packageReferences = (
-				0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */,
+				0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */,
 			);
 			productRefGroup = 0C62B13A2FC69A5F00D95B99 /* Products */;
 			projectDirPath = "";
@@ -1563,61 +1565,61 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */ = {
+		0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../FlyHUD;
+			relativePath = .;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		0C1245702FBE4F8300DE9E08 /* FlyHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyHUD;
 		};
 		0C1245722FBE4F8300DE9E08 /* FlyIndicatorHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyIndicatorHUD;
 		};
 		0C1245742FBE4F8300DE9E08 /* FlyProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyProgressHUD;
 		};
 		0C12457C2FBE4F9E00DE9E08 /* FlyHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyHUD;
 		};
 		0C12457E2FBE4F9E00DE9E08 /* FlyIndicatorHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyIndicatorHUD;
 		};
 		0C1245802FBE4F9E00DE9E08 /* FlyProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyProgressHUD;
 		};
 		0C5D7DEC2FC49FC30062C5DF /* FlyHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyHUD;
 		};
 		0C5D7DEE2FC49FC30062C5DF /* FlyHUDSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyHUDSwiftUI;
 		};
 		0C5D7DF02FC49FC30062C5DF /* FlyIndicatorHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyIndicatorHUD;
 		};
 		0C5D7DF22FC49FC30062C5DF /* FlyProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "../FlyHUD" */;
+			package = 0CC9C8442FBE4977003AF3C3 /* XCLocalSwiftPackageReference "." */;
 			productName = FlyProgressHUD;
 		};
 		0CC9C8452FBE4977003AF3C3 /* FlyHUD */ = {
