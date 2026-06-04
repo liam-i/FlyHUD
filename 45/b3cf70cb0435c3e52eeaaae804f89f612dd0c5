@@ -1,0 +1,32 @@
+release-notes.md
+  h_0fdf31d0789f8d 13-16
+  s_3bcc14210d28db::t_bf045d201059d3 6-12,17-20
+README.md
+  h_0fdf31d0789f8d 252,259
+CHANGELOG.md
+  s_3bcc14210d28db::t_bf045d201059d3 9-15,197
+  h_0fdf31d0789f8d 16-19
+README_CN.md
+  h_0fdf31d0789f8d 253,260
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "45b3cf70cb0435c3e52eeaaae804f89f612dd0c5",
+  "prompts": {},
+  "humans": {
+    "h_0fdf31d0789f8d": {
+      "author": "Liam <liam_i@163.com>"
+    }
+  },
+  "sessions": {
+    "s_3bcc14210d28db": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "0382f51f-7451-4f47-8980-374c4d6be79e",
+        "model": "gpt-5.3-codex"
+      },
+      "human_author": "Liam <liam_i@163.com>"
+    }
+  }
+}
