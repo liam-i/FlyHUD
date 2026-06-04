@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-FlyHUD is a lightweight HUD (Heads-Up Display) library for iOS/tvOS, providing progress indicators, activity indicators, and toast-style notifications. Version: 1.6.1.
+FlyHUD is a lightweight HUD (Heads-Up Display) library for iOS/tvOS, providing progress indicators, activity indicators, and toast-style notifications. Version: 1.6.2.
 
 - **Repo**: <https://github.com/liam-i/FlyHUD>
 - **Language**: Swift 5.0+
