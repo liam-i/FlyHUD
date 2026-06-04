@@ -1,0 +1,22 @@
+FlyHUD.podspec
+  h_0fdf31d0789f8d 3
+README.md
+  h_0fdf31d0789f8d 47,66,84,87,90,93,96,110
+AGENTS.md
+  h_0fdf31d0789f8d 5
+FlyHUD.xcodeproj/project.pbxproj
+  h_0fdf31d0789f8d 791,833,960,968,987,995,1084,1117,1155,1205,1211,1220,1252,1293,1349,1383,1389,1398,1421,1458
+README_CN.md
+  h_0fdf31d0789f8d 47,66,84,87,90,93,96,110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "44bfec8232e368ca0b20166ca4e84eb28060d5e6",
+  "prompts": {},
+  "humans": {
+    "h_0fdf31d0789f8d": {
+      "author": "Liam <liam_i@163.com>"
+    }
+  }
+}
