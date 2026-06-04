@@ -249,13 +249,14 @@ FlyHUD provides comprehensive VoiceOver and accessibility support:
 The documentation for releases and `main` are available here:
 
 * [main](https://liam-i.github.io/FlyHUD/main/documentation/)
-* [1.6.0](https://liam-i.github.io/FlyHUD/1.6.0/documentation/)
+* [1.6.2](https://liam-i.github.io/FlyHUD/1.6.2/documentation/)
 
 <details>
   <summary>
   Other versions
   </summary>
 
+* [1.6.0](https://liam-i.github.io/FlyHUD/1.6.0/documentation/)
 * [1.5.6](https://liam-i.github.io/FlyHUD/1.5.6/documentation/flyhud)
 * [1.5.4](https://liam-i.github.io/FlyHUD/1.5.4/documentation/lphud)
 * [1.5.3](https://liam-i.github.io/FlyHUD/1.5.3/documentation/lphud)

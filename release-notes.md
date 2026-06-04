@@ -3,6 +3,21 @@
 Detailed release notes for all FlyHUD versions. For the full changelog, see the
 <doc:CHANGELOG> file.
 
+## 1.6.2 (June 4, 2026)
+
+### Changes
+
+- Updated `.spi.yml`: removed redundant `builder.configs` section and added `metadata.authors`
+- Updated Xcode project Swift version (`SWIFT_VERSION`) from `5.0` to `6.0`
+
+### Fixed
+
+- Fix Swift Package Index build failure caused by FlyHUD's local SPM dependency configuration
+
+**Full Changelog:** [1.6.1...1.6.2](https://github.com/liam-i/FlyHUD/compare/1.6.1...1.6.2)
+
+---
+
 ## 1.6.1 (May 30, 2026)
 
 ### Fixes

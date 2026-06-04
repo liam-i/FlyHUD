@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-06-04
+
+### Changed
+
+- Updated `.spi.yml`: removed redundant `builder.configs` section and added `metadata.authors`
+- Updated Xcode project `SWIFT_VERSION` from `5.0` to `6.0`
+
+### Fixed
+
+- Fix Swift Package Index build failure caused by FlyHUD's local SPM dependency configuration
+
 ## [1.6.1] - 2026-05-30
 
 ### Added
@@ -183,6 +194,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Keyboard layout guide
 - Dark mode support
 
+[1.6.2]: https://github.com/liam-i/FlyHUD/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/liam-i/FlyHUD/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/liam-i/FlyHUD/compare/1.5.13...1.6.0
 [1.5.13]: https://github.com/liam-i/FlyHUD/compare/1.5.12...1.5.13
